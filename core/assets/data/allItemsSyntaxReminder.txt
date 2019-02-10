@@ -1,0 +1,7 @@
+Weapons: name, type, physDamage, magDamage, rarity, range, hands
+
+Armour: name, type, defense, rarity
+
+Equipment: name, desc, rarity
+
+Other items: name, desc, rarity, consumable

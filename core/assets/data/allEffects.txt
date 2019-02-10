@@ -1,0 +1,5 @@
+Burning
+Take damage every second for a short period of time, or until you find water.
+;
+Invisible
+Be undetectable by all entities apart from allies.

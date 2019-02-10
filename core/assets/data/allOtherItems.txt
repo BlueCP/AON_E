@@ -1,0 +1,125 @@
+Iron ore
+A piece of iron ore, mined from the ground.
+common
+false
+;
+Gold ore
+A piece of gold ore, mined from the ground.
+common
+false
+;
+Silver ore
+A piece of silver ore, mined from the ground.
+common
+false
+;
+Iron ingot
+A bar of smelted iron ore.
+common
+false
+;
+Gold ingot
+A bar of smelted gold ore.
+common
+false
+;
+Silver ingot
+A bar of smelted silver ore.
+common
+false
+;
+Coal
+A chunk of coal. Used for many things.
+common
+false
+;
+Steel ingot
+A bar of steel, formed by smelting iron with coal.
+common
+false
+;
+Beeswax
+A chunk of wax from a beehive.
+common
+false
+;
+Horsehair
+A few long strands of hair from a horse.
+common
+false
+;
+Waxed horsehair
+A few long strands of horsehair coated with beeswax.
+common
+false
+;
+Glass bottle
+A standard, empty glass bottle.
+common
+false
+;
+Water-filled glass bottle
+A glass bottle filled with water.
+common
+true
+;
+Voltroot
+An uncommon root providing interesting energising properties.
+uncommon
+false
+;
+Vertroot
+An uncommon root known to vitalise those who use it in cooking.
+uncommon
+false
+;
+Life potion
+A potion to vitalise whoever drinks it.
+uncommon
+true
+;
+Energy potion
+A potion to energise whoever drinks it.
+uncommon
+true
+;
+Rough diamond
+A diamond dug straight out of the ground.
+rare
+false
+;
+Rough ruby
+A ruby dug straight out of the ground.
+rare
+false
+;
+Rough emerald
+An emeral dug straight out of the ground.
+rare
+false
+;
+Rough sapphire
+A sapphire dug straight out of the ground.
+rare
+false
+;
+Polished diamond
+A diamond polished on a polishing stone.
+rare
+false
+;
+Polished ruby
+A ruby polished on a polishing stone.
+rare
+false
+;
+Polished emerald
+An emerald polished on a polishing stone.
+rare
+false
+;
+Polished sapphire
+A sapphire polished on a polishing stone.
+rare
+false
+;

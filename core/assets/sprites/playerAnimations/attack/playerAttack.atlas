@@ -1,0 +1,1424 @@
+
+playerAttack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+112.5/112.5
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+112.5/112.5
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+112.5/112.5
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+112.5/112.5
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+112.5/112.5
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+112.5/112.5
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+112.5/112.5
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+112.5/112.5
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+112.5/112.5
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+112.5/112.5
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+112.5/112.5
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+112.5/112.5
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+135/135
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+135/135
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+135/135
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+135/135
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+135/135
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+135/135
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+135/135
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+135/135
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+135/135
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+135/135
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+135/135
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+135/135
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+157.5/157.5
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+157.5/157.5
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+157.5/157.5
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+157.5/157.5
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+157.5/157.5
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+157.5/157.5
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+157.5/157.5
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+157.5/157.5
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+157.5/157.5
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+157.5/157.5
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+157.5/157.5
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+157.5/157.5
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+180/180
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+180/180
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+180/180
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+180/180
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+180/180
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+180/180
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+180/180
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+180/180
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+180/180
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+180/180
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+180/180
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+180/180
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack5.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+202.5/202.5
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+202.5/202.5
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+202.5/202.5
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+202.5/202.5
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+202.5/202.5
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+202.5/202.5
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+202.5/202.5
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+202.5/202.5
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+202.5/202.5
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+202.5/202.5
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+202.5/202.5
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+202.5/202.5
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack6.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+225/225
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+225/225
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+225/225
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+225/225
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+225/225
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+225/225
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+225/225
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+225/225
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+225/225
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+225/225
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+225/225
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+225/225
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack7.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+247.5/247.5
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+247.5/247.5
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+247.5/247.5
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+247.5/247.5
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+247.5/247.5
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+247.5/247.5
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+247.5/247.5
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+247.5/247.5
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+247.5/247.5
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+247.5/247.5
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+247.5/247.5
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+247.5/247.5
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack8.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+270/270
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+270/270
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+270/270
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+270/270
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+270/270
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+270/270
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+270/270
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+270/270
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+270/270
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+270/270
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+270/270
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+270/270
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack9.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+292.5/292.5
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+292.5/292.5
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+292.5/292.5
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+292.5/292.5
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+292.5/292.5
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+292.5/292.5
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+292.5/292.5
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+292.5/292.5
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+292.5/292.5
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+292.5/292.5
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+292.5/292.5
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+292.5/292.5
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack10.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+315/315
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+315/315
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+315/315
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+315/315
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+315/315
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+315/315
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+315/315
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+315/315
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+315/315
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+315/315
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+315/315
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+315/315
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack11.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+337.5/337.5
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+337.5/337.5
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+337.5/337.5
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+337.5/337.5
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+337.5/337.5
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+337.5/337.5
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+337.5/337.5
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+337.5/337.5
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+337.5/337.5
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+337.5/337.5
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+337.5/337.5
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+337.5/337.5
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack12.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+000/000
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+000/000
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+000/000
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+000/000
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+000/000
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+000/000
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+000/000
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+000/000
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+000/000
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+000/000
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+000/000
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+000/000
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack13.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+022.5/022.5
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+022.5/022.5
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+022.5/022.5
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+022.5/022.5
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+022.5/022.5
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+022.5/022.5
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+022.5/022.5
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+022.5/022.5
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+022.5/022.5
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+022.5/022.5
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+022.5/022.5
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+022.5/022.5
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack14.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+045/045
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+045/045
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+045/045
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+045/045
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+045/045
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+045/045
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+045/045
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+045/045
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+045/045
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+045/045
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+045/045
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+045/045
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack15.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+067.5/067.5
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+067.5/067.5
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+067.5/067.5
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+067.5/067.5
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+067.5/067.5
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+067.5/067.5
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+067.5/067.5
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+067.5/067.5
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+067.5/067.5
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+067.5/067.5
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+067.5/067.5
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+067.5/067.5
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12
+
+playerAttack16.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+090/090
+  rotate: false
+  xy: 1, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 1
+090/090
+  rotate: false
+  xy: 1, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 2
+090/090
+  rotate: false
+  xy: 99, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 3
+090/090
+  rotate: false
+  xy: 1, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 4
+090/090
+  rotate: false
+  xy: 99, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 5
+090/090
+  rotate: false
+  xy: 197, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 6
+090/090
+  rotate: false
+  xy: 99, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 7
+090/090
+  rotate: false
+  xy: 197, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 8
+090/090
+  rotate: false
+  xy: 295, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 9
+090/090
+  rotate: false
+  xy: 197, 1
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 10
+090/090
+  rotate: false
+  xy: 295, 131
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 11
+090/090
+  rotate: false
+  xy: 393, 261
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: 12

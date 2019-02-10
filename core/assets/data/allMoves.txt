@@ -1,0 +1,12 @@
+Slam
+Slam your weapon into an enemy, with a 70% chance of a hit and a guarenteed critical strike.
+Kill an enemy with a melee weapon.
+;
+Lunge
+Lunge 1 tile to the target enemy, dealing increased damage.
+Kill an enemy with a ranged weapon.
+;
+Cleave
+Slash your weapon around you, dealing reduced damage to all enemies around you.
+Kill 2 enemies with no more than 5 ticks between them.
+;

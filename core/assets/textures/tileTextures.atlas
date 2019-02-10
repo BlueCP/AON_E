@@ -1,0 +1,33 @@
+
+tileTextures.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+voidTop
+  rotate: false
+  xy: 1, 33
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+grassTop
+  rotate: false
+  xy: 131, 33
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+grassLeft
+  rotate: false
+  xy: 261, 1
+  size: 64, 96
+  orig: 64, 96
+  offset: 0, 0
+  index: -1
+grassRight
+  rotate: false
+  xy: 327, 1
+  size: 64, 96
+  orig: 64, 96
+  offset: 0, 0
+  index: -1

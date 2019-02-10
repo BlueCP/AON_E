@@ -1,0 +1,60 @@
+Iron longsword
+A simple longsword, the defense of many soldiers.
+common
+longsword
+4
+0
+0
+melee
+2
+;
+Iron shortsword
+A simple shortsword, intended for stabbing.
+common
+shortsword
+3
+0
+0
+melee
+1
+;
+Iron dagger
+A simple dagger, plain and easy to conceal.
+common
+dagger
+2
+0
+0
+melee
+1
+;
+Basic wood shortbow
+A shortbow, mass produced for legions of archers.
+common
+shortbow
+3
+0
+8
+ranged
+2
+;
+Basic wood magestaff
+A magestaff with little magical conduction, given to novice mages.
+common
+magestaff
+1
+3
+6
+ranged
+2
+;
+Steel longsword
+A longsword made of steel, stronger than iron.
+uncommon
+longsword
+6
+0
+0
+melee
+2
+;

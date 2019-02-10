@@ -1,0 +1,30 @@
+Newbie Hiker
+Travel a total of 100 tiles.
+;
+Adept Hiker
+Travel a total of 1000 tiles.
+;
+Seasoned Hiker
+Travel a total of 5000 tiles.
+;
+Advanced Hiker
+Travel a total of 20,000 tiles.
+;
+Expert Hiker
+Travel a total of 100,000 tiles.
+;
+Newbie Slayer
+Slay 5 enemies.
+;
+Adept Slayer
+Slay 20 enemies.
+;
+Seasoned Slayer
+Slay 50 enemies.
+;
+Advanced Slayer
+Slay 200 enemies.
+;
+Expert Slayer
+Slay 500 enemies.
+;

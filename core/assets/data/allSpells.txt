@@ -1,0 +1,15 @@
+Fireball
+Shoot a ball of fire at a single enemy.
+;
+Immolate
+Burn the are 3 tiles around you.
+;
+Blink
+Teleport to a target tile within 3 tiles.
+;
+Lightning Bolt
+Release a bolt of lightning on an enemy, stunning them.
+;
+Shroud
+Surround yourself with invisibility magic. It will break when you perform a combat action or cast a spell.
+;

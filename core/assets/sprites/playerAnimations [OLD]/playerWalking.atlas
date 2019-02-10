@@ -1,0 +1,1832 @@
+
+playerWalking0.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+00/0000
+  rotate: false
+  xy: 1, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0001
+  rotate: false
+  xy: 1, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0002
+  rotate: false
+  xy: 67, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0003
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0004
+  rotate: false
+  xy: 67, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0005
+  rotate: false
+  xy: 133, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0006
+  rotate: false
+  xy: 67, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0007
+  rotate: false
+  xy: 133, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0008
+  rotate: false
+  xy: 199, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0009
+  rotate: false
+  xy: 133, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0010
+  rotate: false
+  xy: 199, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0011
+  rotate: false
+  xy: 265, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0012
+  rotate: false
+  xy: 199, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0013
+  rotate: false
+  xy: 265, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0014
+  rotate: false
+  xy: 331, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0015
+  rotate: false
+  xy: 265, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0016
+  rotate: false
+  xy: 331, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0017
+  rotate: false
+  xy: 397, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0018
+  rotate: false
+  xy: 331, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0019
+  rotate: false
+  xy: 397, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0020
+  rotate: false
+  xy: 463, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0021
+  rotate: false
+  xy: 397, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0022
+  rotate: false
+  xy: 463, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0023
+  rotate: false
+  xy: 529, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0024
+  rotate: false
+  xy: 463, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0025
+  rotate: false
+  xy: 529, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0026
+  rotate: false
+  xy: 595, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0027
+  rotate: false
+  xy: 529, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0028
+  rotate: false
+  xy: 595, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0029
+  rotate: false
+  xy: 661, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0030
+  rotate: false
+  xy: 595, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+00/0031
+  rotate: false
+  xy: 661, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+
+playerWalking45.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+135/0000
+  rotate: false
+  xy: 1, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0001
+  rotate: false
+  xy: 1, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0002
+  rotate: false
+  xy: 67, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0003
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0004
+  rotate: false
+  xy: 67, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0005
+  rotate: false
+  xy: 133, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0006
+  rotate: false
+  xy: 67, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0007
+  rotate: false
+  xy: 133, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0008
+  rotate: false
+  xy: 199, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0009
+  rotate: false
+  xy: 133, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0010
+  rotate: false
+  xy: 199, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0011
+  rotate: false
+  xy: 265, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0012
+  rotate: false
+  xy: 199, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0013
+  rotate: false
+  xy: 265, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0014
+  rotate: false
+  xy: 331, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0015
+  rotate: false
+  xy: 265, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0016
+  rotate: false
+  xy: 331, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0017
+  rotate: false
+  xy: 397, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0018
+  rotate: false
+  xy: 331, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0019
+  rotate: false
+  xy: 397, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0020
+  rotate: false
+  xy: 463, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0021
+  rotate: false
+  xy: 397, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0022
+  rotate: false
+  xy: 463, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0023
+  rotate: false
+  xy: 529, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0024
+  rotate: false
+  xy: 463, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0025
+  rotate: false
+  xy: 529, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0026
+  rotate: false
+  xy: 595, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0027
+  rotate: false
+  xy: 529, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0028
+  rotate: false
+  xy: 595, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0029
+  rotate: false
+  xy: 661, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0030
+  rotate: false
+  xy: 595, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+135/0031
+  rotate: false
+  xy: 661, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+
+playerWalking90.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+180/0000
+  rotate: false
+  xy: 1, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0001
+  rotate: false
+  xy: 1, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0002
+  rotate: false
+  xy: 67, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0003
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0004
+  rotate: false
+  xy: 67, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0005
+  rotate: false
+  xy: 133, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0006
+  rotate: false
+  xy: 67, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0007
+  rotate: false
+  xy: 133, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0008
+  rotate: false
+  xy: 199, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0009
+  rotate: false
+  xy: 133, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0010
+  rotate: false
+  xy: 199, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0011
+  rotate: false
+  xy: 265, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0012
+  rotate: false
+  xy: 199, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0013
+  rotate: false
+  xy: 265, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0014
+  rotate: false
+  xy: 331, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0015
+  rotate: false
+  xy: 265, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0016
+  rotate: false
+  xy: 331, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0017
+  rotate: false
+  xy: 397, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0018
+  rotate: false
+  xy: 331, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0019
+  rotate: false
+  xy: 397, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0020
+  rotate: false
+  xy: 463, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0021
+  rotate: false
+  xy: 397, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0022
+  rotate: false
+  xy: 463, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0023
+  rotate: false
+  xy: 529, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0024
+  rotate: false
+  xy: 463, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0025
+  rotate: false
+  xy: 529, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0026
+  rotate: false
+  xy: 595, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0027
+  rotate: false
+  xy: 529, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0028
+  rotate: false
+  xy: 595, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0029
+  rotate: false
+  xy: 661, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0030
+  rotate: false
+  xy: 595, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+180/0031
+  rotate: false
+  xy: 661, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+
+playerWalking135.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+225/0000
+  rotate: false
+  xy: 1, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0001
+  rotate: false
+  xy: 1, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0002
+  rotate: false
+  xy: 67, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0003
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0004
+  rotate: false
+  xy: 67, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0005
+  rotate: false
+  xy: 133, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0006
+  rotate: false
+  xy: 67, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0007
+  rotate: false
+  xy: 133, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0008
+  rotate: false
+  xy: 199, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0009
+  rotate: false
+  xy: 133, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0010
+  rotate: false
+  xy: 199, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0011
+  rotate: false
+  xy: 265, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0012
+  rotate: false
+  xy: 199, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0013
+  rotate: false
+  xy: 265, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0014
+  rotate: false
+  xy: 331, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0015
+  rotate: false
+  xy: 265, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0016
+  rotate: false
+  xy: 331, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0017
+  rotate: false
+  xy: 397, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0018
+  rotate: false
+  xy: 331, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0019
+  rotate: false
+  xy: 397, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0020
+  rotate: false
+  xy: 463, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0021
+  rotate: false
+  xy: 397, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0022
+  rotate: false
+  xy: 463, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0023
+  rotate: false
+  xy: 529, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0024
+  rotate: false
+  xy: 463, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0025
+  rotate: false
+  xy: 529, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0026
+  rotate: false
+  xy: 595, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0027
+  rotate: false
+  xy: 529, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0028
+  rotate: false
+  xy: 595, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0029
+  rotate: false
+  xy: 661, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0030
+  rotate: false
+  xy: 595, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+225/0031
+  rotate: false
+  xy: 661, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+
+playerWalking180.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+270/0000
+  rotate: false
+  xy: 1, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0001
+  rotate: false
+  xy: 1, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0002
+  rotate: false
+  xy: 67, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0003
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0004
+  rotate: false
+  xy: 67, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0005
+  rotate: false
+  xy: 133, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0006
+  rotate: false
+  xy: 67, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0007
+  rotate: false
+  xy: 133, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0008
+  rotate: false
+  xy: 199, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0009
+  rotate: false
+  xy: 133, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0010
+  rotate: false
+  xy: 199, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0011
+  rotate: false
+  xy: 265, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0012
+  rotate: false
+  xy: 199, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0013
+  rotate: false
+  xy: 265, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0014
+  rotate: false
+  xy: 331, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0015
+  rotate: false
+  xy: 265, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0016
+  rotate: false
+  xy: 331, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0017
+  rotate: false
+  xy: 397, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0018
+  rotate: false
+  xy: 331, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0019
+  rotate: false
+  xy: 397, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0020
+  rotate: false
+  xy: 463, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0021
+  rotate: false
+  xy: 397, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0022
+  rotate: false
+  xy: 463, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0023
+  rotate: false
+  xy: 529, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0024
+  rotate: false
+  xy: 463, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0025
+  rotate: false
+  xy: 529, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0026
+  rotate: false
+  xy: 595, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0027
+  rotate: false
+  xy: 529, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0028
+  rotate: false
+  xy: 595, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0029
+  rotate: false
+  xy: 661, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0030
+  rotate: false
+  xy: 595, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+270/0031
+  rotate: false
+  xy: 661, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+
+playerWalking225.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+315/0000
+  rotate: false
+  xy: 1, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0001
+  rotate: false
+  xy: 1, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0002
+  rotate: false
+  xy: 67, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0003
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0004
+  rotate: false
+  xy: 67, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0005
+  rotate: false
+  xy: 133, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0006
+  rotate: false
+  xy: 67, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0007
+  rotate: false
+  xy: 133, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0008
+  rotate: false
+  xy: 199, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0009
+  rotate: false
+  xy: 133, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0010
+  rotate: false
+  xy: 199, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0011
+  rotate: false
+  xy: 265, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0012
+  rotate: false
+  xy: 199, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0013
+  rotate: false
+  xy: 265, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0014
+  rotate: false
+  xy: 331, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0015
+  rotate: false
+  xy: 265, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0016
+  rotate: false
+  xy: 331, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0017
+  rotate: false
+  xy: 397, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0018
+  rotate: false
+  xy: 331, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0019
+  rotate: false
+  xy: 397, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0020
+  rotate: false
+  xy: 463, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0021
+  rotate: false
+  xy: 397, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0022
+  rotate: false
+  xy: 463, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0023
+  rotate: false
+  xy: 529, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0024
+  rotate: false
+  xy: 463, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0025
+  rotate: false
+  xy: 529, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0026
+  rotate: false
+  xy: 595, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0027
+  rotate: false
+  xy: 529, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0028
+  rotate: false
+  xy: 595, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0029
+  rotate: false
+  xy: 661, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0030
+  rotate: false
+  xy: 595, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+315/0031
+  rotate: false
+  xy: 661, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+
+playerWalking270.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+45/0000
+  rotate: false
+  xy: 1, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0001
+  rotate: false
+  xy: 1, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0002
+  rotate: false
+  xy: 67, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0003
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0004
+  rotate: false
+  xy: 67, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0005
+  rotate: false
+  xy: 133, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0006
+  rotate: false
+  xy: 67, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0007
+  rotate: false
+  xy: 133, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0008
+  rotate: false
+  xy: 199, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0009
+  rotate: false
+  xy: 133, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0010
+  rotate: false
+  xy: 199, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0011
+  rotate: false
+  xy: 265, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0012
+  rotate: false
+  xy: 199, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0013
+  rotate: false
+  xy: 265, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0014
+  rotate: false
+  xy: 331, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0015
+  rotate: false
+  xy: 265, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0016
+  rotate: false
+  xy: 331, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0017
+  rotate: false
+  xy: 397, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0018
+  rotate: false
+  xy: 331, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0019
+  rotate: false
+  xy: 397, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0020
+  rotate: false
+  xy: 463, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0021
+  rotate: false
+  xy: 397, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0022
+  rotate: false
+  xy: 463, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0023
+  rotate: false
+  xy: 529, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0024
+  rotate: false
+  xy: 463, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0025
+  rotate: false
+  xy: 529, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0026
+  rotate: false
+  xy: 595, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0027
+  rotate: false
+  xy: 529, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0028
+  rotate: false
+  xy: 595, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0029
+  rotate: false
+  xy: 661, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0030
+  rotate: false
+  xy: 595, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+45/0031
+  rotate: false
+  xy: 661, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+
+playerWalking315.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+90/0000
+  rotate: false
+  xy: 1, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0001
+  rotate: false
+  xy: 1, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0002
+  rotate: false
+  xy: 67, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0003
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0004
+  rotate: false
+  xy: 67, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0005
+  rotate: false
+  xy: 133, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0006
+  rotate: false
+  xy: 67, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0007
+  rotate: false
+  xy: 133, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0008
+  rotate: false
+  xy: 199, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0009
+  rotate: false
+  xy: 133, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0010
+  rotate: false
+  xy: 199, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0011
+  rotate: false
+  xy: 265, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0012
+  rotate: false
+  xy: 199, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0013
+  rotate: false
+  xy: 265, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0014
+  rotate: false
+  xy: 331, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0015
+  rotate: false
+  xy: 265, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0016
+  rotate: false
+  xy: 331, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0017
+  rotate: false
+  xy: 397, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0018
+  rotate: false
+  xy: 331, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0019
+  rotate: false
+  xy: 397, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0020
+  rotate: false
+  xy: 463, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0021
+  rotate: false
+  xy: 397, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0022
+  rotate: false
+  xy: 463, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0023
+  rotate: false
+  xy: 529, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0024
+  rotate: false
+  xy: 463, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0025
+  rotate: false
+  xy: 529, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0026
+  rotate: false
+  xy: 595, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0027
+  rotate: false
+  xy: 529, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0028
+  rotate: false
+  xy: 595, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0029
+  rotate: false
+  xy: 661, 261
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0030
+  rotate: false
+  xy: 595, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+90/0031
+  rotate: false
+  xy: 661, 131
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
