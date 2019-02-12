@@ -317,9 +317,9 @@ public class PhysicsWorldLoader {
 			} else if (readingId && currentChar == ':') {
 				readingId = false;
 				readingX = true;
-			} else if (readingX && currentChar != ',') {
+			} else if (readingX && currentChar != ';') {
 				currentX += currentChar;
-			} else if (readingX && currentChar == ',') {
+			} else if (readingX && currentChar == ';') {
 				readingX = false;
 				readingY = true;
 			} else if (readingY) {
