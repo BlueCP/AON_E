@@ -325,7 +325,6 @@ public class PhysicsWorldLoader {
 			} else if (readingY) {
 				currentY += currentChar;
 			}
-			// Test.
 		}
 		return map;
 	}

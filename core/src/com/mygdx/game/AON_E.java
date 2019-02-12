@@ -32,7 +32,7 @@ public class AON_E extends Game {
 	//public static final int HEIGHT = 563;
 	public static final String TITLE = "AON_E";
 
-	// There are floats so that float division rather than integer division is performed with them.
+	// These are floats so that float division rather than integer division is performed with them.
 	public static final float defaultScreenWidth = 1920;
 	public static final float defaultScreenHeight = 1080;
 
