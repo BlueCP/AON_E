@@ -174,8 +174,7 @@ public class OptionsScreen extends MyScreen implements InputProcessor {
 	}
 	
 	void update() {
-		updateVirtualCoords();
-		updatePointer();
+		universalUpdate();
 	}
 
 	@Override

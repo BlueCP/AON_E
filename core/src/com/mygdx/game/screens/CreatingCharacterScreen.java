@@ -86,8 +86,7 @@ public class CreatingCharacterScreen extends MyScreen implements InputProcessor 
 	}
 	
 	void update() {
-		updateVirtualCoords();
-		updatePointer();
+		universalUpdate();
 		if (!(saveNewGameRunner.isAlive())) {
 //			game.setScreen(new MainMenuScreen(game));
 			game.setScreen(new PlayScreen(game, newGame.player.getPlayerName()));

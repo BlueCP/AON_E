@@ -148,8 +148,7 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 	}
 	
 	void update() {
-		updateVirtualCoords();
-		updatePointer();
+		universalUpdate();
 	}
 	
 	@Override

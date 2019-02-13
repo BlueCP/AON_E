@@ -29,12 +29,15 @@ import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.ScreenShakeAction;
+import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.stages.HudStage;
 import com.mygdx.game.stages.OwnStage;
 import com.mygdx.game.utils.Message;
 import com.mygdx.game.utils.Util;
 import com.mygdx.game.world.Time;
 import javafx.util.Pair;
+
+import java.security.Key;
 
 public class PlayScreen extends MyScreen implements InputProcessor {
 
@@ -268,8 +271,7 @@ public class PlayScreen extends MyScreen implements InputProcessor {
 	}
 	
 	void update() {
-		updateVirtualCoords();
-		updatePointer();
+		universalUpdate();
 
 		testforMovement();
 
@@ -587,8 +589,37 @@ public class PlayScreen extends MyScreen implements InputProcessor {
 	
 	private void processKeyboardInput() {
 		processingKeyboardInput = true;
+		boolean skip;
+
 		for (Integer keycode: keyboardEvents) {
-			switch (keycode) {
+			skip = false;
+
+			for (int i = 0; i < 8; i ++) {
+				if (keycode == ControlSettings.abilityKey(i + 1)) {
+					player.getSkills().get(i).start(this);
+					skip = true;
+				}
+			}
+			if (skip) {
+				continue;
+			}
+
+			if (keycode == ControlSettings.basicAttackKey()) {
+				player.getBasicAttack().start(this);
+			}
+			else if (keycode == Keys.SHIFT_LEFT) {
+				entities.addEntity(new Dummy(entities, new Vector3(0, 5, 0)), physicsManager);
+			}
+			else if (keycode == Keys.ESCAPE) {
+				game.setScreen(new OptionsScreen(game, this));
+			}
+			else if (keycode == ControlSettings.openInventoryKey()) {
+				game.setScreen(new InventoryScreen(game, this));
+			}
+			else if (keycode == Keys.SPACE) {
+				testForJump();
+			}
+			/*switch (keycode) {
 				case Keys.W:
 					player.getBasicAttack().start(this);
 					break;
@@ -625,7 +656,7 @@ public class PlayScreen extends MyScreen implements InputProcessor {
 				case Keys.I:
 					game.setScreen(new InventoryScreen(game, this));
 					break;
-				/*
+				*//*
 				case Keys.Q:
 					game.setScreen(new AchievementsScreen(game, this));
 					break;
@@ -635,11 +666,11 @@ public class PlayScreen extends MyScreen implements InputProcessor {
 				case Keys.K:
 					game.setScreen(new MovesScreen(game, this));
 					break;
-				*/
+				*//*
 				case Keys.SPACE:
 					testForJump();
 					break;
-				/*
+				*//*
 				case Keys.Z:
 					// Below is temporary testing code
 					for (OwnStage stage: ownStages) {
@@ -705,8 +736,8 @@ public class PlayScreen extends MyScreen implements InputProcessor {
 					// End of temporary testing code
 					//interactWithTile();
 					break;
-				*/
-			}
+				*//*
+			}*/
 		}
 		keyboardEvents.clear();
 		processingKeyboardInput = false;

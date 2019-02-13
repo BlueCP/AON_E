@@ -1,12 +1,9 @@
 package com.mygdx.game.projectiles.pyromancer;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.physics.PhysicsManager;
@@ -14,7 +11,6 @@ import com.mygdx.game.projectiles.DynamicProjectile;
 import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.utils.VideoSettings;
 
 public class Firebolt extends DynamicProjectile {
 

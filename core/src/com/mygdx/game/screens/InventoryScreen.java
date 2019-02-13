@@ -435,7 +435,7 @@ public class InventoryScreen extends MyScreen implements InputProcessor {
 	}
 	
 	void update() {
-		updatePointer();
+		universalUpdate();
 		
 		Table weaponsTable = table.findActor("weaponsTable");
 		for (int i = 1; i < weaponsTable.getRows() * 2; i += 2) {

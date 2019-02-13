@@ -1,17 +1,14 @@
-package com.mygdx.game.utils;
+package com.mygdx.game.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.Preferences;
 import com.mygdx.game.particles.ParticleEngine;
 
-public class VideoSettings {
-
-	private static Preferences preferences;
-
-	public static void init() {
-		preferences = Gdx.app.getPreferences("Settings");
-	}
+/**
+ * Controls settings to do with graphics, such as VSync and fullscreen.
+ * Also deals with some performance-boosting options, such as disabling particles.
+ */
+public class VideoSettings extends Settings {
 
 	/*public VideoSettings() {
 		preferences = Gdx.app.getPreferences("Settings");

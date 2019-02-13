@@ -7,7 +7,7 @@ import com.mygdx.game.entities.Player;
 import com.mygdx.game.screens.PlayScreen;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
-import com.mygdx.game.utils.VideoSettings;
+import com.mygdx.game.settings.VideoSettings;
 
 public class Camera {
 

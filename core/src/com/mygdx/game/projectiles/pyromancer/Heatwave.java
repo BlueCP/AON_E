@@ -12,7 +12,6 @@ import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.utils.VideoSettings;
 
 public class Heatwave extends StaticProjectile {
 

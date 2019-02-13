@@ -225,8 +225,7 @@ public class DeleteCharacterScreen extends MyScreen implements InputProcessor {
 	}
 	
 	void update() {
-		updateVirtualCoords();
-		updatePointer();
+		universalUpdate();
 	}
 
 	@Override

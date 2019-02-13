@@ -3,7 +3,6 @@ package com.mygdx.game.particles;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
@@ -12,7 +11,7 @@ import com.badlogic.gdx.utils.Pools;
 import com.mygdx.game.particles.Particle.Behaviour;
 import com.mygdx.game.particles.Particle.Sprite;
 import com.mygdx.game.serialisation.KryoManager;
-import com.mygdx.game.utils.VideoSettings;
+import com.mygdx.game.settings.VideoSettings;
 
 public class ParticleEngine {
 

@@ -1,6 +1,7 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -22,6 +23,7 @@ import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.IsometricRenderer.Visibility;
 import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.skills.ActiveSkill;
 import com.mygdx.game.skills.BasicAttack;
 import com.mygdx.game.skills.NullBasicAttack;

@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -11,20 +12,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.physics.Hitboxes;
 import com.mygdx.game.rendering.RenderingUtils;
 import com.mygdx.game.screens.MainMenuScreen;
 import com.mygdx.game.serialisation.KryoManager;
-import com.mygdx.game.utils.VideoSettings;
-
-import javax.xml.soap.Text;
+import com.mygdx.game.settings.ControlSettings;
+import com.mygdx.game.settings.Settings;
+import com.mygdx.game.settings.VideoSettings;
 
 public class AON_E extends Game {
 
@@ -113,7 +112,12 @@ public class AON_E extends Game {
 		RenderingUtils.initialise();
 
 //		videoSettings = new VideoSettings();
-		VideoSettings.init();
+		Settings.init();
+		ControlSettings.init();
+
+//		ControlSettings.resetKeyBindings();
+//		ControlSettings.setBasicAttackKey(Input.Keys.Q);
+//		ControlSettings.setOpenInventoryKey(Input.Keys.W);
 
 		camera = new OrthographicCamera();
 //		viewport = new FitViewport(WORLD_WIDTH, WORLD_WIDTH * ((float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth()), camera);

@@ -17,6 +17,11 @@ abstract class MyScreen implements Screen {
 
 	abstract void update();
 
+	void universalUpdate() {
+		updateVirtualCoords();
+		updatePointer();
+	}
+
 	/**
 	 * Updates the position of the pointer used as the cursor.
 	 */
