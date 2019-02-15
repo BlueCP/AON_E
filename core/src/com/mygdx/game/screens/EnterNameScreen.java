@@ -54,6 +54,7 @@ public class EnterNameScreen extends MyScreen implements InputProcessor {
 					return;
 				}
 				newGame.player.setPlayerName(nameField.getText());
+				game.musicManager.titleMusic.stop();
 				game.setScreen(new CreatingCharacterScreen(game, newGame));
 			}
 		});
@@ -84,7 +85,7 @@ public class EnterNameScreen extends MyScreen implements InputProcessor {
 		stage.addActor(table);
 
 //		game.videoSettings.enableFullScreen();
-		VideoSettings.enableFullScreen();
+//		VideoSettings.enableFullScreen();
 		
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
@@ -109,8 +110,8 @@ public class EnterNameScreen extends MyScreen implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		//  Auto-generated method stub
-		return false;
+		game.soundManager.click.play();
+		return true;
 	}
 
 	@Override

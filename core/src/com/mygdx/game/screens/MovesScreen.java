@@ -7,15 +7,11 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
-import com.mygdx.game.playerattributes.Move;
 import com.mygdx.game.rendering.RenderingUtils;
 
 public class MovesScreen implements Screen, InputProcessor {
@@ -183,7 +179,8 @@ public class MovesScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		game.pointer.setRegion(game.pointerDown);
-		game.click.play();
+//		game.click.play();
+		game.soundManager.click.play();
 		return true;
 	}
 

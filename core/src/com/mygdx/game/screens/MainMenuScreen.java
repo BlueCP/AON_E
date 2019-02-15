@@ -3,7 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,7 +24,7 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 	
 	private Texture titleScreen;
 	
-	private Music titleMusic;
+//	private Music titleMusic;
 	
 	private Stage stage;
 	private Table table;
@@ -40,9 +40,9 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 
 		titleScreen = game.manager.get("textures/titlescreen.jpg", Texture.class);
 		
-		titleMusic = game.manager.get("music/titletheme.mp3", Music.class);
-		titleMusic.setLooping(true);
-		//titleMusic.play();
+//		titleMusic = game.manager.get("music/titletheme.mp3", Music.class);
+		game.musicManager.titleMusic.setLooping(true);
+//		game.soundManager.titleMusic.play();
 		
 		title = new Label("AON_E", new LabelStyle(AON_E.DEFAULT_FONT, Color.MAGENTA));
 		title.setFontScale(3);
@@ -60,7 +60,7 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 		resumeButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new ChooseCharacterScreen(game, titleMusic));
+				game.setScreen(new ChooseCharacterScreen(game));
 			}
 		});
 //		resumeButton.getLabel().setFontScale(AON_E.screenSizeFactor);
@@ -121,7 +121,10 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		game.pointer.setRegion(game.pointerDown);
-		game.click.play(3f);
+//		game.click.play(3f);
+		game.soundManager.click.play();
+//		Sound sound = game.manager.get("sound/UI/click.wav");
+//		sound.play(1, 1, -0.8f);
 		return true;
 	}
 
@@ -220,7 +223,6 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 
 	@Override
 	public void dispose() {
-		titleMusic.dispose();
 		stage.dispose();
 	}
 	

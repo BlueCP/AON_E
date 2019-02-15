@@ -174,7 +174,8 @@ public class ChooseRaceAndClassScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		game.pointer.setRegion(game.pointerDown);
-		game.click.play();
+//		game.click.play();
+		game.soundManager.click.play();
 		return true;
 	}
 

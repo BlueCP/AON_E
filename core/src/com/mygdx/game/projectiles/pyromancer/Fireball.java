@@ -1,11 +1,9 @@
 package com.mygdx.game.projectiles.pyromancer;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.particles.Particle.Behaviour;
@@ -79,6 +77,7 @@ public class Fireball extends DynamicProjectile {
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, 2,
 					Particle.Sprite.FIRE, Behaviour.POOF);
 			playScreen.isoRenderer.camera.screenShake(0.2f, 0.2f);
+			playScreen.game.soundManager.fireball.play(playScreen.isoRenderer.camera.pos, entity.pos);
 		}
 
 		return true;

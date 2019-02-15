@@ -3,7 +3,6 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,21 +21,19 @@ public class ChooseCharacterScreen extends MyScreen implements InputProcessor {
 	
 	private Texture chooseCharacterBackground;
 	
-	private Music titleMusic;
+//	private Music titleMusic;
 	
 	Stage stage;
 	Table table;
 	private ScrollPane charactersPane;
 	private TextButton goBack;
 	
-	ChooseCharacterScreen(AON_E game, final Music titleMusic) {
+	ChooseCharacterScreen(AON_E game) {
 		super(game);
 
 //		this.game = game;
 		
 		chooseCharacterBackground = game.manager.get("textures/chooseCharacterBackground.jpg");
-		
-		this.titleMusic = titleMusic;
 		
 		Table characterTable = new Table();
 		FileHandle[] saves = Gdx.files.local("saves").list();
@@ -45,7 +42,7 @@ public class ChooseCharacterScreen extends MyScreen implements InputProcessor {
 			button.addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					titleMusic.stop();
+					game.musicManager.titleMusic.stop();
 					game.setScreen(new PlayScreen(game, button.getText().toString()));
 				}
 			});
@@ -76,7 +73,7 @@ public class ChooseCharacterScreen extends MyScreen implements InputProcessor {
 		stage.addActor(table);
 
 //		game.videoSettings.disableFullScreen();
-		VideoSettings.disableFullScreen();
+//		VideoSettings.disableFullScreen();
 		
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
@@ -158,8 +155,8 @@ public class ChooseCharacterScreen extends MyScreen implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		//  Auto-generated method stub
-		return false;
+		game.soundManager.click.play();
+		return true;
 	}
 
 	@Override

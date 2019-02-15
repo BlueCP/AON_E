@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
@@ -28,7 +27,6 @@ import com.mygdx.game.playerattributes.SkillCollection;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
 import com.mygdx.game.rendering.IsometricRenderer;
-import com.mygdx.game.rendering.ScreenShakeAction;
 import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.stages.HudStage;
 import com.mygdx.game.stages.OwnStage;
@@ -37,16 +35,14 @@ import com.mygdx.game.utils.Util;
 import com.mygdx.game.world.Time;
 import javafx.util.Pair;
 
-import java.security.Key;
-
 public class PlayScreen extends MyScreen implements InputProcessor {
 
 	public static int foo = 1;
 	
 //	public AON_E game;
 	
-	Music travelMusic;
-	
+//	Music travelMusic;
+
 	public Screen subscreen = null;
 	public String playerName;
 	public Player player;
@@ -138,9 +134,9 @@ public class PlayScreen extends MyScreen implements InputProcessor {
 		//fullManaBar = game.manager.get("sprites/fullManaBar.png");
 		//manaBar = new TextureRegion(fullManaBar);
 		
-		travelMusic = game.manager.get("music/travelmusic.mp3");
-		travelMusic.setLooping(true);
-		//travelMusic.play();
+//		travelMusic = game.manager.get("music/travelmusic.mp3");
+		game.musicManager.travelMusic.setLooping(true);
+//		game.soundManager.travelMusic.play();
 		
 		initialiseBlueprints(game);
 		ParticleSprites.initialise(game);
@@ -750,7 +746,8 @@ public class PlayScreen extends MyScreen implements InputProcessor {
 	private void processMouseInput() {
 		processingMouseInput = true;
 		if (mouseEvents.size > 0) {
-			game.click.play();
+//			game.click.play();
+			game.soundManager.click.play();
 		}
 		for (MouseEvent event: mouseEvents) {
 			if (event.button == Buttons.RIGHT) {

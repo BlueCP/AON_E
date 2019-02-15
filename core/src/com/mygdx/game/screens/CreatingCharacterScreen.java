@@ -2,10 +2,8 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.AON_E;
-import com.mygdx.game.rendering.RenderingUtils;
 import com.mygdx.game.runners.SaveNewGameRunner;
 import com.mygdx.game.utils.NewGameData;
 
@@ -51,7 +49,8 @@ public class CreatingCharacterScreen extends MyScreen implements InputProcessor 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		game.pointer.setRegion(game.pointerDown);
-		game.click.play();
+//		game.click.play();
+		game.soundManager.click.play();
 		return true;
 	}
 

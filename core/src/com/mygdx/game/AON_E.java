@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -17,13 +16,14 @@ import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.audio.MusicManager;
+import com.mygdx.game.audio.SoundManager;
 import com.mygdx.game.physics.Hitboxes;
 import com.mygdx.game.rendering.RenderingUtils;
 import com.mygdx.game.screens.MainMenuScreen;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.settings.Settings;
-import com.mygdx.game.settings.VideoSettings;
 
 public class AON_E extends Game {
 
@@ -79,7 +79,7 @@ public class AON_E extends Game {
 
 	public Sprite pointer;
 
-	public Sound click;
+//	public Sound click;
 
 	// These imaginary units are the units for full HD for convenience.
 	// It means the size of assets doesn't have to be changed, because they were all created for full HD by default anyway.
@@ -89,6 +89,9 @@ public class AON_E extends Game {
 
 	public OrthographicCamera camera;
 	public Viewport viewport;
+
+	public SoundManager soundManager;
+	public MusicManager musicManager;
 
 //	public VideoSettings videoSettings;
 
@@ -172,7 +175,8 @@ public class AON_E extends Game {
 		manager.load("music/travelmusic.mp3", Music.class);
 
 		// Loading sounds
-		manager.load("soundfx/click.wav", Sound.class);
+		manager.load("sound/soundFX/fireball.wav", Sound.class);
+		manager.load("sound/UI/click.wav", Sound.class);
 
 		// Loading world textures
 		manager.load("world/constObjects/constObjects.atlas", TextureAtlas.class);
@@ -199,7 +203,9 @@ public class AON_E extends Game {
 
 		pointer = new Sprite(pointerUp);
 
-		click = manager.get("soundfx/click.wav");
+//		click = manager.get("soundfx/click.wav");
+		soundManager = new SoundManager(this);
+		musicManager = new MusicManager(this);
 
 //		viewport = new ScreenViewport();
 
