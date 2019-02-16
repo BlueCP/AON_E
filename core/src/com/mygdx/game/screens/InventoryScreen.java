@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.items.*;
 
-public class InventoryScreen extends MyScreen implements InputProcessor {
+public class InventoryScreen extends MyScreen {
 
 //	private AON_E game;
 	private PlayScreen playScreen;

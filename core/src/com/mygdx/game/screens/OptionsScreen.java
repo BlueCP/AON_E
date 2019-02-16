@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
 
-public class OptionsScreen extends MyScreen implements InputProcessor {
+public class OptionsScreen extends MyScreen {
 
 //	private AON_E game;
 	private PlayScreen playScreen;
@@ -66,6 +66,14 @@ public class OptionsScreen extends MyScreen implements InputProcessor {
 			}
 		});
 //		controls.getLabel().setFontScale(AON_E.screenSizeFactor);
+
+		TextButton settings = new TextButton("Settings", AON_E.SKIN);
+		settings.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new SettingsScreen(game, game.getScreen()));
+			}
+		});
 		
 		allControls = new Label("[ESCAPE]: Options menu.\n"
 							  + "w: Move up.\n"
@@ -92,10 +100,11 @@ public class OptionsScreen extends MyScreen implements InputProcessor {
 		table.align(Align.center);
 		table.setWidth(stage.getWidth());
 		table.setHeight(stage.getHeight());
-		table.add(resumeGame).row();
-		table.add(saveGame).padTop(30).row();
-		table.add(saveAndExit).padTop(30).row();
-		table.add(controls).padTop(30).row();
+		table.add(resumeGame).width(300).padBottom(30).row();
+		table.add(saveGame).fillX().padBottom(30).row();
+		table.add(saveAndExit).fillX().padBottom(30).row();
+		table.add(controls).fillX().padBottom(30).row();
+		table.add(settings).fillX().padBottom(30);
 		stage.addActor(table);
 		stage.addActor(allControls);
 		
@@ -168,8 +177,7 @@ public class OptionsScreen extends MyScreen implements InputProcessor {
 
 	@Override
 	public void show() {
-		//  Auto-generated method stub
-		
+		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
 	
 	void update() {

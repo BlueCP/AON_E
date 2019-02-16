@@ -19,7 +19,7 @@ import com.mygdx.game.AON_E;
 import com.mygdx.game.utils.NewGameData;
 import com.mygdx.game.settings.VideoSettings;
 
-public class EnterNameScreen extends MyScreen implements InputProcessor {
+public class EnterNameScreen extends MyScreen {
 
 //	private AON_E game;
 	

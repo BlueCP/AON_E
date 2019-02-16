@@ -35,7 +35,7 @@ import com.mygdx.game.utils.Util;
 import com.mygdx.game.world.Time;
 import javafx.util.Pair;
 
-public class PlayScreen extends MyScreen implements InputProcessor {
+public class PlayScreen extends MyScreen {
 
 	public static int foo = 1;
 	
@@ -614,6 +614,9 @@ public class PlayScreen extends MyScreen implements InputProcessor {
 			}
 			else if (keycode == Keys.SPACE) {
 				testForJump();
+			}
+			else if (keycode == Keys.ESCAPE) {
+				game.setScreen(new OptionsScreen(game, this));
 			}
 			/*switch (keycode) {
 				case Keys.W:

@@ -37,6 +37,10 @@ public class ParticleEngine {
 	}
 	
 	public void update(float delta, btDynamicsWorld dynamicsWorld) {
+		if (!VideoSettings.isParticlesEnabled()) {
+			particles.clear();
+		}
+
 		for (int i = 0; i < particles.size; i ++) {
 			Particle particle = particles.get(i);
 			particle.setLifetime(particle.getLifetime() - delta);

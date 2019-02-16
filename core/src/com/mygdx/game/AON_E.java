@@ -118,9 +118,9 @@ public class AON_E extends Game {
 		Settings.init();
 		ControlSettings.init();
 
-//		ControlSettings.resetKeyBindings();
-//		ControlSettings.setBasicAttackKey(Input.Keys.Q);
-//		ControlSettings.setOpenInventoryKey(Input.Keys.W);
+//		ControlSettingsScreen.resetKeyBindings();
+//		ControlSettingsScreen.setBasicAttackKey(Input.Keys.Q);
+//		ControlSettingsScreen.setOpenInventoryKey(Input.Keys.W);
 
 		camera = new OrthographicCamera();
 //		viewport = new FitViewport(WORLD_WIDTH, WORLD_WIDTH * ((float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth()), camera);

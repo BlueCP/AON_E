@@ -1,11 +1,12 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.AON_E;
 
-abstract class MyScreen implements Screen {
+abstract class MyScreen implements Screen, InputProcessor {
 
 	public AON_E game;
 

@@ -49,12 +49,20 @@ public class ControlSettings extends Settings {
 		takenKeys.add(newKey);
 	}
 
-	public static void setBasicAttackKey(int key) {
+	/**
+	 *
+	 * @param key
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setBasicAttackKey(int key) {
 //		basicAttackKey = key;
 		if (!takenKeys.contains(key, true)) {
 			updateTakenKeys(basicAttackKey(), key);
 			preferences.putInteger("basicAttackKey", key);
 			preferences.flush();
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -62,12 +70,21 @@ public class ControlSettings extends Settings {
 		return preferences.getInteger("basicAttackKey", Keys.W);
 	}
 
-	public static void setAbilityKey(int abilityNumber, int key) {
+	/**
+	 *
+	 * @param abilityNumber
+	 * @param key
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setAbilityKey(int abilityNumber, int key) {
 //		abilityKeys[abilityNumber - 1] = key;
 		if (!takenKeys.contains(key, true)) {
 			updateTakenKeys(abilityKey(abilityNumber), key);
 			preferences.putInteger("ability" + abilityNumber + "Key", key);
 			preferences.flush();
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -75,12 +92,20 @@ public class ControlSettings extends Settings {
 		return preferences.getInteger("ability" + abilityNumber + "Key", Keys.valueOf(String.valueOf(abilityNumber)));
 	}
 
-	public static void setOpenInventoryKey(int key) {
+	/**
+	 *
+	 * @param key
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setOpenInventoryKey(int key) {
 //		openInventoryKey = key;
 		if (!takenKeys.contains(key, true)) {
 			updateTakenKeys(openInventoryKey(), key);
 			preferences.putInteger("openInventoryKey", key);
 			preferences.flush();
+			return true;
+		} else {
+			return false;
 		}
 	}
 

@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.settings.VideoSettings;
 
-public class ChooseCharacterScreen extends MyScreen implements InputProcessor {
+public class ChooseCharacterScreen extends MyScreen {
 
 //	AON_E game;
 	

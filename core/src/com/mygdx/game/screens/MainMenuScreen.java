@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
 
-public class MainMenuScreen extends MyScreen implements InputProcessor {
+public class MainMenuScreen extends MyScreen {
 
 //	private AON_E game;
 	//private GlyphLayout gLay;
@@ -27,12 +27,6 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 //	private Music titleMusic;
 	
 	private Stage stage;
-	private Table table;
-	private Label title;
-	private TextButton createButton;
-	private TextButton resumeButton;
-	private TextButton deleteButton;
-	private TextButton exitButton;
 
 	public MainMenuScreen(AON_E game) {
 		super(game);
@@ -43,11 +37,11 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 //		titleMusic = game.manager.get("music/titletheme.mp3", Music.class);
 		game.musicManager.titleMusic.setLooping(true);
 //		game.soundManager.titleMusic.play();
-		
-		title = new Label("AON_E", new LabelStyle(AON_E.DEFAULT_FONT, Color.MAGENTA));
+
+		Label title = new Label("AON_E", new LabelStyle(AON_E.DEFAULT_FONT, Color.MAGENTA));
 		title.setFontScale(3);
-		
-		createButton = new TextButton("Create character", AON_E.SKIN);
+
+		TextButton createButton = new TextButton("Create character", AON_E.SKIN);
 		createButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -55,8 +49,8 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 			}
 		});
 //		createButton.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
-		resumeButton = new TextButton("Resume game", AON_E.SKIN);
+
+		TextButton resumeButton = new TextButton("Resume game", AON_E.SKIN);
 		resumeButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -64,8 +58,8 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 			}
 		});
 //		resumeButton.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
-		deleteButton = new TextButton("Delete character", AON_E.SKIN);
+
+		TextButton deleteButton = new TextButton("Delete character", AON_E.SKIN);
 		deleteButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -73,8 +67,16 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 			}
 		});
 //		deleteButton.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
-		exitButton = new TextButton("Exit game", AON_E.SKIN);
+
+		TextButton settingsButton = new TextButton("Settings", AON_E.SKIN);
+		settingsButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new SettingsScreen(game, game.getScreen()));
+			}
+		});
+
+		TextButton exitButton = new TextButton("Exit game", AON_E.SKIN);
 		exitButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -84,7 +86,8 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 //		exitButton.getLabel().setFontScale(AON_E.screenSizeFactor);
 		
 		stage = new Stage(game.viewport);
-		table = new Table();
+
+		Table table = new Table();
 		table.setWidth(stage.getWidth());
 		table.setHeight(stage.getHeight());
 		table.align(Align.center | Align.top);
@@ -97,7 +100,10 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 		table.row();
 		table.add(deleteButton).padBottom(30).fillX();
 		table.row();
+		table.add(settingsButton).padBottom(30).fillX();
+		table.row();
 		table.add(exitButton).fillX();
+
 		stage.addActor(table);
 		
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
@@ -194,8 +200,7 @@ public class MainMenuScreen extends MyScreen implements InputProcessor {
 	
 	@Override
 	public void show() {
-		//  Auto-generated method stub
-		
+		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
 
 	@Override

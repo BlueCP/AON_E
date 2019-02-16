@@ -11,6 +11,7 @@ public class AudioSettings extends Settings {
 
 	public static void setMasterVolume(float volume) {
 		preferences.putFloat("masterVolume", volume);
+		preferences.flush();
 	}
 
 	public static float musicVolume() {
@@ -19,6 +20,7 @@ public class AudioSettings extends Settings {
 
 	public static void setMusicVolume(float volume) {
 		preferences.putFloat("musicVolume", volume);
+		preferences.flush();
 	}
 
 	public static float environmentalVolume() {
@@ -27,6 +29,7 @@ public class AudioSettings extends Settings {
 
 	public static void setEnvironmentalVolume(float volume) {
 		preferences.putFloat("environmental", volume);
+		preferences.flush();
 	}
 
 	public static float soundFXVolume() {
@@ -35,6 +38,7 @@ public class AudioSettings extends Settings {
 
 	public static void setSoundFXVolume(float volume) {
 		preferences.putFloat("soundFXVolume", volume);
+		preferences.flush();
 	}
 
 	public static float creatureVolume() {
@@ -43,6 +47,7 @@ public class AudioSettings extends Settings {
 
 	public static void setCreatureVolume(float volume) {
 		preferences.putFloat("creatureVolume", volume);
+		preferences.flush();
 	}
 
 	public static float UIVolume() {
@@ -51,6 +56,7 @@ public class AudioSettings extends Settings {
 
 	public static void setUIVolume(float volume) {
 		preferences.putFloat("UIVolume", volume);
+		preferences.flush();
 	}
 
 }

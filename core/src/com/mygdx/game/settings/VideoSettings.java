@@ -81,12 +81,17 @@ public class VideoSettings extends Settings {
 		preferences.flush();
 	}
 
-	public static void disableParticles(ParticleEngine particleEngine) {
+	public static void disableParticles() {
+		preferences.putBoolean("Particles", false);
+		preferences.flush();
+	}
+
+	/*public static void disableParticles(ParticleEngine particleEngine) {
 		particleEngine.particles.clear();
 
 		preferences.putBoolean("Particles", false);
 		preferences.flush();
-	}
+	}*/
 
 	public static boolean isScreenShakeEnabled() {
 		return preferences.getBoolean("Screen shake", true);
