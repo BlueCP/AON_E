@@ -44,8 +44,8 @@ public class IncendiaryTrapExplosion extends StaticProjectile {
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		if (entity.id != owner) {
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage, true);
-			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity);
+			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
+			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
 //		entity.dealDamageOLD(owner, playScreen.player, damage);
 //		playScreen.player.flamingBarrage.testfor(owner);
 //		playScreen.player.vikingFuneral.testfor(owner, entity);

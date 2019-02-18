@@ -66,8 +66,8 @@ public class IceShard extends DynamicProjectile {
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		if (entity.id != owner) {
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage, true);
-			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity);
+			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
+			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, 2,

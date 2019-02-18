@@ -21,13 +21,13 @@ public class FireballSkill extends TargetedSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(5, 0.5f, Entity.AnimationType.SHOOT_PROJECTILE, playScreen.entities);
+		defaultStart(5, 0.5f, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
 	}
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		if (playScreen.entities.getEntity(targetEntity) != null) {
-			playScreen.projectileManager.addFireball(entity, playScreen, entity.pos, playScreen.entities.getEntity(targetEntity).pos, 5);
+		if (playScreen.entities.getEntity(targetEntity, playScreen.player).id != -1) {
+			playScreen.projectileManager.addFireball(entity, playScreen, entity.pos, playScreen.entities.getEntity(targetEntity, playScreen.player).pos, 5);
 			putOnCooldown(2);
 		} else {
 			failResolve();

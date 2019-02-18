@@ -1,4 +1,4 @@
-package com.mygdx.game.projectiles.pyromancer;
+package com.mygdx.game.projectiles.cryomancer;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
@@ -12,20 +12,24 @@ import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
 
-public class SupernovaExplosion extends StaticProjectile {
+public class ShatterExplosion extends StaticProjectile {
 
-	private static final int damage = 3;
+	private static final int damagePerStack = 1;
 	private static final float radius = 2;
+
+	private float totalDamage;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SupernovaExplosion() { }
+	public ShatterExplosion() { }
 
-	public SupernovaExplosion(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos) {
+	public ShatterExplosion(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos, int stacks) {
 		super(entity, projectileEngine, ProjectileSprite.FIREBOLT, pos, -1);
 
-		name = "Supernova Explosion";
+		name = "Shatter";
+
+		totalDamage = damagePerStack * stacks;
 
 		loadPhysicsObject();
 		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(pos));
@@ -33,22 +37,16 @@ public class SupernovaExplosion extends StaticProjectile {
 	}
 
 	@Override
-	protected void loadPhysicsObject() {
-		defaultLoadCollisionObject(new btSphereShape(radius));
-
-		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
-	}
-
-	@Override
 	public void update(float delta, PlayScreen playScreen) {
-		playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 5, 1,
-											Particle.Sprite.FIRE, Particle.Behaviour.POOF);
+		playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 4, 1,
+				Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
+		playScreen.isoRenderer.camera.screenShake(0.2f, 0.2f);
 	}
 
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		if (entity.id != owner) {
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
+			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), totalDamage);
 			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
 			return true;
 		} else {
@@ -59,6 +57,13 @@ public class SupernovaExplosion extends StaticProjectile {
 	@Override
 	public boolean onHitProjectile(Projectile projectile, PlayScreen playScreen) {
 		return false;
+	}
+
+	@Override
+	protected void loadPhysicsObject() {
+		defaultLoadCollisionObject(new btSphereShape(radius));
+
+		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
 	}
 
 }

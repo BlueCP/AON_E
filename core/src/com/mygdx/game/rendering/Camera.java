@@ -1,8 +1,11 @@
 package com.mygdx.game.rendering;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.AON_E;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.screens.PlayScreen;
 import com.badlogic.gdx.utils.Array;
@@ -11,10 +14,13 @@ import com.mygdx.game.settings.VideoSettings;
 
 public class Camera {
 
+	public OrthographicCamera orthographicCamera;
+	public FitViewport viewport;
+
 	public Vector3 pos;
 	public Vector3 screenShakeDisplacement;
 	public Vector2 isoPos;
-	private float zoom; // Higher = zoomed in, lower = zoomed out
+//	private float zoom; // Higher = zoomed in, lower = zoomed out
 	//private int followedEntity;
 
 	private ScreenShakeAction screenShakeAction; // Screen shakes get their own place because they are different to all other actions; they would normally not wait in a queue.
@@ -22,13 +28,19 @@ public class Camera {
 	private Array<UnlimitedCameraAction> unlimitedActions;
 	
 	Camera() {
+		orthographicCamera = new OrthographicCamera();
+		viewport = new FitViewport(AON_E.WORLD_WIDTH, AON_E.WORLD_HEIGHT, orthographicCamera);
+		orthographicCamera.position.set(orthographicCamera.viewportWidth/2, orthographicCamera.viewportHeight/2, 0);
+		orthographicCamera.update();
+		System.out.println(orthographicCamera.zoom);
+
 		screenShakeAction = new ScreenShakeAction();
 		limitedActions = new Queue<>();
 		unlimitedActions = new Array<>();
 		
 		pos = new Vector3();
 		screenShakeDisplacement = new Vector3();
-		zoom = 1;
+//		zoom = 1;
 	}
 	
 	public void update(Player player, PlayScreen playScreen) {
@@ -162,23 +174,23 @@ public class Camera {
 	
 	public void addSoftZoomNow(float lifetime, float targetZoom) {
 		testForEmptyQueue();
-		limitedActions.first().add(new SoftZoomAction(lifetime, zoom, targetZoom));
+		limitedActions.first().add(new SoftZoomAction(lifetime, orthographicCamera.zoom, targetZoom));
 	}
 	
 	public void addSoftZoomToQueue(float lifetime, float targetZoom) {
 		Array<LimitedCameraAction> array = new Array<>();
-		array.add(new SoftZoomAction(lifetime, zoom, targetZoom));
+		array.add(new SoftZoomAction(lifetime, orthographicCamera.zoom, targetZoom));
 		limitedActions.addLast(array);
 	}
 	
 	public void addHardZoomNow(float lifetime, float targetZoom) {
 		testForEmptyQueue();
-		limitedActions.first().add(new HardZoomAction(lifetime, zoom, targetZoom));
+		limitedActions.first().add(new HardZoomAction(lifetime, orthographicCamera.zoom, targetZoom));
 	}
 	
 	public void addHardZoomToQueue(float lifetime, float targetZoom) {
 		Array<LimitedCameraAction> array = new Array<>();
-		array.add(new HardZoomAction(lifetime, zoom, targetZoom));
+		array.add(new HardZoomAction(lifetime, orthographicCamera.zoom, targetZoom));
 		limitedActions.addLast(array);
 	}
 	
@@ -187,11 +199,11 @@ public class Camera {
 	}
 	
 	float getZoom() {
-		return zoom;
+		return orthographicCamera.zoom;
 	}
 	
 	void setZoom(float zoom) {
-		this.zoom = zoom;
+		orthographicCamera.zoom = zoom;
 	}
 	
 }

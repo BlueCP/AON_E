@@ -5,7 +5,6 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.statuseffects.Effect;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
@@ -53,16 +52,17 @@ public class Heatwave extends StaticProjectile {
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		if (entity.id != owner) {
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage, true);
-			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity);
+			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
+			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
 //		entity.dealDamageOLD(owner, playScreen.player, damage);
 //		playScreen.player.flamingBarrage.testfor(owner);
 			entity.slowedEffect.add(slowPower, slowDuration);
 //		playScreen.player.vikingFuneral.testfor(owner, entity);
 //		entity.changeEffect(Effect.EffectType.SLOWED, slowDuration, slowPower);
+			return true;
+		} else {
+			return false;
 		}
-
-		return true;
 	}
 
 	@Override

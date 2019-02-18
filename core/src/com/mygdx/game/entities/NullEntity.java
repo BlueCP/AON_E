@@ -2,14 +2,10 @@ package com.mygdx.game.entities;
 
 import com.mygdx.game.screens.PlayScreen;
 
-public class Rabbit extends Entity {
-	
-	public Rabbit() {
-		super.name = "Rabbit";
-		super.setLife(5);
-		super.basePhysDmg = 0;
-		super.setBehaviour(Behaviour.FLEE);
-		super.setNature(Nature.PASSIVE);
+public class NullEntity extends Entity {
+
+	public NullEntity() {
+		id = -1;
 	}
 
 	@Override
@@ -19,12 +15,12 @@ public class Rabbit extends Entity {
 
 	@Override
 	public void onInteract(PlayScreen session) {
-		session.newMessage("The rabbit looks at you in fear.");
+
 	}
 
 	@Override
 	public void attack(Entity target, int range, PlayScreen session) {
 
 	}
-	
+
 }

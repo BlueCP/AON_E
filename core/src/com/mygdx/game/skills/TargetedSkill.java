@@ -7,6 +7,7 @@ import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
+import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.Util;
 
 public abstract class TargetedSkill extends ActiveSkill {
@@ -17,8 +18,8 @@ public abstract class TargetedSkill extends ActiveSkill {
 		super(entity);
 	}
 
-	protected void defaultStart(int cost, float time, Entity.AnimationType animationType, Entities entities) {
-		if (entity.actions.size == 0 && entities.getEntity(entity.getTargetEntity()) != null && state == State.AVAILABLE) {
+	protected void defaultStart(int cost, float time, Entity.AnimationType animationType, PlayScreen playScreen) {
+		if (entity.actions.size == 0 && playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player).id != -1 && state == State.AVAILABLE) {
 			if (hasResource(entity, cost)) {
 				useSkill();
 				targetEntity = entity.getTargetEntity();
@@ -26,7 +27,7 @@ public abstract class TargetedSkill extends ActiveSkill {
 				array.add(new SkillAction(this, animationType, time));
 				entity.actions.addFirst(array);
 				entity.setAnimationType(animationType);
-				faceTarget(entities.getEntity(entity.getTargetEntity()));
+				faceTarget(playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player));
 			}
 		}
 	}

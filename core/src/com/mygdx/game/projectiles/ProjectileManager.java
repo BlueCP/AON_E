@@ -6,8 +6,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.projectiles.cryomancer.Frostbolt;
-import com.mygdx.game.projectiles.cryomancer.IceShard;
+import com.mygdx.game.projectiles.cryomancer.*;
 import com.mygdx.game.projectiles.pyromancer.*;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
@@ -173,6 +172,30 @@ public class ProjectileManager {
 
 	public void addIceShard(Entity entity, PlayScreen playScreen, Vector3 pos, Vector3 targetPos, float lifetime) {
 		projectiles.add(new IceShard(entity, playScreen, pos, targetPos, lifetime));
+	}
+
+	public void addBlizzard(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
+		projectiles.add(new Blizzard(entity, this, dynamicsWorld, pos, lifetime));
+	}
+
+	public void addDefrostingArea(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos) {
+		projectiles.add(new DefrostingArea(entity, this, dynamicsWorld, pos));
+	}
+
+	public void addHailstorm(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
+		projectiles.add(new Hailstorm(entity, this, dynamicsWorld, pos, lifetime));
+	}
+
+	public void addCryosleep(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
+		projectiles.add(new Cryosleep(entity, this, dynamicsWorld, pos, lifetime));
+	}
+
+	public void addShatterExplosion(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, int stacks) {
+		projectiles.add(new ShatterExplosion(entity, this, dynamicsWorld, pos, stacks));
+	}
+
+	public void addGlacialWall(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
+		projectiles.add(new GlacialWall(entity, this, dynamicsWorld, pos, lifetime));
 	}
 	
 	public void addRazeZone(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {

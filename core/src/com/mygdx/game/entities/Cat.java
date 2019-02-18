@@ -40,11 +40,6 @@ public class Cat extends Entity {
 	}
 
 	@Override
-	public void dealDamageNoCheck(Entity entity, float damage) {
-
-	}
-
-	@Override
 	public void takeDamage(Entity entity, float damage) {
 
 	}

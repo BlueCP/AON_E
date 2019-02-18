@@ -611,6 +611,12 @@ public class PlayScreen extends MyScreen {
 			else if (keycode == Keys.SHIFT_LEFT) {
 				entities.addEntity(new Dummy(entities, new Vector3(0, 5, 0)), physicsManager);
 			}
+			else if (keycode == Keys.SHIFT_RIGHT) {
+				Entity entity = new Dummy(entities, new Vector3(0, 5, 0));
+				entity.setMaxLife(1000);
+				entity.setLife(1000);
+				entities.addEntity(entity, physicsManager);
+			}
 			else if (keycode == Keys.ESCAPE) {
 				game.setScreen(new OptionsScreen(game, this));
 			}

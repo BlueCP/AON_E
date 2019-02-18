@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.mygdx.game.particles.Particle.Behaviour;
 import com.mygdx.game.particles.Particle.Sprite;
+import com.mygdx.game.projectiles.DynamicProjectile;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.settings.VideoSettings;
 
@@ -143,6 +144,14 @@ public class ParticleEngine {
 		}
 	}
 
+	public void addParticle(btDynamicsWorld dynamicsWorld, Vector3 pos, Vector3 velocity, float lifetime, Sprite sprite, Behaviour behaviour) {
+		if (VideoSettings.isParticlesEnabled()) {
+			Particle particle = getParticle(dynamicsWorld, pos, lifetime, sprite, behaviour);
+			particle.rigidBody.setLinearVelocity(velocity);
+			particles.add(particle);
+		}
+	}
+
 	public void addBurst(btDynamicsWorld dynamicsWorld, Vector3 pos, int num, float speed, float lifetime, Sprite sprite, Particle.Behaviour behaviour) {
 		if (VideoSettings.isParticlesEnabled()) {
 			Vector3 velocity = new Vector3();
@@ -208,6 +217,23 @@ public class ParticleEngine {
 				newVelocity.rotate(directionChange);
 				newVelocity.scl(MathUtils.random(0.6f, 1));
 				particle.rigidBody.setLinearVelocity(new Vector3(newVelocity.x, 0, newVelocity.y));
+				particles.add(particle);
+			}
+		}
+	}
+
+	/**
+	 * Add the given number of particles, each with a random velocity and zero gravity.
+	 * They will look like they are floating around. With a low value of speed, they will appear to float in stasis.
+	 */
+	public void addFloatingParticles(btDynamicsWorld dynamicsWorld, Vector3 pos, int num, float speed, float lifetime, Sprite sprite) {
+		if (VideoSettings.isParticlesEnabled()) {
+			Vector3 velocity = new Vector3();
+			for (int i = 0; i < num; i ++) {
+				Particle particle = getParticle(dynamicsWorld, pos, lifetime, sprite, Behaviour.GRAVITY);
+				particle.rigidBody.setGravity(new Vector3());
+				velocity.setToRandomDirection().scl(speed);
+				particle.rigidBody.setLinearVelocity(velocity);
 				particles.add(particle);
 			}
 		}

@@ -1,5 +1,6 @@
-package com.mygdx.game.projectiles.pyromancer;
+package com.mygdx.game.projectiles.cryomancer;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
@@ -12,24 +13,23 @@ import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
 
-public class LavaSnare extends StaticProjectile {
+public class Cryosleep extends StaticProjectile {
 
-	private static final int burnPower = 1;
 	private static final Vector3 halfExtents = new Vector3(0.5f, 1f, 0.5f);
+	private static final float healthRegen = 5;
+	private static final float spiritRegen = 5;
 
-	private int targetEntity;
 	private boolean alreadyHit = false;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public LavaSnare() { }
+	public Cryosleep() { }
 
-	public LavaSnare(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime, Entity targetEntity) {
+	public Cryosleep(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
 		super(entity, projectileEngine, ProjectileSprite.FIREBOLT, pos, lifetime);
 
-		name = "Lava Snare";
-		this.targetEntity = targetEntity.id;
+		name = "Cryosleep";
 
 		loadPhysicsObject();
 		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
@@ -37,27 +37,18 @@ public class LavaSnare extends StaticProjectile {
 	}
 
 	@Override
-	protected void loadPhysicsObject() {
-		defaultLoadCollisionObject(new btBoxShape(halfExtents));
-
-		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
-	}
-
-	@Override
 	public void update(float delta, PlayScreen playScreen) {
-		Entity target = playScreen.entities.getEntity(targetEntity);
+		Entity entity = playScreen.entities.getEntity(owner, playScreen.player);
 
-		if (target == null) {
+		if (entity == null) {
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 		} else if (!alreadyHit) {
-			playScreen.entities.getEntity(owner, playScreen.player).landAbility(target, playScreen);
-//				playScreen.player.flamingBarrage.testfor(owner);
-//				target.burnNoCheck(2, lifetime);
-			target.burnedBy(playScreen.entities.getEntity(owner, playScreen.player), burnPower, lifetime);
-			target.rootedEffect.add(lifetime);
-//				playScreen.player.vikingFuneral.testfor(owner, target);
+			entity.frozenEffect.add(lifetime);
 			alreadyHit = true;
 		}
+
+		entity.changeLife(healthRegen * Gdx.graphics.getDeltaTime());
+		entity.changeSpirit(spiritRegen * Gdx.graphics.getDeltaTime());
 
 		if (Math.floorMod(ticksPast, 6) == 0) {
 			playScreen.particleEngine.addFlyUpPoint(playScreen.physicsManager.getDynamicsWorld(), pos, 1, 7, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
@@ -72,6 +63,13 @@ public class LavaSnare extends StaticProjectile {
 	@Override
 	public boolean onHitProjectile(Projectile projectile, PlayScreen playScreen) {
 		return false;
+	}
+
+	@Override
+	protected void loadPhysicsObject() {
+		defaultLoadCollisionObject(new btBoxShape(halfExtents));
+
+		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
 	}
 
 }

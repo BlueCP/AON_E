@@ -42,6 +42,10 @@ public class ControlSettings extends Settings {
 		}
 
 		preferences.putInteger("openInventoryKey", Keys.I);
+
+		preferences.flush();
+
+		init(); // To update the taken keys.
 	}
 
 	private static void updateTakenKeys(int oldKey, int newKey) {

@@ -15,16 +15,6 @@ public class Zombie extends Entity {
 	}
 
 	@Override
-	public void dealDamageNoCheck(Entity entity, float damage) {
-
-	}
-
-	@Override
-	public void takeDamage(Entity entity, float damage) {
-
-	}
-
-	@Override
 	public void onUpdate(PlayScreen session) {
 		if (isFollowingPlayer()) {
 			int chance = ThreadLocalRandom.current().nextInt(1, 101);

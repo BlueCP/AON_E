@@ -21,13 +21,13 @@ public class LavaSnareSkill extends TargetedSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(5, 1, Entity.AnimationType.SHOOT_PROJECTILE, playScreen.entities);
+		defaultStart(5, 1, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
 	}
 
 	@Override
 	public void finish(PlayScreen playScreen) {
 		if (entity.getTargetEntity() != -1) {
-			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity());
+			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player);
 			playScreen.projectileManager.addLavaSnare(entity, playScreen.physicsManager.getDynamicsWorld(), targetEntity.pos.cpy(), 3, targetEntity);
 			putOnCooldown(3);
 		} else {

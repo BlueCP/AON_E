@@ -61,6 +61,11 @@ public class ProcEffect extends Effect {
 		durations.add(0f);
 	}
 
+	public void remove() {
+		powers.clear();
+		durations.clear();
+	}
+
 	public boolean isActive() {
 		return powers.size > 0;
 	}

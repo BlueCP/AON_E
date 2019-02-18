@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.audio.MusicManager;
@@ -22,6 +24,7 @@ import com.mygdx.game.physics.Hitboxes;
 import com.mygdx.game.rendering.RenderingUtils;
 import com.mygdx.game.screens.MainMenuScreen;
 import com.mygdx.game.serialisation.KryoManager;
+import com.mygdx.game.serialisation.UtilsTest;
 import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.settings.Settings;
 
@@ -95,6 +98,15 @@ public class AON_E extends Game {
 
 //	public VideoSettings videoSettings;
 
+	/*private void serialiserTest() {
+		*//*Queue<String> queue = new Queue<>();
+		KryoManager.write(queue, "test");
+		Queue<String> readQueue = KryoManager.read("test", Queue.class);
+		readQueue.addFirst("bc");*//*
+
+		UtilsTest.test();
+	}*/
+
 	@Override
 	public void create () {
 
@@ -117,6 +129,8 @@ public class AON_E extends Game {
 //		videoSettings = new VideoSettings();
 		Settings.init();
 		ControlSettings.init();
+
+//		serialiserTest();
 
 //		ControlSettingsScreen.resetKeyBindings();
 //		ControlSettingsScreen.setBasicAttackKey(Input.Keys.Q);

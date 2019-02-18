@@ -127,7 +127,7 @@ public class Entities {
 				return entity;
 			}
 		}
-		return null;
+		return new NullEntity();
 	}
 
 	/**

@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.statuseffects.Effect;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
@@ -74,8 +73,8 @@ public class BurningBarrier extends StaticProjectile {
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage, true);
-			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity);
+			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
+			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
 //			entity.dealDamageOLD(owner, playScreen.player, 3);
 //			playScreen.player.flamingBarrage.testfor(owner);
 			entity.stunnedEffect.add(stunDuration);
@@ -91,11 +90,6 @@ public class BurningBarrier extends StaticProjectile {
 	@Override
 	public boolean onHitProjectile(Projectile projectile, PlayScreen playScreen) {
 		return false;
-	}
-
-	@Override
-	public void addToDynamicsWorld(btDynamicsWorld dynamicsWorld, int group, int mask) {
-		super.addToDynamicsWorld(dynamicsWorld, group, mask);
 	}
 
 }

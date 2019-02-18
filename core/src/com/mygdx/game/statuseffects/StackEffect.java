@@ -55,7 +55,12 @@ public class StackEffect extends Effect {
 	 * @param power the number of stacks to add.
 	 */
 	public void addStacks(int power) {
-		stacks ++;
+		stacks += power;
+	}
+
+	public void remove() {
+		stacks = 0;
+		duration = 0;
 	}
 
 	public boolean isActive() {

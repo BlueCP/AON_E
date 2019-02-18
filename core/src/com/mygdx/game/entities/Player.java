@@ -9,8 +9,7 @@ import com.mygdx.game.mobtypes.MobRace;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.skills.*;
-import com.mygdx.game.skills.cryomancer.CryomancerBasicAttack;
-import com.mygdx.game.skills.cryomancer.IceShardSkill;
+import com.mygdx.game.skills.cryomancer.*;
 import com.mygdx.game.skills.pyromancer.*;
 
 import java.util.Map.Entry;
@@ -47,6 +46,11 @@ public class Player extends Entity {
 	private StokeTheFlamesSkill stokeTheFlames;
 	private FlamingBarrageSkill flamingBarrage;
 	private SupernovaSkill supernovaSkill;
+
+	private LastingChillSkill lastingChill;
+	private BitingColdSkill bitingCold;
+	private EncaseInIceSkill encaseInIce;
+	private FracturingBlastSkill fracturingBlast;
 	
 	/*
 	public Player() {
@@ -89,6 +93,13 @@ public class Player extends Entity {
 		basicAttack = new CryomancerBasicAttack(this);
 
 		skills.add(new IceShardSkill(this));
+		skills.add(new BlizzardSkill(this));
+		skills.add(new RapidDefrostingSkill(this));
+		skills.add(new HailstormSkill(this));
+		skills.add(new OverwhelmingFrostSkill(this));
+		skills.add(new CryosleepSkill(this));
+		skills.add(new ShatterSkill(this));
+		skills.add(new GlacialWallSkill(this));
 
 
 		// Note: the player must have all of the passives loaded in like this at the start of the game.
@@ -101,17 +112,28 @@ public class Player extends Entity {
 		flamingBarrage = new FlamingBarrageSkill(this, false);
 		supernovaSkill = new SupernovaSkill(this, false);
 
+		lastingChill = new LastingChillSkill(this, true);
+		bitingCold = new BitingColdSkill(this, true);
+		encaseInIce = new EncaseInIceSkill(this, true);
+		fracturingBlast = new FracturingBlastSkill(this, true);
+
 		//rigidBody.getWorldTransform();
 	}
 
 	@Override
-	public void dealDamageNoCheck(Entity entity, float damage) {
+	public void dealDamage(Entity entity, float damage) {
 		stokeTheFlames.damage(entity, damage);
 	}
 
 	@Override
-	public void burnNoCheck(Entity entity, int power, float duration) {
+	public void burn(Entity entity, int power, float duration) {
 		stokeTheFlames.burn(entity, power, duration);
+	}
+
+	@Override
+	public void chill(Entity entity, int power, float duration) {
+		entity.chilledEffect.add(power, duration, bitingCold.isLearned(), encaseInIce.isLearned());
+//		bitingCold.chill(entity, power, duration);
 	}
 
 	@Override
@@ -120,9 +142,15 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void landAbility(Entity entity) {
+	public void landAbility(Entity entity, PlayScreen playScreen) {
 		vikingFuneral.testfor(entity);
 		flamingBarrage.testfor();
+		lastingChill.testfor(entity);
+	}
+
+	@Override
+	public void landBasicAttack(Entity entity, PlayScreen playScreen) {
+		fracturingBlast.testfor(entity, playScreen);
 	}
 
 	/*

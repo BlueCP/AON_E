@@ -13,16 +13,6 @@ public class Bandit extends Entity {
 	}
 
 	@Override
-	public void dealDamageNoCheck(Entity entity, float damage) {
-
-	}
-
-	@Override
-	public void takeDamage(Entity entity, float damage) {
-
-	}
-
-	@Override
 	public void onUpdate(PlayScreen session) {
 		if (this.isFollowingPlayer()) {
 			//follow(session, session.player);

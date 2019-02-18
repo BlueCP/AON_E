@@ -16,16 +16,6 @@ public class StoneDemidemon extends Entity {
 	}
 
 	@Override
-	public void dealDamageNoCheck(Entity entity, float damage) {
-
-	}
-
-	@Override
-	public void takeDamage(Entity entity, float damage) {
-
-	}
-
-	@Override
 	public void onUpdate(PlayScreen session) {
 		if (nature == Nature.AGGRESSIVE && isFollowingPlayer()) {
 			//this.follow(session, session.player);

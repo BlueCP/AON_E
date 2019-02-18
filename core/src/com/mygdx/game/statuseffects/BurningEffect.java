@@ -22,7 +22,7 @@ public class BurningEffect extends ProcEffect {
 	public void apply(PlayScreen playScreen) {
 		boolean burningParticlesAdded = false;
 		for (int power: powers) {
-			entity.changeLife(-2 * Gdx.graphics.getDeltaTime() * power);
+			entity.takeDamageBase(2 * Gdx.graphics.getDeltaTime() * power);
 			if (!burningParticlesAdded) {
 				playScreen.particleEngine.addFlyUpPillar(playScreen.physicsManager.getDynamicsWorld(), entity.pos, 1,
 						4, 1f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);

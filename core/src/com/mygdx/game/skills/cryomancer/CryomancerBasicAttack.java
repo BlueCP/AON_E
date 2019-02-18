@@ -21,12 +21,12 @@ public class CryomancerBasicAttack extends BasicAttack {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(0.5f, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen.entities);
+		defaultStart(0.5f, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
 	}
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		if (playScreen.entities.getEntity(targetEntity) != null) {
+		if (playScreen.entities.getEntity(targetEntity).id != -1) {
 			playScreen.projectileManager.addFrostbolt(entity, playScreen.physicsManager.getDynamicsWorld(), entity.pos, playScreen.entities.getEntity(targetEntity).pos, 5);
 			putOnCooldown(0);
 		} else {

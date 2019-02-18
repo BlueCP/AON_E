@@ -13,6 +13,8 @@ public class SupernovaSkill extends PassiveSkill {
 	 */
 	public SupernovaSkill() {
 		super(null, false);
+		name = "Supernova";
+		desc = "Killing burning enemies causes them to explode, dealing damage to all nearby enemies.";
 	}
 
 	public SupernovaSkill(Entity entity, boolean learned) {

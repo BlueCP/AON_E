@@ -33,6 +33,10 @@ public class BinaryEffect extends Effect {
 		this.duration += duration;
 	}
 
+	public void remove() {
+		duration = 0;
+	}
+
 	public boolean isActive() {
 		return duration > 0;
 	}

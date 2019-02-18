@@ -114,7 +114,7 @@ public class IsometricRenderer {
 		
 		//camera.addHardPanNow(5, new Vector3(2, 0, 2));
 		//camera.addHardZoomToQueue(3, 2f);
-//		camera.addSoftZoomToQueue(15, 2f);
+		camera.addSoftZoomToQueue(15, 2f);
 		//camera.addSoftZoomToQueue(5, 2f);
 		//camera.setZoom(0.5f);
 		//camera.addCutToQueue(2, Vector3.Zero);
@@ -540,42 +540,52 @@ public class IsometricRenderer {
 			if (orderedObjects.get(i).visibility == Visibility.INVISIBLE) {
 				continue;
 			} else if (effectiveZoom == 1) {
-				spriteBatch.draw(orderedObjects.get(i).getTexture(), orderedObjects.get(i).renderPos.x, orderedObjects.get(i).renderPos.y);
-				
-				if (PhysicsManager.isNonPlayerEntity(orderedObjects.get(i).physicsId)) {
-					Entity entity = entities.getEntity(orderedObjects.get(i).id);
-					float percLife = entity.getLife() / entity.getMaxLife();
-					int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
-					//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
-					entityLifeBar.setRegionWidth(barLength); ///
-					spriteBatch.draw(entityLifeBar, entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - fullEntityLifeBar.getWidth()/2f, entity.renderPos.y + entity.getTexture().getRegionHeight() + 20);
-				}
-				
+				renderUnzoomed(orderedObjects.get(i), spriteBatch, entities);
 			} else {
-				//float factor = Math.abs(orderedPositions.get(i).x - Gdx.graphics.getWidth()/2) / Gdx.graphics.getWidth()/2;
-				float xDisp = (orderedObjects.get(i).renderPos.x - AON_E.WORLD_WIDTH/2) * effectiveZoom;
-				float yDisp = (orderedObjects.get(i).renderPos.y - AON_E.WORLD_HEIGHT/2) * effectiveZoom;
-				orderedObjects.get(i).renderPos.set(AON_E.WORLD_WIDTH/2 + xDisp, AON_E.WORLD_HEIGHT/2 + yDisp);
-				spriteBatch.draw(orderedObjects.get(i).getTexture(), orderedObjects.get(i).renderPos.x, orderedObjects.get(i).renderPos.y, 0, 0,
-								 orderedObjects.get(i).getTexture().getRegionWidth(), orderedObjects.get(i).getTexture().getRegionHeight(),
-								 effectiveZoom, effectiveZoom, 0);
-				
-				if (PhysicsManager.isNonPlayerEntity(orderedObjects.get(i).physicsId)) {
-					Entity entity = entities.getEntity(orderedObjects.get(i).id);
-					float percLife = entity.getLife() / entity.getMaxLife();
-					int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
-					//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
-					entityLifeBar.setRegionWidth(barLength); ///
-					Vector2 coords = new Vector2(entity.renderPos.x - ((fullEntityLifeBar.getWidth()/2f - entity.getTexture().getRegionWidth()/2f) * effectiveZoom), entity.renderPos.y + ((entity.getTexture().getRegionHeight() + 20) * effectiveZoom));
-					//xDisp = (coords.x - Gdx.graphics.getWidth()/2) * camera.getZoom();
-					//yDisp = (coords.y - Gdx.graphics.getHeight()/2) * camera.getZoom();
-					//coords.set(Gdx.graphics.getWidth()/2 + xDisp, Gdx.graphics.getHeight()/2 + yDisp);
-					spriteBatch.draw(entityLifeBar, coords.x, coords.y, 0, 0, entityLifeBar.getRegionWidth(), entityLifeBar.getRegionHeight(),
-							 		 effectiveZoom, effectiveZoom, 0);
-				}
+				renderZoomed(orderedObjects.get(i), spriteBatch, entities);
 			}
 			spriteBatch.setColor(1, 1, 1, 1);
 		}
+	}
+
+	private void renderUnzoomed(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
+		spriteBatch.draw(worldObject.getTexture(), worldObject.renderPos.x, worldObject.renderPos.y);
+
+		if (PhysicsManager.isNonPlayerEntity(worldObject.physicsId)) {
+			Entity entity = entities.getEntity(worldObject.id);
+			float percLife = entity.getLife() / entity.getMaxLife();
+			int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
+			//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
+			entityLifeBar.setRegionWidth(barLength); ///
+			spriteBatch.draw(entityLifeBar, entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - fullEntityLifeBar.getWidth()/2f, entity.renderPos.y + entity.getTexture().getRegionHeight() + 20);
+		}
+	}
+
+	private void renderZoomed(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
+		//float factor = Math.abs(orderedPositions.get(i).x - Gdx.graphics.getWidth()/2) / Gdx.graphics.getWidth()/2;
+		float xDisp = (worldObject.renderPos.x - AON_E.WORLD_WIDTH/2) * effectiveZoom;
+		float yDisp = (worldObject.renderPos.y - AON_E.WORLD_HEIGHT/2) * effectiveZoom;
+		worldObject.renderPos.set(AON_E.WORLD_WIDTH/2 + xDisp, AON_E.WORLD_HEIGHT/2 + yDisp);
+		spriteBatch.draw(worldObject.getTexture(), worldObject.renderPos.x, worldObject.renderPos.y, 0, 0,
+				worldObject.getTexture().getRegionWidth(), worldObject.getTexture().getRegionHeight(),
+				effectiveZoom, effectiveZoom, 0);
+
+		if (PhysicsManager.isNonPlayerEntity(worldObject.physicsId)) {
+			drawEntityLifeBar(entities.getEntity(worldObject.id), spriteBatch);
+		}
+	}
+
+	private void drawEntityLifeBar(Entity entity, SpriteBatch spriteBatch) {
+		float percLife = entity.getLife() / entity.getMaxLife();
+		int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
+		//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
+		entityLifeBar.setRegionWidth(barLength); ///
+		Vector2 coords = new Vector2(entity.renderPos.x - ((fullEntityLifeBar.getWidth()/2f - entity.getTexture().getRegionWidth()/2f) * effectiveZoom), entity.renderPos.y + ((entity.getTexture().getRegionHeight() + 20) * effectiveZoom));
+		//xDisp = (coords.x - Gdx.graphics.getWidth()/2) * camera.getZoom();
+		//yDisp = (coords.y - Gdx.graphics.getHeight()/2) * camera.getZoom();
+		//coords.set(Gdx.graphics.getWidth()/2 + xDisp, Gdx.graphics.getHeight()/2 + yDisp);
+		spriteBatch.draw(entityLifeBar, coords.x, coords.y, 0, 0, entityLifeBar.getRegionWidth(), entityLifeBar.getRegionHeight(),
+				effectiveZoom, effectiveZoom, 0);
 	}
 	
 	public void render(PlayScreen playScreen) {

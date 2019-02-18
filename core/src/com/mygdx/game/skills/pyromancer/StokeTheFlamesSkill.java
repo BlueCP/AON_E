@@ -11,6 +11,8 @@ public class StokeTheFlamesSkill extends PassiveSkill {
 	 */
 	public StokeTheFlamesSkill() {
 		super(null, false);
+		name = "Stoke the Flames";
+		desc = "Enemies burn for longer, and you deal more damage to burning enemies.";
 	}
 
 	public StokeTheFlamesSkill(Entity entity, boolean learned) {

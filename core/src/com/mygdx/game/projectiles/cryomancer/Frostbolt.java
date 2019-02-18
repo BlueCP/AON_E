@@ -26,7 +26,7 @@ public class Frostbolt extends DynamicProjectile {
 	public Frostbolt(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos, Vector3 targetPos, float lifetime) {
 		super(entity, projectileEngine, ProjectileSprite.NO_SPRITE, pos, lifetime);
 
-		name = "Fireball";
+		name = "Frostbolt";
 
 //		this.targetPos = targetPos.cpy();
 
@@ -59,8 +59,8 @@ public class Frostbolt extends DynamicProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		if (entity.id != owner) {
 			playScreen.entities.getEntity(owner, playScreen.player).changeSpirit(spiritGain);
-
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage, true);
+			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
+			playScreen.entities.getEntity(owner, playScreen.player).landBasicAttack(entity, playScreen);
 
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 

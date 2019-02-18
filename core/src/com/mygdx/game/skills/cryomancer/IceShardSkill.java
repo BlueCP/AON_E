@@ -21,12 +21,12 @@ public class IceShardSkill extends TargetedSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(5, 0.7f, Entity.AnimationType.SHOOT_PROJECTILE, playScreen.entities);
+		defaultStart(5, 0.7f, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
 	}
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		if (playScreen.entities.getEntity(targetEntity) != null) {
+		if (playScreen.entities.getEntity(targetEntity).id != -1) {
 			playScreen.projectileManager.addFireball(entity, playScreen, entity.pos, playScreen.entities.getEntity(targetEntity).pos, 5);
 			putOnCooldown(2);
 		} else {

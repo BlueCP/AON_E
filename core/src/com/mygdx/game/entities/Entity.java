@@ -21,10 +21,7 @@ import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.ActiveSkill;
 import com.mygdx.game.skills.BasicAttack;
 import com.mygdx.game.skills.NullBasicAttack;
-import com.mygdx.game.statuseffects.BurningEffect;
-import com.mygdx.game.statuseffects.RootedEffect;
-import com.mygdx.game.statuseffects.SlowedEffect;
-import com.mygdx.game.statuseffects.StunnedEffect;
+import com.mygdx.game.statuseffects.*;
 import com.mygdx.game.utils.Util;
 
 import java.util.HashMap;
@@ -47,6 +44,8 @@ public abstract class Entity extends WorldObject {
 	public StunnedEffect stunnedEffect;
 	public SlowedEffect slowedEffect;
 	public RootedEffect rootedEffect;
+	public ChilledEffect chilledEffect;
+	public FrozenEffect frozenEffect;
 
 //	private Array<Effect> activeEffects = new Array<>();
 	
@@ -69,8 +68,8 @@ public abstract class Entity extends WorldObject {
 	private boolean followingPlayer;
 	private boolean attacking = false;
 	private int targetEntity = -1; // The targeted entity's id
-	private Array<Entity> entitiesThatHit = new Array<>(); // An array of all entities that hit this entity (not necessarily damaged, could also be non-damage harmful effects).
-	private Entity lastHitBy = null;
+	private Array<Integer> entitiesThatHit = new Array<>(); // An array of all the ids of entities that hit this entity (not necessarily damaged, could also be non-damage harmful effects).
+	Integer lastHitBy = -1; // The id of the entity that last hit this entity.
 
 	private boolean canWalk;
 	private float realWalkSpeed;
@@ -148,7 +147,7 @@ public abstract class Entity extends WorldObject {
 		
 		if (movementVectorWasChanged) {
 			applyMovementChanges();
-			if (rootedEffect.isActive()) {
+			if (rootedEffect.isActive() || stunnedEffect.isActive() || frozenEffect.isActive()) {
 				rigidBody.setLinearVelocity(parentVelocity);
 			} else {
 				rigidBody.setLinearVelocity(movementVector.add(parentVelocity));
@@ -203,7 +202,7 @@ public abstract class Entity extends WorldObject {
 	 * Apply effects such as slows.
 	 */
 	private void applyMovementChanges() {
-		movementVector.scl(1 - slowedEffect.movementDampening());
+		movementVector.scl(1 - (slowedEffect.movementDampening() + chilledEffect.movementDampening()));
 	}
 	
 	void generateId(Entities entities) {
@@ -334,11 +333,14 @@ public abstract class Entity extends WorldObject {
 	 * Updates the flags that say whether or not this entity can walk, rotate, and jump.
 	 */
 	private void updateMovementFlags() {
-		canWalk = animationType != AnimationType.SHOOT_PROJECTILE && animationType != AnimationType.MIDAIR;
+		canWalk = animationType != AnimationType.SHOOT_PROJECTILE && animationType != AnimationType.MIDAIR &&
+		!stunnedEffect.isActive() && !rootedEffect.isActive() && !frozenEffect.isActive();
 
-		canRotate = animationType != AnimationType.SHOOT_PROJECTILE;
+		canRotate = animationType != AnimationType.SHOOT_PROJECTILE && !stunnedEffect.isActive() &&
+		!frozenEffect.isActive();
 
-		canJump = animationType != AnimationType.SHOOT_PROJECTILE && animationType != AnimationType.MIDAIR;
+		canJump = animationType != AnimationType.SHOOT_PROJECTILE && animationType != AnimationType.MIDAIR &&
+		!stunnedEffect.isActive() && !rootedEffect.isActive() && !frozenEffect.isActive();
 	}
 	
 	/*
@@ -629,6 +631,8 @@ public abstract class Entity extends WorldObject {
 		stunnedEffect = new StunnedEffect(this);
 		slowedEffect = new SlowedEffect(this);
 		rootedEffect = new RootedEffect(this);
+		chilledEffect = new ChilledEffect(this);
+		frozenEffect = new FrozenEffect(this);
 	}
 	
 	/*
@@ -659,6 +663,8 @@ public abstract class Entity extends WorldObject {
 		}*/
 
 		burningEffect.apply(playScreen);
+		chilledEffect.bitingColdDamage();
+		chilledEffect.testEncaseInIce(playScreen);
 
 		updateAllEffects();
 	}
@@ -707,6 +713,8 @@ public abstract class Entity extends WorldObject {
 		stunnedEffect.update();
 		slowedEffect.update();
 		rootedEffect.update();
+		chilledEffect.update();
+		frozenEffect.update();
 	}
 
 	/**
@@ -714,71 +722,93 @@ public abstract class Entity extends WorldObject {
 	 * A default behaviour is defined here as most entities will use this default behaviours.
 	 * If an entity wants a custom behaviour (which is the minority of entities), that class can override this method.
 	 */
-	void dealDamageNoCheck(Entity entity, float damage) {
+	/*void dealDamageNoCheck(Entity entity, float damage) {
 		entity.takeDamage(this, damage); // Assuming there are no behaviours on the attacking side to proc.
-	}
+	}*/
 
 	/**
 	 * Allows custom behaviours for each entity when it's damaged.
 	 */
 	public void takeDamage(Entity entity, float damage) {
 		takeDamageBase(damage);
-		entitiesThatHit.add(entity);
-		lastHitBy = entity;
+		entitiesThatHit.add(entity.id);
+		lastHitBy = entity.id;
 	}
 
 	/**
-	 * This entity deals damage to the given entity, procing effects on both sides. Checks whether this entity is null or not.
+	 * This entity deals damage to the given entity. Doesn't check whether this entity is null or not (that's done in another method).
+	 * A default behaviour is defined here as most entities will use this default behaviours.
+	 * If an entity wants a custom behaviour (which is the minority of entities), that class can override this method.
 	 */
 	public void dealDamage(Entity entity, float damage) {
-		if (entity != null) {
-			dealDamageNoCheck(entity, damage);
-		}
+		entity.takeDamage(this, damage); // Assuming there are no behaviours on the attacking side to proc.
 	}
 
 	/**
 	 * A reversed dealDamage(). Useful if you don't know whether the parameter 'entity' is null or not.
-	 * @param damageIfNull true to still deal damage even if entity is null, false to skip damage if entity is null.
 	 */
-	public void dealtDamageBy(Entity entity, float damage, boolean damageIfNull) {
-		if (entity != null) {
+	public void dealtDamageBy(Entity entity, float damage) {
+		entity.dealDamage(this, damage);
+		/*if (entity != null) {
 			entity.dealDamageNoCheck(this, damage);
 		} else if (damageIfNull) {
 			takeDamageBase(damage);
-		}
+		}*/
 	}
 
 	/**
 	 * The receiving end of the damage, universal to all entities. In future, this will take into account things like armour.
 	 */
-	private void takeDamageBase(float damage) {
+	public void takeDamageBase(float damage) {
 		changeLife(-damage);
 	}
 
 	/**
 	 * Custom implementations may take into account things that interact with burning, such as the Pyromancer passive 'Stoke the Flames'.
 	 */
-	public void burnNoCheck(Entity entity, int power, float duration) {
+	/*public void burnNoCheck(Entity entity, int power, float duration) {
+		burnBase(power, duration);
+	}*/
+
+	/**
+	 * Custom implementations may take into account things that interact with burning, such as the Pyromancer passive 'Stoke the Flames'.
+	 */
+	public void burn(Entity entity, int power, float duration) {
 		burnBase(power, duration);
 	}
 
-	public void burn(Entity entity, int power, float duration) {
-		if (entity != null) {
-			burnNoCheck(entity, power, duration);
-		}
-	}
-
-	public void burnedBy(Entity entity, int power, float duration, boolean burnIfNull) {
-		if (entity != null) {
+	public void burnedBy(Entity entity, int power, float duration) {
+		entity.burn(this, power, duration);
+		/*if (entity != null) {
 			entity.burnNoCheck(this, power, duration);
 		} else if (burnIfNull) {
 			burnBase(power, duration);
-		}
+		}*/
 	}
 
 	private void burnBase(int power, float duration) {
-//		findProcEffect(EffectType.BURNING).add(power, duration);
 		burningEffect.add(power, duration);
+	}
+
+	/*public void chillNoCheck(Entity entity, int power, float duration) {
+		chillBase(power, duration);
+	}*/
+
+	public void chill(Entity entity, int power, float duration) {
+		chillBase(power, duration);
+	}
+
+	public void chilledBy(Entity entity, int power, float duration) {
+		entity.chill(this, power, duration);
+		/*if (entity != null) {
+			entity.chillNoCheck(this, power, duration);
+		} else if (chillIfNull) {
+			chillBase(power, duration);
+		}*/
+	}
+
+	private void chillBase(int power, float duration) {
+		chilledEffect.add(power, duration, false, false);
 	}
 
 	/**
@@ -800,28 +830,24 @@ public abstract class Entity extends WorldObject {
 	 * Iterate through all offending entities and proc their kill effects.
 	 */
 	public void procDeathEffects(PlayScreen playScreen) {
-		if (lastHitBy != null) {
-			lastHitBy.procKillEffects(this, playScreen);
-		}
+		playScreen.entities.getEntity(lastHitBy, playScreen.player).procKillEffects(this, playScreen);
 
-		for (Entity entity: entitiesThatHit) {
-			if (entity != null) {
-				entity.procDamageEffects(this, playScreen);
-			}
+		for (Integer id: entitiesThatHit) {
+			playScreen.entities.getEntity(id, playScreen.player).procDamageEffects(this, playScreen);
 		}
 	}
 
 	/**
 	 * Procs any passives when an ability lands on an entity.
 	 */
-	public void landAbility(Entity entity) {
+	public void landAbility(Entity entity, PlayScreen playScreen) {
 		// By default, does nothing. Custom implementations if wanted in subclasses.
 	}
 
 	/**
 	 * Procs any passives when this entity lands a basic attack on another entity.
 	 */
-	public void landBasicAttack(Entity entity) {
+	public void landBasicAttack(Entity entity, PlayScreen playScreen) {
 		// By default, does nothing. Custom implementations if wanted in subclasses.
 	}
 	
@@ -1150,14 +1176,6 @@ public abstract class Entity extends WorldObject {
 
 	public void setTargetLocation(Vector3 targetLocation) {
 		this.targetLocation = targetLocation;
-	}
-
-	public Array<Entity> getEntitiesThatHit() {
-		return entitiesThatHit;
-	}
-
-	public void setEntitiesThatHit(Array<Entity> entitiesThatHit) {
-		this.entitiesThatHit = entitiesThatHit;
 	}
 
 	public BasicAttack getBasicAttack() {
