@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entityattributes.Effect;
+import com.mygdx.game.statuseffects.Effect;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
@@ -56,7 +56,7 @@ public class LavaSnare extends StaticProjectile {
 //				playScreen.player.flamingBarrage.testfor(owner);
 //				target.burnNoCheck(2, lifetime);
 				target.burnedBy(playScreen.entities.getEntity(owner, playScreen.player), burnPower, lifetime, true);
-				target.findProcEffect(Effect.EffectType.ROOTED).addOne(lifetime);
+				target.rootedEffect.add(lifetime);
 //				playScreen.player.vikingFuneral.testfor(owner, target);
 				alreadyHit = true;
 			}

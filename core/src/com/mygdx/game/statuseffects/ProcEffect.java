@@ -1,7 +1,8 @@
-package com.mygdx.game.entityattributes;
+package com.mygdx.game.statuseffects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.mygdx.game.entities.Entity;
 
 /**
  * Refers to effects which have individual 'procs'. This means there is no common pool of 'stacks'.
@@ -17,18 +18,27 @@ public class ProcEffect extends Effect {
 	 */
 	public ProcEffect() { }
 
-	public ProcEffect(EffectType effectType) {
-		super(effectType);
+	public ProcEffect(Entity entity) {
+		super(entity);
 		powers = new Array<>();
 		durations = new Array<>();
 	}
 
+	@Override
+	public void update() {
+		for (int a = 0; a < powers.size; a ++) {
+			if (durations.get(a) > 0) {
+				durations.set(a, durations.get(a) - Gdx.graphics.getDeltaTime());
+			} else {
+				powers.removeIndex(a);
+				durations.removeIndex(a);
+			}
+		}
+	}
+
 	/**
 	 * Adds a new instance of this effect with the given power and duration.
-	 * @param power
-	 * @param duration
 	 */
-	@Override
 	public void add(int power, float duration) {
 		powers.add(power);
 		durations.add(duration);
@@ -37,21 +47,22 @@ public class ProcEffect extends Effect {
 	/**
 	 * Adds a new instance of this effect with a power of 1 and the given duration.
 	 * @param duration
-	 */
-	@Override
+	 *//*
 	public void addOne(float duration) {
 		powers.add(1);
 		durations.add(duration);
-	}
+	}*/
 
 	/**
 	 * Adds a new instance of this effect with the given power, which will only operate for one tick.
-	 * @param power
 	 */
-	@Override
 	public void addThisTick(int power) {
 		powers.add(power);
 		durations.add(0f);
+	}
+
+	public boolean isActive() {
+		return powers.size > 0;
 	}
 
 }

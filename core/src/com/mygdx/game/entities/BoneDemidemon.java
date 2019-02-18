@@ -3,7 +3,6 @@ package com.mygdx.game.entities;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.badlogic.gdx.graphics.Color;
-import com.mygdx.game.entityattributes.Effect.EffectType;
 import com.mygdx.game.screens.PlayScreen;
 
 public class BoneDemidemon extends Entity {
@@ -19,15 +18,15 @@ public class BoneDemidemon extends Entity {
 	
 	@Override
 	public void onUpdate(PlayScreen session) {
-		if (this.nature == Nature.AGGRESSIVE && this.isFollowingPlayer()) {
+		if (nature == Nature.AGGRESSIVE && isFollowingPlayer()) {
 			//this.follow(session, session.player);
-			this.attack(session.player, 1, session);
-		} else if (this.nature == Nature.FRIENDLY) {
+			attack(session.player, 1, session);
+		} else if (nature == Nature.FRIENDLY) {
 			if (session.player.getClosestOffensiveEnemy() == null) {
 				//this.follow(session, session.player);
 			} else {
 				//this.follow(session, session.player.getClosestOffensiveEnemy());
-				this.attack(session.player.getClosestOffensiveEnemy(), 1, session);
+				attack(session.player.getClosestOffensiveEnemy(), 1, session);
 			}
 		}
 		// Does not wander
@@ -35,9 +34,9 @@ public class BoneDemidemon extends Entity {
 
 	@Override
 	public void onInteract(PlayScreen session) {
-		if (this.nature == Nature.AGGRESSIVE) {
+		if (nature == Nature.AGGRESSIVE) {
 			session.newMessage("The Bone Demidemon looks at you with hatred.");
-		} else if (this.nature == Nature.FRIENDLY) {
+		} else if (nature == Nature.FRIENDLY) {
 			session.newMessage("The Bone Demidemon looks upon you with kindness.");
 		} else if (ThreadLocalRandom.current().nextInt(1, 101) <= 50) {
 			super.setNature(Nature.FRIENDLY);
@@ -53,7 +52,7 @@ public class BoneDemidemon extends Entity {
 
 	@Override
 	public void attack(Entity target, int range, PlayScreen session) {
-		if (this.basicAttack(target, range, session) && ThreadLocalRandom.current().nextInt(1, 101) <= 25) {
+		if (basicAttack(target, range, session) && ThreadLocalRandom.current().nextInt(1, 101) <= 25) {
 //			target.changeEffect(EffectType.BLEEDING, 2, 1);
 		}
 	}

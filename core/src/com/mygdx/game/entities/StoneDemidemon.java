@@ -27,15 +27,15 @@ public class StoneDemidemon extends Entity {
 
 	@Override
 	public void onUpdate(PlayScreen session) {
-		if (this.nature == Nature.AGGRESSIVE && this.isFollowingPlayer()) {
+		if (nature == Nature.AGGRESSIVE && isFollowingPlayer()) {
 			//this.follow(session, session.player);
-			this.attack(session.player, 1, session);
-		} else if (this.nature == Nature.FRIENDLY) {
+			attack(session.player, 1, session);
+		} else if (nature == Nature.FRIENDLY) {
 			if (session.player.getClosestOffensiveEnemy() == null) {
 				//this.follow(session, session.player);
 			} else {
 				//this.follow(session, session.player.getClosestOffensiveEnemy());
-				this.attack(session.player.getClosestOffensiveEnemy(), 1, session);
+				attack(session.player.getClosestOffensiveEnemy(), 1, session);
 			}
 		}
 		// Does not wander
@@ -43,9 +43,9 @@ public class StoneDemidemon extends Entity {
 	
 	@Override
 	public void onInteract(PlayScreen session) {
-		if (this.nature == Nature.AGGRESSIVE) {
+		if (nature == Nature.AGGRESSIVE) {
 			session.newMessage("The Stone Demidemon looks at you with hatred.");
-		} else if (this.nature == Nature.FRIENDLY) {
+		} else if (nature == Nature.FRIENDLY) {
 			session.newMessage("The Stone Demidemon looks upon you with kindness.");
 		} else if (ThreadLocalRandom.current().nextInt(1, 101) <= 50) {
 			super.setNature(Nature.FRIENDLY);
@@ -61,7 +61,7 @@ public class StoneDemidemon extends Entity {
 
 	@Override
 	public void attack(Entity target, int range, PlayScreen session) {
-		this.basicAttack(target, range, session);
+		basicAttack(target, range, session);
 	}
 	
 }

@@ -10,6 +10,7 @@ import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.skills.*;
 import com.mygdx.game.skills.cryomancer.CryomancerBasicAttack;
+import com.mygdx.game.skills.cryomancer.IceShardSkill;
 import com.mygdx.game.skills.pyromancer.*;
 
 import java.util.Map.Entry;
@@ -71,7 +72,7 @@ public class Player extends Entity {
 
 		// PYROMANCER
 
-		basicAttack = new PyromancerBasicAttack(this);
+		/*basicAttack = new PyromancerBasicAttack(this);
 
 		skills.add(new FireballSkill(this));
 		skills.add(new IncendiaryTrapSkill(this));
@@ -80,12 +81,14 @@ public class Player extends Entity {
 		skills.add(new IncinerateSkill(this));
 		skills.add(new BurningBarrierSkill(this));
 		skills.add(new FlamethrowerSkill(this));
-		skills.add(new LavaSnareSkill(this));
+		skills.add(new LavaSnareSkill(this));*/
 
 
 		// CRYOMANCER
 
-//		basicAttack = new CryomancerBasicAttack(this);
+		basicAttack = new CryomancerBasicAttack(this);
+
+		skills.add(new IceShardSkill(this));
 
 
 		// Note: the player must have all of the passives loaded in like this at the start of the game.
@@ -93,10 +96,10 @@ public class Player extends Entity {
 		// The alternative is to make subclasses of player for each class. This would require copying all class-irrelevant
 		// attributes to a new instance of that subclass when the player chooses a class, which could have serious
 		// implications on game logic.
-		vikingFuneral = new VikingFuneralSkill(this, true);
-		stokeTheFlames = new StokeTheFlamesSkill(this, true);
-		flamingBarrage = new FlamingBarrageSkill(this, true);
-		supernovaSkill = new SupernovaSkill(this, true);
+		vikingFuneral = new VikingFuneralSkill(this, false);
+		stokeTheFlames = new StokeTheFlamesSkill(this, false);
+		flamingBarrage = new FlamingBarrageSkill(this, false);
+		supernovaSkill = new SupernovaSkill(this, false);
 
 		//rigidBody.getWorldTransform();
 	}
@@ -218,10 +221,10 @@ public class Player extends Entity {
 		
 		//this.getFov().update(session.map, this.getStatus().getXPos(), this.getStatus().getYPos(), this.getStatus().getZPos(), this.visionRadius());
 		//this.eStats.updateStatsCopy(session.skillCollection);
-		for (Entry<Entity, Integer> entry: this.getOffensiveEnemies().entrySet()) {
+		for (Entry<Entity, Integer> entry: getOffensiveEnemies().entrySet()) {
 			entry.setValue(entry.getValue() + 1);
 			if (entry.getValue() > Entity.targetTime) {
-				this.getOffensiveEnemies().remove(entry.getKey());
+				getOffensiveEnemies().remove(entry.getKey());
 			}
 		}
 		

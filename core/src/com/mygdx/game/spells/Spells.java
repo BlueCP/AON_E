@@ -34,7 +34,7 @@ public class Spells {
 	}
 	
 	public static void castFirebolt(Entity caster, Entity target, ProjectileManager projectileManager, btDynamicsWorld dynamicsWorld) {
-		projectileManager.addFireball(caster, dynamicsWorld, caster.pos, target.pos, 5);
+//		projectileManager.addFireball(caster, dynamicsWorld, caster.pos, target.pos, 5);
 	}
 	
 	public static void castDamage(Entity caster, Entity target) {

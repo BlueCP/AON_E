@@ -8,12 +8,54 @@ import com.mygdx.game.AON_E;
  */
 public class SoundManager {
 
-	public TrueSound fireball;
+	// Environmental
+
+	// Sound FX
+	public WorldSound fireballExplosion;
+	public WorldSound fireballTravel;
+
+	// Creatures
+
+	// UI
 	public TrueSound click;
 
 	public SoundManager(AON_E game) {
-		fireball = new TrueSound(game.manager.get("sound/soundFX/fireball.wav"), TrueSound.Type.SOUNDFX);
+		// Environmental
+
+		// Sound FX
+		fireballTravel = new WorldSound(game.manager.get("sound/soundFX/fireballTravel.wav"), TrueSound.Type.SOUNDFX);
+		fireballExplosion = new WorldSound(game.manager.get("sound/soundFX/fireballExplosion.wav"), TrueSound.Type.SOUNDFX);
+
+		// Creatures
+
+		// UI
 		click = new TrueSound(game.manager.get("sound/UI/click.wav"), TrueSound.Type.UI);
+	}
+
+	public void pauseAll() {
+		// Environmental
+
+		// Sound FX
+		fireballTravel.pause();
+		fireballExplosion.pause();
+
+		// Creatures
+
+		// UI
+		click.pause();
+	}
+
+	public void resumeAll() {
+		// Environmental
+
+		// Sound FX
+		fireballTravel.resume();
+		fireballExplosion.resume();
+
+		// Creatures
+
+		// UI
+		click.resume();
 	}
 
 }

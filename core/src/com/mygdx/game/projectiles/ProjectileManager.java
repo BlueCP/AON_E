@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.projectiles.cryomancer.Frostbolt;
+import com.mygdx.game.projectiles.cryomancer.IceShard;
 import com.mygdx.game.projectiles.pyromancer.*;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
@@ -130,8 +131,8 @@ public class ProjectileManager {
 		projectiles.add(new Firebolt(entity, this, dynamicsWorld, pos, targetPos, lifetime));
 	}
 	
-	public void addFireball(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, Vector3 targetPos, float lifetime) {
-		projectiles.add(new Fireball(entity, this, dynamicsWorld, pos, targetPos, lifetime));
+	public void addFireball(Entity entity, PlayScreen playScreen, Vector3 pos, Vector3 targetPos, float lifetime) {
+		projectiles.add(new Fireball(entity, playScreen, pos, targetPos, lifetime));
 	}
 
 	public void addIncendiaryTrap(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
@@ -168,6 +169,10 @@ public class ProjectileManager {
 
 	public void addFrostbolt(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, Vector3 targetPos, float lifetime) {
 		projectiles.add(new Frostbolt(entity, this, dynamicsWorld, pos, targetPos, lifetime));
+	}
+
+	public void addIceShard(Entity entity, PlayScreen playScreen, Vector3 pos, Vector3 targetPos, float lifetime) {
+		projectiles.add(new IceShard(entity, playScreen, pos, targetPos, lifetime));
 	}
 	
 	public void addRazeZone(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {

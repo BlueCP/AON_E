@@ -1,7 +1,6 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -11,22 +10,21 @@ import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.mygdx.game.entityactions.EntityAction;
-import com.mygdx.game.entityattributes.Effect.EffectType;
-import com.mygdx.game.entityattributes.ProcEffect;
-import com.mygdx.game.entityattributes.StackEffect;
 import com.mygdx.game.items.Equipped;
 import com.mygdx.game.items.Inventory;
 import com.mygdx.game.items.Weapon;
-import com.mygdx.game.particles.Particle;
 import com.mygdx.game.physics.Hitboxes;
 import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.IsometricRenderer.Visibility;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.skills.ActiveSkill;
 import com.mygdx.game.skills.BasicAttack;
 import com.mygdx.game.skills.NullBasicAttack;
+import com.mygdx.game.statuseffects.BurningEffect;
+import com.mygdx.game.statuseffects.RootedEffect;
+import com.mygdx.game.statuseffects.SlowedEffect;
+import com.mygdx.game.statuseffects.StunnedEffect;
 import com.mygdx.game.utils.Util;
 
 import java.util.HashMap;
@@ -42,8 +40,13 @@ public abstract class Entity extends WorldObject {
 	float spirit;
 	public Vector3 pos;
 
-	private Array<StackEffect> stackEffects = new Array<>();
-	private Array<ProcEffect> procEffects = new Array<>();
+//	private Array<StackEffect> stackEffects = new Array<>();
+//	private Array<ProcEffect> procEffects = new Array<>();
+
+	public BurningEffect burningEffect;
+	public StunnedEffect stunnedEffect;
+	public SlowedEffect slowedEffect;
+	public RootedEffect rootedEffect;
 
 //	private Array<Effect> activeEffects = new Array<>();
 	
@@ -145,7 +148,7 @@ public abstract class Entity extends WorldObject {
 		
 		if (movementVectorWasChanged) {
 			applyMovementChanges();
-			if (findProcEffect(EffectType.ROOTED).powers.size > 0) {
+			if (rootedEffect.isActive()) {
 				rigidBody.setLinearVelocity(parentVelocity);
 			} else {
 				rigidBody.setLinearVelocity(movementVector.add(parentVelocity));
@@ -200,24 +203,7 @@ public abstract class Entity extends WorldObject {
 	 * Apply effects such as slows.
 	 */
 	private void applyMovementChanges() {
-		float totalMovementDampening = 0;
-		for (int power: findProcEffect(EffectType.SLOWED).powers) {
-			switch (power) {
-				case 1:
-					totalMovementDampening += 0.05f;
-					break;
-				case 2:
-					totalMovementDampening += 0.1f;
-					break;
-				case 3:
-					totalMovementDampening += 0.15f;
-					break;
-				case 4:
-					totalMovementDampening += 0.2f;
-					break;
-			}
-		}
-		movementVector.scl(1 - totalMovementDampening);
+		movementVector.scl(1 - slowedEffect.movementDampening());
 	}
 	
 	void generateId(Entities entities) {
@@ -612,7 +598,7 @@ public abstract class Entity extends WorldObject {
 		rigidBody.setUserValue(physicsId);
 	}
 
-	public StackEffect findStackEffect(EffectType name) {
+	/*public StackEffect findStackEffect(EffectType name) {
 		for (StackEffect effect: stackEffects) {
 			if (effect.getStatusEffect() == name) {
 				return effect;
@@ -628,30 +614,35 @@ public abstract class Entity extends WorldObject {
 			}
 		}
 		return null;
-	}
+	}*/
 	
 	private void initialiseEffects() {
 		/*for (EffectType effectType: EffectType.values()) {
 			this.allEffects.add(new Effect(effectType, 0, 0));
 		}*/
-		procEffects.add(new ProcEffect(EffectType.BURNING));
+		/*procEffects.add(new ProcEffect(EffectType.BURNING));
 		procEffects.add(new ProcEffect(EffectType.SLOWED));
 		procEffects.add(new ProcEffect(EffectType.STUNNED));
-		procEffects.add(new ProcEffect(EffectType.ROOTED));
+		procEffects.add(new ProcEffect(EffectType.ROOTED));*/
+
+		burningEffect = new BurningEffect(this);
+		stunnedEffect = new StunnedEffect(this);
+		slowedEffect = new SlowedEffect(this);
+		rootedEffect = new RootedEffect(this);
 	}
 	
 	/*
 	 * Iterate through and apply effects.
 	 */
 	void applyEffects(PlayScreen playScreen) {
-		for (StackEffect effect: stackEffects) {
+		/*for (StackEffect effect: stackEffects) {
 			switch (effect.getStatusEffect()) {
 				default:
 					break;
 			}
-		}
+		}*/
 
-		boolean burningParticlesAdded = false;
+		/*boolean burningParticlesAdded = false;
 		for (ProcEffect effect: procEffects) {
 			switch (effect.getStatusEffect()) {
 				case BURNING:
@@ -665,9 +656,11 @@ public abstract class Entity extends WorldObject {
 					}
 					break;
 			}
-		}
+		}*/
 
-		this.updateAllEffects();
+		burningEffect.apply(playScreen);
+
+		updateAllEffects();
 	}
 	
 	/*
@@ -690,7 +683,7 @@ public abstract class Entity extends WorldObject {
 	 * Update the duration for all effects.
 	 */
 	private void updateAllEffects() {
-		for (StackEffect effect: stackEffects) {
+		/*for (StackEffect effect: stackEffects) {
 			if (effect.getDuration() > 0) { // And the effect is still active
 				effect.setDuration(effect.getDuration() - Gdx.graphics.getDeltaTime()); // Decrease the duration
 			} else {
@@ -708,7 +701,12 @@ public abstract class Entity extends WorldObject {
 					effect.durations.removeIndex(a);
 				}
 			}
-		}
+		}*/
+
+		burningEffect.update();
+		stunnedEffect.update();
+		slowedEffect.update();
+		rootedEffect.update();
 	}
 
 	/**
@@ -779,7 +777,8 @@ public abstract class Entity extends WorldObject {
 	}
 
 	private void burnBase(int power, float duration) {
-		findProcEffect(EffectType.BURNING).add(power, duration);
+//		findProcEffect(EffectType.BURNING).add(power, duration);
+		burningEffect.add(power, duration);
 	}
 
 	/**

@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entityattributes.Effect;
+import com.mygdx.game.statuseffects.Effect;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
@@ -78,7 +78,7 @@ public class BurningBarrier extends StaticProjectile {
 			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity);
 //			entity.dealDamageOLD(owner, playScreen.player, 3);
 //			playScreen.player.flamingBarrage.testfor(owner);
-			entity.findProcEffect(Effect.EffectType.STUNNED).addOne(stunDuration);
+			entity.stunnedEffect.add(stunDuration);
 //			playScreen.player.vikingFuneral.testfor(owner, entity);
 
 			hitEntities.add(entity.id);

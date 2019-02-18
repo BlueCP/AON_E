@@ -1,27 +1,27 @@
-package com.mygdx.game.skills.pyromancer;
+package com.mygdx.game.skills.cryomancer;
 
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.TargetedSkill;
 
-public class FireballSkill extends TargetedSkill {
+public class IceShardSkill extends TargetedSkill {
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public FireballSkill() {
+	public IceShardSkill() {
 		super(null);
 	}
 
-	public FireballSkill(Entity entity) {
+	public IceShardSkill(Entity entity) {
 		super(entity);
-		name = "Fireball";
-		desc = "For the pyromancer, a simple, effective solution to most problems.";
+		name = "Ice Shard";
+		desc = "Warning: excessive use may be indicative of an icy personality.";
 	}
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(5, 0.5f, Entity.AnimationType.SHOOT_PROJECTILE, playScreen.entities);
+		defaultStart(5, 0.7f, Entity.AnimationType.SHOOT_PROJECTILE, playScreen.entities);
 	}
 
 	@Override

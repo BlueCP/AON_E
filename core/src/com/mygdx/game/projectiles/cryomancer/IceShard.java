@@ -1,94 +1,80 @@
-package com.mygdx.game.projectiles.pyromancer;
+package com.mygdx.game.projectiles.cryomancer;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.particles.Particle.Behaviour;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.DynamicProjectile;
 import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.screens.PlayScreen;
 
-public class Fireball extends DynamicProjectile {
+public class IceShard extends DynamicProjectile {
 
 	private static final float speed = 5; // m/s
-//	private static final int spiritGain = 5; // The spirit gained by landing this on an enemy.
 	private static final int damage = 1;
 
-	private long fireballTravelSoundId;
-	
+	private long iceShardTravelSoundId;
+
 //	private btCollisionShape shape;
 //	private btRigidBody rigidBody;
 //	private Vector3 targetPos;
-	
+
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Fireball() { }
-	
-	public Fireball(Entity entity, PlayScreen playScreen, Vector3 pos, Vector3 targetPos, float lifetime) {
+	public IceShard() { }
+
+	public IceShard(Entity entity, PlayScreen playScreen, Vector3 pos, Vector3 targetPos, float lifetime) {
 		super(entity, playScreen.projectileManager, ProjectileSprite.FIREBOLT, pos, lifetime);
 
-		name = "Fireball";
-		
+		name = "Ice Shard";
+
 //		this.targetPos = targetPos.cpy();
 
 		loadPhysicsObject();
 		calcLinearProjectileMotion(targetPos, speed);
 		addToDynamicsWorld(playScreen.physicsManager.getDynamicsWorld(), PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
 	}
-	
+
 	protected void loadPhysicsObject() {
 		defaultLoadRigidBody(new btSphereShape(0.1f));
 
-		rigidBody.setCollisionFlags(rigidBody.getCollisionFlags() | CollisionFlags.CF_NO_CONTACT_RESPONSE);
+		rigidBody.setCollisionFlags(rigidBody.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
 
-		fireballTravelSoundId = -1;
+		iceShardTravelSoundId = -1;
 	}
 
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
 		universalUpdate();
 
-		if (fireballTravelSoundId == -1) {
-			fireballTravelSoundId = playScreen.game.soundManager.fireballTravel.play(0.7f, playScreen.isoRenderer.camera.pos, pos);
-		}
-		
-		if (Math.floorMod(ticksPast, 15) == 0) {
-//			particleEngine.addFireParticle(dynamicsWorld, pos);
-			playScreen.particleEngine.addParticle(playScreen.physicsManager.getDynamicsWorld(), pos, 1f, Particle.Sprite.FIRE, Behaviour.OSCILLATE_DOWN);
+		if (iceShardTravelSoundId == -1) {
+			iceShardTravelSoundId = playScreen.game.soundManager.fireballTravel.play(0.7f, playScreen.isoRenderer.camera.pos, pos);
 		}
 
-		playScreen.game.soundManager.fireballTravel.updateVolumeAndPan(fireballTravelSoundId, playScreen.isoRenderer.camera.pos, pos);
+		if (Math.floorMod(ticksPast, 15) == 0) {
+//			particleEngine.addFireParticle(dynamicsWorld, pos);
+			playScreen.particleEngine.addParticle(playScreen.physicsManager.getDynamicsWorld(), pos, 1f, Particle.Sprite.FIRE, Particle.Behaviour.OSCILLATE_DOWN);
+		}
+
+		playScreen.game.soundManager.fireballTravel.updateVolumeAndPan(iceShardTravelSoundId, playScreen.isoRenderer.camera.pos, pos);
 	}
 
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
-		/*if (owner == 0) {
-			playScreen.player.changeSpirit(spiritGain); // Gaining spirit from landing a successful attack
-		} else {
-			playScreen.entities.getEntity(owner).changeSpirit(spiritGain);
-		}*/
-
 		if (entity.id != owner) {
 			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage, true);
 			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity);
-//		entity.dealDamageOLD(owner, playScreen.player, damage);
-//		playScreen.player.flamingBarrage.testfor(owner);
-//		playScreen.player.vikingFuneral.testfor(owner, entity);
-
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 
-//		playScreen.particleEngine.addFireBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, Behaviour.POOF);
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, 2,
-					Particle.Sprite.FIRE, Behaviour.POOF);
+					Particle.Sprite.FIRE, Particle.Behaviour.POOF);
 			playScreen.isoRenderer.camera.screenShake(0.2f, 0.2f);
 
-//			playScreen.game.soundManager.fireballTravel.stop();
-			playScreen.game.soundManager.fireballTravel.stop(fireballTravelSoundId);
+			playScreen.game.soundManager.fireballTravel.stop(iceShardTravelSoundId);
 			playScreen.game.soundManager.fireballExplosion.play(playScreen.isoRenderer.camera.pos, entity.pos);
 		}
 
@@ -103,7 +89,7 @@ public class Fireball extends DynamicProjectile {
 	@Override
 	public void addToDynamicsWorld(btDynamicsWorld dynamicsWorld, int group, int mask) {
 		super.addToDynamicsWorld(dynamicsWorld, group, mask);
-		
+
 		rigidBody.setGravity(Vector3.Zero);
 	}
 

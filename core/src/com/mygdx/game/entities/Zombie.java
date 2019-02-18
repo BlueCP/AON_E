@@ -26,11 +26,11 @@ public class Zombie extends Entity {
 
 	@Override
 	public void onUpdate(PlayScreen session) {
-		if (this.isFollowingPlayer()) {
+		if (isFollowingPlayer()) {
 			int chance = ThreadLocalRandom.current().nextInt(1, 101);
 			if (chance <= 80) {
 				//this.follow(session, session.player);
-				this.attack(session.player, 1, session);
+				attack(session.player, 1, session);
 			} else {
 				//
 			}
@@ -46,7 +46,7 @@ public class Zombie extends Entity {
 
 	@Override
 	public void attack(Entity target, int range, PlayScreen session) {
-		this.basicAttack(target, range, session);
+		basicAttack(target, range, session);
 	}
 	
 }

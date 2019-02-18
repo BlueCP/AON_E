@@ -175,7 +175,8 @@ public class AON_E extends Game {
 		manager.load("music/travelmusic.mp3", Music.class);
 
 		// Loading sounds
-		manager.load("sound/soundFX/fireball.wav", Sound.class);
+		manager.load("sound/soundFX/fireballExplosion.wav", Sound.class);
+		manager.load("sound/soundFX/fireballTravel.wav", Sound.class);
 		manager.load("sound/UI/click.wav", Sound.class);
 
 		// Loading world textures

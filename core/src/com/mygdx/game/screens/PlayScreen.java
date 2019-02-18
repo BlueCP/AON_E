@@ -179,11 +179,11 @@ public class PlayScreen extends MyScreen {
 		
 		overflowKeyboardEvents = new Array<>();
 		overflowMouseEvents = new Array<>();
-		
-		executeLogic(0);
-		
+
 		isoRenderer = new IsometricRenderer(game, time);
-		
+
+		executeLogic(0);
+
 		//travelMusic.play(); // So that it only starts playing when the player can see the world, i.e. when it has been loaded
 		
 		inputMultiplexer = new InputMultiplexer(hudStage.stage, this);
@@ -262,6 +262,7 @@ public class PlayScreen extends MyScreen {
 
 	@Override
 	public void show() {
+		game.soundManager.resumeAll();
 		Gdx.input.setInputProcessor(new InputMultiplexer(hudStage.stage, this));
 		//travelMusic.play();
 	}
@@ -272,6 +273,8 @@ public class PlayScreen extends MyScreen {
 		testforMovement();
 
 		executeLogic(Gdx.graphics.getDeltaTime());
+
+//		game.soundManager.updateWorldSounds(isoRenderer.camera);
 
 		/*
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)) {
@@ -359,6 +362,8 @@ public class PlayScreen extends MyScreen {
 
 	@Override
 	public void hide() {
+		game.soundManager.pauseAll();
+
 		keyboardEvents.clear();
 		pressedKeys.clear();
 		mouseEvents.clear();

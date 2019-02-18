@@ -26,7 +26,7 @@ public class Entities {
 	}
 	
 	public void clearOffensiveEnemies() {
-		for (Entity entity: this.allEntities) {
+		for (Entity entity: allEntities) {
 			entity.getOffensiveEnemies().clear();
 		}
 	}
@@ -65,7 +65,7 @@ public class Entities {
 	public void update(PlayScreen playScreen) {
 		updatePendingIds();
 
-		for (Entity entity: this.allEntities) {
+		for (Entity entity: allEntities) {
 			/*
 			if (entity.canSee(player, map) && entity.getBehaviour() == Behaviour.FOLLOW) {
 				entity.setFollowingPlayer(true);
@@ -89,7 +89,7 @@ public class Entities {
 			entity.onUpdate(playScreen);
 		}
 		
-		for (Entity entity: this.allEntities) {
+		for (Entity entity: allEntities) {
 			entity.applyEffects(playScreen);
 		}
 	}
