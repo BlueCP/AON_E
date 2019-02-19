@@ -30,6 +30,7 @@ import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.stages.HudStage;
 import com.mygdx.game.stages.OwnStage;
+import com.mygdx.game.statuseffects.StatusEffectSprites;
 import com.mygdx.game.utils.Message;
 import com.mygdx.game.utils.Util;
 import com.mygdx.game.world.Time;
@@ -141,6 +142,7 @@ public class PlayScreen extends MyScreen {
 		initialiseBlueprints(game);
 		ParticleSprites.initialise(game);
 		ProjectileSprites.initialise(game);
+		StatusEffectSprites.init(game);
 		
 		playerName = name;
 		loadGame();
@@ -269,6 +271,7 @@ public class PlayScreen extends MyScreen {
 	
 	void update() {
 		universalUpdate();
+		isoRenderer.camera.orthographicCamera.update();
 
 		testforMovement();
 
@@ -294,9 +297,11 @@ public class PlayScreen extends MyScreen {
 	@Override
 	public void render(float delta) {
 		update();
+		isoRenderer.camera.orthographicCamera.update();
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+//		isoRenderer.camera.viewport.apply();
 		isoRenderer.render(this);
 
 		/*
@@ -306,7 +311,8 @@ public class PlayScreen extends MyScreen {
 		displayCriticalStats();
 		game.batch.end();
 		*/
-		
+
+//		game.viewport.apply();
 		for (OwnStage ownStage: ownStages) {
 			ownStage.render(this);
 		}
@@ -346,6 +352,7 @@ public class PlayScreen extends MyScreen {
 	@Override
 	public void resize(int width, int height) {
 		updateViewport(width, height);
+		isoRenderer.camera.viewport.update(width, height, true);
 	}
 
 	@Override

@@ -140,8 +140,10 @@ public class AON_E extends Game {
 //		viewport = new FitViewport(WORLD_WIDTH, WORLD_WIDTH * ((float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth()), camera);
 		viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 //		viewport.apply();
-		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+//		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+		camera.position.set(0, 0, 0);
 		camera.update();
+//		camera.update();
 
 		batch = new SpriteBatch();
 		manager = new AssetManager();

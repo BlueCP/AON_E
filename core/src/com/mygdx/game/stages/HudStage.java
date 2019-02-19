@@ -1,5 +1,6 @@
 package com.mygdx.game.stages;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -137,7 +138,8 @@ public class HudStage extends OwnStage {
 		update(playScreen);
 		stage.act();
 		stage.draw();
-		
+
+		playScreen.game.batch.setProjectionMatrix(playScreen.game.camera.combined);
 		playScreen.game.batch.begin();
 		displayCriticalStats(playScreen.game.batch, playScreen.player);
 		playScreen.game.batch.end();

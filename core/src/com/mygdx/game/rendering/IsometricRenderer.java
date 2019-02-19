@@ -1,8 +1,8 @@
 package com.mygdx.game.rendering;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,6 +14,7 @@ import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.particles.Particle;
+import com.mygdx.game.particles.ParticleSprites;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.physics.PhysicsManager.Tag;
 import com.mygdx.game.physics.PhysicsManager.TestMode;
@@ -23,6 +24,7 @@ import com.mygdx.game.physicsobjects.ImmobileObject;
 import com.mygdx.game.physicsobjects.MobileObject;
 import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.statuseffects.StatusEffectSprites;
 import com.mygdx.game.world.Time;
 
 public class IsometricRenderer {
@@ -109,14 +111,14 @@ public class IsometricRenderer {
 		orderedObjects = new Array<>();
 		
 		camera = new Camera();
-		
+
 		entityLifeBar = new TextureRegion(fullEntityLifeBar);
 		
-		//camera.addHardPanNow(5, new Vector3(2, 0, 2));
-		//camera.addHardZoomToQueue(3, 2f);
-		camera.addSoftZoomToQueue(15, 2f);
+//		camera.addHardPanNow(5, new Vector3(2, 0, 2));
+//		camera.addHardZoomToQueue(3, 2f);
+//		camera.addSoftZoomToQueue(15, 2f);
 		//camera.addSoftZoomToQueue(5, 2f);
-		//camera.setZoom(0.5f);
+//		camera.setZoom(0.5f);
 		//camera.addCutToQueue(2, Vector3.Zero);
 		//camera.addHardPanToQueue(3, new Vector3(3, 0, 3));
 		//camera.addCutToQueue(2, Vector3.Zero);
@@ -539,29 +541,48 @@ public class IsometricRenderer {
 			
 			if (orderedObjects.get(i).visibility == Visibility.INVISIBLE) {
 				continue;
-			} else if (effectiveZoom == 1) {
-				renderUnzoomed(orderedObjects.get(i), spriteBatch, entities);
 			} else {
-				renderZoomed(orderedObjects.get(i), spriteBatch, entities);
+				renderSingleObject(orderedObjects.get(i), spriteBatch, entities);
 			}
 			spriteBatch.setColor(1, 1, 1, 1);
 		}
 	}
 
-	private void renderUnzoomed(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
+	private void renderSingleObject(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
 		spriteBatch.draw(worldObject.getTexture(), worldObject.renderPos.x, worldObject.renderPos.y);
 
 		if (PhysicsManager.isNonPlayerEntity(worldObject.physicsId)) {
 			Entity entity = entities.getEntity(worldObject.id);
-			float percLife = entity.getLife() / entity.getMaxLife();
-			int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
-			//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
-			entityLifeBar.setRegionWidth(barLength); ///
-			spriteBatch.draw(entityLifeBar, entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - fullEntityLifeBar.getWidth()/2f, entity.renderPos.y + entity.getTexture().getRegionHeight() + 20);
+			drawEntityLifeBar(entity, spriteBatch);
+			drawStackEffects(entity, spriteBatch);
 		}
 	}
 
-	private void renderZoomed(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
+	private void drawEntityLifeBar(Entity entity, SpriteBatch spriteBatch) {
+		float percLife = entity.getLife() / entity.getMaxLife();
+		int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
+		//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
+		entityLifeBar.setRegionWidth(barLength); ///
+		spriteBatch.draw(entityLifeBar, entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - fullEntityLifeBar.getWidth()/2f, entity.renderPos.y + entity.getTexture().getRegionHeight() + 20);
+	}
+
+	/**
+	 * Most stack-type status effects are indicated by a number of images above the entity, to clearly convey the number of stacks.
+	 */
+	private void drawStackEffects(Entity entity, SpriteBatch spriteBatch) {
+		float yCoord = entity.renderPos.y + entity.getTexture().getRegionHeight() + 15; // The number of pixels below the origin of the life bar the images should be drawn at.
+
+		// Chill
+		for (int i = 0; i < entity.chilledEffect.numStacks(); i ++) {
+			spriteBatch.draw(StatusEffectSprites.chill,
+					entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - fullEntityLifeBar.getWidth()/2f + 5 * i,
+					yCoord);
+		}
+
+		yCoord -= 5;
+	}
+
+	/*private void renderZoomed(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
 		//float factor = Math.abs(orderedPositions.get(i).x - Gdx.graphics.getWidth()/2) / Gdx.graphics.getWidth()/2;
 		float xDisp = (worldObject.renderPos.x - AON_E.WORLD_WIDTH/2) * effectiveZoom;
 		float yDisp = (worldObject.renderPos.y - AON_E.WORLD_HEIGHT/2) * effectiveZoom;
@@ -573,9 +594,9 @@ public class IsometricRenderer {
 		if (PhysicsManager.isNonPlayerEntity(worldObject.physicsId)) {
 			drawEntityLifeBar(entities.getEntity(worldObject.id), spriteBatch);
 		}
-	}
+	}*/
 
-	private void drawEntityLifeBar(Entity entity, SpriteBatch spriteBatch) {
+	/*private void drawEntityLifeBar(Entity entity, SpriteBatch spriteBatch) {
 		float percLife = entity.getLife() / entity.getMaxLife();
 		int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
 		//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
@@ -586,7 +607,7 @@ public class IsometricRenderer {
 		//coords.set(Gdx.graphics.getWidth()/2 + xDisp, Gdx.graphics.getHeight()/2 + yDisp);
 		spriteBatch.draw(entityLifeBar, coords.x, coords.y, 0, 0, entityLifeBar.getRegionWidth(), entityLifeBar.getRegionHeight(),
 				effectiveZoom, effectiveZoom, 0);
-	}
+	}*/
 	
 	public void render(PlayScreen playScreen) {
 		SpriteBatch spriteBatch = playScreen.game.batch;
@@ -610,53 +631,22 @@ public class IsometricRenderer {
 		camera.isoPos.y += camera.pos.y*tileHeight;
 		
 		calculateRenderingOrder(physicsManager, player);
-		
+
+//		camera.viewport.apply();
+		spriteBatch.setProjectionMatrix(camera.orthographicCamera.combined);
 		spriteBatch.begin();
-		
 		renderObjects(spriteBatch, entities);
-		
-//		spriteBatch.draw(vignette, AON_E.leftLimit, AON_E.lowerLimit, AON_E.effectiveScreenWidth, AON_E.effectiveScreenHeight);
+		spriteBatch.end();
+
+//		playScreen.game.viewport.apply();
+		spriteBatch.setProjectionMatrix(playScreen.game.camera.combined);
+		spriteBatch.begin();
+
 		spriteBatch.draw(vignette, 0, 0, AON_E.WORLD_WIDTH, AON_E.WORLD_HEIGHT);
-		
-		/*
-		for (StaticObject object: physicsManager.renderable) {
-			pixelCoords.x = object.getSpriteX() - isoPlayer.x + Gdx.graphics.getWidth()/2;
-			pixelCoords.y = object.getSpriteY() - isoPlayer.y + Gdx.graphics.getHeight()/2;
-			//System.out.println(1);
-			// Sprite x = 0, sprite y = 0
-			//System.out.println(2);
-			//System.out.println(pixelCoords.x);
-			//System.out.println(pixelCoords.y);
-			spriteBatch.draw(object.getTexture(), pixelCoords.x, pixelCoords.y);
-		}
-		for (Entity entity: entities.allEntities) {
-			if (entity instanceof Dummy) {
-				Vector2 coords = cartesianToScreen(entity.rigidBody.getWorldTransform().getTranslation(emptyVector).x, entity.rigidBody.getWorldTransform().getTranslation(emptyVector).y, entity.rigidBody.getWorldTransform().getTranslation(emptyVector).z);
-				spriteBatch.draw(entity.getTexture(), coords.x - entity.getTexture().getRegionWidth()/2, coords.y - entity.getTexture().getRegionHeight()/2);
-			}
-		}
-		
-		spriteBatch.draw(player.getTexture(), Gdx.graphics.getWidth()/2 - player.getTexture().getRegionWidth()/2, Gdx.graphics.getHeight()/2 - player.getTexture().getRegionHeight()/2);
-		
-		for (Entity entity: entities.allEntities) {
-			if (entity instanceof Dummy) {
-				Vector2 coords = cartesianToScreen(entity.rigidBody.getWorldTransform().getTranslation(emptyVector).x, entity.rigidBody.getWorldTransform().getTranslation(emptyVector).y, entity.rigidBody.getWorldTransform().getTranslation(emptyVector).z);
-				float percLife = entity.getLife() / entity.getMaxLife();
-				int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
-				entityLifeBar.setRegionWidth(barLength);
-				game.batch.draw(entityLifeBar, coords.x - fullEntityLifeBar.getWidth()/2, coords.y + entity.getTexture().getRegionHeight()/2 + 20);
-			}
-		}
-		
-		renderParticles(particleEngine, spriteBatch, player);
-		renderProjectiles(projectileManager, spriteBatch, player);
-		*/
 		
 		spriteBatch.setColor(1, 1, 1, (1 - time.getSunlightLevel()) / 1.3f);
 		spriteBatch.draw(dayNightOverlay, 0, 0);
 		spriteBatch.setColor(1, 1, 1, 1);
-		
-		//displayCriticalStats(spriteBatch, player);
 		
 		spriteBatch.end();
 		

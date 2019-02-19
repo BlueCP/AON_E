@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.screens.PlayScreen;
@@ -15,7 +16,7 @@ import com.mygdx.game.settings.VideoSettings;
 public class Camera {
 
 	public OrthographicCamera orthographicCamera;
-	public FitViewport viewport;
+	public Viewport viewport;
 
 	public Vector3 pos;
 	public Vector3 screenShakeDisplacement;
@@ -30,9 +31,9 @@ public class Camera {
 	Camera() {
 		orthographicCamera = new OrthographicCamera();
 		viewport = new FitViewport(AON_E.WORLD_WIDTH, AON_E.WORLD_HEIGHT, orthographicCamera);
-		orthographicCamera.position.set(orthographicCamera.viewportWidth/2, orthographicCamera.viewportHeight/2, 0);
+//		orthographicCamera.position.set(orthographicCamera.viewportWidth/2, orthographicCamera.viewportHeight/2, 0);
+		orthographicCamera.position.set(0, 0, 0);
 		orthographicCamera.update();
-		System.out.println(orthographicCamera.zoom);
 
 		screenShakeAction = new ScreenShakeAction();
 		limitedActions = new Queue<>();
