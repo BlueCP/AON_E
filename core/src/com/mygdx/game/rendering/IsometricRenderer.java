@@ -2,19 +2,16 @@ package com.mygdx.game.rendering;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.particles.ParticleSprites;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.physics.PhysicsManager.Tag;
 import com.mygdx.game.physics.PhysicsManager.TestMode;
@@ -31,12 +28,9 @@ public class IsometricRenderer {
 
 	//private final int sunsDistFromEarth = 1000;
 	
-	//private AON_E game;
-	//private World world;
 	private Time time;
 	private Texture fullEntityLifeBar;
-	//private TextureRegion entityLifeBar;
-	
+
 	//private PolygonSprite polySprite;
 	//private PolygonSpriteBatch polyBatch; // To assign at the beginning
 	//private Texture tileShadowPolygon;
@@ -57,8 +51,7 @@ public class IsometricRenderer {
 	//private final int constA = 0;
 	
 	private Vector2 isoPlayer;
-	//private Vector3 playerCoords;
-	
+
 	//private Point3 selectedCartesian = new Point3();
 	//private Point2 selectedScreen = new Point2();
 	
@@ -80,11 +73,6 @@ public class IsometricRenderer {
 	
 	private ShapeRenderer shapeRenderer;
 	
-	//Array<TextureRegion> orderedTextures;
-	//Array<Vector2> orderedPositions;
-	//Array<Integer> orderedIds;
-	//Array<Visibility> orderedVisibilities;
-	
 	private Array<WorldObject> orderedObjects;
 	
 	public Camera camera;
@@ -96,17 +84,9 @@ public class IsometricRenderer {
 	private float effectiveZoom = 1; // A combination of the camera zoom and the zoom considering the screen size.
 	
 	public IsometricRenderer(AON_E game, Time time) {
-		//this.game = game;
-		//this.world = world;
 		this.time = time;
 		fullEntityLifeBar = game.manager.get("sprites/fullEntityLifeBar.png");
-		//entityLifeBar = new TextureRegion(fullEntityLifeBar);
 		vignette = game.manager.get("textures/vignette.png");
-		
-		//orderedTextures = new Array<TextureRegion>();
-		//orderedPositions = new Array<Vector2>();
-		//orderedIds = new Array<Integer>();
-		//orderedVisibilities = new Array<Visibility>();
 		
 		orderedObjects = new Array<>();
 		
@@ -117,16 +97,16 @@ public class IsometricRenderer {
 //		camera.addHardPanNow(5, new Vector3(2, 0, 2));
 //		camera.addHardZoomToQueue(3, 2f);
 //		camera.addSoftZoomToQueue(15, 2f);
-		//camera.addSoftZoomToQueue(5, 2f);
+//		camera.addSoftZoomToQueue(5, 2f);
 //		camera.setZoom(0.5f);
-		//camera.addCutToQueue(2, Vector3.Zero);
-		//camera.addHardPanToQueue(3, new Vector3(3, 0, 3));
-		//camera.addCutToQueue(2, Vector3.Zero);
+//		camera.addCutToQueue(2, Vector3.Zero);
+//		camera.addHardPanToQueue(3, new Vector3(3, 0, 3));
+//		camera.addCutToQueue(2, Vector3.Zero);
 //		camera.addSoftPanToQueue(3, new Vector3(-3, 0, -3));
 //		camera.addCutToQueue(5, new Vector3(-2, 0, 2));
-		//camera.addCutToQueue(2, new Vector3(2, 0, 2));
-		//camera.addCutToQueue(2, new Vector3(2, 0, -2));
-		//camera.addCutToQueue(2, new Vector3(-2, 0, -2));
+//		camera.addCutToQueue(2, new Vector3(2, 0, 2));
+//		camera.addCutToQueue(2, new Vector3(2, 0, -2));
+//		camera.addCutToQueue(2, new Vector3(-2, 0, -2));
 		
 		// Creating the color filling (but textures would work the same way)
 		Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -158,15 +138,6 @@ public class IsometricRenderer {
 		shapeRenderer = new ShapeRenderer();
 	}
 	
-	/*
-	private static enum RenderingStage {
-		ENTITIES,
-		PLAYER,
-		PARTICLES,
-		PROJECTILES;
-	}
-	*/
-	
 	public enum Visibility {
 		VISIBLE,
 		TRANSLUCENT,
@@ -183,60 +154,12 @@ public class IsometricRenderer {
 					break;
 				}
 			}
-			/*
-			if (worldObjects.indexOf(id, false) < index && orderedIds.indexOf(id, false) != -1) { // If this object is a static object (which all begin with 1100, 2100, 3100, etc)
-				index = orderedIds.indexOf(id, false);
-				//
-				switch (renderingStage) {
-					case ENTITIES:
-						if (String.valueOf(id).charAt(1) == '1') {
-							lowestRenderPos = Util.getId(id);
-						}
-						break;
-					case PLAYER:
-						if (String.valueOf(id).charAt(1) == '1' || String.valueOf(id).startsWith("1000")) {
-							lowestRenderPos = Util.getId(id);
-						}
-						break;
-					case PARTICLES:
-						if (String.valueOf(id).charAt(1) == '1' || String.valueOf(id).startsWith("1000")) {
-							lowestRenderPos = Util.getId(id);
-						}
-						break;
-					case PROJECTILES:
-						if (String.valueOf(id).charAt(1) == '1' || String.valueOf(id).startsWith("1000") || String.valueOf(id).startsWith("3000")) {
-							lowestRenderPos = Util.getId(id);
-						}
-						break;
-				}
-				//
-			}
-			*/
 		}
-		//int index = orderedIds.indexOf(lowestRenderPos, false);
-		/*
-		if (index - 1 < 0) {
-			index = 0;
-		}
-		*/
 		if (index == Integer.MAX_VALUE) {
 			index = -1;
 		}
 		return index;
 	}
-	
-	/*
-	private int findIndex(int id, Array<WorldObject> worldObjects) {
-		int index = -1;
-		for (int i = 0; i < worldObjects.size; i ++) {
-			if (worldObjects.get(i).physicsId == id) {
-				index = i;
-				break;
-			}
-		}
-		return index;
-	}
-	*/
 
 	private void calculateImmobileObjectRenderingOrder(PhysicsManager physicsManager) {
 		boolean repeat;
@@ -275,81 +198,16 @@ public class IsometricRenderer {
 		}
 	}
 	
-	/*private void calculateStaticObjectRenderingOrder(PhysicsManager physicsManager) {
-		//renderList = physicsManager.renderable;
-		boolean repeat;
-		do {
-			if (physicsManager.renderableMobileObjects.size == 1) {
-				break;
-			}
-			repeat = false;
-			for (int i = 0; i < physicsManager.renderableMobileObjects.size - 1; i ++) {
-				ConstantObject object = physicsManager.renderableMobileObjects.get(i);
-				ConstantObject nextObject = physicsManager.renderableMobileObjects.get(i + 1);
-				*//*if (object.getLowestPoint() >= nextObject.getHighestPoint() ||
-						object.getHighestPoint() <= nextObject.getLowestPoint()) {
-					if (object.getPos().z > nextObject.getPos().z) {
-						physicsManager.renderableMobileObjects.swap(i, i + 1);
-						repeat = true;
-					}
-				} else {
-					if (object.getIsoY() < nextObject.getIsoY()) {
-						physicsManager.renderableMobileObjects.swap(i, i + 1);
-						repeat = true;
-					}
-				}*//*
-			}
-		} while (repeat);
-		
-		for (ConstantObject object: physicsManager.renderableMobileObjects) {
-			object.updateWorldObject(this);
-			orderedObjects.add(object);
-			*//*
-			orderedTextures.add(object.getTexture());
-			orderedPositions.add(new Vector2(object.getSpriteX() - camera.isoPos.x + Gdx.graphics.getWidth()/2, object.getSpriteY() - camera.isoPos.y + Gdx.graphics.getHeight()/2));
-			orderedIds.add(object.getCollisionObject().getUserValue());
-			orderedVisibilities.add(Visibility.VISIBLE); // This is the default, it may be changed in calculatePlayerRenderingOrder
-			*//*
-		}
-	}*/
-	
 	private void calculateEntitiesRenderingOrder(PhysicsManager physicsManager) {
-		//renderList = physicsManager.renderable;
 		for (int i = 0; i < physicsManager.renderableEntities.size; i ++) {
 			Entity entity = physicsManager.renderableEntities.get(i);
 			Array<Integer> hitIds = physicsManager.convexSweepTestAll(entity.rigidBody, entity.pos);
 			int index = findLowestIndex(hitIds);
-			//int index = findIndex(physicsManager.convexSweepTestFirst(entity.rigidBody, entity.pos), orderedObjects);
-			//Vector2 coords = cartesianToScreen(entity.pos.x, entity.pos.y, entity.pos.z);
-			//entity.renderPos = coords;
 			entity.updateWorldObject(this);
 			if (hitIds.size == 0 || index == -1) { // If there are no objects blocking the entity
 				orderedObjects.add(entity);
-				/*
-				orderedTextures.add(entity.getTexture());  // Put the entity at the front of the rendering order
-				orderedPositions.add(new Vector2(coords.x - entity.getTexture().getRegionWidth()/2, coords.y - entity.getTexture().getRegionHeight()/2));
-				orderedIds.add(entity.rigidBody.getUserValue());
-				orderedVisibilities.add(Visibility.VISIBLE);
-				*/
 			} else {
-				/*
-				orderedTextures.insert(index, entity.getTexture());
-				orderedPositions.insert(index, new Vector2(coords.x - entity.getTexture().getRegionWidth()/2, coords.y - entity.getTexture().getRegionHeight()/2));
-				orderedIds.insert(index, entity.rigidBody.getUserValue());
-				orderedVisibilities.add(Visibility.VISIBLE);
-				*/
 				orderedObjects.insert(index, entity);
-				
-				/*
-				float percLife = entity.getLife() / entity.getMaxLife();
-				int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
-				TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
-				entityLifeBar.setRegionWidth(barLength);
-				orderedTextures.insert(index, entityLifeBar);
-				orderedPositions.insert(index, new Vector2(coords.x - fullEntityLifeBar.getWidth()/2, coords.y + entity.getTexture().getRegionHeight()/2 + 20));
-				orderedIds.insert(index, entity.rigidBody.getUserValue());
-				orderedVisibilities.add(Visibility.VISIBLE);
-				*/
 			}
 		}
 	}
@@ -357,25 +215,10 @@ public class IsometricRenderer {
 	private void calculatePlayerRenderingOrder(PhysicsManager physicsManager, Player player) {
 		Array<Integer> hitIds = physicsManager.convexSweepTestAll(player.rigidBody, player.pos);
 		int index = findLowestIndex(hitIds);
-		//int index = findIndex(physicsManager.convexSweepTestFirst(player.rigidBody, player.pos), orderedObjects);
-		//Vector2 coords = cartesianToScreen(player.pos.x, player.pos.y, player.pos.z);
-		//player.renderPos = coords.cpy();
 		player.updateWorldObject(this);
 		if (hitIds.size == 0 || index == -1) { // If there are no objects blocking the player
-			/*
-			orderedTextures.add(player.getTexture());  // Put the entity at the front of the rendering order
-			orderedPositions.add(new Vector2(coords.x - player.getTexture().getRegionWidth()/2, coords.y - player.getTexture().getRegionHeight()/2));
-			orderedIds.add(player.rigidBody.getUserValue());
-			orderedVisibilities.add(Visibility.VISIBLE);
-			*/
 			orderedObjects.add(player);
 		} else {
-			/*
-			orderedTextures.insert(index, player.getTexture());
-			orderedPositions.insert(index, new Vector2(coords.x - player.getTexture().getRegionWidth()/2, coords.y - player.getTexture().getRegionHeight()/2));
-			orderedIds.insert(index, player.rigidBody.getUserValue());
-			orderedVisibilities.add(Visibility.VISIBLE);
-			*/
 			orderedObjects.insert(index, player);
 			for (int i = orderedObjects.size - 1; i > index; i --) {
 				if (PhysicsManager.isConstObject(orderedObjects.get(i).physicsId)) {
@@ -404,26 +247,11 @@ public class IsometricRenderer {
 		for (int i = 0; i < physicsManager.renderableParticles.size; i ++) {
 			Particle particle = physicsManager.renderableParticles.get(i);
 			Array<Integer> hitIds = physicsManager.rayTestAll(particle.pos, TestMode.UPWARDS);
-			//Vector2 coords = cartesianToScreen(particle.pos.x, particle.pos.y, particle.pos.z);
-			//coords.x -= particle.getTexture().getRegionWidth()/2;
-			//coords.y -= particle.getTexture().getRegionHeight()/2;
 			int index = findLowestIndex(hitIds);
 			particle.updateWorldObject(this);
 			if (hitIds.size == 0 || index == -1) { // If there are no objects blocking the particle
-				/*
-				orderedTextures.add(particle.getTexture()); // Put the particle at the front of the rendering order
-				orderedPositions.add(coords);
-				orderedIds.add(particle.rigidBody.getUserValue());
-				orderedVisibilities.add(Visibility.VISIBLE);
-				*/
 				orderedObjects.add(particle);
 			} else {
-				/*
-				orderedTextures.insert(index, particle.getTexture()); // Put the particle at the front of the rendering order
-				orderedPositions.insert(index, coords);
-				orderedIds.insert(index, particle.rigidBody.getUserValue());
-				orderedVisibilities.add(Visibility.VISIBLE);
-				*/
 				orderedObjects.insert(index, particle);
 			}
 		}
@@ -435,60 +263,19 @@ public class IsometricRenderer {
 			if (!projectile.hasTexture()) {
 				continue;
 			}
-//			System.out.println(projectile.getCollisionObject());
-//			System.out.println(projectile.getCollisionObject().getCollisionShape());
-//			System.out.println(projectile.pos);
 			Array<Integer> hitIds = physicsManager.convexSweepTestAll(projectile.getCollisionObject(), projectile.pos);
 			int index = findLowestIndex(hitIds);
-			//int id = physicsManager.convexSweepTestFirst(projectile.getCollisionObject(), projectile.pos);
-			//Vector2 coords = cartesianToScreen(projectile.pos.x, projectile.pos.y, projectile.pos.z);
-			//coords.x -= projectile.getTexture().getRegionWidth()/2;
-			//coords.y -= projectile.getTexture().getRegionHeight()/2;
-			//int index = findIndex(id, orderedObjects);
 			projectile.updateWorldObject(this);
 			if (hitIds.size == 0 || index == -1) { // If there are no objects blocking the projectile
-				/*
-				orderedTextures.add(projectile.getTexture()); // Put the projectile at the front of the rendering order
-				orderedPositions.add(coords);
-				orderedIds.add(projectile.getCollisionObject().getUserValue());
-				orderedVisibilities.add(Visibility.VISIBLE);
-				*/
 				orderedObjects.add(projectile);
 			} else {
-				/*
-				orderedTextures.insert(index, projectile.getTexture()); // Put the projectile at the front of the rendering order
-				orderedPositions.insert(index, coords);
-				orderedIds.insert(index, projectile.getCollisionObject().getUserValue());
-				orderedVisibilities.add(Visibility.VISIBLE);
-				*/
 				orderedObjects.insert(index, projectile);
 			}
 		}
 	}
 	
-	/*
-	private void calculateEntityHealthBarsRenderingOrder(Entities entities, Array<TextureRegion> orderedTextures, Array<Vector2> orderedPositions) {
-		for (Entity entity: entities.allEntities) {
-			if (entity instanceof Dummy) {
-				Vector2 coords = cartesianToScreen(entity.rigidBody.getWorldTransform().getTranslation(emptyVector).x, entity.rigidBody.getWorldTransform().getTranslation(emptyVector).y, entity.rigidBody.getWorldTransform().getTranslation(emptyVector).z);
-				float percLife = entity.getLife() / entity.getMaxLife();
-				int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
-				entityLifeBar.setRegionWidth(barLength);
-				orderedTextures.add(entityLifeBar);
-				orderedPositions.add(new Vector2(coords.x - fullEntityLifeBar.getWidth()/2, coords.y + entity.getTexture().getRegionHeight()/2 + 20));
-			}
-		}
-	}
-	*/
-	
 	private void calculateRenderingOrder(PhysicsManager physicsManager, Player player) {
-		//orderedTextures.clear();
-		//orderedPositions.clear();
-		//orderedIds.clear();
-		//orderedVisibilities.clear();
-		
 		orderedObjects.clear();
-//		calculateStaticObjectRenderingOrder(man);
 		calculateImmobileObjectRenderingOrder(physicsManager);
 		calculateMobileObjectRenderingOrder(physicsManager);
 		calculatePlayerRenderingOrder(physicsManager, player); // For some reason, player -> entities works but entities -> player doesn't
@@ -498,37 +285,9 @@ public class IsometricRenderer {
 	}
 	
 	private void renderObjects(SpriteBatch spriteBatch, Entities entities) {
-		/*
-		for (int i = 0; i < orderedTextures.size; i ++) {
-			switch (orderedVisibilities.get(i)) {
-				case VISIBLE:
-					break;
-				case TRANSLUCENT:
-					spriteBatch.setColor(1, 1, 1, 0.5f);
-					//System.out.println(123);
-					break;
-				case INVISIBLE:
-					spriteBatch.setColor(1, 1, 1, 0);
-					break;
-			}
-			if (camera.getZoom() == 1) {
-				spriteBatch.draw(orderedTextures.get(i), orderedPositions.get(i).x, orderedPositions.get(i).y);
-			} else {
-				//float factor = Math.abs(orderedPositions.get(i).x - Gdx.graphics.getWidth()/2) / Gdx.graphics.getWidth()/2;
-				float xDisp = (orderedPositions.get(i).x - Gdx.graphics.getWidth()/2) * camera.getZoom();
-				float yDisp = (orderedPositions.get(i).y - Gdx.graphics.getHeight()/2) * camera.getZoom();
-				orderedPositions.get(i).set(Gdx.graphics.getWidth()/2 + xDisp, Gdx.graphics.getHeight()/2 + yDisp);
-				spriteBatch.draw(orderedTextures.get(i), orderedPositions.get(i).x, orderedPositions.get(i).y, 0, 0,
-								 orderedTextures.get(i).getRegionWidth(), orderedTextures.get(i).getRegionHeight(),
-								 camera.getZoom(), camera.getZoom(), 0);
-			}
-			spriteBatch.setColor(1, 1, 1, 1);
-		}
-		*/
-		
 		effectiveZoom = camera.getZoom();
 		for (int i = 0; i < orderedObjects.size; i ++) {
-			switch (orderedObjects.get(i).visibility) {
+			/*switch (orderedObjects.get(i).visibility) {
 				case VISIBLE:
 					break;
 				case TRANSLUCENT:
@@ -537,13 +296,17 @@ public class IsometricRenderer {
 				case INVISIBLE:
 					// Invisibility is handled in an if statement
 					break;
-			}
+			}*/
 			
 			if (orderedObjects.get(i).visibility == Visibility.INVISIBLE) {
 				continue;
+			} else if (orderedObjects.get(i).visibility == Visibility.TRANSLUCENT) {
+				spriteBatch.setColor(1, 1, 1, 0.5f);
+				renderSingleObject(orderedObjects.get(i), spriteBatch, entities);
 			} else {
 				renderSingleObject(orderedObjects.get(i), spriteBatch, entities);
 			}
+
 			spriteBatch.setColor(1, 1, 1, 1);
 		}
 	}
@@ -580,52 +343,19 @@ public class IsometricRenderer {
 		}
 
 		yCoord -= 5;
+
+		// More effects will go here in future.
 	}
-
-	/*private void renderZoomed(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
-		//float factor = Math.abs(orderedPositions.get(i).x - Gdx.graphics.getWidth()/2) / Gdx.graphics.getWidth()/2;
-		float xDisp = (worldObject.renderPos.x - AON_E.WORLD_WIDTH/2) * effectiveZoom;
-		float yDisp = (worldObject.renderPos.y - AON_E.WORLD_HEIGHT/2) * effectiveZoom;
-		worldObject.renderPos.set(AON_E.WORLD_WIDTH/2 + xDisp, AON_E.WORLD_HEIGHT/2 + yDisp);
-		spriteBatch.draw(worldObject.getTexture(), worldObject.renderPos.x, worldObject.renderPos.y, 0, 0,
-				worldObject.getTexture().getRegionWidth(), worldObject.getTexture().getRegionHeight(),
-				effectiveZoom, effectiveZoom, 0);
-
-		if (PhysicsManager.isNonPlayerEntity(worldObject.physicsId)) {
-			drawEntityLifeBar(entities.getEntity(worldObject.id), spriteBatch);
-		}
-	}*/
-
-	/*private void drawEntityLifeBar(Entity entity, SpriteBatch spriteBatch) {
-		float percLife = entity.getLife() / entity.getMaxLife();
-		int barLength = (int)(fullEntityLifeBar.getTextureData().getWidth() * percLife);
-		//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
-		entityLifeBar.setRegionWidth(barLength); ///
-		Vector2 coords = new Vector2(entity.renderPos.x - ((fullEntityLifeBar.getWidth()/2f - entity.getTexture().getRegionWidth()/2f) * effectiveZoom), entity.renderPos.y + ((entity.getTexture().getRegionHeight() + 20) * effectiveZoom));
-		//xDisp = (coords.x - Gdx.graphics.getWidth()/2) * camera.getZoom();
-		//yDisp = (coords.y - Gdx.graphics.getHeight()/2) * camera.getZoom();
-		//coords.set(Gdx.graphics.getWidth()/2 + xDisp, Gdx.graphics.getHeight()/2 + yDisp);
-		spriteBatch.draw(entityLifeBar, coords.x, coords.y, 0, 0, entityLifeBar.getRegionWidth(), entityLifeBar.getRegionHeight(),
-				effectiveZoom, effectiveZoom, 0);
-	}*/
 	
 	public void render(PlayScreen playScreen) {
 		SpriteBatch spriteBatch = playScreen.game.batch;
 		Player player = playScreen.player;
 		Entities entities = playScreen.entities;
 		PhysicsManager physicsManager = playScreen.physicsManager;
-//		ParticleEngine particleEngine = playScreen.particleEngine;
-//		ProjectileManager projectileManager = playScreen.projectileManager;
-		
-		//calcSunPos();
-		
-		//playerCoords = player.pos.cpy();
-		
+
 		isoPlayer = cartesianToIso(player.pos.x, player.pos.z);
 		isoPlayer.y += player.pos.y*tileHeight;
-		//int x = (int)player.getStatus().getXPos();
-		//int y = (int)player.getStatus().getYPos();
-		
+
 		camera.update(player, playScreen);
 		camera.isoPos = cartesianToIso(camera.pos.x, camera.pos.z);
 		camera.isoPos.y += camera.pos.y*tileHeight;
@@ -649,35 +379,7 @@ public class IsometricRenderer {
 		spriteBatch.setColor(1, 1, 1, 1);
 		
 		spriteBatch.end();
-		
-		/*
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(0, 0, 0.1f, (1 - time.getSunlightLevel()) / 1.3f);
-		shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		shapeRenderer.end();
-		*/
 	}
-	
-	/*
-	private void renderParticles(ParticleEngine particleEngine, SpriteBatch spriteBatch, Player player) {
-		//System.out.println(particleEngine.particles.size);
-		for (Particle particle: particleEngine.particles) {
-			Vector2 point = cartesianToScreen(particle.pos.x, particle.pos.y, particle.pos.z);
-			spriteBatch.draw(ParticleSprites.getCurrentTexture(particle), point.x, point.y);
-		}
-		//System.out.println(i);
-	}
-	
-	private void renderProjectiles(ProjectileManager projectileManager, SpriteBatch spriteBatch, Player player) {
-		for (Projectile projectile: projectileManager.projectiles) {
-			if (ProjectileSprites.hasTexture(projectile.sprite)) {
-				Vector2 point = cartesianToScreen(projectile.pos.x, projectile.pos.y, projectile.pos.z);
-				spriteBatch.draw(ProjectileSprites.getCurrentTexture(projectile), point.x, point.y);
-			}
-		}
-	}
-	*/
 	
 	/*
 	private void calcSunPos() {
@@ -876,64 +578,6 @@ public class IsometricRenderer {
 		point.y = newY - AON_E.WORLD_HEIGHT/2 + camera.isoPos.y - camera.pos.y*tileHeight;
 		return point;
 	}
-	
-	/*
-	public Point3 screenToCartesian(float x, float y) {
-		Point3 point = new Point3();
-		Point2 isoPoint = screenToIso(x, y);
-		Point2 cartPoint = isoToCartesian(isoPoint.x, isoPoint.y);
-		for (int z = World.depth - 1; z >= 0; z --) {
-			if (!(world.type(cartPoint.x, cartPoint.y, z) instanceof Air)) {
-				point.x = cartPoint.x;
-				point.y = cartPoint.y;
-				point.z = z;
-				return point;
-			}
-			cartPoint.x --;
-			cartPoint.y --;
-		}
-		return null;
-		//x1 += distanceToTop;
-		//
-		Point3D point = new Point3D();
-		Point2D cartPoint = isoToCartesian(x / 64, y / 64);
-		int x1 = (int)(player.getStatus().getXPos() + World.depth - 1 - player.getStatus().getZPos()) + (int)cartPoint.x;
-		x1 += x - player.getStatus().getXPos();
-		int y1 = (int)(player.getStatus().getYPos() + World.depth - 1 - player.getStatus().getZPos()) + (int)cartPoint.y;
-		y1 += y - player.getStatus().getYPos();
-		for (int z1 = World.depth - 1; z1 >= 0; z1 --) {
-			if (!(world.type(x1, y1, z1) instanceof Air)) {
-				point.x = x1;
-				point.y = y1;
-				point.z = z1;
-				return point;
-			}
-			x1 --;
-			y1 --;
-		}
-		return null;
-		//
-	}
-	*/
-	
-	/*
-	public Point3 screenToCartesian(Point2 screenPoint) {
-		Point3 point = new Point3();
-		Point2 isoPoint = screenToIso(screenPoint.x, screenPoint.y);
-		Point2 cartPoint = isoToCartesian(isoPoint.x, isoPoint.y);
-		for (int z = World.depth - 1; z >= 0; z --) {
-			if (!(world.type(cartPoint.x, cartPoint.y, z) instanceof Air)) {
-				point.x = cartPoint.x;
-				point.y = cartPoint.y;
-				point.z = z;
-				return point;
-			}
-			cartPoint.x --;
-			cartPoint.y --;
-		}
-		return null;
-	}
-	*/
 	
 	public void dispose() {
 		shapeRenderer.dispose();

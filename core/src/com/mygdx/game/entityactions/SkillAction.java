@@ -7,7 +7,6 @@ import com.mygdx.game.skills.ActiveSkill;
 
 public class SkillAction extends EntityAction {
 
-//	protected Entity entity;
 	protected ActiveSkill skill;
 
 	/**
@@ -25,10 +24,6 @@ public class SkillAction extends EntityAction {
 		name = skill.getName();
 		totalLifetime = lifetime;
 	}
-
-//	public Entity getEntity() {
-//		return entity;
-//	}
 
 	public Skill getSkill() {
 		return skill;

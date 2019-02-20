@@ -2,8 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,24 +17,17 @@ import com.mygdx.game.AON_E;
 
 public class MainMenuScreen extends MyScreen {
 
-//	private AON_E game;
-	//private GlyphLayout gLay;
-	
 	private Texture titleScreen;
-	
-//	private Music titleMusic;
 	
 	private Stage stage;
 
 	public MainMenuScreen(AON_E game) {
 		super(game);
-		//gLay = new GlyphLayout();
 
 		titleScreen = game.manager.get("textures/titlescreen.jpg", Texture.class);
 		
-//		titleMusic = game.manager.get("music/titletheme.mp3", Music.class);
 		game.musicManager.titleMusic.setLooping(true);
-//		game.soundManager.titleMusic.play();
+//		game.musicManager.titleMusic.play();
 
 		Label title = new Label("AON_E", new LabelStyle(AON_E.DEFAULT_FONT, Color.MAGENTA));
 		title.setFontScale(3);
@@ -48,7 +39,6 @@ public class MainMenuScreen extends MyScreen {
 				game.setScreen(new EnterNameScreen(game));
 			}
 		});
-//		createButton.getLabel().setFontScale(AON_E.screenSizeFactor);
 
 		TextButton resumeButton = new TextButton("Resume game", AON_E.SKIN);
 		resumeButton.addListener(new ClickListener() {
@@ -57,7 +47,6 @@ public class MainMenuScreen extends MyScreen {
 				game.setScreen(new ChooseCharacterScreen(game));
 			}
 		});
-//		resumeButton.getLabel().setFontScale(AON_E.screenSizeFactor);
 
 		TextButton deleteButton = new TextButton("Delete character", AON_E.SKIN);
 		deleteButton.addListener(new ClickListener() {
@@ -66,7 +55,6 @@ public class MainMenuScreen extends MyScreen {
 				game.setScreen(new DeleteCharacterScreen(game));
 			}
 		});
-//		deleteButton.getLabel().setFontScale(AON_E.screenSizeFactor);
 
 		TextButton settingsButton = new TextButton("Settings", AON_E.SKIN);
 		settingsButton.addListener(new ClickListener() {
@@ -83,8 +71,7 @@ public class MainMenuScreen extends MyScreen {
 				Gdx.app.exit();
 			}
 		});
-//		exitButton.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		stage = new Stage(game.viewport);
 
 		Table table = new Table();
@@ -127,10 +114,7 @@ public class MainMenuScreen extends MyScreen {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		game.pointer.setRegion(game.pointerDown);
-//		game.click.play(3f);
 		game.soundManager.click.play();
-//		Sound sound = game.manager.get("sound/UI/click.wav");
-//		sound.play(1, 1, -0.8f);
 		return true;
 	}
 
@@ -171,9 +155,7 @@ public class MainMenuScreen extends MyScreen {
 
 		game.batch.begin();
 		
-//		game.batch.draw(titleScreen, AON_E.leftLimit, AON_E.lowerLimit, AON_E.effectiveScreenWidth, AON_E.effectiveScreenHeight);
 		game.batch.draw(titleScreen, 0, 0, AON_E.WORLD_WIDTH, AON_E.WORLD_HEIGHT);
-//		game.batch.draw(titleScreen, 0, 0);
 
 		/*
 		AON_E.DEFAULT_FONT.getData().setScale(3f);
@@ -192,9 +174,7 @@ public class MainMenuScreen extends MyScreen {
 		stage.draw();
 		
 		game.batch.begin();
-//		game.pointer.setSize(AON_E.WORLD_WIDTH, AON_E.WORLD_HEIGHT);
 		game.pointer.draw(game.batch);
-//		RenderingUtils.renderBlackBars(game.batch);
 		game.batch.end();
 	}
 	

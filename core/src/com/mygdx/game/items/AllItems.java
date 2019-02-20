@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.items.Item.Rarity;
 
-import java.io.FileNotFoundException;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public class AllItems extends Items {
@@ -15,7 +13,7 @@ public class AllItems extends Items {
 	private static Array<Item> allEquipment = new Array<>();
 	private static Array<Item> allOtherItems = new Array<>();
 	
-	public static AllItems loadAll() throws FileNotFoundException {
+	public static AllItems loadAll() {
 		AllItems allItems = new AllItems();
 		allItems.loadAllWeapons();
 		allItems.loadAllArmour();

@@ -1,6 +1,5 @@
 package com.mygdx.game.physicsobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -19,11 +18,7 @@ import com.mygdx.game.rendering.IsometricRenderer.Visibility;
  */
 public abstract class ConstantObject extends WorldObject implements Disposable {
 
-	//private String id;
 	protected Vector3 pos;
-//	private float highestPoint; // The highest z coord of the object
-//	private float lowestPoint; // The lowest z coord of the object
-//	private float isoY;
 	private TextureRegion[] textures;
 	private boolean isAnimation;
 	private short animationFrame = 0; // If not an animation, stay at 0
@@ -37,18 +32,14 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 		this.collisionObject = collisionObject;
 		this.textures = textureRegions;
 		this.id = Integer.parseInt(id);
-		//collisionObject.setUserValue(Integer.parseInt(id));
 		this.tags = newTags;
 		if (textureRegions.length > 1) {
 			isAnimation = true;
 		}
 		this.spriteX = spriteX;
 		this.spriteY = spriteY;
-//		this.highestPoint = highest;
-//		this.lowestPoint = lowest;
 		pos = new Vector3();
 		collisionObject.getWorldTransform().getTranslation(pos);
-//		isoY = (pos.x + pos.z)/2;
 	}
 	
 	protected void update() {
@@ -57,8 +48,6 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 	
 	@Override
 	public void updateWorldObject(IsometricRenderer renderer) {
-		//physicsId = collisionObject.getUserValue();
-		//texture = getTexture();
 		renderPos = new Vector2(spriteX - renderer.camera.isoPos.x + AON_E.WORLD_WIDTH/2, spriteY - renderer.camera.isoPos.y + AON_E.WORLD_HEIGHT/2);
 		visibility = Visibility.VISIBLE;
 	}
@@ -75,22 +64,6 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 		}
 		collisionObject.dispose();
 	}
-
-//	public float getHighestPoint() {
-//		return highestPoint;
-//	}
-
-//	public void setHighestPoint(float highestPoint) {
-//		this.highestPoint = highestPoint;
-//	}
-
-//	public float getLowestPoint() {
-//		return lowestPoint;
-//	}
-
-//	public void setLowestPoint(float lowestPoint) {
-//		this.lowestPoint = lowestPoint;
-//	}
 
 	public btCollisionObject getCollisionObject() {
 		return collisionObject;
@@ -139,14 +112,6 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 	public void setPos(Vector3 pos) {
 		this.pos = pos;
 	}
-
-//	public float getIsoY() {
-//		return isoY;
-//	}
-
-//	public void setIsoY(float isoY) {
-//		this.isoY = isoY;
-//	}
 
 	public short getAnimationFrame() {
 		return animationFrame;

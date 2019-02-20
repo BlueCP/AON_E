@@ -18,10 +18,6 @@ public class IceShard extends DynamicProjectile {
 
 	private long iceShardTravelSoundId;
 
-//	private btCollisionShape shape;
-//	private btRigidBody rigidBody;
-//	private Vector3 targetPos;
-
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
@@ -56,7 +52,6 @@ public class IceShard extends DynamicProjectile {
 		}
 
 		if (Math.floorMod(ticksPast, 15) == 0) {
-//			particleEngine.addFireParticle(dynamicsWorld, pos);
 			playScreen.particleEngine.addParticle(playScreen.physicsManager.getDynamicsWorld(), pos, 1f, Particle.Sprite.FIRE, Particle.Behaviour.OSCILLATE_DOWN);
 		}
 

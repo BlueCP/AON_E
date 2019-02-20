@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
-import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
 
@@ -49,7 +48,6 @@ public abstract class StaticProjectile extends Projectile {
 		collisionObject.setWorldTransform(worldTransform);
 
 		collisionObject.setUserValue(physicsId);
-		//rigidBody.setCollisionFlags(rigidBody.getCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 		collisionObject.setActivationState(Collision.DISABLE_DEACTIVATION);
 	}
 

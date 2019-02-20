@@ -16,7 +16,6 @@ import com.mygdx.game.screens.PlayScreen;
 
 public class FieryVortex extends StaticProjectile {
 
-//	private static final int burnDuration = 0;
 	private static final int burnPower = 1;
 	private static final float dragSpeed = 0.5f; // The speed at which entities are pulled into the vortex.
 	private static final float radius = 5;
@@ -54,7 +53,6 @@ public class FieryVortex extends StaticProjectile {
 				Vector3 vector = new Vector3();
 				// We add 0.1 to the y coord to make sure the particles spawn above ground level.
 				Vector3 particlePos = pos.cpy().add(vector.setToRandomDirection().scl(radius).set(vector.x, 0, vector.z));
-//			particleEngine.addFireUp(dynamicsWorld, pos.cpy().add(vector.setToRandomDirection().scl(5).set(vector.x, 0, vector.z)), 1, 1);
 				playScreen.particleEngine.addFlyUpPoint(playScreen.physicsManager.getDynamicsWorld(), particlePos, 1, 1,
 						1, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
 			}
@@ -64,12 +62,8 @@ public class FieryVortex extends StaticProjectile {
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-//			playScreen.player.flamingBarrage.testfor(owner);
 			entity.burnedBy(playScreen.entities.getEntity(owner, playScreen.player), burnPower, lifetime);
 			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
-//			entity.burnNoCheck(burnPower, burnDuration);
-//			playScreen.player.vikingFuneral.testfor(owner, entity);
-	//		entity.changeEffect(Effect.EffectType.BURNING, burnDuration, burnPower);
 			hitEntities.add(entity.id);
 		}
 
@@ -78,7 +72,6 @@ public class FieryVortex extends StaticProjectile {
 			entity.rigidBody.translate(movementChange);
 			return true;
 //		entity.addAdditionalMovementVector(pos.cpy().sub(entity.pos).nor().scl(dragSpeed));
-//		System.out.println(entity.additionalMovementVector);
 //		entity.addMovementVector(pos.cpy().sub(entity.pos).nor().scl(dragSpeed)); // Move the entity towards the center of the vortex.
 		} else {
 			return false;

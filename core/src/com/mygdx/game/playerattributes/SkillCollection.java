@@ -81,36 +81,10 @@ public class SkillCollection {
 	}
 	
 	public void saveSkills(String name) {
-		/*
-		try {
-			Formatter dirN = new Formatter(Gdx.files.getLocalStoragePath() + "/saves/" + dir + "/skills.txt");
-			for (int i = 0; i < 10; i++) {
-				dirN.format(String.valueOf(this.getSkillList()[i].getLevel()) + "\r\n");
-			}
-			dirN.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		*/
 		KryoManager.write(this, "saves/" + name + "/playerSkills.txt");
 	}
 	
 	public static SkillCollection loadSkills(String name) {
-		/*
-		try {
-			SkillCollection skillCollection = new SkillCollection(true);
-			File dirN = new File(Gdx.files.getLocalStoragePath() + "/saves/" + dir + "/skills.txt");
-			Scanner fileSkills = new Scanner(dirN);
-			for (int i = 0; i < 10; i++) {
-				skillCollection.getSkillList()[i].setLevel(fileSkills.nextInt());
-			}
-			fileSkills.close();
-			return skillCollection;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		*/
 		return KryoManager.read("saves/" + name + "/playerSkills.txt", SkillCollection.class);
 	}
 

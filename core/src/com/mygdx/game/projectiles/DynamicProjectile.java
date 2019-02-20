@@ -7,11 +7,10 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.particles.Particle;
 
 public abstract class DynamicProjectile extends Projectile {
 
-	protected Vector3 linearVelocity;
+	private Vector3 linearVelocity;
 
 	protected btRigidBody rigidBody;
 
@@ -36,7 +35,6 @@ public abstract class DynamicProjectile extends Projectile {
 		rigidBody.setLinearVelocity(linearVelocity);
 
 		rigidBody.setUserValue(physicsId);
-		//rigidBody.setCollisionFlags(rigidBody.getCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 		rigidBody.setActivationState(Collision.DISABLE_DEACTIVATION);
 	}
 

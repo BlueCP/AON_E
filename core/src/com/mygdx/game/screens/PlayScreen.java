@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -40,31 +40,19 @@ public class PlayScreen extends MyScreen {
 
 	public static int foo = 1;
 	
-//	public AON_E game;
-	
-//	Music travelMusic;
-
 	public Screen subscreen = null;
 	public String playerName;
 	public Player player;
-	//public Equipped equipped; // Pointer to player's equipped items
-	//public RealItems inventory; // Pointer to player's inventory
 	public Time time; // Pointer to the time of the current world
 	private AllItems allItems = new AllItems();
 	AchievementCollection achievements = new AchievementCollection(); // New achievements object
 //	private SkillCollection skillCollection = new SkillCollection(true); // New skills object
-//	MoveCollection moveCollection = new MoveCollection(); // New actions object
-//	SpellCollection spellCollection = new SpellCollection(); // New spells object
 
 	private SkillCollection skillCollection;
 
 	public Entities entities;
 	private long tick = -1; // -1 is the tick even before anything has happened in the world. When everything is loaded in, the tick is updated to 0.
 	private long localTick = -1; // The local tick is the tick starting from when the player first entered the current world (i.e. resets when the player worldwalks)
-	//public boolean continueConfirm = false;
-	//public Entity targetEntity = null;
-	//public Weapon selectedWeapon = new Weapon(true);
-//	public String baseDir;
 //	public FieldOfView fov;
 	private Array<Message> messages = new Array<>();
 	private Array<Message> subMessages = new Array<>();
@@ -78,19 +66,6 @@ public class PlayScreen extends MyScreen {
 	public ProjectileManager projectileManager;
 	
 	private OwnStage hudStage; // Stage is visible to classes in the package so that screens can access stage when setting the input processor back to stage and this (e.g. inventory screen)
-	
-	/*
-	private Texture fullPlayerLifeBar;
-	private TextureRegion lifeBar;
-	
-	private Texture fullPlayerSpiritBar;
-	private TextureRegion spiritBar;
-	*/
-	
-	//private Texture fullManaBar;
-	//private TextureRegion manaBar;
-	
-	//btGhostObject ghostObj;
 	
 	private Array<Integer> keyboardEvents;
 	private Array<Integer> pressedKeys;
@@ -123,21 +98,9 @@ public class PlayScreen extends MyScreen {
 	
 	public PlayScreen(AON_E game, String name) {
 		super(game);
-
-//		this.game = game;
 		
-		/*
-		fullPlayerLifeBar = game.manager.get("sprites/fullPlayerLifeBar.png");
-		lifeBar = new TextureRegion(fullPlayerLifeBar);
-		fullPlayerSpiritBar = game.manager.get("sprites/fullSpiritBar.png");
-		spiritBar = new TextureRegion(fullPlayerSpiritBar);
-		*/
-		//fullManaBar = game.manager.get("sprites/fullManaBar.png");
-		//manaBar = new TextureRegion(fullManaBar);
-		
-//		travelMusic = game.manager.get("music/travelmusic.mp3");
 		game.musicManager.travelMusic.setLooping(true);
-//		game.soundManager.travelMusic.play();
+//		game.musicManager.travelMusic.play();
 		
 		initialiseBlueprints(game);
 		ParticleSprites.initialise(game);
@@ -147,18 +110,9 @@ public class PlayScreen extends MyScreen {
 		playerName = name;
 		loadGame();
 
-		//this.pStats = this.player.eStats();
-		//this.inventory = this.player.inventory();
-		//this.equipped = this.player.equipped();
-		
 		//particleEngine = new ParticleEngine();
 		
 		//projectileManager = new ProjectileManager();
-
-//		System.out.println(123);
-//		System.out.println(player.actions.size);
-//		player.actions.ensureCapacity(1);
-//		player.actions.addFirst(new Array<>());
 
 		skillCollection = new SkillCollection();
 		
@@ -225,21 +179,11 @@ public class PlayScreen extends MyScreen {
 			mouseEvents.add(event);
 			pressedMouseButtons.add(button);
 		}
-		/*
-		game.pointer.setRegion(game.pointerDown);
-		game.click.play();
-		if (button == Buttons.RIGHT) {
-			rayPick(screenX, Gdx.graphics.getHeight() - screenY);
-		}
-		//isoRenderer.interactWithClickedTile(this, screenX, screenY);
-		*/
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		//game.pointer.setRegion(game.pointerUp);
-		//MouseEvent event = new MouseEvent(screenX, screenY, pointer, button);
 		pressedMouseButtons.removeValue(button, true);
 		return true;
 	}
@@ -273,25 +217,9 @@ public class PlayScreen extends MyScreen {
 		universalUpdate();
 		isoRenderer.camera.orthographicCamera.update();
 
-		testforMovement();
+//		testforMovement();
 
 		executeLogic(Gdx.graphics.getDeltaTime());
-
-//		game.soundManager.updateWorldSounds(isoRenderer.camera);
-
-		/*
-		if (Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)) {
-			player.rigidBody.setLinearVelocity(new Vector3(0, -30, 0));
-		}
-		if (Gdx.input.isKeyPressed(Keys.W)) {
-			//player.rigidBody.applyForce(new Vector3(2, 0, 0), new Vector3(0, 0, 0));
-			player.rigidBody.applyImpulse(new Vector3(0.05f, 0, 0), new Vector3(0, 0, 0));
-		} else if (Gdx.input.isKeyPressed(Keys.S)) {
-			//player.rigidBody.applyForce(new Vector3(2, 0, 0), new Vector3(0, 0, 0));
-			player.rigidBody.applyImpulse(new Vector3(-0.05f, 0, 0), new Vector3(0, 0, 0));
-		}
-		*/
-		//System.out.println(player.rigidBody.getLinearVelocity());
 	}
 
 	@Override
@@ -301,7 +229,6 @@ public class PlayScreen extends MyScreen {
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//		isoRenderer.camera.viewport.apply();
 		isoRenderer.render(this);
 
 		/*
@@ -312,27 +239,16 @@ public class PlayScreen extends MyScreen {
 		game.batch.end();
 		*/
 
-//		game.viewport.apply();
 		for (OwnStage ownStage: ownStages) {
 			ownStage.render(this);
 		}
 
-//		System.out.println(player.getSkills().get(0).getCooldown());
-		
-//		game.batch.begin();
-//		RenderingUtils.renderBlackBars(game.batch);
-//		game.batch.end();
-
-//		((TargetedSkill) player.getSkills().get(0)).faceTarget(entities.allEntities.get(0));
-
-		//System.out.println(player.isCollidingWithWalkable());
-		
 		/*
 		game.batch.begin();
 		game.pointer.draw(game.batch);
 		game.batch.end();
 		*/
-		
+
 		//achievements.testforNewAchievements(terminal, this); // Tells the player if they have unlocked any new achievements
 		//moves.testforNewMoves(terminal, this); // Informs player of new moves
 		//displayCriticalStats(terminal); // Print critical stats after enemies have attacked
@@ -407,16 +323,26 @@ public class PlayScreen extends MyScreen {
 		if (player.canRotate()) {
 			Vector2 renderPos = player.renderPos.cpy().add(player.getTexture().getRegionWidth()/2f * isoRenderer.getEffectiveZoom(),
 														   player.getTexture().getRegionHeight()/2f * isoRenderer.getEffectiveZoom());
+
 			int screenX1 = (int) (virtualCoords.x - renderPos.x); // X distance relative to player
 			int halfScreenX1 = screenX1 / 2; // Reasons for this can be found in one of the notebooks.
 			int screenY1 = (int) (virtualCoords.y - renderPos.y); // Y distance relative to player
-			/*
-			System.out.println(screenX);
-			System.out.println(screenY);
-			System.out.println(screenX1);
-			System.out.println(screenY1);
-			*/
-			int b = (int) (renderPos.y);
+
+			// TAN2 ANGLE CALCULATION STARTS HERE //
+			float angle = (float) Math.toDegrees(MathUtils.atan2(screenY1, halfScreenX1));
+
+			if (angle < 0) {
+				angle += 360;
+			}
+
+			angle += 90;
+			if (angle >= 360) {
+				angle -= 360;
+			}
+			// TAN2 ANGLE CALCULATION ENDS HERE //
+
+			// COSINE ANGLE CALCULATION STARTS HERE //
+			/*int b = (int) (renderPos.y);
 			double c = Math.sqrt(halfScreenX1*halfScreenX1 + screenY1*screenY1); // Total distance relative to the player
 			double a = Math.sqrt(halfScreenX1*halfScreenX1 + (virtualCoords.y)*(virtualCoords.y));
 			double cosx = (float) ((b*b + c*c - a*a)/(2 * b * c));
@@ -428,8 +354,10 @@ public class PlayScreen extends MyScreen {
 			double angle = Math.toDegrees(Math.acos(cosx)); // Using the cosine theorem to find the angle of the click
 			if (virtualCoords.x < player.renderPos.x) {
 				angle = 360 - angle;
-			}
-			angle = Math.round(angle/22.5) * 22.5; // Round to nearest 22.5 degrees (which is 360/number of directions)
+			}*/
+			// COSINE ANGLE CALCULATION ENDS HERE //
+
+			angle = (float) (Math.round(angle/22.5f) * 22.5); // Round to nearest 22.5 degrees (which is 360/number of directions)
 			String facing = "N" + String.valueOf(angle).replace('.', '_'); // Convert to the format for 'facing'
 			for (Facing facing0: Facing.values()) {
 				if (facing.equals(facing0.toString())) {
@@ -453,12 +381,6 @@ public class PlayScreen extends MyScreen {
 			yComponent = (angle > 90 && angle < 270) ? yComponent : -yComponent;
 			Vector2 point = isoRenderer.cartToInvertedIso((float)xComponent, (float)yComponent);
 			player.addMovementVector(point.x, 0, point.y);
-			//player.moveByMovementVector();
-			//player.setWalkImpulse(point.x, 0, point.y);
-			//System.out.println("--------");
-			//System.out.println(player.getWalkImpulse());
-			//System.out.println(player.getPrevWalkImpulse());
-			//player.applyWalkImpulse();
 		}  // Don't bother with walking logic if the player can't actually walk
 
 	}
@@ -468,21 +390,8 @@ public class PlayScreen extends MyScreen {
 		if (player.canJump()) {
 			player.rigidBody.applyCentralImpulse(new Vector3(0, 5, 0));
 			player.setAnimationType(AnimationType.MIDAIR);
-			//player.moveByMovementVector();
 		}
 	}
-	
-	/*
-	private void mouseClickMovement() {
-		//
-		if (Gdx.input.isButtonPressed(1)) {
-			player.rigidBody.setLinearVelocity(new Vector3(0.3f, 0.3f, -0.3f));
-		}
-		//
-		testForWalk();
-		testForJump();
-	}
-	*/
 	
 	private void testforMovement() {
 		//player.setMovementState(MovementState.WALKING);
@@ -767,7 +676,6 @@ public class PlayScreen extends MyScreen {
 	private void processMouseInput() {
 		processingMouseInput = true;
 		if (mouseEvents.size > 0) {
-//			game.click.play();
 			game.soundManager.click.play();
 		}
 		for (MouseEvent event: mouseEvents) {
@@ -789,15 +697,6 @@ public class PlayScreen extends MyScreen {
 		}
 		overflowMouseEvents.clear();
 	}
-	
-	/*
-	private void movementLogic() {
-		if (Gdx.input.isButtonPressed(0)) {
-			rotatePlayer(Gdx.input.getX(), Gdx.input.getY());
-		}
-		mouseClickMovement();
-	}
-	*/
 	
 	private void regenCriticalStats() {
 		// Regen life
@@ -825,12 +724,10 @@ public class PlayScreen extends MyScreen {
 			this.player.getStatus().setMana(pStats.getRealMaxMana());
 		}
 		*/
-		
 	}
 	
 	public void addMessagesToHud() {
 		for (int i = 0; i < messages.size; i ++) {
-			//terminal.write(messages.get(i).getText(), PlayScreen.leftAlign, PlayScreen.mainGuiDownAlign - 1 - messages.size() + i, messages.get(i).getColour());
 			Label label = new Label(messages.get(i).getText(), new LabelStyle(AON_E.DEFAULT_FONT, messages.get(i).getColour()));
 			label.setFontScale(0.2f);
 			label.setX(AON_E.WORLD_WIDTH/2, Align.center);
@@ -842,7 +739,6 @@ public class PlayScreen extends MyScreen {
 	
 	public void addSubMessagesToHud() {
 		for (int i = 0; i < subMessages.size; i ++) {
-			//terminal.write(subMessages.get(i).getText(), PlayScreen.leftAlign, PlayScreen.messagesDownAlign + i, subMessages.get(i).getColour());
 			Label label = new Label(subMessages.get(i).getText(), new LabelStyle(AON_E.DEFAULT_FONT, subMessages.get(i).getColour()));
 			label.setFontScale(0.2f);
 			label.setX(AON_E.WORLD_WIDTH/2, Align.center);
@@ -1029,7 +925,6 @@ public class PlayScreen extends MyScreen {
 				player.setTargetEntity(id);
 			} else {
 				player.setTargetLocation(pair.getValue());
-	//			System.out.println(pair.getValue());
 			}
 		}
 	}

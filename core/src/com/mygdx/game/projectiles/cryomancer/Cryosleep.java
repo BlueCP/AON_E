@@ -40,7 +40,7 @@ public class Cryosleep extends StaticProjectile {
 	public void update(float delta, PlayScreen playScreen) {
 		Entity entity = playScreen.entities.getEntity(owner, playScreen.player);
 
-		if (entity == null) {
+		if (entity.id == -1) {
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 		} else if (!alreadyHit) {
 			entity.frozenEffect.add(lifetime);

@@ -13,14 +13,6 @@ public abstract class WorldObject {
 	public Vector2 renderPos;
 	public Visibility visibility;
 	
-	/*
-	public static enum Visibility {
-		VISIBLE,
-		TRANSLUCENT,
-		INVISIBLE;
-	}
-	*/
-	
 	public abstract void updateWorldObject(IsometricRenderer renderer);
 	
 	public abstract TextureRegion getTexture();

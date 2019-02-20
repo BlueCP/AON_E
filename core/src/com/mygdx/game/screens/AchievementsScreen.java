@@ -25,8 +25,7 @@ public class AchievementsScreen implements Screen, InputProcessor {
 	
 	Stage stage;
 	Table table;
-	private ScrollPane achievementsPane;
-	
+
 	public AchievementsScreen(AON_E game, PlayScreen playScreen) {
 		this.game = game;
 		this.playScreen = playScreen;
@@ -71,8 +70,8 @@ public class AchievementsScreen implements Screen, InputProcessor {
 			achievButtonGroup.add(button);
 			achievementsTable.add(button).padBottom(10).row();
 		}
-		
-		achievementsPane = new ScrollPane(achievementsTable, AON_E.SKIN);
+
+		ScrollPane achievementsPane = new ScrollPane(achievementsTable, AON_E.SKIN);
 		
 		table = new Table();
 		table.align(Align.center | Align.top);

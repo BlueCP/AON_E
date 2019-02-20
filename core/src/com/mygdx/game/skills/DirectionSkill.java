@@ -6,6 +6,10 @@ import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 import com.mygdx.game.utils.Util;
 
+/**
+ * A directional skill is one which uses the player's facing direction to influence properties of the spell,
+ * such as which direction a projectile should face.
+ */
 public abstract class DirectionSkill extends ActiveSkill {
 
 	protected DirectionSkill(Entity entity) {
@@ -16,11 +20,8 @@ public abstract class DirectionSkill extends ActiveSkill {
 		if (entity.actions.size == 0 && state == State.AVAILABLE) {
 			if (hasResource(entity, cost)) {
 				useSkill();
-//				this.targetPos = targetPos;
 				Array<EntityAction> array = new Array<>();
 				array.add(new SkillAction(this, animationType, time));
-//				System.out.println(entity.actions.size);
-//				System.out.println(array.size);
 				entity.actions.addLast(array);
 				entity.setAnimationType(animationType);
 			}

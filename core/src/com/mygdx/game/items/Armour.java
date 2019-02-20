@@ -24,7 +24,7 @@ public class Armour extends Item {
 	}
 	
 	Armour() {
-		// pass
+
 	}
 	
 	public Armour(boolean var) {

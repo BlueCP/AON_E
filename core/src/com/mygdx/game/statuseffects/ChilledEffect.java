@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.screens.PlayScreen;
 
 public class ChilledEffect extends Effect {
 
 	private static final int maxStacks = 5;
 
-//	Array<Boolean> isBitingCold; // Whether or not the effected entity will also take damage from the player's Biting Cold passive.
 	private float duration;
 	private Array<Boolean> isBitingCold; // For each stack, whether or not it has biting cold damage.
 	private Array<Boolean> isEncaseInIce; // Whether of not these stacks have the encase in ice effect.
@@ -93,9 +91,6 @@ public class ChilledEffect extends Effect {
 	}
 
 	public void testEncaseInIce(PlayScreen playScreen) {
-		/*if (entity.id != 0) {
-			System.out.println(isBitingCold.size);
-		}*/
 		if (isBitingCold.size >= maxStacks) {
 			for (boolean encaseInIce: isEncaseInIce) {
 				if (encaseInIce) {

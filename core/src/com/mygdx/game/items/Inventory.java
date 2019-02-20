@@ -2,28 +2,12 @@ package com.mygdx.game.items;
 
 import com.badlogic.gdx.utils.Array;
 
-import java.util.LinkedList;
-
 public class Inventory extends Items {
 	
 	private Array<Item> weapons = new Array<>();
 	private Array<Item> armour = new Array<>();
 	private Array<Item> equipment = new Array<>();
 	private Array<Item> otherItems = new Array<>();
-	
-	/*
-	private int generateCode(LinkedList<Item> list) {
-		int highestCode = 0;
-		if (list.size() > 0) {
-			for (Item item: list) {
-				if (item.getId() > highestCode) {
-					highestCode = item.getId();
-				}
-			}
-		}
-		return highestCode;
-	}
-	*/
 	
 	public void addWeapon(Weapon weaponToAdd) {
 		//weaponToAdd.setId(generateCode(weapons));

@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,35 +16,26 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.utils.NewGameData;
-import com.mygdx.game.settings.VideoSettings;
 
 public class EnterNameScreen extends MyScreen {
 
-//	private AON_E game;
-	
 	private NewGameData newGame;
 	
 	private Texture enterNameBackground;
 	
 	private Stage stage;
-	private Table table;
-	private Label enterName;
 	private TextField nameField;
-	private TextButton okay;
-	private TextButton goBack;
-	
+
 	EnterNameScreen(AON_E game) {
 		super(game);
-//		this.game = game;
-		
+
 		newGame = new NewGameData();
 		
 		enterNameBackground = game.manager.get("textures/enterNameBackground.jpg", Texture.class);
-		
-		enterName = new Label("Enter your character's name.", new LabelStyle(AON_E.DEFAULT_FONT, Color.WHITE));
-//		enterName.setFontScale(AON_E.screenSizeFactor);
+
+		Label enterName = new Label("Enter your character's name.", new LabelStyle(AON_E.DEFAULT_FONT, Color.WHITE));
 		nameField = new TextField("", AON_E.SKIN);
-		okay = new TextButton("Okay", AON_E.SKIN);
+		TextButton okay = new TextButton("Okay", AON_E.SKIN);
 		okay.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -58,19 +48,17 @@ public class EnterNameScreen extends MyScreen {
 				game.setScreen(new CreatingCharacterScreen(game, newGame));
 			}
 		});
-//		okay.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
-		goBack = new TextButton("Go back", AON_E.SKIN);
+
+		TextButton goBack = new TextButton("Go back", AON_E.SKIN);
 		goBack.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				game.setScreen(new MainMenuScreen(game));
 			}
 		});
-//		goBack.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		stage = new Stage(game.viewport);
-		table = new Table();
+		Table table = new Table();
 		table.setWidth(stage.getWidth());
 		table.setHeight(stage.getHeight());
 		table.align(Align.center | Align.top);
@@ -84,9 +72,6 @@ public class EnterNameScreen extends MyScreen {
 		table.add(goBack);
 		stage.addActor(table);
 
-//		game.videoSettings.enableFullScreen();
-//		VideoSettings.enableFullScreen();
-		
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
 	
@@ -153,9 +138,10 @@ public class EnterNameScreen extends MyScreen {
 		update();
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		game.batch.setProjectionMatrix(game.camera.combined);
 		
 		game.batch.begin();
-//		game.batch.draw(enterNameBackground, AON_E.leftLimit, AON_E.lowerLimit, AON_E.effectiveScreenWidth, AON_E.effectiveScreenHeight);
 		game.batch.draw(enterNameBackground, 0, 0, AON_E.WORLD_WIDTH, AON_E.WORLD_HEIGHT);
 		game.batch.end();
 		
@@ -164,7 +150,6 @@ public class EnterNameScreen extends MyScreen {
 		
 		game.batch.begin();
 		game.pointer.draw(game.batch);
-//		RenderingUtils.renderBlackBars(game.batch);
 		game.batch.end();
 	}
 

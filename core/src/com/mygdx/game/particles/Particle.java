@@ -21,7 +21,6 @@ public class Particle extends WorldObject implements Pool.Poolable {
 
 	private Vector3 emptyVector = new Vector3();
 	
-	//private int id;
 	private String type;
 	
 	private float stateTime;
@@ -34,7 +33,6 @@ public class Particle extends WorldObject implements Pool.Poolable {
 	
 	btCollisionShape shape;
 	public btRigidBody rigidBody;
-	//private boolean justCreated = true;
 	public Vector3 pos;
 	
 	Sprite sprite;
@@ -88,6 +86,9 @@ public class Particle extends WorldObject implements Pool.Poolable {
 		dynamicsWorld.addRigidBody(rigidBody, PhysicsManager.PARTICLE_FLAG, PhysicsManager.TERRAIN_FLAG);
 	}
 
+	/**
+	 * Called when a particle is to be added to the pool.
+	 */
 	@Override
 	public void reset() {
 		emptyVector.setZero();
@@ -116,19 +117,6 @@ public class Particle extends WorldObject implements Pool.Poolable {
 	}
 	
 	private void generateId(ParticleEngine particleEngine) {
-		/*
-		int highest = 0;
-		for (int i = 0; i < particleEngine.particles.size; i ++) {
-			if (i != particleEngine.particles.get(i).id) {
-				id = i;
-				return;
-			} else {
-				highest = particleEngine.particles.get(i).id;
-			}
-		}
-		id = highest;
-		*/
-		
 		if (particleEngine.idPool.size > 0) {
 			int lowest = Integer.MAX_VALUE; // Set it to the max value so that we can't accidentally be lower than the lowest int in the pool
 			for (Integer int0: particleEngine.idPool) {
@@ -194,8 +182,9 @@ public class Particle extends WorldObject implements Pool.Poolable {
 		//physicsId = rigidBody.getUserValue();
 		//texture = getTexture();
 		Vector2 coords = renderer.cartesianToScreen(pos.x, pos.y, pos.z);
-		coords.x -= getTexture().getRegionWidth()/2;
-		coords.y -= getTexture().getRegionHeight()/2;
+		coords.sub(getTexture().getRegionWidth()/2f, getTexture().getRegionHeight()/2f);
+//		coords.x -= getTexture().getRegionWidth()/2f;
+//		coords.y -= getTexture().getRegionHeight()/2f;
 		renderPos = coords;
 		visibility = Visibility.VISIBLE;
 	}

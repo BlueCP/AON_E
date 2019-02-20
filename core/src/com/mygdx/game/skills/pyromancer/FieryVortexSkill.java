@@ -2,7 +2,6 @@ package com.mygdx.game.skills.pyromancer;
 
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.skills.ActivatedSkill;
 import com.mygdx.game.skills.LocationSkill;
 
 public class FieryVortexSkill extends LocationSkill {

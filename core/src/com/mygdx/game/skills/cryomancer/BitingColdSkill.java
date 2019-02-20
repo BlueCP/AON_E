@@ -18,12 +18,4 @@ public class BitingColdSkill extends PassiveSkill {
 		super(entity, learned);
 	}
 
-	/*public void chill(Entity targetEntity, int power, float duration) {
-		if (isLearned()) {
-			targetEntity.chilledEffect.add(power, duration, true);
-		} else {
-			targetEntity.chilledEffect.add(power, duration, false);
-		}
-	}*/
-
 }

@@ -54,8 +54,8 @@ public class BurningBarrier extends StaticProjectile {
 		if (rotation < 0) {
 			rotation += 360;
 		}
-//		System.out.println(rotation);
 //		angle = (float) (Math.round(angle/22.5) * 22.5); // Round to nearest 22.5 degrees (which is 360/number of directions)
+
 		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setToRotation(Vector3.Y, -rotation));
 
 		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
@@ -64,7 +64,6 @@ public class BurningBarrier extends StaticProjectile {
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
 		if (Math.floorMod(ticksPast, 1) == 0) {
-//			Vector3 randomX = pos.cpy().add(MathUtils.random(-3, 3), 0, 0).rot;
 			Vector3 randomPos = new Vector3(MathUtils.random(-halfExtents.x, halfExtents.x), halfExtents.y, MathUtils.random(-halfExtents.z, halfExtents.z)).rotate(Vector3.Y, -rotation).add(pos);
 			playScreen.particleEngine.addParticle(playScreen.physicsManager.getDynamicsWorld(), randomPos, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
 		}
@@ -75,10 +74,7 @@ public class BurningBarrier extends StaticProjectile {
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
 			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
 			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
-//			entity.dealDamageOLD(owner, playScreen.player, 3);
-//			playScreen.player.flamingBarrage.testfor(owner);
 			entity.stunnedEffect.add(stunDuration);
-//			playScreen.player.vikingFuneral.testfor(owner, entity);
 
 			hitEntities.add(entity.id);
 			return true;

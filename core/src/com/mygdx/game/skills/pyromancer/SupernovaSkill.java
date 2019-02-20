@@ -2,7 +2,6 @@ package com.mygdx.game.skills.pyromancer;
 
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.statuseffects.Effect;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.skills.PassiveSkill;
 

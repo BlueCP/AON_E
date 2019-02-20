@@ -13,17 +13,6 @@ public class Hitboxes {
 	private static short counter = 0;
 	
 	/*
-	private static btCollisionShape getColShape(String name) {
-		for (int i = 0; i < importer.getNumCollisionShapes(); i ++) {
-			if (name.equals(importer.getNameForPointer(importer.getRigidBodyByIndex(i).getCPointer()))) {
-				return importer.getCollisionShapeByIndex(i);
-			}
-		}
-		return null;
-	}
-	*/
-	
-	/*
 	 * Load the hitbox for a given entity.
 	 */
 	private static void initEntity(String name) {

@@ -11,14 +11,14 @@ import com.mygdx.game.entities.Entity;
 public class ProcEffect extends Effect {
 
 	public Array<Integer> powers;
-	public Array<Float> durations;
+	private Array<Float> durations;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
 	public ProcEffect() { }
 
-	public ProcEffect(Entity entity) {
+	ProcEffect(Entity entity) {
 		super(entity);
 		powers = new Array<>();
 		durations = new Array<>();
@@ -43,15 +43,6 @@ public class ProcEffect extends Effect {
 		powers.add(power);
 		durations.add(duration);
 	}
-
-	/**
-	 * Adds a new instance of this effect with a power of 1 and the given duration.
-	 * @param duration
-	 *//*
-	public void addOne(float duration) {
-		powers.add(1);
-		durations.add(duration);
-	}*/
 
 	/**
 	 * Adds a new instance of this effect with the given power, which will only operate for one tick.

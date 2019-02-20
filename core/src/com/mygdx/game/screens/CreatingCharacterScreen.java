@@ -1,7 +1,6 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.runners.SaveNewGameRunner;
@@ -9,8 +8,6 @@ import com.mygdx.game.utils.NewGameData;
 
 public class CreatingCharacterScreen extends MyScreen {
 
-//	AON_E game;
-	
 	private NewGameData newGame;
 	
 	private Thread saveNewGameRunner;
@@ -18,8 +15,6 @@ public class CreatingCharacterScreen extends MyScreen {
 	CreatingCharacterScreen(AON_E game, NewGameData newGame) {
 		super(game);
 
-//		this.game = game;
-		
 		this.newGame = newGame;
 		
 		saveNewGameRunner = new Thread(new SaveNewGameRunner(newGame));
@@ -97,10 +92,11 @@ public class CreatingCharacterScreen extends MyScreen {
 		update();
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
+		game.batch.setProjectionMatrix(game.camera.combined);
+
 		game.batch.begin();
 		game.pointer.draw(game.batch);
-//		RenderingUtils.renderBlackBars(game.batch);
 		game.batch.end();
 	}
 

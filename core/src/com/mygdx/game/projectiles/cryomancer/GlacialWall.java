@@ -3,9 +3,7 @@ package com.mygdx.game.projectiles.cryomancer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.physics.PhysicsManager;
@@ -21,8 +19,6 @@ public class GlacialWall extends StaticProjectile {
 	private Vector3 startPos;
 	private float rotation; // The rotation around the y axis, anticlockwise.
 
-	private Array<Integer> hitEntities; // Entities which have been damaged by this barrier, so will not be damaged again.
-
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
@@ -33,7 +29,6 @@ public class GlacialWall extends StaticProjectile {
 
 		name = "Glacial Wall";
 		startPos = entity.pos.cpy();
-		hitEntities = new Array<>();
 
 		this.pos.add(0, halfExtents.y, 0);
 		loadPhysicsObject();
@@ -45,7 +40,6 @@ public class GlacialWall extends StaticProjectile {
 	public void update(float delta, PlayScreen playScreen) {
 		if (Math.floorMod(ticksPast, 1) == 0) {
 			Vector3 randomPos = new Vector3(MathUtils.random(-halfExtents.x, halfExtents.x), MathUtils.random(-halfExtents.y, halfExtents.y), MathUtils.random(-halfExtents.z, halfExtents.z)).rotate(Vector3.Y, -rotation).add(pos);
-//			playScreen.particleEngine.addParticle(playScreen.physicsManager.getDynamicsWorld(), randomPos, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
 			playScreen.particleEngine.addFloatingParticles(playScreen.physicsManager.getDynamicsWorld(), randomPos,
 					1, 0.1f, 2f, Particle.Sprite.FIRE);
 		}

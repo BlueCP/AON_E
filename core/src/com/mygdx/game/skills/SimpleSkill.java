@@ -5,9 +5,13 @@ import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 
-public abstract class ActivatedSkill extends ActiveSkill {
+/**
+ * A 'simple' skill is one where all that is required to do to activate it is press a button.
+ * There is no targeting of any sort involved.
+ */
+public abstract class SimpleSkill extends ActiveSkill {
 
-	protected ActivatedSkill(Entity entity) {
+	protected SimpleSkill(Entity entity) {
 		super(entity);
 	}
 

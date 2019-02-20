@@ -6,8 +6,6 @@ import com.mygdx.game.serialisation.KryoManager;
 
 public class AchievementCollection {
 
-//	private int enemiesSlain;
-//	private int timesMoved;
 	private Array<Achievement> achievements = new Array<>();
 	/*
 	static String[] progOrder = {"Newbie","Adept","Seasoned","Advanced","Expert"};
@@ -15,8 +13,7 @@ public class AchievementCollection {
 	*/
 	
 	public AchievementCollection() {
-//		this.enemiesSlain = 0;
-//		this.timesMoved = 0;
+
 	}
 	
 	public void savePlayerAchievements(String name) {

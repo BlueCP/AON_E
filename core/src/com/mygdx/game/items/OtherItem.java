@@ -4,12 +4,6 @@ public class OtherItem extends Item {
 
 	private boolean consumable;
 	
-	/*
-	static String[] atrList = {"name","id","code","desc","rarity","consumable"};
-	static String[] viewAtrList = {"name","id","desc","rarity"};
-	private HashMap<String, String> atr = new HashMap<String, String>();
-	*/
-	
 	OtherItem(String name, String origName, int id, String desc, Rarity rarity, boolean consumable) {
 		this.setName(name);
 		this.setOrigName(origName);

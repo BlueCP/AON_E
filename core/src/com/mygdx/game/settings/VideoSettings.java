@@ -2,23 +2,12 @@ package com.mygdx.game.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
-import com.mygdx.game.particles.ParticleEngine;
 
 /**
  * Controls settings to do with graphics, such as VSync and fullscreen.
  * Also deals with some performance-boosting options, such as disabling particles.
  */
 public class VideoSettings extends Settings {
-
-	/*public VideoSettings() {
-		preferences = Gdx.app.getPreferences("Settings");
-
-		*//*preferences.putBoolean("VSync", false);
-		preferences.putInteger("Framerate", 60);
-		preferences.putBoolean("Particles", true);
-		preferences.putBoolean("Screen shake", true);
-		preferences.putBoolean("Fullscreen", true);*//*
-	}*/
 
 	public static boolean isFullscreen() {
 		return preferences.getBoolean("Fullscreen", true);
@@ -85,13 +74,6 @@ public class VideoSettings extends Settings {
 		preferences.putBoolean("Particles", false);
 		preferences.flush();
 	}
-
-	/*public static void disableParticles(ParticleEngine particleEngine) {
-		particleEngine.particles.clear();
-
-		preferences.putBoolean("Particles", false);
-		preferences.flush();
-	}*/
 
 	public static boolean isScreenShakeEnabled() {
 		return preferences.getBoolean("Screen shake", true);

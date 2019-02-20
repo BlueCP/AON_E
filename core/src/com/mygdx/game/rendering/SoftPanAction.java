@@ -6,10 +6,8 @@ import com.badlogic.gdx.math.Vector3;
 public class SoftPanAction extends LimitedCameraAction {
 
 	private Vector3 startingPos;
-	//private Vector3 targetPos;
 	private Vector3 displacement;
-	//private float distance;
-	
+
 	private float fullLifetime;
 	
 	/*
@@ -20,10 +18,8 @@ public class SoftPanAction extends LimitedCameraAction {
 	SoftPanAction(float lifetime, Vector3 startingPos, Vector3 targetPos) {
 		this.lifetime = lifetime;
 		this.startingPos = startingPos.cpy();
-		//this.targetPos = targetPos.cpy();
 		displacement = targetPos.sub(startingPos);
-		//distance = startingPos.dst(targetPos);
-		
+
 		fullLifetime = lifetime;
 	}
 	

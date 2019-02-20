@@ -1,6 +1,5 @@
 package com.mygdx.game.stages;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,10 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.entities.Player;
@@ -58,14 +57,11 @@ public class HudStage extends OwnStage {
 		*/
 		
 		fastTime = new TextButton("Fast time", AON_E.SKIN, "toggle");
-//		fastTime.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		fps = new Label("FPS = " + Gdx.graphics.getFramesPerSecond(), new LabelStyle(AON_E.DEFAULT_FONT, Color.WHITE));
-//		fps.setFontScale(AON_E.screenSizeFactor);
-		
+
 		timeDisplay = new Label("Day " + playScreen.time.getDay() + "   " + String.format("%02d", playScreen.time.getHour()) + ":" + String.format("%02d", playScreen.time.getMinute()), new LabelStyle(AON_E.DEFAULT_FONT, Color.WHITE));
-//		timeDisplay.setFontScale(AON_E.screenSizeFactor);
-		
+
 		ButtonGroup<TextButton> group = new ButtonGroup<>();
 		
 		FPS24 = new TextButton("24 FPS", AON_E.SKIN, "toggle");
@@ -78,8 +74,7 @@ public class HudStage extends OwnStage {
 			}
 		});
 		FPS24.setChecked(true);
-//		FPS24.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		FPS12 = new TextButton("12 FPS", AON_E.SKIN, "toggle");
 		FPS12.addListener(new ClickListener() {
 			@Override
@@ -89,8 +84,7 @@ public class HudStage extends OwnStage {
 				}
 			}
 		});
-//		FPS12.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		FPS18 = new TextButton("18 FPS", AON_E.SKIN, "toggle");
 		FPS18.addListener(new ClickListener() {
 			@Override
@@ -100,8 +94,7 @@ public class HudStage extends OwnStage {
 				}
 			}
 		});
-//		FPS18.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		group.add(FPS12, FPS18, FPS24);
 		
 		stage = new Stage(game.viewport);
@@ -128,10 +121,6 @@ public class HudStage extends OwnStage {
 		table.add(FPS24).center();
 		
 		stage.addActor(table);
-	}
-	
-	public Label getTimeDisplay() {
-		return timeDisplay;
 	}
 	
 	public void render(PlayScreen playScreen) {

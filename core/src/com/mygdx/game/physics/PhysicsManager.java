@@ -2,7 +2,6 @@ package com.mygdx.game.physics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.*;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSol
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.esotericsoftware.kryo.Kryo;
 import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
@@ -435,8 +433,7 @@ public class PhysicsManager {
 		}*/
 
         dynamicsWorld.addRigidBody(player.rigidBody, HITBOX_FLAG, ALL_FLAG);
-//        System.out.println(player.rigidBody.getCollisionShape());
-        
+
         for (Entity entity: entities.allEntities) {
         	dynamicsWorld.addRigidBody(entity.rigidBody, HITBOX_FLAG, ALL_FLAG);
         }
@@ -465,44 +462,7 @@ public class PhysicsManager {
         */
         
         hitIds = new Array<>();
-        
-        /*
-        btCollisionShape largeSphereShape = new btBoxShape(new Vector3(1, 1, 1));
-        sphere = new btCollisionObject();
-        sphere.setUserValue(40000);
-        sphere.setCollisionShape(largeSphereShape);
-        sphere.setWorldTransform(sphere.getWorldTransform().setTranslation(0, 0, 0));
-        sphere.setActivationState(Collision.DISABLE_DEACTIVATION);
-        //dynamicsWorld.addCollisionObject(sphere, ALL_FLAG, ALL_FLAG);
-        dynamicsWorld.addCollisionObject(sphere);
-        */
-        
-        /*
-        btCollisionShape sphereShape = new btSphereShape(3f);
-		ghost = new btGhostObject();
-		ghost.setCollisionShape(sphereShape);
-		
-		ghost.setUserValue(40000);
-		ghost.setWorldTransform(ghost.getWorldTransform().setTranslation(5, 0, 0));
-		ghost.setCollisionFlags(ghost.getCollisionFlags() | CollisionFlags.CF_NO_CONTACT_RESPONSE);
-		//ghostObj.setWorldTransform(ghostObj.getWorldTransform().translate(0.2f, 0.2f, -0.2f));
-		dynamicsWorld.addCollisionObject(ghost, ALL_FLAG, ALL_FLAG);
-		*/
-        
-		/*
-        btCollisionShape smallSphereShape = new btSphereShape(3);
-        sphere = new btCollisionObject();
-        sphere.setUserValue(40000);
-        sphere.setCollisionShape(smallSphereShape);
-        sphere.setWorldTransform(sphere.getWorldTransform().setTranslation(5, 0, 0));
-        sphere.setActivationState(Collision.DISABLE_DEACTIVATION);
-        dynamicsWorld.addCollisionObject(sphere, TERRAIN_FLAG, ALL_FLAG);
-        //dynamicsWorld.addCollisionObject(sphere);
-        */
 	}
-	
-	//boolean foo = false;
-	//btGhostObject ghost;
 	
 	public void update(float delta, PlayScreen playScreen) {
 		for (Entity entity: this.entities.allEntities) {
@@ -518,14 +478,12 @@ public class PhysicsManager {
 			}
 		}
 
-		for (Entity entity: entities.allEntities) {
+		/*for (Entity entity: entities.allEntities) {
 //			System.out.println(entity.additionalMovementVector);
 //			entity.rigidBody.setLinearVelocity(entity.rigidBody.getLinearVelocity().add(entity.additionalMovementVector));
-		}
+		}*/
 		
 		final float newDelta = Math.min(1f/30f, delta);
-		
-		//collisionLogic(playScreen);
 		
 		dynamicsWorld.stepSimulation(newDelta, 5, 1/60f);
 		
@@ -533,17 +491,9 @@ public class PhysicsManager {
 		
 		findRenderable(playScreen);
 
-		for (Entity entity: entities.allEntities) {
+		/*for (Entity entity: entities.allEntities) {
 //			entity.rigidBody.setLinearVelocity(entity.rigidBody.getLinearVelocity().sub(entity.additionalMovementVector));
-		}
-		
-		/*
-		System.out.println("----------------");
-		hitIds = convexSweepTestAll(playScreen.player.rigidBody, playScreen.player.pos);
-		for (Integer id: hitIds) {
-			System.out.println(id);
-		}
-		*/
+		}*/
 	}
 	
 	private ConstantObject findStaticObject(int physicsId) {
@@ -681,7 +631,6 @@ public class PhysicsManager {
 			
 			if (contactManifold.getNumContacts() > 0) { // If the collision is true, and not just aabb
 				testProjectileEntityCollision(objA, objB, playScreen);
-				//testPlayerEntityCollision(objA, objB, playScreen);
 				testEntityStaticObjectCollision(objA, objB, playScreen);
 				testProjectileProjectileCollision(objA, objB, playScreen);
 			} else { // If the collision is just aabb
@@ -690,35 +639,14 @@ public class PhysicsManager {
 			
 			//addPlayerManifolds(objA, objB, contactManifold);
 		}
-		
-		//processPendingCollisions(playScreen);
 	}
-	
-	/*
-	 * Where it is unsafe to execute game logic because it removes elements from a list,
-	 * execute this logic after iterating through contact manifolds is finished.
-	 */
-	/*
-	private void processPendingCollisions(PlayScreen playScreen) {
-		for (int i = 0; i < projectileWithEntity.size; i ++) {
-			projectileWithEntity.get(i).onHitEntity(entityWithProjectile.get(i), playScreen);
-		}
-		projectileWithEntity.clear();
-		entityWithProjectile.clear();
-	}
-	*/
 	
 	/*
 	 * Test if the 'collidingWith...' flags of this entity can be updated.
 	 */
 	private void testEntityStaticObjectCollision(btCollisionObject objA, btCollisionObject objB, PlayScreen playScreen) {
 		if (isEntityOrPlayer(objA.getUserValue()) && isConstObject(objB.getUserValue())) {
-			Entity entity;
-			if (isPlayer(objA.getUserValue())) {
-				entity = playScreen.player;
-			} else {
-				entity = playScreen.entities.getEntity(Util.getId(objA.getUserValue()));
-			}
+			Entity entity = playScreen.entities.getEntity(Util.getId(objA.getUserValue()), playScreen.player);
 			ConstantObject obj = findStaticObject(objB.getUserValue());
 			for (Tag tag: obj.getTags()) {
 				if (tag == Tag.WALKABLE) {
@@ -743,12 +671,6 @@ public class PhysicsManager {
 			Projectile projectile = playScreen.projectileManager.get(Util.getId(objA.getUserValue()));
 			Entity entity = playScreen.entities.getEntity(Util.getId(objB.getUserValue()), playScreen.player);
 			projectile.onHitEntity(entity, playScreen);
-			/*
-			if (!projectileWithEntity.contains(playScreen.projectileManager.get(Util.getEnd(objA.getUserValue(), 4)), false)) {
-				projectileWithEntity.add(playScreen.projectileManager.get(Util.getEnd(objA.getUserValue(), 4)));
-				entityWithProjectile.add(entities.getEntity(Util.getEnd(objB.getUserValue(), 4)));
-			}
-			*/
 			// Execute the logic for the projectile colliding with the entity
 		} else if (isProjectile(objB.getUserValue()) && isEntityOrPlayer(objA.getUserValue())) {
 			testProjectileEntityCollision(objB, objA, playScreen);
@@ -756,8 +678,6 @@ public class PhysicsManager {
 	}
 
 	private void testProjectileProjectileCollision(btCollisionObject objA, btCollisionObject objB, PlayScreen playScreen) {
-//		System.out.println(objA.getUserValue());
-//		System.out.println(objB.getUserValue());
 		if (isProjectile(objA.getUserValue()) && isProjectile(objB.getUserValue())) {
 			Projectile projectileA = playScreen.projectileManager.get(Util.getId(objA.getUserValue()));
 			Projectile projectileB = playScreen.projectileManager.get(Util.getId(objB.getUserValue()));
@@ -765,21 +685,6 @@ public class PhysicsManager {
 			projectileB.onHitProjectile(projectileA, playScreen);
 		}
 	}
-	
-	/*
-	 * Test if the player is colliding with an entity, and damage them if they are.
-	 * This is temporary code used to test narrow phase collision.
-	 */
-	/*
-	private void testPlayerEntityCollision(btCollisionObject objA, btCollisionObject objB, PlayScreen playScreen) {
-		if (isPlayer(objA.getUserValue()) && isNonPlayerEntity(objB.getUserValue())) {
-			playScreen.player.dealDamage(0.1f);
-			// Execute the logic for the projectile colliding with the entity
-		} else if (isPlayer(objB.getUserValue()) && isNonPlayerEntity(objA.getUserValue())) {
-			testProjectileEntityCollision(objB, objA, playScreen);
-		}
-	}
-	*/
 	
 	/*
 	private void addPlayerManifolds(btCollisionObject objA, btCollisionObject objB, btPersistentManifold manifold) {
@@ -839,31 +744,16 @@ public class PhysicsManager {
 		ClosestRayResultCallback rayTest = new ClosestRayResultCallback(Vector3.Zero, Vector3.Zero);
 		Vector3 rayFrom = new Vector3(x + highestPoint - y, highestPoint, z - (highestPoint - y));
 		Vector3 rayTo = new Vector3(x - (y - lowestPoint), lowestPoint, z + y - lowestPoint);
-		//System.out.println(rayFrom);
-		//System.out.println(rayTo);
-		//rayFrom.set(0, 10, 0);
-		//rayTo.set(0, -10, 0);
-		//rayTest.setCollisionObject(null);
 		rayTest.setClosestHitFraction(1f);
 		rayTest.setRayFromWorld(rayFrom);
 		rayTest.setRayToWorld(rayTo);
 		
 		dynamicsWorld.rayTest(rayFrom, rayTo, rayTest);
-
-		/*Vector3 vector = new Vector3();
-		rayTest.getHitPointWorld(vector);
-		System.out.println(vector);*/
-//		rayTest.getRayFromWorld(vector);
-//		System.out.println(vector);
-//		rayTest.getRayToWorld(vector);
-//		System.out.println(vector);
 		
-		//dynamicsWorld.convexSweepTest(castShape, from, to, resultCallback);
 		if (rayTest.hasHit()) {
 			Vector3 vector = new Vector3();
 			rayTest.getHitPointWorld(vector);
 			return new Pair<>(rayTest.getCollisionObject().getUserValue(), vector);
-//			return rayTest.getCollisionObject().getUserValue();
 		} else {
 			return null;
 		}
@@ -909,9 +799,7 @@ public class PhysicsManager {
 		}
 		
 		rayTest.setClosestHitFraction(1f);
-		//rayTest.setRayFromWorld(rayFrom);
-		//rayTest.setRayToWorld(rayTo);
-		
+
 		dynamicsWorld.rayTest(rayFrom, rayTo, rayTest);
 		
 		for (int i = 0; i < rayTest.getCollisionObjects().size(); i ++) {
@@ -949,9 +837,7 @@ public class PhysicsManager {
 		rayTest.setClosestHitFraction(1f);
 		rayTest.setRayFromWorld(rayFrom);
 		rayTest.setRayToWorld(rayTo);
-		//rayTest.setRayFromWorld(rayFrom);
-		//rayTest.setRayToWorld(rayTo);
-		
+
 		dynamicsWorld.rayTest(rayFrom, rayTo, rayTest);
 		
 		for (int i = 0; i < rayTest.getCollisionObjects().size(); i ++) {
@@ -960,30 +846,6 @@ public class PhysicsManager {
 		
 		return hitIds;
 	}
-	
-	/*
-	public int convexSweepTest(btCollisionShape collisionShape, float x, float y, float z) {
-		btConvexShape convexShape = (btConvexShape)collisionShape;
-		
-		Vector3 vectorFrom = new Vector3(x, y, z);
-		Vector3 vectorTo = new Vector3(x + highestPoint - y, highestPoint, z - (highestPoint - y));
-		ClosestConvexResultCallback sweepTest = new ClosestConvexResultCallback(vectorFrom, vectorTo);
-		Matrix4 matrixFrom = new Matrix4();
-		matrixFrom.setTranslation(vectorFrom);
-		Matrix4 matrixTo = new Matrix4();
-		matrixTo.setTranslation(vectorTo);
-		sweepTest.setClosestHitFraction(1f);
-		
-		dynamicsWorld.convexSweepTest(convexShape, matrixFrom, matrixTo, sweepTest);
-		collisionShape.dispose();
-		convexShape.dispose();
-		if (sweepTest.hasHit()) {
-			return sweepTest.getHitCollisionObject().getUserValue();
-		} else {
-			return -1;
-		}
-	}
-	*/
 	
 	public int convexSweepTestFirst(btCollisionShape collisionShape, Vector3 pos) {
 		btConvexShape convexShape = (btConvexShape)collisionShape;
@@ -1006,41 +868,6 @@ public class PhysicsManager {
 			return -1;
 		}
 	}
-	
-	/*
-	public int convexSweepTest(btCollisionObject collisionObject, float x, float y, float z) {
-		//collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | IGNORE_FLAG);
-		btConvexShape convexShape = (btConvexShape)collisionObject.getCollisionShape();
-		
-		//ClosestNotMeConvexResultCallback sweepTest = new ClosestNotMeConvexResultCallback(collisionObject, Vector3.Zero, Vector3.Zero);
-		//Vector3 vectorFrom = new Vector3(x, y, z);
-		//Vector3 vectorTo = new Vector3(x + highestPoint - y, highestPoint, z - (highestPoint - y));
-		Vector3 vectorFrom = new Vector3(0, 10, 0);
-		Vector3 vectorTo = new Vector3(0, -10, 0);
-		ClosestNotMeConvexResultCallback sweepTest = new ClosestNotMeConvexResultCallback(collisionObject, vectorFrom, vectorTo);
-		Matrix4 matrixFrom = new Matrix4();
-		matrixFrom.setTranslation(vectorFrom);
-		Matrix4 matrixTo = new Matrix4();
-		matrixTo.setTranslation(vectorTo);
-		sweepTest.setClosestHitFraction(1f);
-		sweepTest.setCollisionFilterMask(HITBOX_FLAG);
-		//System.out.println(sweepTest.getCollisionFilterGroup());
-		//System.out.println(sweepTest.getCollisionFilterMask());
-		//sweepTest.setCollisionFilterGroup(ALL_FLAG ^ IGNORE_FLAG);
-		//sweepTest.setCollisionFilterGroup(IGNORE_FLAG);
-		//sweepTest.setCollisionFilterMask(IGNORE_FLAG);
-		//sweepTest.setCollisionFilterMask(HITBOX_FLAG);
-		
-		//System.out.println(Integer.toBinaryString(ALL_FLAG ^ IGNORE_FLAG));
-		dynamicsWorld.convexSweepTest(convexShape, matrixFrom, matrixTo, sweepTest);
-		//collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() ^ IGNORE_FLAG);
-		if (sweepTest.hasHit()) {
-			return sweepTest.getHitCollisionObject().getUserValue();
-		} else {
-			return -1;
-		}
-	}
-	*/
 	
 	public int convexSweepTestFirst(btCollisionObject collisionObject, Vector3 pos) {
 		btConvexShape convexShape = (btConvexShape)collisionObject.getCollisionShape();
@@ -1166,30 +993,11 @@ public class PhysicsManager {
 		matrixTo.setTranslation(vectorTo);
 
 		sweepTest.setClosestHitFraction(1f);
-		//sweepTest.setMe(collisionObject);
-		
+
 		dynamicsWorld.convexSweepTest(convexShape, matrixFrom, matrixTo, sweepTest);
-		
-		/*
-		if (collisionObject.getUserValue() == 10000) {
-			//System.out.println(pos.y);
-		}
-		if (sweepTest.hasHit() && collisionObject.getUserValue() == 10000) {
-			//System.out.println(sweepTest.getHitCollisionObject().getUserValue());
-		}
-		*/
-		//Array<Integer> hitIds = sweepTest.getHitIds();
+
 		sweepTest.dispose();
 		return hitIds;
-		/*
-		if (sweepTest.hasHit()) {
-			System.out.println("a");
-			return sweepTest.getHitIds();
-		} else {
-			System.out.println(123);
-			return hitIds;
-		}
-		*/
 	}
 	
 	private Array<Integer> convexSweepTestAll(btConvexShape shape, Vector3 pos, TestMode mode) {
@@ -1229,109 +1037,12 @@ public class PhysicsManager {
 		//sweepTest.setMe(collisionObject);
 		
 		dynamicsWorld.convexSweepTest(shape, matrixFrom, matrixTo, sweepTest);
-		
-		/*
-		if (collisionObject.getUserValue() == 10000) {
-			//System.out.println(pos.y);
-		}
-		if (sweepTest.hasHit() && collisionObject.getUserValue() == 10000) {
-			//System.out.println(sweepTest.getHitCollisionObject().getUserValue());
-		}
-		*/
-		//Array<Integer> hitIds = sweepTest.getHitIds();
+
 		sweepTest.dispose();
 		return hitIds;
 	}
 	
-	/*
-	public void convexSweepTestAll(btConvexShape castShape, btTransform convexFromWorld, btTransform convexToWorld, ConvexResultCallback resultCallback) {
-		btTransform convexFromTrans = new btTransform();
-		btTransform convexToTrans = new btTransform();
-
-		convexFromTrans = convexFromWorld;
-		convexToTrans = convexToWorld;
-
-		Vector3 castShapeAabbMin = new Vector3();
-		Vector3 castShapeAabbMax = new Vector3();
-
-		// Compute AABB that encompasses angular movement
-		{
-			Vector3 linVel = new Vector3();
-			Vector3 angVel = new Vector3();
-			btTransformUtil.calculateVelocity(convexFromTrans.inverse(), convexToTrans.getOrigin(), 1f, linVel, angVel);
-			btTransform R = new btTransform();
-			R.setIdentity();
-			R.setRotation(convexFromTrans.getRotation(Stack.alloc(Quat4f.class)));
-			castShape.calculateTemporalAabb(R, linVel, angVel, 1f, castShapeAabbMin, castShapeAabbMax);
-		}
-
-		Transform tmpTrans = Stack.alloc(Transform.class);
-		Vector3f collisionObjectAabbMin = Stack.alloc(Vector3f.class);
-		Vector3f collisionObjectAabbMax = Stack.alloc(Vector3f.class);
-		float[] hitLambda = new float[1];
-
-		// go over all objects, and if the ray intersects their aabb + cast shape aabb,
-		// do a ray-shape query using convexCaster (CCD)
-		for (int i = 0; i < collisionObjects.size(); i++) {
-			CollisionObject collisionObject = collisionObjects.getQuick(i);
-
-			// only perform raycast if filterMask matches
-			if (resultCallback.needsCollision(collisionObject.getBroadphaseHandle())) {
-				//RigidcollisionObject* collisionObject = ctrl->GetRigidcollisionObject();
-				collisionObject.getWorldTransform(tmpTrans);
-				collisionObject.getCollisionShape().getAabb(tmpTrans, collisionObjectAabbMin, collisionObjectAabbMax);
-				AabbUtil2.aabbExpand(collisionObjectAabbMin, collisionObjectAabbMax, castShapeAabbMin, castShapeAabbMax);
-				hitLambda[0] = 1f; // could use resultCallback.closestHitFraction, but needs testing
-				Vector3f hitNormal = Stack.alloc(Vector3f.class);
-				if (AabbUtil2.rayAabb(convexFromWorld.origin, convexToWorld.origin, collisionObjectAabbMin, collisionObjectAabbMax, hitLambda, hitNormal)) {
-					objectQuerySingle(castShape, convexFromTrans, convexToTrans,
-					                  collisionObject,
-					                  collisionObject.getCollisionShape(),
-					                  tmpTrans,
-					                  resultCallback,
-					                  getDispatchInfo().allowedCcdPenetration);
-				}
-			}
-		}
-	}
-	
-	public static void objectQuerySingle(btConvexShape castShape, btTransform convexFromTrans, btTransform convexToTrans, btCollisionObject collisionObject, btCollisionShape collisionShape, btTransform colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration) {
-		if (collisionShape.isConvex()) {
-			CastResult castResult = new CastResult();
-			castResult.allowedPenetration = allowedPenetration;
-			castResult.fraction = 1f; // ??
-
-			ConvexShape convexShape = (ConvexShape) collisionShape;
-			VoronoiSimplexSolver simplexSolver = new VoronoiSimplexSolver();
-			GjkEpaPenetrationDepthSolver gjkEpaPenetrationSolver = new GjkEpaPenetrationDepthSolver();
-
-			// JAVA
-			//ContinuousConvexCollision convexCaster1(castShape,convexShape,&simplexSolver,&gjkEpaPenetrationSolver);
-			GjkConvexCast convexCaster2 = new GjkConvexCast(castShape, convexShape, simplexSolver);
-			//btSubsimplexConvexCast convexCaster3(castShape,convexShape,&simplexSolver);
-
-			ConvexCast castPtr = convexCaster2;
-
-			if (castPtr.calcTimeOfImpact(convexFromTrans, convexToTrans, colObjWorldTransform, colObjWorldTransform, castResult)) {
-				// add hit
-				if (castResult.normal.lengthSquared() > 0.0001f) {
-					if (castResult.fraction < resultCallback.closestHitFraction) {
-						castResult.normal.normalize();
-						LocalConvexResult localConvexResult = new LocalConvexResult(collisionObject, null, castResult.normal, castResult.hitPoint, castResult.fraction);
-
-						boolean normalInWorldSpace = true;
-						resultCallback.addSingleResult(localConvexResult, normalInWorldSpace);
-					}
-				}
-			}
-		}
-	}
-	*/
-	
 	public Array<Integer> testCollision(btCollisionShape shape, Vector3 pos) {
-		//btGhostPairCallback ghostCall = new btGhostPairCallback();
-		//dynamicsWorld.getBroadphase().getOverlappingPairCache().setInternalGhostPairCallback(ghostCall);
-		
 		btGhostObject ghostObj = new btGhostObject();
 		ghostObj.setCollisionShape(shape);
 		

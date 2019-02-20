@@ -1,12 +1,6 @@
 package com.mygdx.game.items;
 
 public class Equipment extends Item {
-
-	/*
-	public static String[] atrList = {"name","id","code","desc","rarity"};
-	static String[] viewAtrList = {"name","id","desc","rarity"};
-	private HashMap<String, String> atr = new HashMap<String, String>();
-	*/
 	
 	protected boolean equipped;
 

@@ -3,7 +3,6 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,7 +15,6 @@ import com.mygdx.game.AON_E;
 
 public class OptionsScreen extends MyScreen {
 
-//	private AON_E game;
 	private PlayScreen playScreen;
 	
 	Stage stage;
@@ -26,7 +24,6 @@ public class OptionsScreen extends MyScreen {
 	OptionsScreen(AON_E game, PlayScreen playScreen) {
 		super(game);
 
-//		this.game = game;
 		this.playScreen = playScreen;
 		
 		stage = new Stage(game.viewport);
@@ -38,8 +35,7 @@ public class OptionsScreen extends MyScreen {
 				game.setScreen(playScreen);
 			}
 		});
-//		resumeGame.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		TextButton saveGame = new TextButton("Save game", AON_E.SKIN);
 		saveGame.addListener(new ClickListener() {
 			@Override
@@ -47,8 +43,7 @@ public class OptionsScreen extends MyScreen {
 				save();
 			}
 		});
-//		saveGame.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		TextButton saveAndExit = new TextButton("Save and exit", AON_E.SKIN);
 		saveAndExit.addListener(new ClickListener() {
 			@Override
@@ -56,8 +51,7 @@ public class OptionsScreen extends MyScreen {
 				saveAndExit();
 			}
 		});
-//		saveAndExit.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		TextButton controls = new TextButton("Show controls", AON_E.SKIN, "toggle");
 		controls.addListener(new ClickListener() {
 			@Override
@@ -65,7 +59,6 @@ public class OptionsScreen extends MyScreen {
 				allControls.setVisible(controls.isChecked());
 			}
 		});
-//		controls.getLabel().setFontScale(AON_E.screenSizeFactor);
 
 		TextButton settings = new TextButton("Settings", AON_E.SKIN);
 		settings.addListener(new ClickListener() {
@@ -94,8 +87,7 @@ public class OptionsScreen extends MyScreen {
 		allControls.setX((AON_E.WORLD_WIDTH / 1.3f), Align.center);
 		allControls.setY(AON_E.WORLD_HEIGHT / 2f, Align.center);
 		allControls.setVisible(false);
-//		allControls.setFontScale(AON_E.screenSizeFactor);
-		
+
 		table = new Table();
 		table.align(Align.center);
 		table.setWidth(stage.getWidth());
@@ -146,7 +138,6 @@ public class OptionsScreen extends MyScreen {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		game.pointer.setRegion(game.pointerDown);
-//		game.click.play();
 		game.soundManager.click.play();
 		return true;
 	}
@@ -189,13 +180,14 @@ public class OptionsScreen extends MyScreen {
 		update();
 		
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		game.batch.setProjectionMatrix(game.camera.combined);
 		
 		stage.act();
 		stage.draw();
 		
 		game.batch.begin();
 		game.pointer.draw(game.batch);
-//		RenderingUtils.renderBlackBars(game.batch);
 		game.batch.end();
 	}
 

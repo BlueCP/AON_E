@@ -42,8 +42,6 @@ public class Heatwave extends StaticProjectile {
 
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
-//		particleEngine.addFireWave(dynamicsWorld, pos, 30, 5, Particle.Behaviour.POOF);
-
 		playScreen.particleEngine.addWave(playScreen.physicsManager.getDynamicsWorld(), pos, 30, 5, 2, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
 
 		playScreen.isoRenderer.camera.screenShake(0.4f, 0.4f);
@@ -54,11 +52,7 @@ public class Heatwave extends StaticProjectile {
 		if (entity.id != owner) {
 			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
 			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
-//		entity.dealDamageOLD(owner, playScreen.player, damage);
-//		playScreen.player.flamingBarrage.testfor(owner);
 			entity.slowedEffect.add(slowPower, slowDuration);
-//		playScreen.player.vikingFuneral.testfor(owner, entity);
-//		entity.changeEffect(Effect.EffectType.SLOWED, slowDuration, slowPower);
 			return true;
 		} else {
 			return false;

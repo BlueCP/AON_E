@@ -24,10 +24,6 @@ public class ProjectileManager {
 		projectiles = new Array<>();
 		futureProjectiles = new Array<>();
 	}
-
-	public void removeProjectile(Projectile projectile, btDynamicsWorld dynamicsWorld) {
-
-	}
 	
 	public void update(float delta, PlayScreen playScreen) {
 		for (Projectile projectile: futureProjectiles) {
@@ -40,12 +36,6 @@ public class ProjectileManager {
 
 			projectile.universalUpdate(delta);
 
-			/*if (projectile.hitEntity != -1) {
-				if (projectile.onHitEntity(playScreen.entities.getEntity(projectile.hitEntity), playScreen)) {
-					// If the projectile was destroyed (onHitEntity returns true if destroyed), decrement the counter to adjust.
-					i--;
-				}
-			}*/
 			if (projectile.lifetime <= -1) { // If the projectile was to die immediately
 				projectile.lifetime = 0; // Give it a chance to do its thing
 				projectile.update(delta, playScreen);

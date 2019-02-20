@@ -26,7 +26,7 @@ abstract class MyScreen implements Screen, InputProcessor {
 	/**
 	 * Updates the position of the pointer used as the cursor.
 	 */
-	void updatePointer() {
+	private void updatePointer() {
 		game.pointer.setCenterX(virtualCoords.x);
 		game.pointer.setCenterY(virtualCoords.y); // Unproject gives a vector with origin at bottom left, so height - y is not needed.
 		game.camera.update();
@@ -36,7 +36,7 @@ abstract class MyScreen implements Screen, InputProcessor {
 		return game.viewport.unproject(new Vector2(x, y));
 	}
 
-	void updateVirtualCoords() {
+	private void updateVirtualCoords() {
 		virtualCoords = screenToVirtual(Gdx.input.getX(), Gdx.input.getY());
 	}
 

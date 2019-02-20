@@ -15,7 +15,7 @@ import com.mygdx.game.AON_E;
 
 public class SettingsScreen extends MyScreen {
 
-	Screen prevScreen;
+	private Screen prevScreen;
 	Stage stage;
 
 	SettingsScreen(AON_E game, Screen prevScreen) {

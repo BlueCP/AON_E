@@ -15,14 +15,9 @@ import com.mygdx.game.screens.PlayScreen;
 public class Fireball extends DynamicProjectile {
 
 	private static final float speed = 5; // m/s
-//	private static final int spiritGain = 5; // The spirit gained by landing this on an enemy.
 	private static final int damage = 1;
 
 	private long fireballTravelSoundId;
-	
-//	private btCollisionShape shape;
-//	private btRigidBody rigidBody;
-//	private Vector3 targetPos;
 	
 	/*
 	 * No-arg constructor for serialisation purposes.
@@ -58,7 +53,6 @@ public class Fireball extends DynamicProjectile {
 		}
 		
 		if (Math.floorMod(ticksPast, 15) == 0) {
-//			particleEngine.addFireParticle(dynamicsWorld, pos);
 			playScreen.particleEngine.addParticle(playScreen.physicsManager.getDynamicsWorld(), pos, 1f, Particle.Sprite.FIRE, Behaviour.OSCILLATE_DOWN);
 		}
 
@@ -67,27 +61,16 @@ public class Fireball extends DynamicProjectile {
 
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
-		/*if (owner == 0) {
-			playScreen.player.changeSpirit(spiritGain); // Gaining spirit from landing a successful attack
-		} else {
-			playScreen.entities.getEntity(owner).changeSpirit(spiritGain);
-		}*/
-
 		if (entity.id != owner) {
 			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
 			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
-//		entity.dealDamageOLD(owner, playScreen.player, damage);
-//		playScreen.player.flamingBarrage.testfor(owner);
-//		playScreen.player.vikingFuneral.testfor(owner, entity);
 
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 
-//		playScreen.particleEngine.addFireBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, Behaviour.POOF);
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, 2,
 					Particle.Sprite.FIRE, Behaviour.POOF);
 			playScreen.isoRenderer.camera.screenShake(0.2f, 0.2f);
 
-//			playScreen.game.soundManager.fireballTravel.stop();
 			playScreen.game.soundManager.fireballTravel.stop(fireballTravelSoundId);
 			playScreen.game.soundManager.fireballExplosion.play(playScreen.isoRenderer.camera.pos, entity.pos);
 		}

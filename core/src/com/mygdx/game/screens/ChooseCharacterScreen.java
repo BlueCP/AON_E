@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,26 +12,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.AON_E;
-import com.mygdx.game.settings.VideoSettings;
 
 public class ChooseCharacterScreen extends MyScreen {
 
-//	AON_E game;
-	
 	private Texture chooseCharacterBackground;
-	
-//	private Music titleMusic;
 	
 	Stage stage;
 	Table table;
-	private ScrollPane charactersPane;
-	private TextButton goBack;
-	
+
 	ChooseCharacterScreen(AON_E game) {
 		super(game);
 
-//		this.game = game;
-		
 		chooseCharacterBackground = game.manager.get("textures/chooseCharacterBackground.jpg");
 		
 		Table characterTable = new Table();
@@ -46,21 +36,19 @@ public class ChooseCharacterScreen extends MyScreen {
 					game.setScreen(new PlayScreen(game, button.getText().toString()));
 				}
 			});
-//			button.getLabel().setFontScale(AON_E.screenSizeFactor);
 			characterTable.add(button).padBottom(10).row();
 		}
-		
-		charactersPane = new ScrollPane(characterTable, AON_E.SKIN);
-		
-		goBack = new TextButton("Go back", AON_E.SKIN);
+
+		ScrollPane charactersPane = new ScrollPane(characterTable, AON_E.SKIN);
+
+		TextButton goBack = new TextButton("Go back", AON_E.SKIN);
 		goBack.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				game.setScreen(new MainMenuScreen(game));
 			}
 		});
-//		goBack.getLabel().setFontScale(AON_E.screenSizeFactor);
-		
+
 		stage = new Stage(game.viewport);
 		characterTable.setWidth(stage.getWidth());
 		characterTable.setHeight(stage.getHeight());
@@ -72,9 +60,6 @@ public class ChooseCharacterScreen extends MyScreen {
 		table.add(goBack);
 		stage.addActor(table);
 
-//		game.videoSettings.disableFullScreen();
-//		VideoSettings.disableFullScreen();
-		
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
 	
@@ -92,9 +77,10 @@ public class ChooseCharacterScreen extends MyScreen {
 		update();
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		game.batch.setProjectionMatrix(game.camera.combined);
 		
 		game.batch.begin();
-//		game.batch.draw(chooseCharacterBackground, AON_E.leftLimit, AON_E.lowerLimit, AON_E.effectiveScreenWidth, AON_E.effectiveScreenHeight);
 		game.batch.draw(chooseCharacterBackground, 0, 0, AON_E.WORLD_WIDTH, AON_E.WORLD_HEIGHT);
 		game.batch.end();
 		
@@ -103,7 +89,6 @@ public class ChooseCharacterScreen extends MyScreen {
 		
 		game.batch.begin();
 		game.pointer.draw(game.batch);
-//		RenderingUtils.renderBlackBars(game.batch);
 		game.batch.end();
 	}
 

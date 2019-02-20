@@ -2,9 +2,9 @@ package com.mygdx.game.skills.cryomancer;
 
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.skills.ActivatedSkill;
+import com.mygdx.game.skills.SimpleSkill;
 
-public class CryosleepSkill extends ActivatedSkill {
+public class CryosleepSkill extends SimpleSkill {
 
 	/**
 	 * No-arg constructor for serialisation purposes.

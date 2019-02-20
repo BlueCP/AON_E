@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.mygdx.game.entities.Entity.AnimationType;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
@@ -14,10 +13,9 @@ import java.util.Map.Entry;
 
 public class Entities {
 	
-	//public Enemies enemies = new Enemies();
 	public Array<Entity> allEntities = new Array<>();
 	
-	public Array<Integer> idPool;
+	Array<Integer> idPool;
 	ObjectMap<Integer, Float> pendingIds; // Ids which will be added back into the id pool after a period of time.
 	
 	public Entities() {
@@ -32,29 +30,11 @@ public class Entities {
 	}
 
 	private void updatePendingIds() {
-//		System.out.println(1234567890);
-		/*for (Integer id: pendingIds.keys()) {
-			float time = pendingIds.get(id);
-			System.out.println(id);
-			System.out.println(time);
-			if (time > 0) {
-				pendingIds.put(id, time - Gdx.graphics.getDeltaTime());
-			} else {
-				idPool.add(id);
-				pendingIds.remove(id);
-
-			}
-		}*/
-
 		Iterator<ObjectMap.Entry<Integer, Float>> iterator = pendingIds.entries().iterator();
 		while (iterator.hasNext()) {
 			ObjectMap.Entry<Integer, Float> entry = iterator.next();
-//			System.out.println(entry.key);
-//			System.out.println(entry.value);
 			if (entry.value > 0) {
-//				entry.value -= Gdx.graphics.getDeltaTime();
 				pendingIds.put(entry.key, entry.value - Gdx.graphics.getDeltaTime());
-//				iterator.next();
 			} else {
 				idPool.add(entry.key);
 				iterator.remove();
@@ -79,7 +59,6 @@ public class Entities {
 				}
 			}
 		}
-//		updateActiveEffects();
 		
 		removeDeadEntities(playScreen);
 		removeLostEntities(playScreen);
@@ -96,8 +75,8 @@ public class Entities {
 	
 	public void preUpdate() {
 		for (Entity entity: allEntities) {
-			//entity.preUpdate();
-			entity.setAnimationType(AnimationType.STAND);
+			entity.preUpdate();
+//			entity.setAnimationType(AnimationType.STAND);
 		}
 	}
 	
@@ -109,17 +88,11 @@ public class Entities {
 	
 	public void addEntity(Entity entity, PhysicsManager physicsManager) {
 		allEntities.add(entity);
-		if (entity instanceof Player) {
+		/*if (entity instanceof Player) {
 			return;
-		}
+		}*/
 		physicsManager.getDynamicsWorld().addRigidBody(entity.rigidBody, PhysicsManager.HITBOX_FLAG, PhysicsManager.ALL_FLAG);
 	}
-	
-	/*private void updateActiveEffects() {
-		for (Entity entity: this.allEntities) {
-			entity.updateActiveEffects();
-		}
-	}*/
 	
 	public Entity getEntity(int id) {
 		for (Entity entity: allEntities) {
@@ -150,11 +123,12 @@ public class Entities {
 
 		try {
 			KryoManager.write(this, "saves/" + dir + "/world/entities.txt");
-			for (int i = 0; i < tempBodies.size; i ++) {
-				allEntities.get(i).rigidBody = tempBodies.get(i);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		for (int i = 0; i < tempBodies.size; i ++) {
+			allEntities.get(i).rigidBody = tempBodies.get(i);
 		}
 	}
 	
@@ -194,7 +168,6 @@ public class Entities {
 		entity.procDeathEffects(playScreen);
 		allEntities.removeValue(entity, false);
 		playScreen.physicsManager.getDynamicsWorld().removeRigidBody(entity.rigidBody);
-//		idPool.add(entity.getId());
 		pendingIds.put(entity.getId(), 60f); // Adds the id to the pending ids. It will be added to the id pool after 60 seconds.
 	}
 	

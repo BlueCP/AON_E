@@ -17,16 +17,13 @@ import com.mygdx.game.utils.Util;
 public abstract class Projectile extends WorldObject {
 
 	public String name;
-	//protected int id;
 	protected int owner; // The id of the entity that created this projectile
 	
 	private float stateTime;
 	protected float lifetime;
 	protected int ticksPast;
 	
-	int hitEntity = -1;
-	
-	protected Matrix4 worldTransform;
+	Matrix4 worldTransform;
 
 	protected btCollisionShape shape;
 	
@@ -70,11 +67,9 @@ public abstract class Projectile extends WorldObject {
 	abstract void updatePos();
 	
 	public void updateWorldObject(IsometricRenderer renderer) {
-		//physicsId = getCollisionObject().getUserValue();
-		//texture = getTexture();
 		Vector2 coords = renderer.cartesianToScreen(pos.x, pos.y, pos.z);
-		coords.x -= getTexture().getRegionWidth()/2;
-		coords.y -= getTexture().getRegionHeight()/2;
+		coords.x -= getTexture().getRegionWidth()/2f;
+		coords.y -= getTexture().getRegionHeight()/2f;
 		renderPos = coords;
 		visibility = Visibility.VISIBLE;
 	}
@@ -106,19 +101,6 @@ public abstract class Projectile extends WorldObject {
 	protected abstract void loadPhysicsObject();
 
 	private void generateId(ProjectileManager projectileManager) {
-		/*
-		int highest = 0;
-		for (int i = 0; i < projectileManager.projectiles.size; i ++) {
-			if (i != projectileManager.projectiles.get(i).id) {
-				id = i;
-				return;
-			} else {
-				highest = projectileManager.projectiles.get(i).id;
-			}
-		}
-		id = highest;
-		*/
-		
 		if (projectileManager.idPool.size > 0) {
 			int lowest = Integer.MAX_VALUE; // Set it to the max value so that we can't accidentally be lower than the lowest int in the pool
 			for (Integer int0: projectileManager.idPool) {

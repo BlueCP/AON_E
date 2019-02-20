@@ -17,9 +17,9 @@ public class Equipped {
 	private Equipment equipment2;
 	private Equipment equipment3;
 	
-	public static enum SelectedWeapon {
+	public enum SelectedWeapon {
 		MAIN,
-		OFF;
+		OFF
 	}
 	
 	public Equipped() {
@@ -236,86 +236,5 @@ public class Equipped {
 		this.equipment3 = new Equipment(true);
 		equipment3Equipped = false;
 	}
-	
-	/*
-	public void saveEquipped(String dir) throws FileNotFoundException {
-		Formatter dirN = new Formatter(dir + "equipped.txt");
-		
-		dirN.format(String.valueOf(this.getMain().getCode()) + "\r\n");
-		
-		dirN.format(String.valueOf(this.getOff().getCode()) + "\r\n");
-		
-		dirN.format(String.valueOf(this.getArmour().getCode()) + "\r\n");
-		
-		dirN.format(String.valueOf(this.getEquipment1().getCode()) + "\r\n");
-		
-		dirN.format(String.valueOf(this.getEquipment2().getCode()) + "\r\n");
-		
-		dirN.format(String.valueOf(this.getEquipment3().getCode()));
-		
-		dirN.close();
-	}
-	*/
-	
-	/*
-	public void loadEquipped(String dir, Inventory items) throws FileNotFoundException {
-		File dirN = new File(dir + "equipped.txt");
-		Scanner fileEquipped = new Scanner(dirN);
-		
-		String mainCode = fileEquipped.next();
-		String offCode = fileEquipped.next();
-		String armourCode = fileEquipped.next();
-		String equipment1Code = fileEquipped.next();
-		String equipment2Code = fileEquipped.next();
-		String equipment3Code = fileEquipped.next();
-		
-		if ("[no item]".equals(mainCode)) {
-			this.setMain(new Weapon(true));
-		}
-		if ("[no item]".equals(offCode)) {
-			this.setOff(new Weapon(true));
-		}
-		if ("[no item]".equals(armourCode)) {
-			this.setArmour(new Armour(true));
-		}
-		if ("[no item]".equals(equipment1Code)) {
-			this.setEquipment1(new Equipment(true));
-		}
-		if ("[no item]".equals(equipment2Code)) {
-			this.setEquipment2(new Equipment(true));
-		}
-		if ("[no item]".equals(equipment3Code)) {
-			this.setEquipment3(new Equipment(true));
-		}
-		
-		for (Item item: items.getWeapons()) {
-			if (item.getId().equals(mainCode)) {
-				this.setMain((Weapon)item);
-			}
-			if (item.getId().equals(offCode)) {
-				this.setOff((Weapon)item);
-			}
-		}
-		
-		for (Item item: items.getArmour()) {
-			if (armour.getId().equals(armourCode)) {
-				this.setArmour((Armour)item);
-			}
-		}
-		
-		for (Item item: items.getEquipment()) {
-			if (item.getId().equals(equipment1Code)) {
-				this.setEquipment1((Equipment)item);
-			}
-			if (item.getId().equals(equipment2Code)) {
-				this.setEquipment2((Equipment)item);
-			}
-			if (item.getId().equals(equipment3Code)) {
-				this.setEquipment3((Equipment)item);
-			}
-		}
-		fileEquipped.close();
-	}
-	*/
 	
 }

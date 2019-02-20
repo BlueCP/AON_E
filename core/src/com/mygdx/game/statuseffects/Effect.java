@@ -8,11 +8,7 @@ public abstract class Effect {
 	String desc;
 
 	Entity entity; // The entity that this effect is acting on.
-//	EffectType effectType;
-//	private float duration = 0;
-//	private int power = 0;
-//	private boolean initial = true;
-	
+
 	/*public enum EffectType {
 		
 		BURNING("Burning", "Just burning.", new Color(255, 128, 38)),
@@ -46,47 +42,10 @@ public abstract class Effect {
 	 */
 	public Effect() { }
 	
-	/*public Effect(EffectType effectType) {
-		this.effectType = effectType;
-	}*/
-	
 	public Effect(Entity entity) {
 		this.entity = entity;
-//		this.effectType = effectType;
-//		this.duration = duration;
-//		this.power = power;
 	}
 
 	public abstract void update();
-
-	/*public abstract void add(int power, float duration);
-
-	public abstract void addOne(float duration);
-
-	public abstract void addThisTick(int power);*/
-
-//	public EffectType getStatusEffect() {
-//		return effectType;
-//	}
-	
-	/*public void setStatusEffect(EffectType effectType) {
-		this.effectType = effectType;
-	}*/
-
-//	public float getDuration() {
-//		return duration;
-//	}
-
-//	public void setDuration(float duration) {
-//		this.duration = duration;
-//	}
-
-//	public int getPower() {
-//		return power;
-//	}
-
-//	public void setPower(int power) {
-//		this.power = power;
-//	}
 
 }

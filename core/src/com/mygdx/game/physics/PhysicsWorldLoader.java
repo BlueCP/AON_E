@@ -6,13 +6,11 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btScaledBvhTriangleMeshShape;
-import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.extras.btBulletWorldImporter;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entities;
@@ -180,7 +178,6 @@ public class PhysicsWorldLoader {
 		} else { // If the object is generic terrain (without a subtype)
 			reading = 2;
 			for (char character: name.toCharArray()) {
-//				System.out.println(character);
 				if (character == '<' && reading != 3) {
 					reading = 3;
 					continue;
@@ -214,71 +211,6 @@ public class PhysicsWorldLoader {
 
 		tempId = String.valueOf(Integer.parseInt(tempIdBuilder.toString())); // To get rid of 0s at the start of the string.
 	}
-
-	/*private String findSubType(String name) {
-		String type = "";
-		for (char character: name.toCharArray()) {
-			if (character != '_' && character != '<') {
-				type += character;
-			} else {
-				break;
-			}
-		}
-		return type;
-	}*/
-	
-	/*
-	 * Finds the id of the objects within its name.
-	 */
-	/*private String findId(String name) {
-		if (!(name.contains("<")) && !(name.contains("_"))) {
-			return String.valueOf(Integer.parseInt(name));
-		} else if (name.contains("_")) {
-			String id = "";
-			boolean isId = false;
-			for (char character: name.toCharArray()) {
-				if (character == '_') {
-					isId = true;
-				} else if (isId && character != '<') {
-					id += character;
-				}
-			}
-			return String.valueOf(Integer.parseInt(id));
-		} else {
-			String id = "";
-			for (char character: name.toCharArray()) {
-				if (character != '<') {
-					id += character;
-				} else {
-					break;
-				}
-			}
-			return String.valueOf(Integer.parseInt(id)); // To get rid of 0s at start of number
-		}
-	}*/
-	
-	/*
-	 * Returns an array of tags belonging to this static object.
-	 */
-	/*private Array<Tag> findTags(String name) {
-		Array<Tag> tags = new Array<>();
-		tags.add(Tag.WALKABLE);
-		boolean isTagNext = false;
-		for (char character: name.toCharArray()) {
-			if (character == '<') {
-				isTagNext = true;
-				continue;
-			}
-			if (isTagNext) {
-				for (Tag tag: Tag.values()) {
-					if (tag.id().equals(String.valueOf(character))) {
-						tags.add(tag);
-					}
-				}
-			}
-		}
-		return tags;
-	}*/
 	
 	/*
 	 * Method used by loadTextureRegionCoords and loadHighestLowest to provide a common method of interpreting the same coord syntax in .txt files
@@ -328,29 +260,6 @@ public class PhysicsWorldLoader {
 		}
 		return map;
 	}
-	
-	/*
-	 * Loads the coords of all sprites of all static objects.
-	 */
-//	private HashMap<String, int[]> loadTextureRegionCoords(String type) {
-//		return loadCoordValues(type, "coords");
-//	}
-	
-	/*
-	 * Loads the highest and lowest points of all static objects.
-	 */
-//	private HashMap<String, int[]> loadHighestLowest(String type) {
-//		return loadCoordValues(type, "highestLowest");
-//	}
-	
-	/*
-	protected void loadHitboxes(btDynamicsWorld dynamicsWorld) {
-		importer = new btBulletWorldImporter(); // Import physics world
-        loadEntityHitbox("player");
-        PlayerBlueprint.setRigidBody(importer.getRigidBodyByName("player"));
-        dynamicsWorld.addRigidBody(importer.getRigidBodyByName("player"));
-	}
-	*/
 
 	Array<Integer> loadImmobileRenderingOrder() {
 		Array<Integer> indexes = new Array<>();
@@ -364,35 +273,6 @@ public class PhysicsWorldLoader {
 
 		return indexes;
 	}
-
-	/*private Array<Integer> loadRenderingOrder(String fileName) {
-		Array<Integer> indexes = new Array<>();
-		FileHandle file = Gdx.files.internal("world/" + fileName + ".txt");
-		String fileString = file.readString();
-		for (char character: fileString.toCharArray()) {
-			if (character != '\n') {
-				indexes.add(Integer.parseInt(String.valueOf(character)));
-			}
-		}
-
-		return indexes;
-	}*/
-
-	/*Array<Integer> loadTerrainRenderingOrder() {
-		return loadRenderingOrder("terrainRenderingOrder");
-	}
-
-	Array<Integer> loadControllerRenderingOrder() {
-		return loadRenderingOrder("controllersRenderingOrder");
-	}
-
-	Array<Integer> loadControllableRenderingOrder() {
-		return loadRenderingOrder("controllablesRenderingOrder");
-	}
-
-	Array<Integer> loadInteractiveRenderingOrder() {
-		return loadRenderingOrder("interactivesRenderingOrder");
-	}*/
 
 	private void resetTempVars() {
 		tempSubType.setLength(0);
@@ -562,17 +442,7 @@ public class PhysicsWorldLoader {
 			Vector2 chunkCoords = new Vector2(Math.floorDiv((int) pos.x, chunkSize), Math.floorDiv((int) pos.z, chunkSize));
 			Vector2 lower = chunkCoords.cpy().scl(chunkSize);
 			Vector2 higher = chunkCoords.cpy().add(1, 1).scl(chunkSize);
-			/*for (int i = 0; i < physicsManager..size; i ++) {
-				ConstantObject obj = physicsManager.getAllConstantObjects().get(i);
-				if (obj.collisionObject.getWorldTransform().getTranslation(vector).x < lower.x ||
-						obj.collisionObject.getWorldTransform().getTranslation(vector).z < lower.y ||
-						obj.collisionObject.getWorldTransform().getTranslation(vector).x > higher.x ||
-						obj.collisionObject.getWorldTransform().getTranslation(vector).z > higher.y) {
-					if (PhysicsManager.isImmobileTerrain(obj.physicsId)) {
-						physicsManager.removeImmobileTerrain(obj);
-					}
-				}
-			}*/
+
 			removeImmobileTerrain(physicsManager, vector, chunkCoords, lower, higher);
 			removeImmobileControllers(physicsManager, vector, chunkCoords, lower, higher);
 			removeImmobileControllables(physicsManager, vector, chunkCoords, lower, higher);
@@ -640,9 +510,6 @@ public class PhysicsWorldLoader {
 
 			findNameData(importer.getNameForPointer(collisionObject.getCPointer()));
 
-//			String physicsId = findId(importer.getNameForPointer(collisionObject.getCPointer()));
-//			String subType = findSubType(importer.getNameForPointer(collisionObject.getCPointer()));
-
 			if (immobileTerrainTypes.contains(tempSubType.toString(), false)) {
 				buildImmobileTerrain(collisionObject, regions, textureRegionCoords);
 			} else if (immobileControllerTypes.contains(tempSubType.toString(), false)) {
@@ -669,70 +536,8 @@ public class PhysicsWorldLoader {
 		importer.dispose();
 	}
 
-	/*void importAll() {
-		importer = new btBulletWorldImporter(); // Import physics world
-		importer.loadFile(Gdx.files.internal("world/constObjects/constObjects.bullet")); // Import terrain objects
-		manager.load("world/constObjects/constObjects.atlas", TextureAtlas.class); // Load textures
-		TextureAtlas atlas = manager.get("world/constObjects/constObjects.atlas"); // Create temp. atlas
-		Array<AtlasRegion> regions = atlas.getRegions(); // Create temp. array of regions
-		//ConstantObject[] instances = new ConstantObject[importer.getNumRigidBodies()];
-//		Array<StaticObject> objs = new Array<>();
-		HashMap<String, int[]> textureRegionCoords = loadTextureRegionCoords("constObjects");
-
-		System.out.println(importer.getNumRigidBodies());
-		System.out.println(importer.getNumCollisionShapes());
-		for (int a = 0; a < importer.getNumCollisionShapes(); a ++) {
-			System.out.println(importer.getCollisionShapeByIndex(a));
-		}
-
-		int numInvalidShapes = 0; // A counter of how many invalid collision shapes have been skipped so far.
-		for (int i = 0; i <importer.getNumRigidBodies(); i ++) {
-			btCollisionObject collisionObject = importer.getRigidBodyByIndex(i);
-
-			// If this shape is invalid.
-			// A pattern was found that triangle meshes had two shapes, a triangle mesh and a scaled triangle mesh.
-			// The scaled triangle mesh was found to be the correct one.
-			if (importer.getCollisionShapeByIndex(i + numInvalidShapes) instanceof btBvhTriangleMeshShape &&
-				importer.getCollisionShapeByIndex(i + numInvalidShapes + 1) instanceof btScaledBvhTriangleMeshShape) {
-				numInvalidShapes ++;
-			}
-
-			collisionObject.setCollisionShape(importer.getCollisionShapeByIndex(i + numInvalidShapes));
-
-			findNameData(importer.getNameForPointer(collisionObject.getCPointer()));
-
-//			String physicsId = findId(importer.getNameForPointer(collisionObject.getCPointer()));
-//			String subType = findSubType(importer.getNameForPointer(collisionObject.getCPointer()));
-
-			if (immobileTerrainTypes.contains(tempSubType.toString(), false)) {
-				buildImmobileTerrain(collisionObject, regions, textureRegionCoords);
-			} else if (immobileControllerTypes.contains(tempSubType.toString(), false)) {
-
-			} else if (immobileControllableTypes.contains(tempSubType.toString(), false)) {
-
-			} else if (immobileInteractiveTypes.contains(tempSubType.toString(), false)) {
-
-			} else if (mobileTerrainTypes.contains(tempSubType.toString(), false)) {
-
-			} else if (mobileControllerTypes.contains(tempSubType.toString(), false)) {
-
-			} else if (mobileControllableTypes.contains(tempSubType.toString(), false)) {
-
-			} else if (mobileInteractiveTypes.contains(tempSubType.toString(), false)) {
-
-			} else {
-				buildImmobileTerrain(collisionObject, regions, textureRegionCoords);
-			}
-
-			resetTempVars();
-		}
-
-		importer.dispose();
-	}*/
-
 	private void buildImmobileTerrain(btCollisionObject collisionObject, Array<AtlasRegion> regions, HashMap<String, int[]> textureRegionCoords) {
 		boolean isAnimation = false;
-//		String physicsId = findId(importer.getNameForPointer(collisionObject.getCPointer()));
 		for (AtlasRegion region: regions) {
 			StringBuilder textureRegionId = new StringBuilder();
 			for (char character: region.name.toCharArray()) {
@@ -745,13 +550,11 @@ public class PhysicsWorldLoader {
 			if (textureRegionId.toString().equals(tempId) && !isAnimation) {
 				textureRegions = new TextureRegion[1];
 				textureRegions[0] = new TextureRegion(region);
-//				Array<Tag> tags = findTags(tempIdBuilder);
 				int[] coords = textureRegionCoords.get(tempId);
 				immobileTerrain.add(new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]));
 				break;
 			} else if (textureRegionId.toString().equals(tempId) && isAnimation) {
 				textureRegions = buildAnimationFrames(regions, region, importer, collisionObject);
-//				Array<Tag> tags = findTags(tempIdBuilder);
 				int[] coords = textureRegionCoords.get(tempId);
 				immobileTerrain.add(new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]));
 				break;
@@ -759,177 +562,5 @@ public class PhysicsWorldLoader {
 
 		}
 	}
-
-	/*
-	 * Returns an array of all terrain-type static objects imported in.
-	 */
-	/*Array<StaticObject> loadImmobileTerrain(btDynamicsWorld dynamicsWorld) {
-		importer = new btBulletWorldImporter(); // Import physics world
-        importer.loadFile(Gdx.files.internal("world/statics/statics.bullet")); // Import terrain objects
-        manager.load("world/statics/statics.atlas", TextureAtlas.class); // Load textures
-        TextureAtlas atlas = manager.get("world/statics/statics.atlas"); // Create temp. atlas
-        Array<AtlasRegion> regions = atlas.getRegions(); // Create temp. array of regions
-		//ConstantObject[] instances = new ConstantObject[importer.getNumRigidBodies()];
-        Array<StaticObject> objs = new Array<>();
-		HashMap<String, int[]> TextureRegionCoords = loadTextureRegionCoords("statics");
-//		HashMap<String, int[]> highestLowest = loadHighestLowest("statics");
-
-        for (int i = 0; i < importer.getNumRigidBodies(); i ++) {
-        	btCollisionObject collisionObject = importer.getRigidBodyByIndex(i);
-
-        	*//*collisionObject.setCollisionShape(importer.getCollisionShapeByIndex(i));
-
-        	// Rigid bodies
-        	System.out.println(importer.getNumRigidBodies());
-        	for (int a = 0; a < importer.getNumRigidBodies(); a ++) {
-				System.out.println(importer.getRigidBodyByIndex(a));
-				System.out.println(importer.getRigidBodyByIndex(a).getCollisionShape());
-				System.out.println(importer.getNameForPointer(importer.getRigidBodyByIndex(a).getCPointer()));
-			}
-
-        	// Collision shapes
-        	System.out.println(importer.getNumCollisionShapes());
-        	for (int a = 0; a < importer.getNumCollisionShapes(); a ++) {
-        		System.out.println(importer.getCollisionShapeByIndex(a));
-        		System.out.println(importer.getNameForPointer(importer.getCollisionShapeByIndex(a).getCPointer()));
-			}*//*
-
-        	boolean isAnimation = false;
-        	String physicsId = findId(importer.getNameForPointer(collisionObject.getCPointer()));
-        	for (AtlasRegion region: regions) {
-        		String TextureRegionId = "";
-        		for (char character: region.name.toCharArray()) {
-        			TextureRegionId += character;
-        			if (character == '_') {
-        				isAnimation = true;
-        			}
-        		}
-        		if (TextureRegionId.equals(physicsId) && !isAnimation) {
-        			TextureRegion[] TextureRegion = {new TextureRegion(region)};
-        			Array<Tag> tags = findTags(physicsId);
-        			int[] coords = TextureRegionCoords.get(physicsId);
-//        			int[] highLow = highestLowest.get(physicsId);
-        			objs.add(new StaticObject(collisionObject, TextureRegion, physicsId, tags, coords[0], coords[1]));
-        			break;
-        		} else if (TextureRegionId.equals(physicsId) && isAnimation) {
-        			TextureRegion[] TextureRegions = buildAnimationFrames(regions, region, importer, collisionObject);
-        			Array<Tag> tags = findTags(physicsId);
-        			int[] coords = TextureRegionCoords.get(physicsId);
-//        			int[] highLow = highestLowest.get(physicsId);
-        			objs.add(new StaticObject(collisionObject, TextureRegions, physicsId, tags, coords[0], coords[1]));
-        			break;
-        		}
-        	}
-            //dynamicsWorld.addCollisionObject(collisionObject);
-        }
-        importer.dispose();
-		return objs;
-	}*/
-	
-	/*
-	 * Returns an array of all controller-type static objects imported in.
-	 */
-	/*protected Array<ControllerObject> loadControllers(btDynamicsWorld dynamicsWorld) {
-		btBulletWorldImporter importer = new btBulletWorldImporter(); // Import physics world
-        importer.loadFile(Gdx.files.internal("controllers.bullet")); // Import terrain objects
-        manager.load("world/controllers/controllers.atlas", TextureAtlas.class); // Load textures
-        TextureAtlas atlas = manager.get("world/controllers/controllers.atlas"); // Create temp. atlas
-        Array<AtlasRegion> regions = atlas.getRegions(); // Create temp. array of regions
-		//ControllerObject[] instances = new ControllerObject[importer.getNumCollisionShapes()];
-        Array<ControllerObject> objs = new Array<>();
-		HashMap<String, int[]> TextureRegionCoords = loadTextureRegionCoords("controllers");
-//		HashMap<String, int[]> highestLowest = loadHighestLowest("controllers");
-		
-        for (int i = 0; i < importer.getNumCollisionShapes(); i ++) {
-        	btCollisionObject collisionObject = importer.getRigidBodyByIndex(i);
-
-        	collisionObject.setCollisionShape(importer.getCollisionShapeByIndex(i));
-        	
-        	boolean isAnimation = false;
-        	for (AtlasRegion region: regions) {
-        		String id = "";
-        		for (char character: region.name.toCharArray()) {
-        			id += character;
-        			if (character == '_') {
-        				isAnimation = true;
-        			}
-        		}
-        		String physicsId = findId(importer.getNameForPointer(collisionObject.getCPointer()));
-        		if (id.equals(physicsId) && !isAnimation) {
-        			TextureRegion[] TextureRegion = {new TextureRegion(region)};
-        			Array<Tag> tags = findTags(importer.getNameForPointer(collisionObject.getCPointer()));
-        			int[] coords = TextureRegionCoords.get(physicsId);
-//        			int[] highLow = highestLowest.get(physicsId);
-        			objs.add(new ControllerObject(collisionObject, TextureRegion, physicsId, tags, coords[0], coords[1]));
-        			break;
-        		} else if (id.equals(physicsId) && isAnimation) {
-        			TextureRegion[] TextureRegions = buildAnimationFrames(regions, region, importer, collisionObject);
-        			Array<Tag> tags = findTags(importer.getNameForPointer(collisionObject.getCPointer()));
-        			int[] coords = TextureRegionCoords.get(physicsId);
-//        			int[] highLow = highestLowest.get(physicsId);
-        			objs.add(new ControllerObject(collisionObject, TextureRegions, physicsId, tags, coords[0], coords[1]));
-        			break;
-        		}
-        	}
-        	
-            //dynamicsWorld.addCollisionObject(collisionObject);
-        }
-        
-        importer.dispose();
-		return objs;
-	}*/
-	
-	/*
-	 * Returns an array of all controllable-type static objects imported in.
-	 */
-	/*protected Array<ControllableObject> loadControllables(btDynamicsWorld dynamicsWorld) {
-		btBulletWorldImporter importer = new btBulletWorldImporter(); // Import physics world
-        importer.loadFile(Gdx.files.internal("controllables.bullet")); // Import terrain objects
-        manager.load("world/controllables/controllables.atlas", TextureAtlas.class); // Load textures
-        TextureAtlas atlas = manager.get("world/controllables/controllables.atlas"); // Create temp. atlas
-        Array<AtlasRegion> regions = atlas.getRegions(); // Create temp. array of regions
-		//ControllableObject[] instances = new ControllableObject[importer.getNumCollisionShapes()];
-        Array<ControllableObject> objs = new Array<>();
-		HashMap<String, int[]> TextureRegionCoords = loadTextureRegionCoords("controllables");
-//		HashMap<String, int[]> highestLowest = loadHighestLowest("controllables");
-		
-        for (int i = 0; i < importer.getNumCollisionShapes(); i ++) {
-        	btCollisionObject collisionObject = importer.getRigidBodyByIndex(i);
-
-        	collisionObject.setCollisionShape(importer.getCollisionShapeByIndex(i));
-        	
-        	boolean isAnimation = false;
-        	for (AtlasRegion region: regions) {
-        		String id = "";
-        		for (char character: region.name.toCharArray()) {
-        			id += character;
-        			if (character == '_') {
-        				isAnimation = true;
-        			}
-        		}
-        		String physicsId = findId(importer.getNameForPointer(collisionObject.getCPointer()));
-        		if (id.equals(physicsId) && !isAnimation) {
-        			TextureRegion[] TextureRegion = {new TextureRegion(region)};
-        			Array<Tag> tags = findTags(importer.getNameForPointer(collisionObject.getCPointer()));
-        			int[] coords = TextureRegionCoords.get(physicsId);
-//        			int[] highLow = highestLowest.get(physicsId);
-        			objs.add(new ControllableObject(collisionObject, TextureRegion, physicsId, tags, coords[0], coords[1]));
-        			break;
-        		} else if (id.equals(physicsId) && isAnimation) {
-        			TextureRegion[] TextureRegions = buildAnimationFrames(regions, region, importer, collisionObject);
-        			Array<Tag> tags = findTags(importer.getNameForPointer(collisionObject.getCPointer()));
-        			int[] coords = TextureRegionCoords.get(physicsId);
-//        			int[] highLow = highestLowest.get(physicsId);
-        			objs.add(new ControllableObject(collisionObject, TextureRegions, physicsId, tags, coords[0], coords[1]));
-        			break;
-        		}
-        	}
-        	
-            //dynamicsWorld.addCollisionObject(collisionObject);
-        }
-        
-        importer.dispose();
-		return objs;
-	}*/
 	
 }

@@ -32,7 +32,7 @@ public enum CRecipes {
 		WORKBENCH,
 		FURNACE,
 		ANVIL,
-		POLISHING_STONE;
+		POLISHING_STONE
 	}
 	
 	CRecipes(String id, String components, Station station) {
@@ -45,17 +45,17 @@ public enum CRecipes {
 	 * Returns a string array of components for a given recipe.
 	 */
 	public String[] stringComponents() {
-		LinkedList<String> list = new LinkedList<String>(); // Initialise a list of the components
-		String currentComponent = ""; // A string to hold the current component
+		LinkedList<String> list = new LinkedList<>(); // Initialise a list of the components
+		StringBuilder currentComponent = new StringBuilder(); // A string to hold the current component
 		for (char character: components.toCharArray()) {
 			if (character != '+') { // If the character isn't a '+' (indicating the end of the component hasn't been reached)
-				currentComponent += character; // Add the character to the current string
+				currentComponent.append(character); // Add the character to the current string
 			} else {
-				list.add(currentComponent); // Add the finished string to the list of strings
-				currentComponent = ""; // Reset the string
+				list.add(currentComponent.toString()); // Add the finished string to the list of strings
+				currentComponent.setLength(0); // Reset the string
 			}
 		}
-		list.add(currentComponent); // Because the last component is not added; there is no + sign after it to trigger it being added to the list
+		list.add(currentComponent.toString()); // Because the last component is not added; there is no + sign after it to trigger it being added to the list
 		Object[] objectArray = list.toArray(); // Converts the list to an array
 		String[] stringArray = new String[objectArray.length]; // Creates a new string array the same length as the object array
 		for (int i = 0; i < objectArray.length; i ++) {
@@ -65,7 +65,7 @@ public enum CRecipes {
 	}
 	
 	public LinkedList<Item> itemComponents() {
-		LinkedList<Item> listOfItems = new LinkedList<Item>(); // Initialise a list of type Item
+		LinkedList<Item> listOfItems = new LinkedList<>(); // Initialise a list of type Item
 		for (String component: stringComponents()) { // Iterate through the list of components of type String
 			listOfItems.add(Items.getOtherItem(AllItems.getAllOtherItems(), component)); // Add each item to the listOfItems in type Item
 		}
@@ -84,14 +84,11 @@ public enum CRecipes {
 					noOfComponentsNeeded --; // Take one away from the no. of items still needed
 			}
 		}
-		if (noOfComponentsNeeded > 0) // If any components are missing
-			return false;
-		else // If all components are present
-			return true;
+		return noOfComponentsNeeded <= 0; // If all components are present, return true. If any are missing, return false.
 	}
 	
 	public boolean craft(Inventory inventory) {
-		if (componentsPresent(inventory) == false) // First check if the player has all the necessary components
+		if (!componentsPresent(inventory)) // First check if the player has all the necessary components
 			return false; // If not, don't craft and return false
 		for (Item playerItem: inventory.getOtherItems()) {
 			for (Item neededItem: itemComponents()) {

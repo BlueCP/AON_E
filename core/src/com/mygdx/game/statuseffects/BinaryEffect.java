@@ -8,14 +8,14 @@ import com.mygdx.game.entities.Entity;
  */
 public class BinaryEffect extends Effect {
 
-	float duration;
+	private float duration;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
 	public BinaryEffect() { }
 
-	public BinaryEffect(Entity entity) {
+	BinaryEffect(Entity entity) {
 		super(entity);
 	}
 

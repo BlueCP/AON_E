@@ -16,7 +16,7 @@ import com.mygdx.game.settings.VideoSettings;
 
 public class VideoSettingsScreen extends MyScreen {
 
-	Screen prevScreen;
+	private Screen prevScreen;
 	Stage stage;
 
 	VideoSettingsScreen(AON_E game, Screen prevScreen) {
@@ -100,64 +100,6 @@ public class VideoSettingsScreen extends MyScreen {
 
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
-
-	/*VideoSettingsScreen(AON_E game, ParticleEngine particleEngine) {
-		super(game);
-
-		TextButton vSyncButton = new TextButton("VSync", AON_E.SKIN, "toggle");
-		vSyncButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (vSyncButton.isChecked()) {
-					VideoSettings.enableVSync();
-				} else {
-					VideoSettings.disableVSync();
-				}
-			}
-		});
-
-		TextButton fullScreenButton = new TextButton("Fullscreen", AON_E.SKIN, "toggle");
-		fullScreenButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (fullScreenButton.isChecked()) {
-					VideoSettings.enableFullScreen();
-				} else {
-					VideoSettings.disableFullScreen();
-				}
-			}
-		});
-
-		TextButton screenShakeButton = new TextButton("Screen shake", AON_E.SKIN, "toggle");
-		screenShakeButton.setChecked(true);
-		screenShakeButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (screenShakeButton.isChecked()) {
-					VideoSettings.enableScreenShake();
-				} else {
-					VideoSettings.disableScreenShake();
-				}
-			}
-		});
-
-		TextButton particlesButton = new TextButton("Particles", AON_E.SKIN, "toggle");
-		particlesButton.setChecked(true);
-		particlesButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (particlesButton.isChecked()) {
-					VideoSettings.enableParticles();
-				} else {
-					VideoSettings.disableParticles(particleEngine);
-				}
-			}
-		});
-
-		initStage(game, vSyncButton, fullScreenButton, screenShakeButton, particlesButton);
-
-		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
-	}*/
 
 	@Override
 	void update() {

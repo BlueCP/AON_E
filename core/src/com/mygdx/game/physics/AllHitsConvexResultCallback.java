@@ -27,7 +27,6 @@ public class AllHitsConvexResultCallback extends ConvexResultCallback {
 			Vector3 vector = new Vector3();
 			convexResult.getHitPointLocal(vector);
 			hitPoints.add(vector);
-//			System.out.println(vector);
 		}
 
 		return 0; // Not entirely sure what this does

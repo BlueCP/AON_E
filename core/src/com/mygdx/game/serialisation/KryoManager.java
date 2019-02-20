@@ -2,11 +2,8 @@ package com.mygdx.game.serialisation;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Queue;
 import com.cyphercove.gdx.gdxtokryo.GdxToKryo;
-import com.cyphercove.gdx.gdxtokryo.gdxserializers.utils.ObjectMapSerializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -25,8 +22,6 @@ public class KryoManager {
 //		kryo.setRegistrationRequired(true); // Although this is 'recommended', it makes it a nightmare to create new classes since they all require a custom serialiser.
 		GdxToKryo.registerAll(kryo);
 		kryo.register(Queue.class, new MyQueueSerialiser());
-//		kryo.register(Array.class, new ArraySerialiser());
-//		kryo.register(ObjectMap.class, new ObjectMapSerializer());
 	}
 	
 	/*

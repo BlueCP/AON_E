@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -18,19 +17,17 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.settings.ControlSettings;
 
-import java.security.Key;
-
 public class ControlSettingsScreen extends MyScreen {
 
-	Screen prevScreen;
+	private Screen prevScreen;
 	Stage stage;
 
 	Table table;
-	TextButton basicAttackButton;
-	Array<TextButton> abilityButtons;
-	TextButton openInventoryButton;
+	private TextButton basicAttackButton;
+	private Array<TextButton> abilityButtons;
+	private TextButton openInventoryButton;
 
-	ButtonGroup<TextButton> keyBindingsGroup;
+	private ButtonGroup<TextButton> keyBindingsGroup;
 
 	ControlSettingsScreen(AON_E game, Screen prevScreen) {
 		super(game);
@@ -81,7 +78,6 @@ public class ControlSettingsScreen extends MyScreen {
 		keyBindingsGroup.uncheckAll();
 
 		stage = new Stage(game.viewport);
-//		stage.setDebugAll(true);
 
 		table = new Table();
 		table.setWidth(stage.getWidth());

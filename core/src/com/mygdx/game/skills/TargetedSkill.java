@@ -3,13 +3,15 @@ package com.mygdx.game.skills;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.Util;
 
+/**
+ * A skill which targets one specific entity, usually the target entity of the caster.
+ */
 public abstract class TargetedSkill extends ActiveSkill {
 
 	protected int targetEntity;
@@ -35,15 +37,11 @@ public abstract class TargetedSkill extends ActiveSkill {
 	protected void faceTarget(Entity target) {
 		Vector3 diff = target.pos.cpy().sub(entity.pos);
 		float angle = (float) Math.toDegrees(MathUtils.atan2(diff.z, diff.x));
-//		System.out.println("---");
-//		System.out.println(angle);
 
 		if (angle < 0) {
 			angle += 360;
 		}
-//		System.out.println(angle);
 		angle = (float) (Math.round(angle/22.5) * 22.5); // Round to nearest 22.5 degrees (which is 360/number of directions)
-//		System.out.println(angle);
 		angle += 45;
 		if (angle >= 360) {
 			angle -= 360;

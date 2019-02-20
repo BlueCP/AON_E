@@ -9,8 +9,6 @@ import com.mygdx.game.skills.ActiveSkill;
  */
 public class ActivatedSkillAction extends SkillAction {
 
-//	private Skill skill;
-
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */

@@ -1,6 +1,6 @@
 package com.mygdx.game.items;
 
-import java.awt.Color;
+import java.awt.*;
 
 public abstract class Item {
 	
@@ -12,7 +12,7 @@ public abstract class Item {
 	protected String desc;
 	protected Rarity rarity;
 	
-	public static enum Rarity {
+	public enum Rarity {
 		
 		COMMON("Common", Color.lightGray),
 		UNCOMMON("Uncommon", Color.white),
@@ -42,30 +42,39 @@ public abstract class Item {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getOrigName() {
 		return origName;
 	}
+
 	public void setOrigName(String origName) {
 		this.origName = origName;
 	}
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public Rarity getRarity() {
 		return rarity;
 	}
+
 	public void setRarity(Rarity rarity) {
 		this.rarity = rarity;
 	}
+
 	public String getDesc() {
 		return desc;
 	}
+
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}

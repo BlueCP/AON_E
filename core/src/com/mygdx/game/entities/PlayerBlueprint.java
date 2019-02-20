@@ -19,9 +19,6 @@ public class PlayerBlueprint {
 	private static HashMap<String, Animation<TextureRegion>> walkMap18 = new HashMap<>();
 	private static HashMap<String, Animation<TextureRegion>> attackMap = new HashMap<>();
 	
-	//private static String currentState = "";
-	//private static String previousState = "";
-	
 	//private static TextureRegion currentTexture;
 
 	/**

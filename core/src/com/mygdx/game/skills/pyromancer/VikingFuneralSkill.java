@@ -21,7 +21,6 @@ public class VikingFuneralSkill extends PassiveSkill {
 	public void testfor(Entity targetEntity) {
 		if (isLearned()) {
 			entity.burn(targetEntity, 1, 2);
-//			targetEntity.burnNoCheck(1, 2);
 		}
 	}
 

@@ -2,6 +2,9 @@ package com.mygdx.game.skills;
 
 import com.mygdx.game.entities.Entity;
 
+/**
+ * Opposite of the Active Skill - a skill which doesn't require any explicit input from the user to work.
+ */
 public abstract class PassiveSkill extends Skill {
 
 	private boolean learned;

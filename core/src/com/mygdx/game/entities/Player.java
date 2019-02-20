@@ -3,14 +3,16 @@ package com.mygdx.game.entities;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
-import com.mygdx.game.items.Weapon;
 import com.mygdx.game.mobtypes.MobClass;
 import com.mygdx.game.mobtypes.MobRace;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
-import com.mygdx.game.skills.*;
+import com.mygdx.game.skills.SkillBar;
 import com.mygdx.game.skills.cryomancer.*;
-import com.mygdx.game.skills.pyromancer.*;
+import com.mygdx.game.skills.pyromancer.FlamingBarrageSkill;
+import com.mygdx.game.skills.pyromancer.StokeTheFlamesSkill;
+import com.mygdx.game.skills.pyromancer.SupernovaSkill;
+import com.mygdx.game.skills.pyromancer.VikingFuneralSkill;
 
 import java.util.Map.Entry;
 
@@ -29,14 +31,9 @@ public class Player extends Entity {
 	}
 
 	private String playerName;
-//	public MoveBar moveBar;
-//	public SpellBar spellBar;
 	public SkillBar skillBar;
-//	public PlayScreen session;
 	private MobRace mobRace;
 	private MobClass mobClass;
-//	private int physDamage;
-//	private int magDamage;
 	public static final int basicLvlReq = 10;
 
 	static final int fps = 24;
@@ -52,21 +49,12 @@ public class Player extends Entity {
 	private EncaseInIceSkill encaseInIce;
 	private FracturingBlastSkill fracturingBlast;
 	
-	/*
-	public Player() {
-		super.name = "player";
-		this.moveBar = new MoveBar();
-		this.spellBar = new SpellBar();
-	}
-	*/
-	
 	public Player() {
 		id = 0;
 		physicsId = 10000;
 		
 		super.name = "player";
-//		this.moveBar = new MoveBar();
-//		this.spellBar = new SpellBar();
+
 		skillBar = new SkillBar();
 
 		maxLife = 50;
@@ -116,8 +104,6 @@ public class Player extends Entity {
 		bitingCold = new BitingColdSkill(this, true);
 		encaseInIce = new EncaseInIceSkill(this, true);
 		fracturingBlast = new FracturingBlastSkill(this, true);
-
-		//rigidBody.getWorldTransform();
 	}
 
 	@Override
@@ -133,7 +119,6 @@ public class Player extends Entity {
 	@Override
 	public void chill(Entity entity, int power, float duration) {
 		entity.chilledEffect.add(power, duration, bitingCold.isLearned(), encaseInIce.isLearned());
-//		bitingCold.chill(entity, power, duration);
 	}
 
 	@Override
@@ -152,46 +137,12 @@ public class Player extends Entity {
 	public void landBasicAttack(Entity entity, PlayScreen playScreen) {
 		fracturingBlast.testfor(entity, playScreen);
 	}
-
-	/*
-	private String findFrameAngle(String name) {
-		String angle = "";
-		for (char character: name.toCharArray()) {
-			if (character != '_') {
-				angle += character;
-			} else {
-				break;
-			}
-		}
-		return angle;
-	}
-	*/
-	
-	/*
-	private String findFrameId(String name) {
-		String id = "";
-		boolean start = false;
-		for (char character: name.toCharArray()) {
-			if (character == '_') {
-				start = true;
-			} else if (start) {
-				id += character;
-			}
-		}
-		return id;
-	}
-	*/
 	
 	/*
 	 * Normal save, would be done from PlayScreen.
 	 */
 	public void saveAndExit() {
 		try {
-			//String name = session.playerName;
-//			session = null; // To avoid unnecessarily serialising huge amounts of data
-			/*rigidBody.getWorldTransform(rigidBodyMatrix);
-			linearVelocity = rigidBody.getLinearVelocity();
-			rigidBody = null;*/
 			prepareForSaveAndExit();
 			KryoManager.write(this, "saves/" + playerName + "/player.txt");
 		} catch (Exception e) {
@@ -204,7 +155,6 @@ public class Player extends Entity {
 			btRigidBody body = prepareForSave();
 			KryoManager.write(this, "saves/" + playerName + "/player.txt");
 			rigidBody = body;
-//			System.out.println(rigidBody);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -215,7 +165,6 @@ public class Player extends Entity {
 	 */
 	public void saveInitial() {
 		try {
-//			session = null; // To avoid unnecessarily serialising huge amounts of data (including a reference to the player object itself)
 			rigidBody = null;
 			rigidBodyMatrix = new Matrix4();
 			rigidBodyMatrix.setTranslation(new Vector3(0, 10, 0));
@@ -243,10 +192,6 @@ public class Player extends Entity {
 	}
 	
 	public void update(PlayScreen playScreen) {
-//		this.session = session;
-		
-//		updateActiveEffects();
-		
 		//this.getFov().update(session.map, this.getStatus().getXPos(), this.getStatus().getYPos(), this.getStatus().getZPos(), this.visionRadius());
 		//this.eStats.updateStatsCopy(session.skillCollection);
 		for (Entry<Entity, Integer> entry: getOffensiveEnemies().entrySet()) {
@@ -267,76 +212,6 @@ public class Player extends Entity {
 			// Makes neutral entities that are damaged by the player aggressive
 		}
 	}
-
-	private boolean outOfRange(int range) {
-		/*
-		if (range > session.targetEntity.getPureDiff()) {
-			session.newMessage("Target out of range!", Color.RED);
-			return true;
-		}
-		*/
-		return false;
-	}
-
-	private boolean outOfRange(Weapon weapon) {
-		/*if (session.targetEntity == null) {
-			return true;
-		}*/
-		/*
-		if (session.targetEntity.getPureDiff() > weapon.getRange()) {
-			session.newMessage("Target out of range!", Color.RED);
-			return true;
-		}
-		*/
-		return false;
-	}
-
-	private boolean noTargetSelected() {
-		/*if (session.targetEntity == null) {
-			session.newMessage("No target selected!", Color.RED);
-			return true;
-		} else { return false; }*/
-		return false;
-	}
-
-	private boolean noWeaponEquipped() {
-		/*if (session.player.equipped().getMain().getId().equals("[no item]") && session.player.equipped().getOff().getId().equals("[no item]")) {
-			return true;
-		} else {
-			return false;
-		}*/
-		return false;
-	}
-
-	/*private void noWeaponMessage() {
-		session.newMessage("No weapon equipped!", Color.RED);
-	}*/
-
-	private boolean noMainEquipped() {
-		/*if (session.player.equipped().getMain().getId().equals("[no item]")) {
-			return true;
-		} else {
-			return false;
-		}*/
-		return false;
-	}
-
-//	private void noMainMessage() {
-//		session.newMessage("No weapon equipped to the main hand!", Color.RED);
-//	}
-
-	private boolean noOffEquipped() {
-		/*if (session.player.equipped().getOff().getId().equals("[no item]")) {
-			return true;
-		} else {
-			return false;
-		}*/
-		return false;
-	}
-
-//	private void noOffMessage() {
-//		session.newMessage("No weapon equipped to the off hand!", Color.RED);
-//	}
 	
 	public void basicAttack(boolean withMainHand) {
 		/*if (noTargetSelected()) { return; }

@@ -8,8 +8,8 @@ import com.mygdx.game.entities.Entity;
  */
 public class StackEffect extends Effect {
 
-	int stacks;
-	float duration;
+	private int stacks;
+	private float duration;
 
 	/**
 	 * No-arg constructor for serialisation purposes.

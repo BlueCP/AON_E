@@ -40,7 +40,6 @@ public class IncendiaryTrap extends StaticProjectile {
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
 		if (Math.floorMod(ticksPast, 6) == 0) {
-//			particleEngine.addFireUp(dynamicsWorld, pos, 1, 5);
 			playScreen.particleEngine.addFlyUpPoint(playScreen.physicsManager.getDynamicsWorld(), pos, 1, 5, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
 		}
 	}
@@ -58,15 +57,11 @@ public class IncendiaryTrap extends StaticProjectile {
 			projectile.destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 
 			playScreen.projectileManager.futureProjectiles.add(new IncendiaryTrapExplosion(playScreen.entities.getEntity(owner, playScreen.player), playScreen.projectileManager, playScreen.physicsManager.getDynamicsWorld(), pos));
-			/*if (owner == 0) { // If the owner of the projectile is the player (id 0)
-				playScreen.projectileManager.futureProjectiles.add(new IncendiaryTrapExplosion(playScreen.player, playScreen.projectileManager, playScreen.physicsManager.getDynamicsWorld(), pos));
-			} else { // If the owner is a non-player entity
-				playScreen.projectileManager.futureProjectiles.add(new IncendiaryTrapExplosion(playScreen.entities.getEntity(owner), playScreen.projectileManager, playScreen.physicsManager.getDynamicsWorld(), pos));
-			}*/
-//			playScreen.particleEngine.addFireBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 4, Particle.Behaviour.POOF);
+
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 4, 2,
 												Particle.Sprite.FIRE, Particle.Behaviour.POOF);
 			playScreen.isoRenderer.camera.screenShake(0.4f, 0.4f);
+
 			return true;
 		} else {
 			return false;

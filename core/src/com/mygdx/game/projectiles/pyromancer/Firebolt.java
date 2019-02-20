@@ -63,7 +63,6 @@ public class Firebolt extends DynamicProjectile {
 
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 
-//		playScreen.particleEngine.addFireBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, Behaviour.POOF);
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 2, 2,
 					Particle.Sprite.FIRE, Particle.Behaviour.POOF);
 

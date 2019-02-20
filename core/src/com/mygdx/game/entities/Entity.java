@@ -31,14 +31,10 @@ public abstract class Entity extends WorldObject {
 	static int targetTime; // The number of turns that an entity will aggressively follow another entity for
 	
 	protected String name;
-	//protected int id;
-	
+
 	float life;
 	float spirit;
 	public Vector3 pos;
-
-//	private Array<StackEffect> stackEffects = new Array<>();
-//	private Array<ProcEffect> procEffects = new Array<>();
 
 	public BurningEffect burningEffect;
 	public StunnedEffect stunnedEffect;
@@ -47,8 +43,6 @@ public abstract class Entity extends WorldObject {
 	public ChilledEffect chilledEffect;
 	public FrozenEffect frozenEffect;
 
-//	private Array<Effect> activeEffects = new Array<>();
-	
 	protected float realPhysDamage;
 	protected float realMagDamage;
 	
@@ -63,13 +57,12 @@ public abstract class Entity extends WorldObject {
 	
 	protected Inventory inventory = new Inventory();
 	private Equipped equipped  = new Equipped();
-	private boolean damagedByPlayer = false;
 	private Weapon lastHitWith = null;
 	private boolean followingPlayer;
 	private boolean attacking = false;
 	private int targetEntity = -1; // The targeted entity's id
 	private Array<Integer> entitiesThatHit = new Array<>(); // An array of all the ids of entities that hit this entity (not necessarily damaged, could also be non-damage harmful effects).
-	Integer lastHitBy = -1; // The id of the entity that last hit this entity.
+	int lastHitBy = -1; // The id of the entity that last hit this entity.
 
 	private boolean canWalk;
 	private float realWalkSpeed;
@@ -96,9 +89,6 @@ public abstract class Entity extends WorldObject {
 	private Vector3 movementVector = new Vector3();
 //	public Vector3 additionalMovementVector = new Vector3(); // The additional movement vector exists only for the one tick: it is added, then removed, from the velocity of the object.
 	private Vector3 parentVelocity = new Vector3(); // The velocity of the object the player is walking on, if any
-	
-	//private Vector3 walkImpulse = new Vector3();
-	//private Vector3 prevWalkImpulse = new Vector3();
 	
 	Matrix4 rigidBodyMatrix;
 	private Vector3 linearVelocity;
@@ -231,8 +221,6 @@ public abstract class Entity extends WorldObject {
 	
 	@Override
 	public void updateWorldObject(IsometricRenderer renderer) {
-		//physicsId = rigidBody.getUserValue();
-		//texture = getTexture();
 		Vector2 coords = renderer.cartesianToScreen(pos.x, pos.y, pos.z);
 		renderPos = new Vector2(coords.x - getTexture().getRegionWidth()/2f, coords.y - getTexture().getRegionHeight()/2f);
 		visibility = Visibility.VISIBLE;
@@ -319,8 +307,8 @@ public abstract class Entity extends WorldObject {
 	 * Updates gameplay-affecting stats such as life.
 	 */
 	private void updateStats() {
-		updateLife();
-		updateSpirit();
+		applyLifeCap();
+		applySpiritCap();
 		
 		realPhysDamage = basePhysDmg; // In future this calculation may take into account modifiers, buffs, etc
 		
@@ -415,13 +403,13 @@ public abstract class Entity extends WorldObject {
 		}
 	}
 	
-	private void updateLife() {
+	private void applyLifeCap() {
 		if (life > maxLife) {
 			life = maxLife;
 		}
 	}
 	
-	private void updateSpirit() {
+	private void applySpiritCap() {
 		if (spirit > maxSpirit) {
 			spirit = maxSpirit;
 		}
@@ -484,11 +472,9 @@ public abstract class Entity extends WorldObject {
 	 * Update before anything else has happened in PlayScreen.executeLogic.
 	 */
 	public void preUpdate() {
-		//setAnimationType(AnimationType.STAND);
 		resetAnimationType();
 		updateActionAnimations();
 		//updateAnimationType();
-		//resetAnimationType();
 	}
 	
 	public abstract void onUpdate(PlayScreen session);
@@ -559,7 +545,6 @@ public abstract class Entity extends WorldObject {
 	}
 	
 	void prepareForSaveAndExit() {
-		//rigidBodyMatrix = rigidBody.getWorldTransform();
 		rigidBody.getWorldTransform(rigidBodyMatrix);
 		linearVelocity.set(rigidBody.getLinearVelocity());
 		rigidBody = null;
@@ -596,37 +581,10 @@ public abstract class Entity extends WorldObject {
 		rigidBody.setLinearVelocity(linearVelocity);
 		rigidBody.setAngularFactor(new Vector3(0, 0, 0)); // Disable rotation in all axis
 		rigidBody.setActivationState(Collision.DISABLE_DEACTIVATION); // Prevent the body from being deactivated, otherwise it wouldn't respond to changes in velocity
-//		rigidBody.setCollisionFlags(rigidBody.getCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK); // Enable contact callbacks
 		rigidBody.setUserValue(physicsId);
 	}
-
-	/*public StackEffect findStackEffect(EffectType name) {
-		for (StackEffect effect: stackEffects) {
-			if (effect.getStatusEffect() == name) {
-				return effect;
-			}
-		}
-		return null;
-	}
-
-	public ProcEffect findProcEffect(EffectType name) {
-		for (ProcEffect effect: procEffects) {
-			if (effect.getStatusEffect() == name) {
-				return effect;
-			}
-		}
-		return null;
-	}*/
 	
 	private void initialiseEffects() {
-		/*for (EffectType effectType: EffectType.values()) {
-			this.allEffects.add(new Effect(effectType, 0, 0));
-		}*/
-		/*procEffects.add(new ProcEffect(EffectType.BURNING));
-		procEffects.add(new ProcEffect(EffectType.SLOWED));
-		procEffects.add(new ProcEffect(EffectType.STUNNED));
-		procEffects.add(new ProcEffect(EffectType.ROOTED));*/
-
 		burningEffect = new BurningEffect(this);
 		stunnedEffect = new StunnedEffect(this);
 		slowedEffect = new SlowedEffect(this);
@@ -639,29 +597,6 @@ public abstract class Entity extends WorldObject {
 	 * Iterate through and apply effects.
 	 */
 	void applyEffects(PlayScreen playScreen) {
-		/*for (StackEffect effect: stackEffects) {
-			switch (effect.getStatusEffect()) {
-				default:
-					break;
-			}
-		}*/
-
-		/*boolean burningParticlesAdded = false;
-		for (ProcEffect effect: procEffects) {
-			switch (effect.getStatusEffect()) {
-				case BURNING:
-					for (int power: effect.powers) {
-						changeLife(-2 * Gdx.graphics.getDeltaTime() * power);
-						if (!burningParticlesAdded) {
-							playScreen.particleEngine.addFlyUpPillar(playScreen.physicsManager.getDynamicsWorld(), pos, 1, 4,
-									1f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
-							burningParticlesAdded = true;
-						}
-					}
-					break;
-			}
-		}*/
-
 		burningEffect.apply(playScreen);
 		chilledEffect.bitingColdDamage();
 		chilledEffect.testEncaseInIce(playScreen);
@@ -670,45 +605,9 @@ public abstract class Entity extends WorldObject {
 	}
 	
 	/*
-	 * Add currently active effects to the list active effects, and remove inactive effects from that list.
-	 */
-	/*void updateActiveEffects() {
-		activeEffects.clear(); // Reset active effects so only active ones can be re-entered there
-		for (Effect effect: allEffects) {
-			if (effect.getDuration() > 0 && effect.getPower() > 0) { // If the effect is active
-				activeEffects.add(new Effect(effect.getStatusEffect(), effect.getDuration(), effect.getPower()));
-			} else {
-				// If the effect is not active, just make sure everything to do with it is set to 0
-				effect.setDuration(0);
-				effect.setPower(0);
-			}
-		}
-	}*/
-	
-	/*
 	 * Update the duration for all effects.
 	 */
 	private void updateAllEffects() {
-		/*for (StackEffect effect: stackEffects) {
-			if (effect.getDuration() > 0) { // And the effect is still active
-				effect.setDuration(effect.getDuration() - Gdx.graphics.getDeltaTime()); // Decrease the duration
-			} else {
-				effect.setStacks(0); // Otherwise (i.e. if the effect is no longer active) set the power to 0 (to reset the effect)
-			}
-		}
-
-		for (int i = 0; i < procEffects.size; i ++) {
-			ProcEffect effect = procEffects.get(i);
-			for (int a = 0; a < effect.powers.size; a ++) {
-				if (effect.durations.get(a) > 0) {
-					effect.durations.set(a, effect.durations.get(a) - Gdx.graphics.getDeltaTime());
-				} else {
-					effect.powers.removeIndex(a);
-					effect.durations.removeIndex(a);
-				}
-			}
-		}*/
-
 		burningEffect.update();
 		stunnedEffect.update();
 		slowedEffect.update();
@@ -716,15 +615,6 @@ public abstract class Entity extends WorldObject {
 		chilledEffect.update();
 		frozenEffect.update();
 	}
-
-	/**
-	 * This entity deals damage to the given entity. Doesn't check whether this entity is null or not (that's done in another method).
-	 * A default behaviour is defined here as most entities will use this default behaviours.
-	 * If an entity wants a custom behaviour (which is the minority of entities), that class can override this method.
-	 */
-	/*void dealDamageNoCheck(Entity entity, float damage) {
-		entity.takeDamage(this, damage); // Assuming there are no behaviours on the attacking side to proc.
-	}*/
 
 	/**
 	 * Allows custom behaviours for each entity when it's damaged.
@@ -749,11 +639,6 @@ public abstract class Entity extends WorldObject {
 	 */
 	public void dealtDamageBy(Entity entity, float damage) {
 		entity.dealDamage(this, damage);
-		/*if (entity != null) {
-			entity.dealDamageNoCheck(this, damage);
-		} else if (damageIfNull) {
-			takeDamageBase(damage);
-		}*/
 	}
 
 	/**
@@ -766,33 +651,17 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * Custom implementations may take into account things that interact with burning, such as the Pyromancer passive 'Stoke the Flames'.
 	 */
-	/*public void burnNoCheck(Entity entity, int power, float duration) {
-		burnBase(power, duration);
-	}*/
-
-	/**
-	 * Custom implementations may take into account things that interact with burning, such as the Pyromancer passive 'Stoke the Flames'.
-	 */
 	public void burn(Entity entity, int power, float duration) {
 		burnBase(power, duration);
 	}
 
 	public void burnedBy(Entity entity, int power, float duration) {
 		entity.burn(this, power, duration);
-		/*if (entity != null) {
-			entity.burnNoCheck(this, power, duration);
-		} else if (burnIfNull) {
-			burnBase(power, duration);
-		}*/
 	}
 
 	private void burnBase(int power, float duration) {
 		burningEffect.add(power, duration);
 	}
-
-	/*public void chillNoCheck(Entity entity, int power, float duration) {
-		chillBase(power, duration);
-	}*/
 
 	public void chill(Entity entity, int power, float duration) {
 		chillBase(power, duration);
@@ -800,11 +669,6 @@ public abstract class Entity extends WorldObject {
 
 	public void chilledBy(Entity entity, int power, float duration) {
 		entity.chill(this, power, duration);
-		/*if (entity != null) {
-			entity.chillNoCheck(this, power, duration);
-		} else if (chillIfNull) {
-			chillBase(power, duration);
-		}*/
 	}
 
 	private void chillBase(int power, float duration) {
@@ -904,14 +768,6 @@ public abstract class Entity extends WorldObject {
 		this.equipped = equipped;
 	}
 
-	public boolean isDamagedByPlayer() {
-		return damagedByPlayer;
-	}
-
-	public void setDamagedByPlayer(boolean damagedByPlayer) {
-		this.damagedByPlayer = damagedByPlayer;
-	}
-
 	public boolean isAttacking() {
 		return attacking;
 	}
@@ -994,12 +850,12 @@ public abstract class Entity extends WorldObject {
 	
 	public void changeLife(float change) {
 		life += change;
-		updateLife();
+		applyLifeCap();
 	}
 	
 	public void changeSpirit(float change) {
 		spirit += change;
-		updateSpirit();
+		applySpiritCap();
 	}
 
 	public float getMaxLife() {

@@ -9,19 +9,6 @@ import com.badlogic.gdx.utils.Array;
  */
 public class ControlSettings extends Settings {
 
-//	public static int basicAttackKey = Keys.W;
-
-	/*static int ability1Key = Keys.NUM_1;
-	static int ability2Key = Keys.NUM_2;
-	static int ability3Key = Keys.NUM_3;
-	static int ability4Key = Keys.NUM_4;
-	static int ability5Key = Keys.NUM_5;
-	static int ability6Key = Keys.NUM_6;
-	static int ability7Key = Keys.NUM_7;
-	static int ability8Key = Keys.NUM_8;*/
-
-//	public static int openInventoryKey = Keys.I;
-
 	private static Array<Integer> takenKeys = new Array<>();
 
 	public static void init() {
@@ -54,8 +41,7 @@ public class ControlSettings extends Settings {
 	}
 
 	/**
-	 *
-	 * @param key
+	 * Sets the basic attack key.
 	 * @return true if the key was updated, false if not.
 	 */
 	public static boolean setBasicAttackKey(int key) {
@@ -75,9 +61,8 @@ public class ControlSettings extends Settings {
 	}
 
 	/**
-	 *
-	 * @param abilityNumber
-	 * @param key
+	 * Sets the chosen ability's key.
+	 * @param abilityNumber the index of the ability.
 	 * @return true if the key was updated, false if not.
 	 */
 	public static boolean setAbilityKey(int abilityNumber, int key) {
@@ -97,8 +82,7 @@ public class ControlSettings extends Settings {
 	}
 
 	/**
-	 *
-	 * @param key
+	 * Sets the key for opening inventory.
 	 * @return true if the key was updated, false if not.
 	 */
 	public static boolean setOpenInventoryKey(int key) {

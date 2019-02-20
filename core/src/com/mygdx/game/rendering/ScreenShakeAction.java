@@ -4,13 +4,13 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class ScreenShakeAction extends LimitedCameraAction {
 
-	float fullLifetime;
-	float magnitude;
+	private float fullLifetime;
+	private float magnitude;
 
-	int arrayLength;
-	final int pointsPerSecond = 20; // The number of points in the perlin noise graph for 1s of screen shake.
-	float[] slopeAtX;
-	float[] slopeAtY;
+	private int arrayLength;
+	private final int pointsPerSecond = 20; // The number of points in the perlin noise graph for 1s of screen shake.
+	private float[] slopeAtX;
+	private float[] slopeAtY;
 
 	/**
 	 * No-arg constructor for serialisation purposes.

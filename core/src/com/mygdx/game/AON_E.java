@@ -14,24 +14,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.audio.MusicManager;
 import com.mygdx.game.audio.SoundManager;
 import com.mygdx.game.physics.Hitboxes;
-import com.mygdx.game.rendering.RenderingUtils;
 import com.mygdx.game.screens.MainMenuScreen;
 import com.mygdx.game.serialisation.KryoManager;
-import com.mygdx.game.serialisation.UtilsTest;
 import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.settings.Settings;
 
 public class AON_E extends Game {
 
-	//public static final int WIDTH = 1000;
-	//public static final int HEIGHT = 563;
 	public static final String TITLE = "AON_E";
 
 	// These are floats so that float division rather than integer division is performed with them.
@@ -64,7 +58,6 @@ public class AON_E extends Game {
 	public static BitmapFont DEFAULT_FONT;
 	public static Skin SKIN;
 
-//	public TextureAtlas tileAtlas;
 	public TextureAtlas playerWalkingAtlas;
 	public TextureAtlas playerAttackAtlas;
 
@@ -74,15 +67,8 @@ public class AON_E extends Game {
 
 	public Texture pointerUp;
 	public Texture pointerDown;
-//	private Texture tilePointer;
-//	private Texture tileShadowNorth;
-//	private Texture tileShadowEast;
-//	private Texture tileShadowSouth;
-//	private Texture tileShadowWest;
 
 	public Sprite pointer;
-
-//	public Sound click;
 
 	// These imaginary units are the units for full HD for convenience.
 	// It means the size of assets doesn't have to be changed, because they were all created for full HD by default anyway.
@@ -96,54 +82,24 @@ public class AON_E extends Game {
 	public SoundManager soundManager;
 	public MusicManager musicManager;
 
-//	public VideoSettings videoSettings;
-
-	/*private void serialiserTest() {
-		*//*Queue<String> queue = new Queue<>();
-		KryoManager.write(queue, "test");
-		Queue<String> readQueue = KryoManager.read("test", Queue.class);
-		readQueue.addFirst("bc");*//*
-
-		UtilsTest.test();
-	}*/
-
 	@Override
 	public void create () {
-
-		// GitHub Push Test, Last time.
-//		 GitHub Pull Test. Again.
-
 		KryoManager.initialise();
 
 		Bullet.init();
 
 		Hitboxes.initialise();
 
-		//effectiveScreenWidth = Gdx.graphics.getWidth();
-		//effectiveScreenHeight = Gdx.graphics.getHeight();
-
-		initialScreenCalcs();
-
-		RenderingUtils.initialise();
-
-//		videoSettings = new VideoSettings();
 		Settings.init();
 		ControlSettings.init();
 
-//		serialiserTest();
-
 //		ControlSettingsScreen.resetKeyBindings();
-//		ControlSettingsScreen.setBasicAttackKey(Input.Keys.Q);
-//		ControlSettingsScreen.setOpenInventoryKey(Input.Keys.W);
 
 		camera = new OrthographicCamera();
 //		viewport = new FitViewport(WORLD_WIDTH, WORLD_WIDTH * ((float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth()), camera);
 		viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
-//		viewport.apply();
-//		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
 		camera.position.set(0, 0, 0);
 		camera.update();
-//		camera.update();
 
 		batch = new SpriteBatch();
 		manager = new AssetManager();
@@ -205,11 +161,6 @@ public class AON_E extends Game {
 
 		pointerUp = manager.get("sprites/pointer.png");
 		pointerDown = manager.get("sprites/pointerdown.png");
-//		tilePointer = manager.get("sprites/tilePointer.png");
-//		tileShadowNorth = manager.get("sprites/tileShadowNorth.png");
-//		tileShadowEast = manager.get("sprites/tileShadowEast.png");
-//		tileShadowSouth = manager.get("sprites/tileShadowSouth.png");
-//		tileShadowWest = manager.get("sprites/tileShadowWest.png");
 
 		playerWalkingAtlas = manager.get("sprites/playerAnimations/walking/playerWalking.atlas");
 		playerAttackAtlas = manager.get("sprites/playerAnimations/attack/playerAttack.atlas");
@@ -220,18 +171,15 @@ public class AON_E extends Game {
 
 		pointer = new Sprite(pointerUp);
 
-//		click = manager.get("soundfx/click.wav");
 		soundManager = new SoundManager(this);
 		musicManager = new MusicManager(this);
-
-//		viewport = new ScreenViewport();
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 
 		setScreen(new MainMenuScreen(this));
 	}
 
-	private void initialScreenCalcs() {
+	/*private void initialScreenCalcs() {
 		// The two black boxes are equal in size, so the center of the screen should remain constant regardless.
 		center = new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 
@@ -245,7 +193,7 @@ public class AON_E extends Game {
 		// Use the smaller factor in order to have black bars on the screen (if a different aspect ratio is being used),
 		// instead of rendering things off-screen.
 		screenSizeFactor = widthFactor > heightFactor ? heightFactor : widthFactor;
-	}
+	}*/
 
 	@Override
 	public void render () {

@@ -19,9 +19,8 @@ public class Camera {
 	public Viewport viewport;
 
 	public Vector3 pos;
-	public Vector3 screenShakeDisplacement;
+	Vector3 screenShakeDisplacement;
 	public Vector2 isoPos;
-//	private float zoom; // Higher = zoomed in, lower = zoomed out
 	//private int followedEntity;
 
 	private ScreenShakeAction screenShakeAction; // Screen shakes get their own place because they are different to all other actions; they would normally not wait in a queue.
@@ -41,7 +40,6 @@ public class Camera {
 		
 		pos = new Vector3();
 		screenShakeDisplacement = new Vector3();
-//		zoom = 1;
 	}
 	
 	public void update(Player player, PlayScreen playScreen) {

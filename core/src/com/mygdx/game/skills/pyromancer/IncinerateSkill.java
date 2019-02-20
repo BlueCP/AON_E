@@ -4,7 +4,6 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
-import com.mygdx.game.statuseffects.Effect;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.TargetedSkill;
@@ -29,7 +28,7 @@ public class IncinerateSkill extends TargetedSkill {
 	@Override
 	public void start(PlayScreen playScreen) {
 		if (entity.getTargetEntity() != -1) {
-			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity());
+			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player);
 			if (entity.actions.size == 0 && targetEntity.burningEffect.isActive()) {
 				if (hasResource(entity, 20)) {
 					useSkill();

@@ -1,12 +1,6 @@
 package com.mygdx.game.items;
 
 public class Weapon extends Item {
-
-	/*
-	public static String[] atrList = {"name","id","code","type","physDamage","magDamage","rarity","range","hands"};
-	public static String[] viewAtrList = {"name","id","type","physDamage","magDamage","rarity","range","hands"};
-	private HashMap<String, String> atr = new HashMap<String, String>();
-	*/
 	
 	protected String type;
 	private int physDamage;

@@ -3,7 +3,6 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,18 +15,11 @@ import com.mygdx.game.items.*;
 
 public class InventoryScreen extends MyScreen {
 
-//	private AON_E game;
 	private PlayScreen playScreen;
 	
 	private Stage stage;
 	private Table table;
-	
-	private ButtonGroup<TextButton> itemTypeGroup;
-	private TextButton weaponButton;
-	private TextButton armourButton;
-	private TextButton equipmentButton;
-	private TextButton otherItemButton;
-	
+
 	private ScrollPane weaponsPane;
 	private ScrollPane armourPane;
 	private ScrollPane equipmentPane;
@@ -36,14 +28,13 @@ public class InventoryScreen extends MyScreen {
 	InventoryScreen(AON_E game, PlayScreen playScreen) {
 		super(game);
 
-//		this.game = game;
 		this.playScreen = playScreen;
 		
 		stage = new Stage(game.viewport);
-		
-		itemTypeGroup = new ButtonGroup<>();
-		
-		weaponButton = new TextButton("Weapons", AON_E.SKIN, "toggle");
+
+		ButtonGroup<TextButton> itemTypeGroup = new ButtonGroup<>();
+
+		TextButton weaponButton = new TextButton("Weapons", AON_E.SKIN, "toggle");
 		weaponButton.setChecked(true);
 		weaponButton.addListener(new ClickListener() {
 			@Override
@@ -55,8 +46,8 @@ public class InventoryScreen extends MyScreen {
 			}
 		});
 		itemTypeGroup.add(weaponButton);
-		
-		armourButton = new TextButton("Armour", AON_E.SKIN, "toggle");
+
+		TextButton armourButton = new TextButton("Armour", AON_E.SKIN, "toggle");
 		armourButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -67,8 +58,8 @@ public class InventoryScreen extends MyScreen {
 			}
 		});
 		itemTypeGroup.add(armourButton);
-		
-		equipmentButton = new TextButton("Equipment", AON_E.SKIN, "toggle");
+
+		TextButton equipmentButton = new TextButton("Equipment", AON_E.SKIN, "toggle");
 		equipmentButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -79,8 +70,8 @@ public class InventoryScreen extends MyScreen {
 			}
 		});
 		itemTypeGroup.add(equipmentButton);
-		
-		otherItemButton = new TextButton("Other items", AON_E.SKIN, "toggle");
+
+		TextButton otherItemButton = new TextButton("Other items", AON_E.SKIN, "toggle");
 		otherItemButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -368,8 +359,7 @@ public class InventoryScreen extends MyScreen {
 		table.row().padTop(30);
 		table.add(paneGroup).fillX().colspan(4);
 		stage.addActor(table);
-		//stage.setDebugAll(true);
-		
+
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
 	
@@ -475,13 +465,14 @@ public class InventoryScreen extends MyScreen {
 		update();
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		game.batch.setProjectionMatrix(game.camera.combined);
 		
 		stage.act();
 		stage.draw();
 		
 		game.batch.begin();
 		game.pointer.draw(game.batch);
-//		RenderingUtils.renderBlackBars(game.batch);
 		game.batch.end();
 	}
 	

@@ -28,7 +28,7 @@ public class OverwhelmingFrostSkill extends TargetedSkill {
 	@Override
 	public void start(PlayScreen playScreen) {
 		if (entity.getTargetEntity() != -1) {
-			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity());
+			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player);
 			if (entity.actions.size == 0 && targetEntity.chilledEffect.isActive()) {
 				if (hasResource(entity, 20)) {
 					useSkill();
@@ -46,7 +46,7 @@ public class OverwhelmingFrostSkill extends TargetedSkill {
 	@Override
 	public void finish(PlayScreen playScreen) {
 		if (entity.getTargetEntity() != -1) {
-			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity());
+			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player);
 			if (targetEntity.chilledEffect.isActive()) {
 				targetEntity.frozenEffect.add(freezeDuration);
 				entity.landAbility(targetEntity, playScreen);

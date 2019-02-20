@@ -6,6 +6,10 @@ import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 
+/**
+ * A locational skill uses the entity's target location to influence the skill, such as where to summon
+ * a field of magic.
+ */
 public abstract class LocationSkill extends ActiveSkill {
 
 	protected Vector3 targetPos;
@@ -19,11 +23,8 @@ public abstract class LocationSkill extends ActiveSkill {
 		if (entity.actions.size == 0 && entity.pos.dst(targetPos) <= range && state == State.AVAILABLE) {
 			if (hasResource(entity, cost)) {
 				useSkill();
-//				this.targetPos = targetPos;
 				Array<EntityAction> array = new Array<>();
 				array.add(new SkillAction(this, animationType, time));
-//				System.out.println(entity.actions.size);
-//				System.out.println(array.size);
 				entity.actions.addLast(array);
 				entity.setAnimationType(animationType);
 			}

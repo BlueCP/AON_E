@@ -20,7 +20,7 @@ import com.mygdx.game.settings.AudioSettings;
 
 public class AudioSettingsScreen extends MyScreen {
 
-	Screen prevScreen;
+	private Screen prevScreen;
 	Stage stage;
 
 	AudioSettingsScreen(AON_E game, Screen prevScreen) {

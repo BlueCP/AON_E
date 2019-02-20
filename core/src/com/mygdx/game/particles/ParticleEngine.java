@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.mygdx.game.particles.Particle.Behaviour;
 import com.mygdx.game.particles.Particle.Sprite;
-import com.mygdx.game.projectiles.DynamicProjectile;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.settings.VideoSettings;
 
@@ -40,6 +39,7 @@ public class ParticleEngine {
 	public void update(float delta, btDynamicsWorld dynamicsWorld) {
 		if (!VideoSettings.isParticlesEnabled()) {
 			particles.clear();
+			return;
 		}
 
 		for (int i = 0; i < particles.size; i ++) {
@@ -87,16 +87,16 @@ public class ParticleEngine {
 
 		try {
 			KryoManager.write(this, "saves/" + dir + "/particles.txt");
-
-			for (int i = 0; i < tempBodies.size; i ++) {
-				particles.get(i).rigidBody = tempBodies.get(i);
-				particles.get(i).shape = tempBodies.get(i).getCollisionShape();
-			}
-
-			particlePool = tempParticlePool;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		for (int i = 0; i < tempBodies.size; i ++) {
+			particles.get(i).rigidBody = tempBodies.get(i);
+			particles.get(i).shape = tempBodies.get(i).getCollisionShape();
+		}
+
+		particlePool = tempParticlePool;
 	}
 	
 	public void saveAndExit(String dir) {
@@ -213,9 +213,7 @@ public class ParticleEngine {
 			for (int i = 0; i < num; i++) {
 				Particle particle = getParticle(dynamicsWorld, pos, lifetime, sprite, behaviour);
 				float directionChange = MathUtils.random(-variation / 2, variation / 2);
-				newVelocity.set(baseVelocity);
-				newVelocity.rotate(directionChange);
-				newVelocity.scl(MathUtils.random(0.6f, 1));
+				newVelocity.set(baseVelocity).rotate(directionChange).scl(MathUtils.random(0.6f, 1));
 				particle.rigidBody.setLinearVelocity(new Vector3(newVelocity.x, 0, newVelocity.y));
 				particles.add(particle);
 			}
@@ -270,6 +268,7 @@ public class ParticleEngine {
 	public void dispose() {
 		for (Particle particle: particles) {
 			particle.rigidBody.dispose();
+			particle.shape.dispose();
 		}
 	}
 	
