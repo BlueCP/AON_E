@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.items.*;
+import com.mygdx.game.statuseffects.StatusEffectSprites;
 
 public class InventoryScreen extends MyScreen {
 
@@ -86,8 +87,8 @@ public class InventoryScreen extends MyScreen {
 		Table weaponsTable = new Table();
 		weaponsTable.setName("weaponsTable");
 		weaponsTable.align(Align.center | Align.top);
-		for (Item item: playScreen.player.inventory().getWeapons()) {
-			TextButton infoButton = new TextButton(item.getName(), AON_E.SKIN);
+		for (Weapon weapon: playScreen.player.inventory().weapons) {
+			TextButton infoButton = new TextButton(weapon.getName(), AON_E.SKIN);
 			infoButton.addListener(new ClickListener() {
 
 				@Override
@@ -97,7 +98,7 @@ public class InventoryScreen extends MyScreen {
 					statsTable.align(Align.right | Align.center);
 					statsTable.setWidth(stage.getWidth());
 					statsTable.setHeight(stage.getHeight());
-					Weapon weapon = (Weapon)item;
+//					Weapon weapon = (Weapon)weapon;
 					
 					// Below we are reusing label by reassigning it new objects which makes the code easier to write as well as more efficient
 					statsTable.add(new Label("Name:", AON_E.SKIN)).row();
@@ -146,12 +147,12 @@ public class InventoryScreen extends MyScreen {
 			});
 			
 			TextButton equipButton = new TextButton("[equip]", AON_E.SKIN, "toggle");
-			equipButton.setName(String.valueOf(item.getId()));
+			equipButton.setName(String.valueOf(weapon.getId()));
 			equipButton.addListener(new ClickListener() {
 
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					Weapon weapon = (Weapon)item;
+//					Weapon weapon = (Weapon)weapon;
 					Equipped equipped = playScreen.player.equipped();
 					if (weapon.isEquipped() && weapon.getId() == equipped.getMain().getId()) {
 						equipped.resetMain();
@@ -178,53 +179,59 @@ public class InventoryScreen extends MyScreen {
 		Table armourTable = new Table();
 		armourTable.setName("armourTable");
 		armourTable.align(Align.center | Align.top);
-		for (Item item: playScreen.player.inventory().getArmour()) {
-			TextButton infoButton = new TextButton(item.getName(), AON_E.SKIN);
+		for (Armour armour: playScreen.player.inventory().armour) {
+			TextButton infoButton = new TextButton(armour.getName(), AON_E.SKIN);
 			infoButton.addListener(new ClickListener() {
-				
+
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					Table statsTable = new Table();
+					statsTable.setName("statsTable");
+					statsTable.align(Align.center | Align.right);
+					statsTable.setWidth(stage.getWidth());
+					statsTable.setHeight(stage.getHeight());
+//					Armour armour = (Armour)armour;
+
+					statsTable.add(new Label("Name:", AON_E.SKIN)).row();
+					Label label = new Label(armour.getName(), AON_E.SKIN); label.setWrap(true);
+					statsTable.add(label).width(500).row();
+
+					statsTable.add(new Label("Description:", AON_E.SKIN)).row();
+					label = new Label(armour.getDesc(), AON_E.SKIN); label.setWrap(true);
+					statsTable.add(label).width(500).row();
+
+					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
+					statsTable.add(new Label(armour.getRarity().type(), AON_E.SKIN)).row();
+
+					// Below are labels specifically to do with armour
+					statsTable.add(new Label("Type:", AON_E.SKIN)).row();
+					statsTable.add(new Label(armour.getType(), AON_E.SKIN)).row();
+
+					statsTable.add(new Label("Type:", AON_E.SKIN)).row();
+					statsTable.add(new Label(String.valueOf(armour.getDefense()), AON_E.SKIN));
+
+					stage.addActor(statsTable);
+				}
+
+				@Override
+				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 					for (Actor actor: stage.getActors()) {
 						if ("statsTable".equals(actor.getName())) {
 							actor.remove();
 							return;
 						}
 					}
-					Table statsTable = new Table();
-					statsTable.setName("statsTable");
-					statsTable.align(Align.center | Align.right);
-					Armour armour = (Armour)item;
-					
-					statsTable.add(new Label("Name:", AON_E.SKIN)).row();
-					Label label = new Label(armour.getName(), AON_E.SKIN); label.setWrap(true);
-					statsTable.add(label).width(500).row();
-					
-					statsTable.add(new Label("Description:", AON_E.SKIN)).row();
-					label = new Label(armour.getDesc(), AON_E.SKIN); label.setWrap(true);
-					statsTable.add(label).width(500).row();
-					
-					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
-					statsTable.add(new Label(armour.getRarity().type(), AON_E.SKIN)).row();
-					
-					// Below are labels specifically to do with armour
-					statsTable.add(new Label("Type:", AON_E.SKIN)).row();
-					statsTable.add(new Label(armour.getType(), AON_E.SKIN)).row();
-					
-					statsTable.add(new Label("Type:", AON_E.SKIN)).row();
-					statsTable.add(new Label(String.valueOf(armour.getDefense()), AON_E.SKIN));
-					
-					stage.addActor(statsTable);
 				}
 				
 			});
 			
 			TextButton equipButton = new TextButton("[equip]", AON_E.SKIN, "toggle");
-			equipButton.setName(String.valueOf(item.getId()));
+			equipButton.setName(String.valueOf(armour.getId()));
 			equipButton.addListener(new ClickListener() {
 				
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					Armour armour = (Armour)item;
+//					Armour armour = (Armour)armour;
 					Equipped equipped = playScreen.player.equipped();
 					if (armour.isEquipped()) {
 						equipped.resetArmour();
@@ -244,44 +251,52 @@ public class InventoryScreen extends MyScreen {
 		Table equipmentTable = new Table();
 		equipmentTable.setName("equipmentTable");
 		equipmentTable.align(Align.center | Align.top);
-		for (Item item: playScreen.player.inventory().getEquipment()) {
-			TextButton infoButton = new TextButton(item.getName(), AON_E.SKIN);
+		for (Equipment equipment: playScreen.player.inventory().equipment) {
+			TextButton infoButton = new TextButton(equipment.getName(), AON_E.SKIN);
 			infoButton.addListener(new ClickListener() {
+
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					Table statsTable = new Table();
+					statsTable.setName("statsTable");
+					statsTable.align(Align.center | Align.right);
+					statsTable.setWidth(stage.getWidth());
+					statsTable.setHeight(stage.getHeight());
+//					Equipment equipment = (Equipment)equipment;
+
+					statsTable.add(new Label("Name:", AON_E.SKIN)).row();
+					Label label = new Label(equipment.getName(), AON_E.SKIN); label.setWrap(true);
+					statsTable.add(label).width(500).row();
+
+					statsTable.add(new Label("Description:", AON_E.SKIN)).row();
+					label = new Label(equipment.getDesc(), AON_E.SKIN); label.setWrap(true);
+					statsTable.add(label).width(500).row();
+
+					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
+					statsTable.add(new Label(equipment.getRarity().type(), AON_E.SKIN)).row();
+
+					stage.addActor(statsTable);
+				}
+
+				@Override
+				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 					for (Actor actor: stage.getActors()) {
 						if ("statsTable".equals(actor.getName())) {
 							actor.remove();
 							return;
 						}
 					}
-					Table statsTable = new Table();
-					statsTable.setName("statsTable");
-					statsTable.align(Align.center | Align.right);
-					Equipment equipment = (Equipment)item;
-					
-					statsTable.add(new Label("Name:", AON_E.SKIN)).row();
-					Label label = new Label(equipment.getName(), AON_E.SKIN); label.setWrap(true);
-					statsTable.add(label).width(500).row();
-					
-					statsTable.add(new Label("Description:", AON_E.SKIN)).row();
-					label = new Label(equipment.getDesc(), AON_E.SKIN); label.setWrap(true);
-					statsTable.add(label).width(500).row();
-					
-					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
-					statsTable.add(new Label(equipment.getRarity().type(), AON_E.SKIN)).row();
-					
-					stage.addActor(statsTable);
 				}
+
 			});
 			
 			TextButton equipButton = new TextButton("[equip]", AON_E.SKIN, "toggle");
-			equipButton.setName(String.valueOf(item.getId()));
+			equipButton.setName(String.valueOf(equipment.getId()));
 			equipButton.addListener(new ClickListener() {
 
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					Equipment equipment = (Equipment)item;
+//					Equipment equipment = (Equipment)equipment;
 					Equipped equipped = playScreen.player.equipped();
 					
 					if (equipped.getEquipment1().getId() == -1) {
@@ -308,35 +323,43 @@ public class InventoryScreen extends MyScreen {
 		Table otherItemsTable = new Table();
 		otherItemsTable.setName("otherItemsTable");
 		otherItemsTable.align(Align.center | Align.top);
-		for (Item item: playScreen.player.inventory().getOtherItems()) {
-			TextButton button = new TextButton(item.getName(), AON_E.SKIN);
+		for (OtherItem otherItem: playScreen.player.inventory().otherItems) {
+			TextButton button = new TextButton(otherItem.getName(), AON_E.SKIN);
 			button.addListener(new ClickListener() {
+
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					Table statsTable = new Table();
+					statsTable.setName("statsTable");
+					statsTable.align(Align.center | Align.right);
+					statsTable.setWidth(stage.getWidth());
+					statsTable.setHeight(stage.getHeight());
+//					OtherItem otherItem = (OtherItem)otherItem;
+
+					statsTable.add(new Label("Name:", AON_E.SKIN)).row();
+					Label label = new Label(otherItem.getName(), AON_E.SKIN); label.setWrap(true);
+					statsTable.add(label).width(500).row();
+
+					statsTable.add(new Label("Description:", AON_E.SKIN)).row();
+					label = new Label(otherItem.getDesc(), AON_E.SKIN); label.setWrap(true);
+					statsTable.add(label).width(500).row();
+
+					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
+					statsTable.add(new Label(otherItem.getRarity().type(), AON_E.SKIN)).row();
+
+					stage.addActor(statsTable);
+				}
+
+				@Override
+				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 					for (Actor actor: stage.getActors()) {
 						if ("statsTable".equals(actor.getName())) {
 							actor.remove();
 							return;
 						}
 					}
-					Table statsTable = new Table();
-					statsTable.setName("statsTable");
-					statsTable.align(Align.center | Align.right);
-					OtherItem otherItem = (OtherItem)item;
-					
-					statsTable.add(new Label("Name:", AON_E.SKIN)).row();
-					Label label = new Label(otherItem.getName(), AON_E.SKIN); label.setWrap(true);
-					statsTable.add(label).width(500).row();
-					
-					statsTable.add(new Label("Description:", AON_E.SKIN)).row();
-					label = new Label(otherItem.getDesc(), AON_E.SKIN); label.setWrap(true);
-					statsTable.add(label).width(500).row();
-					
-					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
-					statsTable.add(new Label(otherItem.getRarity().type(), AON_E.SKIN)).row();
-					
-					stage.addActor(statsTable);
 				}
+
 			});
 			otherItemsTable.add(button);
 			otherItemsTable.row();

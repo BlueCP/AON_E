@@ -3,14 +3,14 @@ package com.mygdx.game.items;
 public class Weapon extends Item {
 	
 	protected String type;
-	private int physDamage;
-	private int magDamage;
+	protected int physDamage;
+	protected int magDamage;
 	protected int range;
-	private String rangeType;
-	private int hands;
+	protected String rangeType;
+	protected int hands;
 	boolean equipped = false;
 	
-	Weapon(String name, String origName, int id, String desc, String type, int physDamage, int magDamage, Rarity rarity, int range, String rangeType, int hands) {
+	/*Weapon(String name, String origName, int id, String desc, String type, int physDamage, int magDamage, Rarity rarity, int range, String rangeType, int hands) {
 		// String name, String id, int code, String type, int physDamage, int magDamage, String rarity, boolean ranged, int hands
 		
 		this.setName(name);
@@ -25,12 +25,12 @@ public class Weapon extends Item {
 		this.setRangeType(rangeType);
 		this.setHands(hands);
 		this.setEquipped(false);
-	}
+	}*/
 	
-	Weapon() { }
+	public Weapon() { }
 	
-	Weapon(boolean var) {
-		/*
+	/*Weapon(boolean var) {
+		*//*
 		this.setName("[no item]");
 		this.setOrigName("[no item]");
 		this.setId(-1);
@@ -43,9 +43,9 @@ public class Weapon extends Item {
 		this.setRangeType("[no item]");
 		this.setHands(0);
 		this.setEquipped(false);
-		*/
+		*//*
 		id = -1;
-	}
+	}*/
 
 	public String getType() {
 		return type;

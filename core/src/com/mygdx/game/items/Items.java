@@ -1,9 +1,8 @@
 package com.mygdx.game.items;
-import com.badlogic.gdx.utils.Array;
 
 class Items {
 	
-	static Weapon getWeapon(Array<Item> list, String name) {
+	/*static Weapon getWeapon(Array<Item> list, String name) {
 		for (Item item: list) {
 			if (name.equals(item.getOrigName())) {
 				return (Weapon)item;
@@ -37,9 +36,9 @@ class Items {
 			}
 		}
 		return null;
-	}
+	}*/
 	
-	static Item getItem(Items items, String name) {
+	/*static Item getItem(Items items, String name) {
 		Array<Item> weapons;
 		Array<Item> armour;
 		Array<Item> equipment;
@@ -66,6 +65,6 @@ class Items {
 		} else {
 			return null;
 		}
-	}
+	}*/
 	
 }

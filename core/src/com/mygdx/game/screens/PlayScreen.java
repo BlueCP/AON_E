@@ -28,6 +28,7 @@ import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.settings.ControlSettings;
+import com.mygdx.game.stages.FurnaceStage;
 import com.mygdx.game.stages.HudStage;
 import com.mygdx.game.stages.OwnStage;
 import com.mygdx.game.statuseffects.StatusEffectSprites;
@@ -545,6 +546,24 @@ public class PlayScreen extends MyScreen {
 			else if (keycode == Keys.ESCAPE) {
 				game.setScreen(new OptionsScreen(game, this));
 			}
+			else if (keycode == Keys.C) {
+				// Below is temporary testing code
+				boolean openNew = true;
+				for (OwnStage stage: ownStages) {
+					if ("furnace".equals(stage.getName())) {
+						ownStages.removeValue(stage, false);
+						openNew = false;
+						break; // If a furnace crafting window was already open, don't then immediately open another
+					}
+				}
+				if (openNew) {
+					ownStages.add(new FurnaceStage(game, player.inventory()));
+					Gdx.input.setInputProcessor(new InputMultiplexer(ownStages.get(ownStages.size - 1).stage, this));
+				} else {
+					Gdx.input.setInputProcessor(new InputMultiplexer(hudStage.stage, this));
+				}
+				// End of temporary testing code
+			}
 			/*switch (keycode) {
 				case Keys.W:
 					player.getBasicAttack().start(this);
@@ -880,7 +899,7 @@ public class PlayScreen extends MyScreen {
 			player = Player.load(this);
 			
 			// Loading stuff from allItems.txt
-			allItems = AllItems.loadAll();
+			allItems = AllItems.init();
 			
 			// Loading stuff from playerAchievements.txt and allAchievements.txt
 			achievements = AchievementCollection.loadAll(playerName);

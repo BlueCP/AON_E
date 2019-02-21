@@ -67,7 +67,7 @@ public enum CRecipes {
 	public LinkedList<Item> itemComponents() {
 		LinkedList<Item> listOfItems = new LinkedList<>(); // Initialise a list of type Item
 		for (String component: stringComponents()) { // Iterate through the list of components of type String
-			listOfItems.add(Items.getOtherItem(AllItems.getAllOtherItems(), component)); // Add each item to the listOfItems in type Item
+			listOfItems.add(ItemFactory.createOtherItem(component)); // Add each item to the listOfItems in type Item
 		}
 		return listOfItems;
 	}
@@ -78,7 +78,7 @@ public enum CRecipes {
 	private boolean componentsPresent(Inventory inventory) {
 		LinkedList<Item> listOfItems = itemComponents();
 		int noOfComponentsNeeded = listOfItems.size(); // Keeps track of how many more items are needed to craft the recipe
-		for (Item playerItem: inventory.getOtherItems()) { // Iterates through player's items
+		for (Item playerItem: inventory.otherItems) { // Iterates through player's items
 			for (Item neededItem: listOfItems) { // Iterates through needed items
 				if (playerItem.getOrigName().equals(neededItem.getOrigName())) // If the player has an item that is needed for the recipe
 					noOfComponentsNeeded --; // Take one away from the no. of items still needed
@@ -90,10 +90,10 @@ public enum CRecipes {
 	public boolean craft(Inventory inventory) {
 		if (!componentsPresent(inventory)) // First check if the player has all the necessary components
 			return false; // If not, don't craft and return false
-		for (Item playerItem: inventory.getOtherItems()) {
+		for (OtherItem playerItem: inventory.otherItems) {
 			for (Item neededItem: itemComponents()) {
 				if (playerItem.getOrigName().equals(neededItem.getOrigName())) { // If a component if found in the player's inventory
-					inventory.getOtherItems().removeValue(playerItem, false); // Remove that component
+					inventory.otherItems.removeValue(playerItem, false); // Remove that component
 				}
 			}
 		}

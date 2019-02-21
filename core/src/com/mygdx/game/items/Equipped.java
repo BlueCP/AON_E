@@ -23,13 +23,13 @@ public class Equipped {
 	}
 	
 	public Equipped() {
-		selected = new Weapon(true);
-		main = new Weapon(true);
-		off = new Weapon(true);
-		armour = new Armour(true);
-		equipment1 = new Equipment(true);
-		equipment2 = new Equipment(true);
-		equipment3 = new Equipment(true);
+		selected = new NullWeapon();
+		main = new NullWeapon();
+		off = new NullWeapon();
+		armour = new NullArmour();
+		equipment1 = new NullEquipment();
+		equipment2 = new NullEquipment();
+		equipment3 = new NullEquipment();
 	}
 	
 	public void update(Inventory inventory) {
@@ -40,7 +40,7 @@ public class Equipped {
 		boolean noEquipment2 = true;
 		boolean noEquipment3 = true;
 		
-		for (Item weapon: inventory.getWeapons()) {
+		for (Weapon weapon: inventory.weapons) {
 			if (weapon.id == main.id && noMain) {
 				noMain = false;
 			} else if (weapon.id == off.id && noOff) {
@@ -48,13 +48,13 @@ public class Equipped {
 			}
 		}
 		
-		for (Item armour0: inventory.getArmour()) {
+		for (Armour armour0: inventory.armour) {
 			if (armour0.id == armour.id && noArmour) {
 				noArmour = false;
 			}
 		}
 		
-		for (Item equipment: inventory.getEquipment()) {
+		for (Equipment equipment: inventory.equipment) {
 			if (equipment.id == equipment1.id && noEquipment1) {
 				noEquipment1 = false;
 			} else if (equipment.id == equipment2.id && noEquipment2) {
@@ -85,11 +85,7 @@ public class Equipped {
 	}
 
 	public boolean isWeaponEquipped() {
-		if (mainEquipped || offEquipped) {
-			return true;
-		} else {
-			return false;
-		}
+		return mainEquipped || offEquipped;
 	}
 
 	public boolean isMainEquipped() {
@@ -132,7 +128,7 @@ public class Equipped {
 	}
 	
 	public void resetSelected() {
-		this.selected = new Weapon(true);
+		this.selected = new NullWeapon();
 	}
 
 	public Weapon getMain() {
@@ -148,7 +144,7 @@ public class Equipped {
 	
 	public void resetMain() {
 		main.equipped = false;
-		main = new Weapon(true);
+		main = new NullWeapon();
 		mainEquipped = false;
 	}
 
@@ -165,7 +161,7 @@ public class Equipped {
 	
 	public void resetOff() {
 		off.equipped = false;
-		off = new Weapon(true);
+		off = new NullWeapon();
 		offEquipped = false;
 	}
 
@@ -182,7 +178,7 @@ public class Equipped {
 	
 	public void resetArmour() {
 		armour.equipped = false;
-		armour = new Armour(true);
+		armour = new NullArmour();
 		armourEquipped = false;
 	}
 
@@ -199,7 +195,7 @@ public class Equipped {
 	
 	public void resetEquipment1() {
 		equipment1.equipped = false;
-		equipment1 = new Equipment(true);
+		equipment1 = new NullEquipment();
 		equipment1Equipped = false;
 	}
 
@@ -216,7 +212,7 @@ public class Equipped {
 	
 	public void resetEquipment2() {
 		equipment2.equipped = false;
-		equipment2 = new Equipment(true);
+		equipment2 = new NullEquipment();
 		equipment2Equipped = false;
 	}
 
@@ -233,7 +229,7 @@ public class Equipped {
 	
 	public void resetEquipment3() {
 		equipment3.equipped = false;
-		this.equipment3 = new Equipment(true);
+		this.equipment3 = new NullEquipment();
 		equipment3Equipped = false;
 	}
 	

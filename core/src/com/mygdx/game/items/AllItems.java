@@ -1,28 +1,45 @@
 package com.mygdx.game.items;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.items.Item.Rarity;
-
-import java.util.Scanner;
 
 public class AllItems extends Items {
+
+	static Array<String> weaponNames;
+	static Array<String> armourNames;
+	static Array<String> equipmentNames;
+	static Array<String> otherItemNames;
+
+//	private static Array<Item> allWeapons = new Array<>();
+//	private static Array<Item> allArmour = new Array<>();
+//	private static Array<Item> allEquipment = new Array<>();
+//	private static Array<Item> allOtherItems = new Array<>();
 	
-	private static Array<Item> allWeapons = new Array<>();
-	private static Array<Item> allArmour = new Array<>();
-	private static Array<Item> allEquipment = new Array<>();
-	private static Array<Item> allOtherItems = new Array<>();
-	
-	public static AllItems loadAll() {
+	public static AllItems init() {
 		AllItems allItems = new AllItems();
-		allItems.loadAllWeapons();
+
+		allItems.initItemNames();
+
+		/*allItems.loadAllWeapons();
 		allItems.loadAllArmour();
 		allItems.loadAllEquipment();
-		allItems.loadAllOtherItems();
+		allItems.loadAllOtherItems();*/
 		return allItems;
 	}
+
+	private void initItemNames() {
+		weaponNames = new Array<>();
+		weaponNames.add("Iron shortsword");
+
+		armourNames = new Array<>();
+
+		equipmentNames = new Array<>();
+
+		otherItemNames = new Array<>();
+		otherItemNames.add("Iron ore");
+		otherItemNames.add("Iron ingot");
+	}
 	
-	private void loadAllWeapons() {
+	/*private void loadAllWeapons() {
 		// Acts on items
 		String weaponsFile = Gdx.files.internal("data/allWeapons.txt").readString();
 		Scanner fileWeapons = new Scanner(weaponsFile);
@@ -133,9 +150,9 @@ public class AllItems extends Items {
 			}
 		}
 		fileOtherItems.close();
-	}
+	}*/
 	
-	static Array<Item> getAllWeapons() {
+	/*static Array<Item> getAllWeapons() {
 		return allWeapons;
 	}
 
@@ -149,6 +166,6 @@ public class AllItems extends Items {
 
 	static Array<Item> getAllOtherItems() {
 		return allOtherItems;
-	}
+	}*/
 	
 }

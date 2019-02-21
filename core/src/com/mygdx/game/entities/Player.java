@@ -62,6 +62,9 @@ public class Player extends Entity {
 		
 		baseWalkSpeed = 1.4f;
 
+		inventory.addWeapon("Iron shortsword");
+		inventory.addOtherItem("Iron ore");
+
 		// PYROMANCER
 
 		/*basicAttack = new PyromancerBasicAttack(this);

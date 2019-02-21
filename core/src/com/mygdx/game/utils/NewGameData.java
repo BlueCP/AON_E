@@ -23,7 +23,7 @@ public class NewGameData {
 	public NewGameData() {
 		player = new Player();
 		try {
-			items = AllItems.loadAll();
+			items = AllItems.init();
 			moveCollection.loadAllMoves();
 			spellCollection.loadAllSpells();
 		} catch (Exception e) {

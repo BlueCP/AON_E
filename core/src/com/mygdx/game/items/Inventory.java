@@ -4,52 +4,60 @@ import com.badlogic.gdx.utils.Array;
 
 public class Inventory extends Items {
 	
-	private Array<Item> weapons = new Array<>();
-	private Array<Item> armour = new Array<>();
-	private Array<Item> equipment = new Array<>();
-	private Array<Item> otherItems = new Array<>();
+	public Array<Weapon> weapons = new Array<>();
+	public Array<Armour> armour = new Array<>();
+	public Array<Equipment> equipment = new Array<>();
+	public Array<OtherItem> otherItems = new Array<>();
+
+	public void addItem(String name) {
+		if (AllItems.weaponNames.contains(name, false)) {
+			addWeapon(name);
+		} else if (AllItems.armourNames.contains(name, false)) {
+			addArmour(name);
+		} else if (AllItems.equipmentNames.contains(name, false)) {
+			addEquipment(name);
+		} else if (AllItems.otherItemNames.contains(name, false)) {
+			addOtherItem(name);
+		}
+	}
 	
 	public void addWeapon(Weapon weaponToAdd) {
 		//weaponToAdd.setId(generateCode(weapons));
 		weapons.add(weaponToAdd);
 	}
-	
+
 	public void addWeapon(String name) {
-		Weapon weaponToAdd = Items.getWeapon(AllItems.getAllWeapons(), name);
-		addWeapon(weaponToAdd);
+		weapons.add(ItemFactory.createWeapon(name));
 	}
 	
 	public void addArmour(Armour armourToAdd) {
 		//armourToAdd.setId(generateCode(armour));
 		armour.add(armourToAdd);
 	}
-	
+
 	public void addArmour(String name) {
-		Armour armourToAdd = Items.getArmour(AllItems.getAllArmour(), name);
-		addArmour(armourToAdd);
+		armour.add(ItemFactory.createArmour(name));
 	}
 	
 	public void addEquipment(Equipment equipmentToAdd) {
 		//equipmentToAdd.setId(generateCode(equipment));
 		equipment.add(equipmentToAdd);
 	}
-	
+
 	public void addEquipment(String name) {
-		Equipment equipmentToAdd = Items.getEquipment(AllItems.getAllEquipment(), name);
-		addEquipment(equipmentToAdd);
+		equipment.add(ItemFactory.createEquipment(name));
 	}
 	
 	public void addOtherItem(OtherItem otherItemToAdd) {
 		//otherItemToAdd.setId(generateCode(otherItems));
 		otherItems.add(otherItemToAdd);
 	}
-	
+
 	public void addOtherItem(String name) {
-		OtherItem otherItemToAdd = Items.getOtherItem(AllItems.getAllOtherItems(), name);
-		addOtherItem(otherItemToAdd);
+		otherItems.add(ItemFactory.createOtherItem(name));
 	}
 	
-	public void addItem(Item itemToAdd) {
+	/*public void addItem(Item itemToAdd) {
 		if (itemToAdd instanceof Weapon) {
 			//itemToAdd.setId(generateCode(weapons));
 			weapons.add(itemToAdd);
@@ -63,25 +71,6 @@ public class Inventory extends Items {
 			//itemToAdd.setId(generateCode(otherItems));
 			otherItems.add(itemToAdd);
 		}
-	}
-	
-	public void addItem(String name) {
-		Item item = Items.getItem(new AllItems(), name);
-		addItem(item);
-	}
-	
-	public Array<Item> getWeapons() {
-		return weapons;
-	}
-	
-	public Array<Item> getArmour() { return armour; }
-	
-	public Array<Item> getEquipment() {
-		return equipment;
-	}
-	
-	public Array<Item> getOtherItems() {
-		return otherItems;
-	}
+	}*/
 	
 }

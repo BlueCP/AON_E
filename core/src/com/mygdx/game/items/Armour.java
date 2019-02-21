@@ -12,7 +12,7 @@ public class Armour extends Item {
 	protected int defense;
 	protected boolean equipped;
 	
-	Armour(String name, String origName, int id, String desc, String type, int defense, Rarity rarity) {
+	/*Armour(String name, String origName, int id, String desc, String type, int defense, Rarity rarity) {
 		this.setName(name);
 		this.setOrigName(origName);
 		this.setId(id);
@@ -21,13 +21,13 @@ public class Armour extends Item {
 		this.setType(type);
 		this.setDefense(defense);
 		this.setEquipped(false);
-	}
+	}*/
 	
-	Armour() {
+	public Armour() {
 
 	}
 	
-	public Armour(boolean var) {
+	/*public Armour(boolean var) {
 		this.setName("[no item]");
 		this.setOrigName("[no item]");
 		this.setId(-1);
@@ -36,7 +36,7 @@ public class Armour extends Item {
 		this.setType("[no item]");
 		this.setDefense(0);
 		this.setEquipped(false);
-	}
+	}*/
 
 	public String getType() {
 		return type;
