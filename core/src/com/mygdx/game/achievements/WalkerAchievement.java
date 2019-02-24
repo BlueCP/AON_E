@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.screens.PlayScreen;
 
-public class Walker extends Achievement {
+public class WalkerAchievement extends Achievement {
 
 	private float secondsWalked;
 
-	Walker() {
+	WalkerAchievement() {
 		name = "Walker";
 		desc = "Walk for a total of 3 seconds.";
 	}

@@ -7,12 +7,14 @@ import com.mygdx.game.serialisation.KryoManager;
 public class Time {
 	
 	private int day;
-	private int hour;
-	private int minute;
-	private int second;
-	
-	private float decDay;
-	private float decHour;
+//	private int hour;
+//	private int minute;
+//	private int second;
+
+//	private float decDay;
+//	private float decHour;
+
+	private float minute; // Resets every day, the number of minutes that have passed since 12am (can be <1).
 	
 	private float sunlightLevel;
 	
@@ -40,92 +42,53 @@ public class Time {
 	}
 	
 	public int getHour() {
-		return hour;
+		return (int) (minute / 60);
 	}
 	
 	public int getMinute() {
-		return minute;
-	}
-	
-	public int getSecond() {
-		return second;
+		return Math.floorMod((int) minute, 60);
 	}
 	
 	public float getSunlightLevel() {
 		return sunlightLevel;
 	}
 	
-	public float getDecDay() {
-		return decDay;
-	}
-	
-	public float getDecHour() {
-		return decHour;
-	}
-	
-	public void setDay(int day) {
-		this.day = day;
-	}
-	
-	public void setHour(int hour) {
-		this.hour = hour;
-	}
-	
-	public void setMinute(int minute) {
-		this.minute = minute;
-	}
-	
-	public void setSecond(int second) {
-		this.second = second;
-	}
-	
-	public void changeDay(int amount) {
-		this.day += amount;
-	}
-	
-	public void changeHour(int amount) {
-		this.hour += amount;
-	}
-	
-	public void changeMinute(int amount) {
-		this.minute += amount;
-	}
-	
-	public void changeSecond(int amount) {
-		this.second += amount;
+	public void setHour(float hour) {
+		this.minute = hour * 60;
 	}
 	
 	public Time() {
 		day = 1;
-		hour = 0;
+//		hour = 0;
 		minute = 0;
 		sunlightLevel = 0;
 	}
 	
 	public void update(boolean fastTime) {
 		if (fastTime) {
-			minute ++;
+			minute += Gdx.graphics.getDeltaTime() * 60;
 		} else {
-			second ++;
+			minute += Gdx.graphics.getDeltaTime();
 		}
 		
-		if (second >= 60) {
+		/*if (second >= 60) {
 			second = 0;
 			minute ++;
-		}
+		}*/
 		
-		if (minute >= 60) {
+		/*if (minute >= 60) {
 			minute = 0;
 			hour ++;
-		}
+		}*/
 		
-		if (hour >= 24) {
-			hour = 0;
+		if (minute >= 60*24) {
+//			hour = 0;
+			minute = 0;
 			day ++;
 		}
 		
-		decHour = hour + (minute / 60f) + (second / 3600f);
-		decDay = day + (hour / 24f) + (minute / (24f*60f)) + (second / (24f*3600f));
+//		decHour = hour + (minute / 60f) + (second / 3600f);
+//		decDay = day + (hour / 24f) + (minute / (24f*60f)) + (second / (24f*3600f));
 		
 		/*
 		if (decHour >= 2 && decHour <= 14) {
@@ -136,7 +99,7 @@ public class Time {
 			sunlightLevel = 1 - ((decHour - 14) / 12f);
 		}
 		*/
-		sunlightLevel = (MathUtils.sinDeg(((decHour - 8) * 15)) + 1) / 2;
+		sunlightLevel = (MathUtils.sinDeg(((minute/60 - 8) * 15)) + 1) / 2;
 		// The reason the 12's above are floats is so that decimal division, rather than integer division, is performed.
 	}
 	

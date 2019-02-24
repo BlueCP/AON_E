@@ -1,8 +1,6 @@
 package com.mygdx.game.items.weapons;
 
-import com.mygdx.game.items.Weapon;
-
-public class IronShortswordWeapon extends Weapon {
+public class IronShortswordWeapon extends SwordWeapon {
 
 	public IronShortswordWeapon() {
 		origName = "Iron shortsword";

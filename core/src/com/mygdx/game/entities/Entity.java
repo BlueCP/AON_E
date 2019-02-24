@@ -55,7 +55,7 @@ public abstract class Entity extends WorldObject {
 	private int xpProg;
 	private int skillPoints;
 	
-	protected Inventory inventory = new Inventory();
+	public Inventory inventory;
 	private Equipped equipped  = new Equipped();
 	private Weapon lastHitWith = null;
 	private boolean followingPlayer;
@@ -534,7 +534,7 @@ public abstract class Entity extends WorldObject {
 		this.initialiseEffects();
 		
 		renderPos = new Vector2();
-		
+		inventory = new Inventory();
 		actions = new Queue<>();
 
 		basicAttack = new NullBasicAttack();

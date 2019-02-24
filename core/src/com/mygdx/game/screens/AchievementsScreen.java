@@ -1,10 +1,9 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,66 +17,88 @@ import com.mygdx.game.AON_E;
 import com.mygdx.game.achievements.Achievement;
 import com.mygdx.game.rendering.RenderingUtils;
 
-public class AchievementsScreen implements Screen, InputProcessor {
+public class AchievementsScreen extends MyScreen {
 
-	AON_E game;
+//	AON_E game;
 	private PlayScreen playScreen;
 	
 	Stage stage;
 	Table table;
 
-	public AchievementsScreen(AON_E game, PlayScreen playScreen) {
-		this.game = game;
+	AchievementsScreen(AON_E game, PlayScreen playScreen) {
+		super(game);
+
+//		this.game = game;
 		this.playScreen = playScreen;
 		
 		stage = new Stage(game.viewport);
+
 		Table achievementsTable = new Table();
+		achievementsTable.setWidth(stage.getWidth());
+		achievementsTable.setHeight(stage.getHeight());
 		achievementsTable.align(Align.center | Align.top);
 		
-		ButtonGroup<TextButton> achievButtonGroup = new ButtonGroup<>();
+//		ButtonGroup<TextButton> achievButtonGroup = new ButtonGroup<>();
 		for (Achievement achievement: playScreen.achievements.getAchievements()) {
-			TextButton button = new TextButton(achievement.getName(), AON_E.SKIN, "toggle");
+			TextButton button = new TextButton(achievement.getName(), AON_E.SKIN);
+			if (achievement.isCompleted()) {
+				button.getLabel().setColor(Color.GREEN);
+			}
 			button.addListener(new ClickListener() {
 
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					if (pointer != -1) {
+						return;
+					}
+					Table infoTable = new Table();
+					infoTable.setName("infoTable");
+					infoTable.setWidth(stage.getWidth());
+					infoTable.setHeight(stage.getHeight());
+					infoTable.align(Align.right);
+
+//					infoTable.add(new Label("Name:", AON_E.SKIN)).row();
+					infoTable.add(new Label(achievement.getName(), AON_E.SKIN)).padBottom(30).row();
+
+//					infoTable.add(new Label("Description:", AON_E.SKIN)).row();
+					Label label = new Label(achievement.getDesc(), AON_E.SKIN);
+//					label.setWrap(true);
+					infoTable.add(label).padBottom(30).row();
+
+					if (achievement.isCompleted()) {
+						infoTable.add(new Label("Completed!", new LabelStyle(AON_E.DEFAULT_FONT, Color.GREEN)));
+					}
+
+//					infoTable.add(new Label(achievement.isCompleted() ? "Completed!" : "Not completed.",
+//							achievement.isCompleted() ? new LabelStyle(AON_E.DEFAULT_FONT, Color.GREEN) : new LabelStyle(AON_E.DEFAULT_FONT, Color.YELLOW)));
+
+					stage.addActor(infoTable);
+				}
+
+				@Override
+				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					if (pointer != -1) {
+						return;
+					}
 					for (Actor actor: stage.getActors()) {
 						if ("infoTable".equals(actor.getName())) {
 							actor.remove();
 							break;
 						}
 					}
-					Table infoTable = new Table();
-					infoTable.setName("infoTable");
-					infoTable.align(Align.center | Align.right);
-					infoTable.setWidth(stage.getWidth());
-					infoTable.setHeight(stage.getHeight());
-					
-					infoTable.add(new Label("Name:", AON_E.SKIN)).row();
-					infoTable.add(new Label(achievement.getName(), AON_E.SKIN)).width(500).row();
-					
-					infoTable.add(new Label("Description:", AON_E.SKIN)).row();
-					Label label = new Label(achievement.getDesc(), AON_E.SKIN); label.setWrap(true);
-					infoTable.add(label).width(500).row();
-					
-					infoTable.add(new Label(achievement.isCompleted() ? "Completed!" : "Not completed.",
-											achievement.isCompleted() ? new LabelStyle(AON_E.DEFAULT_FONT, Color.GREEN) : new LabelStyle(AON_E.DEFAULT_FONT, Color.YELLOW)));
-					
-					stage.addActor(infoTable);
 				}
-				
 			});
-			achievButtonGroup.add(button);
+//			achievButtonGroup.add(button);
 			achievementsTable.add(button).padBottom(10).row();
 		}
 
 		ScrollPane achievementsPane = new ScrollPane(achievementsTable, AON_E.SKIN);
 		
 		table = new Table();
-		table.align(Align.center | Align.top);
+		table.align(Align.center);
 		table.setWidth(stage.getWidth());
 		table.setHeight(stage.getHeight());
-		table.add(achievementsPane).padTop(50);
+		table.add(achievementsPane);
 		stage.addActor(table);
 		
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
@@ -88,9 +109,8 @@ public class AchievementsScreen implements Screen, InputProcessor {
 
 	}
 	
-	private void update() {
-		game.pointer.setCenterX(Gdx.input.getX());
-		game.pointer.setCenterY(Gdx.graphics.getHeight() - Gdx.input.getY());
+	void update() {
+		universalUpdate();
 	}
 
 	@Override
@@ -104,13 +124,13 @@ public class AchievementsScreen implements Screen, InputProcessor {
 		
 		game.batch.begin();
 		game.pointer.draw(game.batch);
-		RenderingUtils.renderBlackBars(game.batch);
+//		RenderingUtils.renderBlackBars(game.batch);
 		game.batch.end();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-
+		updateViewport(width, height);
 	}
 
 	@Override
@@ -136,11 +156,12 @@ public class AchievementsScreen implements Screen, InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
-			case Keys.ESCAPE:
+			case Input.Keys.ESCAPE:
 				game.setScreen(playScreen);
-				break;
+				return true;
+			default:
+				return false;
 		}
-		return false;
 	}
 
 	@Override
@@ -155,7 +176,7 @@ public class AchievementsScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		game.pointer.setRegion(game.pointerDown);
+//		game.pointer.setRegion(game.pointerDown);
 //		game.click.play();
 		game.soundManager.click.play();
 		return true;

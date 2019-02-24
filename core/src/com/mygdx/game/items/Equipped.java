@@ -39,27 +39,32 @@ public class Equipped {
 		boolean noEquipment1 = true;
 		boolean noEquipment2 = true;
 		boolean noEquipment3 = true;
+
+		// Note: old code used to used to look like this:
+		// weapon.id == main.id && noMain
+		// Instead of this:
+		// weapon.id == main.id
 		
 		for (Weapon weapon: inventory.weapons) {
-			if (weapon.id == main.id && noMain) {
+			if (weapon.id == main.id) {
 				noMain = false;
-			} else if (weapon.id == off.id && noOff) {
+			} else if (weapon.id == off.id) {
 				noOff = false;
 			}
 		}
 		
 		for (Armour armour0: inventory.armour) {
-			if (armour0.id == armour.id && noArmour) {
+			if (armour0.id == armour.id) {
 				noArmour = false;
 			}
 		}
 		
 		for (Equipment equipment: inventory.equipment) {
-			if (equipment.id == equipment1.id && noEquipment1) {
+			if (equipment.id == equipment1.id) {
 				noEquipment1 = false;
-			} else if (equipment.id == equipment2.id && noEquipment2) {
+			} else if (equipment.id == equipment2.id) {
 				noEquipment2 = false;
-			} else if (equipment.id == equipment3.id && noEquipment3) {
+			} else if (equipment.id == equipment3.id) {
 				noEquipment3 = false;
 			}
 		}
@@ -193,7 +198,7 @@ public class Equipped {
 		equipment1Equipped = true;
 	}
 	
-	public void resetEquipment1() {
+	private void resetEquipment1() {
 		equipment1.equipped = false;
 		equipment1 = new NullEquipment();
 		equipment1Equipped = false;
@@ -210,7 +215,7 @@ public class Equipped {
 		equipment2Equipped = true;
 	}
 	
-	public void resetEquipment2() {
+	private void resetEquipment2() {
 		equipment2.equipped = false;
 		equipment2 = new NullEquipment();
 		equipment2Equipped = false;
@@ -227,7 +232,7 @@ public class Equipped {
 		equipment3Equipped = true;
 	}
 	
-	public void resetEquipment3() {
+	private void resetEquipment3() {
 		equipment3.equipped = false;
 		this.equipment3 = new NullEquipment();
 		equipment3Equipped = false;

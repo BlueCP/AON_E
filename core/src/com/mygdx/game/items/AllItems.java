@@ -2,12 +2,13 @@ package com.mygdx.game.items;
 
 import com.badlogic.gdx.utils.Array;
 
-public class AllItems extends Items {
+public class AllItems {
 
 	static Array<String> weaponNames;
 	static Array<String> armourNames;
 	static Array<String> equipmentNames;
 	static Array<String> otherItemNames;
+	static Array<String> consumableItemNames;
 
 //	private static Array<Item> allWeapons = new Array<>();
 //	private static Array<Item> allArmour = new Array<>();
@@ -37,6 +38,8 @@ public class AllItems extends Items {
 		otherItemNames = new Array<>();
 		otherItemNames.add("Iron ore");
 		otherItemNames.add("Iron ingot");
+
+		consumableItemNames = new Array<>();
 	}
 	
 	/*private void loadAllWeapons() {

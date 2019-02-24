@@ -1,8 +1,8 @@
 package com.mygdx.game.items;
 
-public class OtherItem extends Item {
+public abstract class OtherItem extends Item {
 
-	protected boolean consumable;
+//	protected boolean consumable;
 	
 	/*OtherItem(String name, String origName, int id, String desc, Rarity rarity, boolean consumable) {
 		this.setName(name);
@@ -23,13 +23,5 @@ public class OtherItem extends Item {
 		this.setRarity(Rarity.COMMON);
 		this.setConsumable(false);
 	}*/
-
-	public boolean isConsumable() {
-		return consumable;
-	}
-
-	void setConsumable(boolean consumable) {
-		this.consumable = consumable;
-	}
 	
 }

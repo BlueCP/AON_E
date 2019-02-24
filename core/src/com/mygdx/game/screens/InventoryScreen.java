@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.items.*;
-import com.mygdx.game.statuseffects.StatusEffectSprites;
 
 public class InventoryScreen extends MyScreen {
 
@@ -25,6 +24,7 @@ public class InventoryScreen extends MyScreen {
 	private ScrollPane armourPane;
 	private ScrollPane equipmentPane;
 	private ScrollPane otherItemsPane;
+	private ScrollPane consumableItemsPane;
 	
 	InventoryScreen(AON_E game, PlayScreen playScreen) {
 		super(game);
@@ -44,6 +44,7 @@ public class InventoryScreen extends MyScreen {
 				armourPane.setVisible(false);
 				equipmentPane.setVisible(false);
 				otherItemsPane.setVisible(false);
+				consumableItemsPane.setVisible(false);
 			}
 		});
 		itemTypeGroup.add(weaponButton);
@@ -56,6 +57,7 @@ public class InventoryScreen extends MyScreen {
 				armourPane.setVisible(true);
 				equipmentPane.setVisible(false);
 				otherItemsPane.setVisible(false);
+				consumableItemsPane.setVisible(false);
 			}
 		});
 		itemTypeGroup.add(armourButton);
@@ -68,6 +70,7 @@ public class InventoryScreen extends MyScreen {
 				armourPane.setVisible(false);
 				equipmentPane.setVisible(true);
 				otherItemsPane.setVisible(false);
+				consumableItemsPane.setVisible(false);
 			}
 		});
 		itemTypeGroup.add(equipmentButton);
@@ -80,9 +83,23 @@ public class InventoryScreen extends MyScreen {
 				armourPane.setVisible(false);
 				equipmentPane.setVisible(false);
 				otherItemsPane.setVisible(true);
+				consumableItemsPane.setVisible(false);
 			}
 		});
 		itemTypeGroup.add(otherItemButton);
+
+		TextButton consumableItemButton = new TextButton("Consumables", AON_E.SKIN, "toggle");
+		consumableItemButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				weaponsPane.setVisible(false);
+				armourPane.setVisible(false);
+				equipmentPane.setVisible(false);
+				otherItemsPane.setVisible(false);
+				consumableItemsPane.setVisible(true);
+			}
+		});
+		itemTypeGroup.add(consumableItemButton);
 		
 		Table weaponsTable = new Table();
 		weaponsTable.setName("weaponsTable");
@@ -93,6 +110,9 @@ public class InventoryScreen extends MyScreen {
 
 				@Override
 				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					if (pointer != -1) {
+						return;
+					}
 					Table statsTable = new Table();
 					statsTable.setName("statsTable");
 					statsTable.align(Align.right | Align.center);
@@ -114,7 +134,7 @@ public class InventoryScreen extends MyScreen {
 					
 					// Below are labels specifically to do with weapons
 					statsTable.add(new Label("Type", AON_E.SKIN)).row();
-					statsTable.add(new Label(weapon.getType(), AON_E.SKIN)).row();
+					statsTable.add(new Label(weapon.getType().type(), AON_E.SKIN)).row();
 					
 					statsTable.add(new Label("Physical damage:", AON_E.SKIN)).row();
 					statsTable.add(new Label(String.valueOf(weapon.getPhysDamage()), AON_E.SKIN)).row();
@@ -136,6 +156,9 @@ public class InventoryScreen extends MyScreen {
 
 				@Override
 				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					if (pointer != -1) {
+						return;
+					}
 					for (Actor actor: stage.getActors()) {
 						if ("statsTable".equals(actor.getName())) {
 							actor.remove();
@@ -169,8 +192,9 @@ public class InventoryScreen extends MyScreen {
 				
 			});
 			
-			weaponsTable.add(infoButton).padBottom(10);
-			weaponsTable.add(equipButton).padBottom(10).row();
+			weaponsTable.add(infoButton).padRight(20);
+			weaponsTable.add(equipButton);
+			weaponsTable.row().padTop(10);
 			
 		}
 		weaponsPane = new ScrollPane(weaponsTable, AON_E.SKIN);
@@ -185,6 +209,9 @@ public class InventoryScreen extends MyScreen {
 
 				@Override
 				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					if (pointer != -1) {
+						return;
+					}
 					Table statsTable = new Table();
 					statsTable.setName("statsTable");
 					statsTable.align(Align.center | Align.right);
@@ -205,7 +232,7 @@ public class InventoryScreen extends MyScreen {
 
 					// Below are labels specifically to do with armour
 					statsTable.add(new Label("Type:", AON_E.SKIN)).row();
-					statsTable.add(new Label(armour.getType(), AON_E.SKIN)).row();
+					statsTable.add(new Label(armour.getType().type(), AON_E.SKIN)).row();
 
 					statsTable.add(new Label("Type:", AON_E.SKIN)).row();
 					statsTable.add(new Label(String.valueOf(armour.getDefense()), AON_E.SKIN));
@@ -215,6 +242,9 @@ public class InventoryScreen extends MyScreen {
 
 				@Override
 				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					if (pointer != -1) {
+						return;
+					}
 					for (Actor actor: stage.getActors()) {
 						if ("statsTable".equals(actor.getName())) {
 							actor.remove();
@@ -242,8 +272,9 @@ public class InventoryScreen extends MyScreen {
 				
 			});
 			
-			armourTable.add(infoButton).padBottom(10);
-			armourTable.add(equipButton).padBottom(10).row();
+			armourTable.add(infoButton).padRight(20);
+			armourTable.add(equipButton);
+			armourTable.row().padTop(10);
 		}
 		armourPane = new ScrollPane(armourTable, AON_E.SKIN);
 		armourPane.setVisible(false);
@@ -257,6 +288,9 @@ public class InventoryScreen extends MyScreen {
 
 				@Override
 				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					if (pointer != -1) {
+						return;
+					}
 					Table statsTable = new Table();
 					statsTable.setName("statsTable");
 					statsTable.align(Align.center | Align.right);
@@ -280,6 +314,9 @@ public class InventoryScreen extends MyScreen {
 
 				@Override
 				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					if (pointer != -1) {
+						return;
+					}
 					for (Actor actor: stage.getActors()) {
 						if ("statsTable".equals(actor.getName())) {
 							actor.remove();
@@ -313,8 +350,9 @@ public class InventoryScreen extends MyScreen {
 				
 			});
 			
-			equipmentTable.add(infoButton).padBottom(10);
-			equipmentTable.add(equipButton).padBottom(10).row();
+			equipmentTable.add(infoButton).padRight(20);
+			equipmentTable.add(equipButton);
+			equipmentTable.row().padTop(10);
 			
 		}
 		equipmentPane = new ScrollPane(equipmentTable, AON_E.SKIN);
@@ -329,6 +367,9 @@ public class InventoryScreen extends MyScreen {
 
 				@Override
 				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					if (pointer != -1) {
+						return;
+					}
 					Table statsTable = new Table();
 					statsTable.setName("statsTable");
 					statsTable.align(Align.center | Align.right);
@@ -352,6 +393,9 @@ public class InventoryScreen extends MyScreen {
 
 				@Override
 				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					if (pointer != -1) {
+						return;
+					}
 					for (Actor actor: stage.getActors()) {
 						if ("statsTable".equals(actor.getName())) {
 							actor.remove();
@@ -366,21 +410,74 @@ public class InventoryScreen extends MyScreen {
 		}
 		otherItemsPane = new ScrollPane(otherItemsTable, AON_E.SKIN);
 		otherItemsPane.setVisible(false);
+
+		Table consumableItemsTable = new Table();
+		consumableItemsTable.setName("consumableItemsTable");
+		consumableItemsTable.align(Align.center | Align.top);
+		for (ConsumableItem consumableItem: playScreen.player.inventory().consumableItems) {
+			TextButton button = new TextButton(consumableItem.getName(), AON_E.SKIN);
+			button.addListener(new ClickListener() {
+
+				@Override
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					if (pointer != -1) {
+						return;
+					}
+					Table statsTable = new Table();
+					statsTable.setName("statsTable");
+					statsTable.align(Align.center | Align.right);
+					statsTable.setWidth(stage.getWidth());
+					statsTable.setHeight(stage.getHeight());
+
+					statsTable.add(new Label("Name:", AON_E.SKIN)).row();
+					Label label = new Label(consumableItem.getName(), AON_E.SKIN); label.setWrap(true);
+					statsTable.add(label).width(500).row();
+
+					statsTable.add(new Label("Description:", AON_E.SKIN)).row();
+					label = new Label(consumableItem.getDesc(), AON_E.SKIN); label.setWrap(true);
+					statsTable.add(label).width(500).row();
+
+					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
+					statsTable.add(new Label(consumableItem.getRarity().type(), AON_E.SKIN)).row();
+
+					stage.addActor(statsTable);
+				}
+
+				@Override
+				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					if (pointer != -1) {
+						return;
+					}
+					for (Actor actor: stage.getActors()) {
+						if ("statsTable".equals(actor.getName())) {
+							actor.remove();
+							return;
+						}
+					}
+				}
+
+			});
+			consumableItemsTable.add(button);
+			consumableItemsTable.row();
+		}
+		consumableItemsPane = new ScrollPane(consumableItemsTable, AON_E.SKIN);
+		consumableItemsPane.setVisible(false);
 		
 		Stack paneGroup = new Stack();
 		paneGroup.addActor(weaponsPane);
 		paneGroup.addActor(armourPane);
 		paneGroup.addActor(equipmentPane);
 		paneGroup.addActor(otherItemsPane);
+		paneGroup.addActor(consumableItemsPane);
 		
 		table = new Table();
 		table.align(Align.center | Align.top);
 		table.setWidth(stage.getWidth());
 		table.setHeight(stage.getHeight());
 		table.padTop(50);
-		table.add(weaponButton, armourButton, equipmentButton, otherItemButton);
+		table.add(weaponButton, armourButton, equipmentButton, otherItemButton, consumableItemButton);
 		table.row().padTop(30);
-		table.add(paneGroup).fillX().colspan(4);
+		table.add(paneGroup).fillX().colspan(5);
 		stage.addActor(table);
 
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
@@ -391,9 +488,9 @@ public class InventoryScreen extends MyScreen {
 		switch (keycode) {
 			case Keys.ESCAPE:
 				game.setScreen(playScreen);
-				break;
+				return true;
 		}
-		return true;
+		return false;
 	}
 	
 	@Override

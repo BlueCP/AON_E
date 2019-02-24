@@ -26,6 +26,7 @@ import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.playerattributes.SkillCollection;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
+import com.mygdx.game.quests.Quests;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.stages.FurnaceStage;
@@ -46,10 +47,11 @@ public class PlayScreen extends MyScreen {
 	public Player player;
 	public Time time; // Pointer to the time of the current world
 	private AllItems allItems = new AllItems();
-	AchievementCollection achievements = new AchievementCollection(); // New achievements object
+	public AchievementCollection achievements = new AchievementCollection(); // New achievements object
 //	private SkillCollection skillCollection = new SkillCollection(true); // New skills object
 
 	private SkillCollection skillCollection;
+	public Quests quests;
 
 	public Entities entities;
 	private long tick = -1; // -1 is the tick even before anything has happened in the world. When everything is loaded in, the tick is updated to 0.
@@ -110,13 +112,14 @@ public class PlayScreen extends MyScreen {
 		
 		playerName = name;
 		loadGame();
+//		player.inventory.addWeapon("Iron shortsword");
 
 		//particleEngine = new ParticleEngine();
 		
 		//projectileManager = new ProjectileManager();
 
 		skillCollection = new SkillCollection();
-		
+
 		physicsManager = new PhysicsManager(game.manager, player, entities, particleEngine, projectileManager);
 		
 		//entities.addEntity(player, physicsManager);
@@ -125,7 +128,7 @@ public class PlayScreen extends MyScreen {
 		//entities.addEntity(new Dummy(entities, new Vector3(0, 5, 0)), physicsManager);
 		//entities.addEntity(new Dummy(entities, new Vector3(0, 50, 0)), physicsManager);
 		
-		hudStage = new HudStage(game, this);
+		hudStage = new HudStage(this);
 		ownStages.add(hudStage);
 		
 		keyboardEvents = new Array<>();
@@ -139,7 +142,8 @@ public class PlayScreen extends MyScreen {
 
 		isoRenderer = new IsometricRenderer(game, time);
 
-		executeLogic(0);
+//		executeLogic(0);
+		initialExecuteLogic(0);
 
 		//travelMusic.play(); // So that it only starts playing when the player can see the world, i.e. when it has been loaded
 		
@@ -464,6 +468,47 @@ public class PlayScreen extends MyScreen {
 		}
 		*/
 	}
+
+	private void initialExecuteLogic(float delta) {
+		/*
+		if (delta !=0 && !(loadNewChunksThread.isAlive())) {
+			loadNewChunksThread = new Thread(new LoadNewChunksRunner(playerName, player.getStatus().getYMap(), player.getStatus().getXMap(), player.getStatus().getYPos(), player.getStatus().getXPos(), map));
+			loadNewChunksThread.start();
+		} else if (delta == 0) {
+			loadNewChunksThread = new Thread(new LoadNewChunksRunner(playerName, player.getStatus().getYMap(), player.getStatus().getXMap(), player.getStatus().getYPos(), player.getStatus().getXPos(), map));
+			loadNewChunksThread.start();
+			while (loadNewChunksThread.isAlive()) {}
+		}
+		*/
+		//movementLogic();
+		player.preUpdate();
+		entities.preUpdate();
+
+		processKeyboardInput();
+		//keyboardEvents.clear();
+
+		processMouseInput();
+		//mouseEvents.clear();
+
+		updateTick();
+		physicsManager.importNearbyChunks(player.pos);
+		physicsManager.unloadFarAwayChunks(this, player.pos);
+		time.update(((HudStage)hudStage).fastTime.isChecked());
+		player.update(this);
+		entities.update(this);
+//		achievements.updateAchievements(this);
+//		quests.update(this);
+//		moveCollection.updateMoves(tick);
+		regenCriticalStats();
+
+		particleEngine.update(delta, physicsManager.getDynamicsWorld());
+		projectileManager.update(delta, this);
+		physicsManager.update(delta, this);
+
+		player.postUpdate();
+		entities.postUpdate(this);
+		//entities.spawnEntities(player.getStatus(), map.chunkNum(), map); // Spawn enemies after moving them, so player has a chance to react to newly spawned enemies
+	}
 	
 	private void executeLogic(float delta) {
 		/*
@@ -493,6 +538,7 @@ public class PlayScreen extends MyScreen {
 		player.update(this);
 		entities.update(this);
 		achievements.updateAchievements(this);
+		quests.update(this);
 //		moveCollection.updateMoves(tick);
 		regenCriticalStats();
 
@@ -543,9 +589,6 @@ public class PlayScreen extends MyScreen {
 			else if (keycode == Keys.SPACE) {
 				testForJump();
 			}
-			else if (keycode == Keys.ESCAPE) {
-				game.setScreen(new OptionsScreen(game, this));
-			}
 			else if (keycode == Keys.C) {
 				// Below is temporary testing code
 				boolean openNew = true;
@@ -563,6 +606,12 @@ public class PlayScreen extends MyScreen {
 					Gdx.input.setInputProcessor(new InputMultiplexer(hudStage.stage, this));
 				}
 				// End of temporary testing code
+			}
+			else if (keycode == Keys.Q) {
+				game.setScreen(new QuestScreen(game, this));
+			}
+			else if (keycode == Keys.A) {
+				game.setScreen(new AchievementsScreen(game, this));
 			}
 			/*switch (keycode) {
 				case Keys.W:
@@ -838,6 +887,9 @@ public class PlayScreen extends MyScreen {
 			
 			// Saving stuff to playerAchievements.txt
 			achievements.savePlayerAchievements(playerName);
+
+			// Saving stuff to quests.txt
+			quests.save(playerName);
 			
 			// Saving stuff to skills.txt
 //			skillCollection.saveSkills(playerName);
@@ -871,6 +923,8 @@ public class PlayScreen extends MyScreen {
 
 			achievements.savePlayerAchievements(playerName);
 
+			quests.save(playerName);
+
 //			skillCollection.saveSkills(playerName);
 
 			/*moveCollection.savePlayerMoves(playerName);
@@ -903,6 +957,9 @@ public class PlayScreen extends MyScreen {
 			
 			// Loading stuff from playerAchievements.txt and allAchievements.txt
 			achievements = AchievementCollection.loadAll(playerName);
+
+			// Loading stuff from quests.txt
+			quests = Quests.load(playerName);
 			
 			/*// Loading stuff from skills.txt
 			skillCollection = SkillCollection.loadSkills(playerName);*/

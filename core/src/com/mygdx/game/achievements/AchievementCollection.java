@@ -13,7 +13,7 @@ public class AchievementCollection {
 	*/
 	
 	public AchievementCollection() {
-
+		achievements.add(new WalkerAchievement());
 	}
 	
 	public void savePlayerAchievements(String name) {
@@ -21,14 +21,9 @@ public class AchievementCollection {
 	}
 	
 	public static AchievementCollection loadAll(String name) {
-		AchievementCollection achievements = loadPlayerAchievements(name);
-		achievements.createAllAchievements();
-		return achievements;
-	}
-
-	private void createAllAchievements() {
-		achievements.add(new Walker());
-		// Add more achievements here in future.
+		return loadPlayerAchievements(name);
+//		achievements.createAllAchievements();
+//		return achievements;
 	}
 	
 	private static AchievementCollection loadPlayerAchievements(String name) {
@@ -59,6 +54,9 @@ public class AchievementCollection {
 	
 	public void updateAchievements(PlayScreen playScreen) {
 		for (Achievement achievement: achievements) {
+			if (achievement.completed) {
+				achievement.setDisplayed(true);
+			}
 			achievement.update(playScreen);
 		}
 

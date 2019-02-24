@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.mygdx.game.entities.Entities;
 import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.projectiles.ProjectileManager;
+import com.mygdx.game.quests.Quests;
 import com.mygdx.game.utils.NewGameData;
 import com.mygdx.game.world.Time;
 
@@ -89,6 +90,9 @@ public class SaveNewGameRunner implements Runnable {
 		
 		// Saving stuff to playerAchievements.txt
 		newGameData.achievements.savePlayerAchievements(name);
+
+		// Saving stuff to quests.txt
+		new Quests().save(name);
 		
 		/*// Saving stuff to skills.txt
 		newGameData.skillCollection.saveSkills(name);

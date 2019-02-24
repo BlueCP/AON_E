@@ -1,6 +1,6 @@
 package com.mygdx.game.items;
 
-public class Armour extends Item {
+public abstract class Armour extends Item {
 	
 	/*
 	public static String[] atrList = {"name","id","code","type","defense","rarity"};
@@ -8,9 +8,22 @@ public class Armour extends Item {
 	private HashMap<String, String> atr = new HashMap<String, String>();
 	*/
 	
-	protected String type;
+	protected Type type;
 	protected int defense;
 	protected boolean equipped;
+
+	public enum Type {
+		MELEE("Melee"), // For warriors, summoners and paladins.
+		MAGE("Mage"), // For pyromancers, cryomancers, electromancers and necromancers.
+		SCOUT("Scout"); // For rogues and archers.
+
+		private String type;
+		public String type() { return type; }
+
+		Type(String type) {
+			this.type = type;
+		}
+	}
 	
 	/*Armour(String name, String origName, int id, String desc, String type, int defense, Rarity rarity) {
 		this.setName(name);
@@ -38,11 +51,11 @@ public class Armour extends Item {
 		this.setEquipped(false);
 	}*/
 
-	public String getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 

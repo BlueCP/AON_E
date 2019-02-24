@@ -1,14 +1,25 @@
 package com.mygdx.game.items;
 
-public class Weapon extends Item {
+public abstract class Weapon extends Item {
 	
-	protected String type;
+	protected Type type;
 	protected int physDamage;
 	protected int magDamage;
 	protected int range;
 	protected String rangeType;
-	protected int hands;
+	private int hands;
 	boolean equipped = false;
+
+	public enum Type {
+		SWORD("Sword");
+
+		private String type;
+		public String type() { return type; }
+
+		Type(String type) {
+			this.type = type;
+		}
+	}
 	
 	/*Weapon(String name, String origName, int id, String desc, String type, int physDamage, int magDamage, Rarity rarity, int range, String rangeType, int hands) {
 		// String name, String id, int code, String type, int physDamage, int magDamage, String rarity, boolean ranged, int hands
@@ -47,11 +58,11 @@ public class Weapon extends Item {
 		id = -1;
 	}*/
 
-	public String getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 

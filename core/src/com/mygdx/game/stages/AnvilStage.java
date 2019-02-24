@@ -36,6 +36,9 @@ public class AnvilStage extends OwnStage {
 
 				@Override
 				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					if (pointer != -1) {
+						return;
+					}
 					Table infoTable = new Table();
 					infoTable.setName("infoTable");
 					infoTable.align(Align.center | Align.right);
@@ -49,6 +52,9 @@ public class AnvilStage extends OwnStage {
 
 				@Override
 				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					if (pointer != -1) {
+						return;
+					}
 					for (Actor actor: stage.getActors()) {
 						if ("infoTable".equals(actor.getName())) {
 							actor.remove();

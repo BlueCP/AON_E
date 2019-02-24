@@ -40,4 +40,11 @@ public class ItemFactory {
 		}
 	}
 
+	public static ConsumableItem createConsumableItem(String name) {
+		switch (name) {
+			default:
+				return new NullConsumableItem();
+		}
+	}
+
 }

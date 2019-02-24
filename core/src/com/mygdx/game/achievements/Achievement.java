@@ -40,7 +40,7 @@ public abstract class Achievement {
 		this.desc = desc;
 	}
 	
-	public boolean getDisplayed() {
+	public boolean isDisplayed() {
 		return displayed;
 	}
 	

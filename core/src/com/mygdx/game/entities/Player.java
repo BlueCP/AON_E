@@ -48,7 +48,7 @@ public class Player extends Entity {
 	private BitingColdSkill bitingCold;
 	private EncaseInIceSkill encaseInIce;
 	private FracturingBlastSkill fracturingBlast;
-	
+
 	public Player() {
 		id = 0;
 		physicsId = 10000;
@@ -62,8 +62,13 @@ public class Player extends Entity {
 		
 		baseWalkSpeed = 1.4f;
 
+//		System.out.println(inventory.weapons.size);
+
 		inventory.addWeapon("Iron shortsword");
+//		newGameData.player.inventory.weapons.get(0).setDesc("Testing...");
 		inventory.addOtherItem("Iron ore");
+
+//		System.out.println(123456789);
 
 		// PYROMANCER
 
@@ -170,7 +175,7 @@ public class Player extends Entity {
 		try {
 			rigidBody = null;
 			rigidBodyMatrix = new Matrix4();
-			rigidBodyMatrix.setTranslation(new Vector3(0, 10, 0));
+			rigidBodyMatrix.setTranslation(new Vector3(0, 0.6f, 0));
 			setLinearVelocity(new Vector3());
 
 			KryoManager.write(this, "saves/" + playerName + "/player.txt");

@@ -7,6 +7,7 @@ import com.cyphercove.gdx.gdxtokryo.GdxToKryo;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import org.objenesis.strategy.StdInstantiatorStrategy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +23,7 @@ public class KryoManager {
 //		kryo.setRegistrationRequired(true); // Although this is 'recommended', it makes it a nightmare to create new classes since they all require a custom serialiser.
 		GdxToKryo.registerAll(kryo);
 		kryo.register(Queue.class, new MyQueueSerialiser());
+//		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 	}
 	
 	/*

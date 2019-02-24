@@ -2,12 +2,13 @@ package com.mygdx.game.items;
 
 import com.badlogic.gdx.utils.Array;
 
-public class Inventory extends Items {
+public class Inventory {
 	
 	public Array<Weapon> weapons = new Array<>();
 	public Array<Armour> armour = new Array<>();
 	public Array<Equipment> equipment = new Array<>();
 	public Array<OtherItem> otherItems = new Array<>();
+	public Array<ConsumableItem> consumableItems = new Array<>();
 
 	public void addItem(String name) {
 		if (AllItems.weaponNames.contains(name, false)) {
@@ -18,6 +19,8 @@ public class Inventory extends Items {
 			addEquipment(name);
 		} else if (AllItems.otherItemNames.contains(name, false)) {
 			addOtherItem(name);
+		} else if (AllItems.consumableItemNames.contains(name, false)) {
+			addConsumableItem(name);
 		}
 	}
 	
@@ -55,6 +58,14 @@ public class Inventory extends Items {
 
 	public void addOtherItem(String name) {
 		otherItems.add(ItemFactory.createOtherItem(name));
+	}
+
+	public void addConsumableItem(ConsumableItem consumableItem) {
+		consumableItems.add(consumableItem);
+	}
+
+	public void addConsumableItem(String name) {
+		consumableItems.add(ItemFactory.createConsumableItem(name));
 	}
 	
 	/*public void addItem(Item itemToAdd) {
