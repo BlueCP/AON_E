@@ -1,8 +1,8 @@
 package com.mygdx.game.items;
 
-public abstract class Equipment extends Item {
+public abstract class Equipment extends GearItem {
 	
-	protected boolean equipped;
+//	protected boolean equipped;
 
 	/*Equipment(String name, String origName, int id, String desc, Rarity rarity) {
 		this.setName(name);

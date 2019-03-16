@@ -6,7 +6,7 @@ public abstract class Skill {
 
 	protected String name;
 	protected String desc;
-	protected Entity entity; // The entity which used this skill.
+	protected transient Entity entity; // The entity which used this skill.
 
 	public Skill(Entity entity) {
 		this.entity = entity;
@@ -38,6 +38,14 @@ public abstract class Skill {
 
 	public String getName() {
 		return name;
+	}
+
+	public Entity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Entity entity) {
+		this.entity = entity;
 	}
 
 }

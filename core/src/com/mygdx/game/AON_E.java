@@ -62,8 +62,12 @@ public class AON_E extends Game {
 	public TextureAtlas playerAttackAtlas;
 
 	public TextureAtlas dummyWalkingAtlas;
+
 	public TextureAtlas fireParticlesAtlas;
+
 	public TextureAtlas projectilesAtlas;
+
+	public TextureAtlas droppedItemsAtlas;
 
 	public Texture pointerUp;
 	public Texture pointerDown;
@@ -129,6 +133,9 @@ public class AON_E extends Game {
 		// Loading projectile sprites
 		manager.load("sprites/projectiles/projectiles.atlas", TextureAtlas.class);
 
+		// Loading dropped item sprites
+		manager.load("sprites/droppedItems/droppedItems.atlas", TextureAtlas.class);
+
 		// Loading screen backgrounds
 		manager.load("textures/titlescreen.jpg", Texture.class);
 		manager.load("textures/chooseRAndCBackground.jpg", Texture.class);
@@ -168,6 +175,7 @@ public class AON_E extends Game {
 		dummyWalkingAtlas = manager.get("sprites/dummyAnimations/dummyWalking.atlas");
 		fireParticlesAtlas = manager.get("sprites/particles/fireParticles.atlas");
 		projectilesAtlas = manager.get("sprites/projectiles/projectiles.atlas");
+		droppedItemsAtlas = manager.get("sprites/droppedItems/droppedItems.atlas");
 
 		pointer = new Sprite(pointerUp);
 

@@ -10,12 +10,12 @@ public class BitingColdSkill extends PassiveSkill {
 	 */
 	public BitingColdSkill() {
 		super(null, false);
-		name = "Biting Cold";
-		desc = "Chilled enemies also take damage over time.";
 	}
 
 	public BitingColdSkill(Entity entity, boolean learned) {
 		super(entity, learned);
+		name = "Biting Cold";
+		desc = "Chilled enemies also take damage over time.";
 	}
 
 }

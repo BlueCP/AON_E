@@ -1,14 +1,14 @@
 package com.mygdx.game.items;
 
-public abstract class Weapon extends Item {
+public abstract class Weapon extends GearItem {
 	
 	protected Type type;
 	protected int physDamage;
 	protected int magDamage;
 	protected int range;
-	protected String rangeType;
-	private int hands;
-	boolean equipped = false;
+//	protected String rangeType;
+//	private int hands;
+//	boolean equipped = false;
 
 	public enum Type {
 		SWORD("Sword");
@@ -90,7 +90,7 @@ public abstract class Weapon extends Item {
 		this.range = range;
 	}
 
-	public int getHands() {
+	/*public int getHands() {
 		return hands;
 	}
 
@@ -104,14 +104,6 @@ public abstract class Weapon extends Item {
 
 	void setRangeType(String rangeType) {
 		this.rangeType = rangeType;
-	}
-
-	public boolean isEquipped() {
-		return equipped;
-	}
-
-	private void setEquipped(boolean equipped) {
-		this.equipped = equipped;
-	}
+	}*/
 	
 }

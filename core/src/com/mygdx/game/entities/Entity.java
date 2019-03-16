@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoCopyable;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.items.Equipped;
 import com.mygdx.game.items.Inventory;
@@ -21,6 +23,7 @@ import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.ActiveSkill;
 import com.mygdx.game.skills.BasicAttack;
 import com.mygdx.game.skills.NullBasicAttack;
+import com.mygdx.game.skills.Skill;
 import com.mygdx.game.statuseffects.*;
 import com.mygdx.game.utils.Util;
 
@@ -34,7 +37,7 @@ public abstract class Entity extends WorldObject {
 
 	float life;
 	float spirit;
-	public Vector3 pos;
+//	public Vector3 pos;
 
 	public BurningEffect burningEffect;
 	public StunnedEffect stunnedEffect;
@@ -93,7 +96,7 @@ public abstract class Entity extends WorldObject {
 	Matrix4 rigidBodyMatrix;
 	private Vector3 linearVelocity;
 	
-	public btRigidBody rigidBody;
+	public transient btRigidBody rigidBody;
 	float stateTime = 0f;
 	
 	public Queue<Array<EntityAction>> actions;
@@ -442,6 +445,8 @@ public abstract class Entity extends WorldObject {
 		
 		moveByMovementVector();
 		rigidBody.getWorldTransform().getTranslation(pos);
+		rigidBody.getWorldTransform(rigidBodyMatrix);
+		linearVelocity.set(rigidBody.getLinearVelocity());
 		
 		collidingWithWalkable = false;
 		collidingWithClimbable = false;
@@ -476,7 +481,14 @@ public abstract class Entity extends WorldObject {
 		updateActionAnimations();
 		//updateAnimationType();
 	}
-	
+
+	/**
+	 * Copies the non-transient fields of this Entity object to the given object.
+	 *//*
+	void copyFields(Entity entity) {
+
+	}*/
+
 	public abstract void onUpdate(PlayScreen session);
 	
 	public abstract void onInteract(PlayScreen session);
@@ -544,23 +556,34 @@ public abstract class Entity extends WorldObject {
 		linearVelocity = new Vector3();
 	}
 	
-	void prepareForSaveAndExit() {
-		rigidBody.getWorldTransform(rigidBodyMatrix);
-		linearVelocity.set(rigidBody.getLinearVelocity());
+	/*void prepareForSaveAndExit() {
 		rigidBody = null;
-	}
+	}*/
 
 	/**
 	 * @return the rigid body of this entity, which was set to null during serialisation, and is now being put back in.
 	 */
-	btRigidBody prepareForSave() {
+	/*btRigidBody prepareForSave() {
 		btRigidBody body = rigidBody;
 		prepareForSaveAndExit();
 		return body;
-	}
+	}*/
 	
-	void processAfterLoading() {
+	final void processAfterLoadingBase() {
 		loadRigidBody();
+
+		// The entity field of a Skill object is transient (to prevent headaches with circular references).
+		// Thus the reference to this entity must be reconstructed.
+		for (Skill skill: skills) {
+			skill.setEntity(this);
+		}
+	}
+
+	/**
+	 * By default, use the basic method for processing the object after deserialisation. Overridable if desired.
+	 */
+	void processAfterLoading() {
+		processAfterLoadingBase();
 	}
 	
 	/*

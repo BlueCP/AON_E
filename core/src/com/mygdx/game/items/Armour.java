@@ -1,6 +1,6 @@
 package com.mygdx.game.items;
 
-public abstract class Armour extends Item {
+public abstract class Armour extends GearItem {
 	
 	/*
 	public static String[] atrList = {"name","id","code","type","defense","rarity"};
@@ -9,8 +9,8 @@ public abstract class Armour extends Item {
 	*/
 	
 	protected Type type;
-	protected int defense;
-	protected boolean equipped;
+	protected float defense;
+//	protected boolean equipped;
 
 	public enum Type {
 		MELEE("Melee"), // For warriors, summoners and paladins.
@@ -59,20 +59,12 @@ public abstract class Armour extends Item {
 		this.type = type;
 	}
 
-	public int getDefense() {
+	public float getDefense() {
 		return defense;
 	}
 
-	public void setDefense(int defense) {
+	public void setDefense(float defense) {
 		this.defense = defense;
-	}
-
-	public boolean isEquipped() {
-		return equipped;
-	}
-
-	public void setEquipped(boolean equipped) {
-		this.equipped = equipped;
 	}
 	
 }

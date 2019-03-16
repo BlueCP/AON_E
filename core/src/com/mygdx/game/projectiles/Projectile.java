@@ -25,9 +25,9 @@ public abstract class Projectile extends WorldObject {
 	
 	Matrix4 worldTransform;
 
-	protected btCollisionShape shape;
+	protected transient btCollisionShape shape;
 	
-	public Vector3 pos;
+//	public Vector3 pos;
 	
 	ProjectileSprite sprite;
 	
@@ -68,8 +68,9 @@ public abstract class Projectile extends WorldObject {
 	
 	public void updateWorldObject(IsometricRenderer renderer) {
 		Vector2 coords = renderer.cartesianToScreen(pos.x, pos.y, pos.z);
-		coords.x -= getTexture().getRegionWidth()/2f;
-		coords.y -= getTexture().getRegionHeight()/2f;
+		coords.sub(getTexture().getRegionWidth()/2f, getTexture().getRegionHeight()/2f);
+		/*coords.x -= getTexture().getRegionWidth()/2f;
+		coords.y -= getTexture().getRegionHeight()/2f;*/
 		renderPos = coords;
 		visibility = Visibility.VISIBLE;
 	}
@@ -92,7 +93,7 @@ public abstract class Projectile extends WorldObject {
 	 */
 	public abstract void addToDynamicsWorld(btDynamicsWorld dynamicsWorld, int group, int mask);
 
-	public abstract void prepareForSaveAndExit();
+//	public abstract void prepareForSaveAndExit();
 	
 	public void processAfterLoading() {
 		loadPhysicsObject();

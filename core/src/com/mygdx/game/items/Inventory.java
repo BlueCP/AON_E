@@ -8,7 +8,32 @@ public class Inventory {
 	public Array<Armour> armour = new Array<>();
 	public Array<Equipment> equipment = new Array<>();
 	public Array<OtherItem> otherItems = new Array<>();
-	public Array<ConsumableItem> consumableItems = new Array<>();
+	public Array<Consumable> consumables = new Array<>();
+
+	public boolean contains(String name) {
+		if (AllItems.weaponNames.contains(name, false)) {
+			return searchFor(name, weapons.toArray(Weapon.class));
+		} else if (AllItems.armourNames.contains(name, false)) {
+			return searchFor(name, armour.toArray(Armour.class));
+		} else if (AllItems.equipmentNames.contains(name, false)) {
+			return searchFor(name, equipment.toArray(Equipment.class));
+		} else if (AllItems.otherItemNames.contains(name, false)) {
+			return searchFor(name, otherItems.toArray(OtherItem.class));
+		} else if (AllItems.consumableItemNames.contains(name, false)) {
+			return searchFor(name, consumables.toArray(Consumable.class));
+		} else {
+			return false;
+		}
+	}
+
+	private boolean searchFor(String name, Item[] collection) {
+		for (Item item: collection) {
+			if (item.origName.equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void addItem(String name) {
 		if (AllItems.weaponNames.contains(name, false)) {
@@ -60,12 +85,12 @@ public class Inventory {
 		otherItems.add(ItemFactory.createOtherItem(name));
 	}
 
-	public void addConsumableItem(ConsumableItem consumableItem) {
-		consumableItems.add(consumableItem);
+	public void addConsumableItem(Consumable consumableItem) {
+		consumables.add(consumableItem);
 	}
 
 	public void addConsumableItem(String name) {
-		consumableItems.add(ItemFactory.createConsumableItem(name));
+		consumables.add(ItemFactory.createConsumableItem(name));
 	}
 	
 	/*public void addItem(Item itemToAdd) {

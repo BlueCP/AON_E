@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.physics.PhysicsManager.Tag;
 import com.mygdx.game.utils.Util;
 
-public class KinematicObject extends ConstantObject implements Disposable {
+public abstract class KinematicObject extends ConstantObject implements Disposable {
 	
 	private Vector3 linearVelocity;
 	

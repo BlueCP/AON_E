@@ -53,13 +53,14 @@ public class Hailstorm extends StaticProjectile {
 
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
+		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
+			offender.landAbility(entity, playScreen);
 			hitEntities.add(entity.id);
 		}
 
 		if (entity.id != owner) {
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), dps * Gdx.graphics.getDeltaTime());
+			entity.dealtDamageBy(offender, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage());
 			return true;
 		} else {
 			return false;

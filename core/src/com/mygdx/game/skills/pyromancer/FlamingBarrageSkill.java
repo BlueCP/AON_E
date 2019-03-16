@@ -11,12 +11,12 @@ public class FlamingBarrageSkill extends PassiveSkill {
 	 */
 	public FlamingBarrageSkill() {
 		super(null, false);
-		name = "Flaming Barrage";
-		desc = "Landing abilities decreases the cooldowns on all abilities.";
 	}
 
 	public FlamingBarrageSkill(Entity entity, boolean learned) {
 		super(entity, learned);
+		name = "Flaming Barrage";
+		desc = "Landing abilities decreases the cooldowns on all abilities.";
 	}
 
 	public void testfor() {

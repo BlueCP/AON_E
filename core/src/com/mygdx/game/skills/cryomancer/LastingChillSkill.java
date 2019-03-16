@@ -10,12 +10,12 @@ public class LastingChillSkill extends PassiveSkill {
 	 */
 	public LastingChillSkill() {
 		super(null, false);
-		name = "Lasting Chill";
-		desc = "Landing abilities on enemies chills them. Chilled enemies are slowed for each chill stack.";
 	}
 
 	public LastingChillSkill(Entity entity, boolean learned) {
 		super(entity, learned);
+		name = "Lasting Chill";
+		desc = "Landing abilities on enemies chills them. Chilled enemies are slowed for each chill stack.";
 	}
 
 	public void testfor(Entity targetEntity) {

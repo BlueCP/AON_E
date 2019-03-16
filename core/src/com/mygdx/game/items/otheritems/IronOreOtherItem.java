@@ -9,6 +9,8 @@ public class IronOreOtherItem extends OtherItem {
 		name = origName;
 		desc = "An unrefined chunk of iron in rock.";
 		rarity = Rarity.UNCOMMON;
+
+		cost = 2;
 	}
 
 }

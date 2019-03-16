@@ -56,10 +56,11 @@ public class Firebolt extends DynamicProjectile {
 
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
+		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
-			playScreen.entities.getEntity(owner, playScreen.player).changeSpirit(spiritGain);
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
-			playScreen.entities.getEntity(owner, playScreen.player).landBasicAttack(entity, playScreen);
+			offender.changeSpirit(spiritGain);
+			entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
+			offender.landBasicAttack(entity, playScreen);
 
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 

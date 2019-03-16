@@ -1,8 +1,15 @@
 package com.mygdx.game.achievements;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.cyphercove.gdx.gdxtokryo.GdxToKryo;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class AchievementCollection {
 
@@ -18,6 +25,16 @@ public class AchievementCollection {
 	
 	public void savePlayerAchievements(String name) {
 		KryoManager.write(this, "saves/" + name + "/playerAchievements.txt");
+	}
+
+	public void savePlayerAchievements(String name, Kryo kryo) {
+		try {
+			Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath() + "/saves/" + name + "/playerAchievements.txt"));
+			kryo.writeObject(output, this);
+			output.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static AchievementCollection loadAll(String name) {

@@ -2,9 +2,9 @@ package com.mygdx.game.items;
 
 import com.mygdx.game.screens.PlayScreen;
 
-public abstract class ConsumableItem extends Item {
+public abstract class Consumable extends NonGearItem {
 
-	public ConsumableItem() {
+	public Consumable() {
 
 	}
 

@@ -61,9 +61,10 @@ public class FieryVortex extends StaticProjectile {
 
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
+		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-			entity.burnedBy(playScreen.entities.getEntity(owner, playScreen.player), burnPower, lifetime);
-			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
+			entity.burnedBy(offender, burnPower, lifetime);
+			offender.landAbility(entity, playScreen);
 			hitEntities.add(entity.id);
 		}
 

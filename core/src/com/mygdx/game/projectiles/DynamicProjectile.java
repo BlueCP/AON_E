@@ -12,7 +12,7 @@ public abstract class DynamicProjectile extends Projectile {
 
 	private Vector3 linearVelocity;
 
-	protected btRigidBody rigidBody;
+	protected transient btRigidBody rigidBody;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
@@ -40,6 +40,8 @@ public abstract class DynamicProjectile extends Projectile {
 
 	protected void universalUpdate() {
 		rigidBody.getWorldTransform().getTranslation(pos);
+		rigidBody.getWorldTransform(worldTransform);
+		linearVelocity.set(rigidBody.getLinearVelocity());
 	}
 
 	protected void calcLinearProjectileMotion(Vector3 targetPos, float speed) {
@@ -54,19 +56,6 @@ public abstract class DynamicProjectile extends Projectile {
 		rigidBody.getWorldTransform().getTranslation(pos);
 	}
 
-	public void prepareForSaveAndExit() {
-		rigidBody.getWorldTransform(worldTransform);
-		linearVelocity.set(rigidBody.getLinearVelocity());
-		shape = null;
-		rigidBody = null;
-	}
-
-	public btRigidBody prepareForSave() {
-		btRigidBody body = rigidBody;
-		prepareForSaveAndExit();
-		return body;
-	}
-
 	public btCollisionObject getCollisionObject() {
 		return rigidBody;
 	}
@@ -76,6 +65,7 @@ public abstract class DynamicProjectile extends Projectile {
 	}
 
 	public void destroy(btDynamicsWorld dynamicsWorld, ProjectileManager projectileManager) {
+		projectileManager.idPool.add(id);
 		dynamicsWorld.removeRigidBody(rigidBody);
 		projectileManager.projectiles.removeValue(this, false);
 		shape.dispose();

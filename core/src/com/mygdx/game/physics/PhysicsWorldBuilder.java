@@ -13,8 +13,13 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btScaledBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.extras.btBulletWorldImporter;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.Player;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.physics.PhysicsManager.Tag;
@@ -22,10 +27,15 @@ import com.mygdx.game.physicsobjects.*;
 import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.serialisation.KryoManager;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 
-public class PhysicsWorldLoader {
+public class PhysicsWorldBuilder {
 
 	public static final int worldSize = 100; // Temporary, to avoid creating masses of unnecessary chunk folders.
 	public static final int chunkSize = 100;
@@ -34,9 +44,9 @@ public class PhysicsWorldLoader {
 	btBulletWorldImporter importer;
 	private AssetManager manager;
 
-	private Array<Vector2> loadedChunks;
+	private Array<ConstantObject.Chunk> loadedChunks;
 
-	Array<ImmobileTerrain> immobileTerrain;
+	/*Array<ImmobileTerrain> immobileTerrain;
 	Array<ImmobileController> immobileControllers;
 	Array<ImmobileControllable> immobileControllables;
 	Array<ImmobileInteractive> immobileInteractives;
@@ -44,8 +54,11 @@ public class PhysicsWorldLoader {
 	Array<MobileTerrain> mobileTerrain;
 	Array<MobileController> mobileControllers;
 	Array<MobileControllable> mobileControllables;
-	Array<MobileInteractive> mobileInteractives;
+	Array<MobileInteractive> mobileInteractives;*/
 
+	private PhysicsManager physicsManager;
+
+	// The following 8 arrays contain all the names of the subtypes for each type of constant object.
 	private Array<String> immobileTerrainTypes;
 	private Array<String> immobileControllerTypes;
 	private Array<String> immobileControllableTypes;
@@ -62,21 +75,12 @@ public class PhysicsWorldLoader {
 	private Array<String> tempPorts;
 	private Array<Tag> tempTags;
 	
-	PhysicsWorldLoader(AssetManager manager) {
+	PhysicsWorldBuilder(AssetManager manager, PhysicsManager physicsManager) {
 		this.manager = manager;
 
 		loadedChunks = new Array<>();
 
-		immobileTerrain = new Array<>();
-		immobileControllers = new Array<>();
-		immobileControllables = new Array<>();
-		immobileInteractives = new Array<>();
-
-		mobileTerrain = new Array<>();
-		mobileControllers = new Array<>();
-		mobileControllables = new Array<>();
-		mobileInteractives = new Array<>();
-
+		this.physicsManager = physicsManager;
 
 		immobileTerrainTypes = new Array<>();
 		immobileControllerTypes = new Array<>();
@@ -100,12 +104,13 @@ public class PhysicsWorldLoader {
 	 */
 	private TextureRegion[] buildAnimationFrames(Array<AtlasRegion> regions, AtlasRegion region, btBulletWorldImporter importer, btCollisionObject collisionObject) {
 		HashMap<Integer, AtlasRegion> regionMap = new HashMap<>();
-		for (AtlasRegion region0: regions) {
+		for (int i = 0; i < regions.size; i ++) {
+			AtlasRegion region0 = regions.get(i);
 			StringBuilder id0 = new StringBuilder();
 			StringBuilder frame = new StringBuilder();
 			boolean ontoFrameNum = false;
 			for (char character: region.name.toCharArray()) {
-    			if (character == '_') {
+    			if (character == '-') {
     				ontoFrameNum = true;
     				continue;
     			}
@@ -261,13 +266,32 @@ public class PhysicsWorldLoader {
 		return map;
 	}
 
-	Array<Integer> loadImmobileRenderingOrder() {
-		Array<Integer> indexes = new Array<>();
-		FileHandle file = Gdx.files.internal("world/immobileRenderingOrder.txt");
+	/**
+	 *
+	 * @param chunk the chunk to have its immobile rendering order loaded in.
+	 * @return a map of ids of immobile objects in this chunk and their indexes.
+	 */
+	ObjectMap<Integer, Integer> loadImmobileRenderingOrder(ConstantObject.Chunk chunk) {
+		ObjectMap<Integer, Integer> indexes = new ObjectMap<>();
+		FileHandle file = Gdx.files.internal("world/chunks/" + chunk.type() + "/immobileRenderingOrder.txt");
 		String fileString = file.readString();
+		boolean readingId = true; // If true, reading id. If false, reading rendering index.
+		StringBuilder tempId = new StringBuilder();
+		StringBuilder tempIndex = new StringBuilder();
 		for (char character: fileString.toCharArray()) {
 			if (character != '\n' && character != '\r') {
-				indexes.add(Integer.parseInt(String.valueOf(character)));
+				if (character == ':') {
+					readingId = false;
+					continue;
+				} else if (readingId) {
+					tempId.append(character);
+//					indexes.add(Integer.parseInt(String.valueOf(character)));
+				} else {
+					tempIndex.append(character);
+				}
+			} else {
+				readingId = true;
+				indexes.put(Integer.parseInt(tempId.toString()), Integer.parseInt(tempIndex.toString()));
 			}
 		}
 
@@ -284,9 +308,8 @@ public class PhysicsWorldLoader {
 
 	/**
 	 * Not sure if this method is needed or not, perhaps remove in future.
-	 * @param pos
 	 */
-	public void dynamicallyImportChunks(Vector3 pos) {
+	/*public void dynamicallyImportChunks(Vector3 pos) {
 		Vector2 chunkCoords = new Vector2(Math.floorDiv((int) pos.x, chunkSize), Math.floorDiv((int) pos.z, chunkSize));
 		for (int x = -1; x <= 1; x ++) {
 			for (int z = -1; z <= 1; z ++) {
@@ -297,7 +320,7 @@ public class PhysicsWorldLoader {
 				}
 			}
 		}
-	}
+	}*/
 
 	private void removeImmobileTerrain(PhysicsManager physicsManager, Vector3 vector, Vector2 chunkCoords, Vector2 lower, Vector2 higher) {
 		for (int i = 0; i < physicsManager.immobileTerrain.size; i ++) {
@@ -437,7 +460,18 @@ public class PhysicsWorldLoader {
 		// If more chunks are loaded than those immediately surrounding the player.
 		PhysicsManager physicsManager = playScreen.physicsManager;
 		if (loadedChunks.size > 9) {
-			playScreen.save(); // So that entities/projectiles/whatever in chunks that are being unloaded aren't lost.
+			if (playScreen.previousGameSerialisationThreadState == Thread.State.NEW) {
+				// If the thread is new, start it.
+				// Use the previous state as this means the thread was new since at least last frame; using the current state
+				// could mean that the thread was just terminated and made new again (we only want to detect the former).
+				playScreen.gameSerialisationThread.start();
+			} else if (playScreen.gameSerialisationThread.getState() == Thread.State.RUNNABLE) {
+				// If the thread is running, wait until it has terminated before executing any unloading logic.
+				return;
+			}
+
+//			playScreen.save(); // So that entities/projectiles/whatever in chunks that are being unloaded aren't lost.
+
 			Vector3 vector = new Vector3();
 			Vector2 chunkCoords = new Vector2(Math.floorDiv((int) pos.x, chunkSize), Math.floorDiv((int) pos.z, chunkSize));
 			Vector2 lower = chunkCoords.cpy().scl(chunkSize);
@@ -458,25 +492,39 @@ public class PhysicsWorldLoader {
 		}
 	}
 
-	public void importNearbyChunks(Vector3 pos) {
-		Array<btBulletWorldImporter> importers = new Array<>();
-		Vector2 chunkCoords = new Vector2(Math.floorDiv((int) pos.x, chunkSize), Math.floorDiv((int) pos.z, chunkSize));
+	public void importNearbyChunks(PhysicsManager physicsManager, Player player) {
+		/*Array<btBulletWorldImporter> importers = new Array<>();
+		Vector2 chunkCoords = new Vector2(Math.floorDiv((int) player.pos.x, chunkSize), Math.floorDiv((int) player.pos.z, chunkSize));
 		for (int x = -1; x <= 1; x ++) {
 			for (int z = -1; z <= 1; z ++) {
 				Vector2 currentChunk = chunkCoords.cpy().add(x, z);
 				currentChunk = new Vector2(); // TODO: this is temp. code because there's no point in creating eight empty chunk folders. When more content is added to the world, remove this continue statement.
 				if (!loadedChunks.contains(currentChunk, false)) {
-					String path = "world/chunks/" + (int) currentChunk.x + "_" + (int) currentChunk.y + "/";
-					importChunk(path);
+					importChunk(currentChunk, player);
 					loadedChunks.add(currentChunk.cpy());
 				}
 				break; // Temp. code (see above).
 			}
 			break; // Temp. code (see above).
+		}*/
+
+		Array<btBulletWorldImporter> importers = new Array<>();
+		Array<ConstantObject.Chunk> chunks = player.getAdjacentChunksInclusive();
+		for (ConstantObject.Chunk chunk: chunks) {
+			if (!loadedChunks.contains(chunk, false)) {
+				importChunk(chunk, player);
+				loadedChunks.add(chunk);
+			}
 		}
 	}
 
-	private void importChunk(String path) {
+	/**
+	 *
+	 * @param currentChunk the vector representing the current chunk as an element in an imaginary 'array' of chunks.
+	 */
+	private void importChunk(ConstantObject.Chunk currentChunk, Player player) {
+		String path = "world/chunks/" + currentChunk.type() + "/";
+
 		importer = new btBulletWorldImporter(); // Import physics world
 		importer.loadFile(Gdx.files.internal(path + "constObjects.bullet")); // Import terrain objects
 
@@ -487,6 +535,17 @@ public class PhysicsWorldLoader {
 		//ConstantObject[] instances = new ConstantObject[importer.getNumRigidBodies()];
 //		Array<StaticObject> objs = new Array<>();
 		HashMap<String, int[]> textureRegionCoords = loadCoordValues(path + "coords.txt");
+
+		Kryo kryo = KryoManager.getKryo();
+		Input input = null;
+		// Create a new input stream for the file containing the (mutable) data for constant objects in this chunk.
+		try {
+			input = new Input(new FileInputStream("saves/" + player.getPlayerName() + "/world/chunks/" + currentChunk.type() + "/constObjData.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		ObjectMap<Integer, Integer> immobileRenderingIndexes = loadImmobileRenderingOrder(currentChunk);
 
 		System.out.println(importer.getNumRigidBodies());
 		System.out.println(importer.getNumCollisionShapes());
@@ -510,8 +569,9 @@ public class PhysicsWorldLoader {
 
 			findNameData(importer.getNameForPointer(collisionObject.getCPointer()));
 
+			ConstantObject constantObject = new NullConstantObject();
 			if (immobileTerrainTypes.contains(tempSubType.toString(), false)) {
-				buildImmobileTerrain(collisionObject, regions, textureRegionCoords);
+				constantObject = buildImmobileTerrain(immobileRenderingIndexes, collisionObject, regions, textureRegionCoords);
 			} else if (immobileControllerTypes.contains(tempSubType.toString(), false)) {
 
 			} else if (immobileControllableTypes.contains(tempSubType.toString(), false)) {
@@ -526,9 +586,14 @@ public class PhysicsWorldLoader {
 
 			} else if (mobileInteractiveTypes.contains(tempSubType.toString(), false)) {
 
-			} else {
-				buildImmobileTerrain(collisionObject, regions, textureRegionCoords);
+			} else { // If the object doesn't have a subtype, assume it's a generic terrain object.
+				constantObject = buildImmobileTerrain(immobileRenderingIndexes, collisionObject, regions, textureRegionCoords);
 			}
+			constantObject.setChunk(ConstantObject.Chunk.START);
+			constantObject.load(kryo, input);
+
+			physicsManager.allConstantObjects.add(constantObject);
+			physicsManager.getDynamicsWorld().addCollisionObject(constantObject.collisionObject, PhysicsManager.TERRAIN_FLAG, PhysicsManager.ALL_FLAG);
 
 			resetTempVars();
 		}
@@ -536,13 +601,23 @@ public class PhysicsWorldLoader {
 		importer.dispose();
 	}
 
-	private void buildImmobileTerrain(btCollisionObject collisionObject, Array<AtlasRegion> regions, HashMap<String, int[]> textureRegionCoords) {
+	private void setRenderingIndex(ImmobileObject immobileObject, ObjectMap<Integer, Integer> immobileRenderingIndexes) {
+		Iterator<ObjectMap.Entry<Integer, Integer>> iterator = immobileRenderingIndexes.entries().iterator();
+		while (iterator.hasNext()) {
+			ObjectMap.Entry<Integer, Integer> entry = iterator.next();
+			if (immobileObject.id == entry.key) {
+				immobileObject.setRenderingIndex(entry.value);
+			}
+		}
+	}
+
+	private ConstantObject buildImmobileTerrain(ObjectMap<Integer, Integer> immobileRenderingIndexes, btCollisionObject collisionObject, Array<AtlasRegion> regions, HashMap<String, int[]> textureRegionCoords) {
 		boolean isAnimation = false;
 		for (AtlasRegion region: regions) {
 			StringBuilder textureRegionId = new StringBuilder();
 			for (char character: region.name.toCharArray()) {
 				textureRegionId.append(character);
-				if (character == '_') {
+				if (character == '-') {
 					isAnimation = true;
 				}
 			}
@@ -551,16 +626,21 @@ public class PhysicsWorldLoader {
 				textureRegions = new TextureRegion[1];
 				textureRegions[0] = new TextureRegion(region);
 				int[] coords = textureRegionCoords.get(tempId);
-				immobileTerrain.add(new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]));
-				break;
+				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
+				setRenderingIndex(obj, immobileRenderingIndexes);
+				physicsManager.immobileTerrain.add(obj);
+				return obj;
 			} else if (textureRegionId.toString().equals(tempId) && isAnimation) {
 				textureRegions = buildAnimationFrames(regions, region, importer, collisionObject);
 				int[] coords = textureRegionCoords.get(tempId);
-				immobileTerrain.add(new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]));
-				break;
+				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
+				setRenderingIndex(obj, immobileRenderingIndexes);
+				physicsManager.immobileTerrain.add(obj);
+				return obj;
 			}
 
 		}
+		return new NullConstantObject();
 	}
 	
 }

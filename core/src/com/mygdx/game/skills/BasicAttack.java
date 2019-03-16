@@ -20,9 +20,9 @@ public abstract class BasicAttack extends ActiveSkill {
 		super(entity);
 	}
 
-	protected void defaultStart(float time, float range, Entity.AnimationType animationType, PlayScreen playScreen) {
+	protected void defaultStart(float time, Entity.AnimationType animationType, PlayScreen playScreen) {
 		if (entity.actions.size == 0 && playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player).id != -1 && state == State.AVAILABLE) {
-			if (entity.pos.dst(playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player).pos) <= range) {
+			if (entity.pos.dst(playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player).pos) <= entity.equipped().getWeapon().getRange()) {
 				useSkill();
 				targetEntity = entity.getTargetEntity();
 				Array<EntityAction> array = new Array<>();

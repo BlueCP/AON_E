@@ -1,9 +1,15 @@
 package com.mygdx.game.quests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.quests.edgy.EdgyQuest;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class Quests {
 
@@ -98,6 +104,16 @@ public class Quests {
 		try {
 			KryoManager.write(this, "saves/" + dir + "/quests.txt");
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void save(String name, Kryo kryo) {
+		try {
+			Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath() + "/saves/" + name + "/quests.txt"));
+			kryo.writeObject(output, this);
+			output.close();
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}

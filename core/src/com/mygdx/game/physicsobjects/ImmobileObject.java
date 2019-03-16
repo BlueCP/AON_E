@@ -9,7 +9,7 @@ import com.mygdx.game.physics.PhysicsManager;
  * Represents objects in the world which cannot move, and which are ConstantObjects.
  *
  */
-public class ImmobileObject extends ConstantObject {
+public abstract class ImmobileObject extends ConstantObject {
 
 	private int renderingIndex;
 

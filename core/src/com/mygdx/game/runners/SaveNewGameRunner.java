@@ -1,10 +1,14 @@
 package com.mygdx.game.runners;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.droppeditems.DroppedItemManager;
 import com.mygdx.game.entities.Entities;
 import com.mygdx.game.particles.ParticleEngine;
+import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.quests.Quests;
+import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.NewGameData;
 import com.mygdx.game.world.Time;
 
@@ -82,6 +86,9 @@ public class SaveNewGameRunner implements Runnable {
 		
 		// Saving stuff to projectiles.txt
 		new ProjectileManager().saveAndExit(name);
+
+		// Saving stuff to droppedItems.txt
+		new DroppedItemManager().saveAndExit(name);
 		
 		// Saving stuff to time.txt
 		Time time = new Time();
@@ -93,6 +100,8 @@ public class SaveNewGameRunner implements Runnable {
 
 		// Saving stuff to quests.txt
 		new Quests().save(name);
+
+		PhysicsManager.createInitialFiles(name);
 		
 		/*// Saving stuff to skills.txt
 		newGameData.skillCollection.saveSkills(name);

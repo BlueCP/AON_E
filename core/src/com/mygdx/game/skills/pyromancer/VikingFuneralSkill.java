@@ -10,12 +10,12 @@ public class VikingFuneralSkill extends PassiveSkill {
 	 */
 	public VikingFuneralSkill() {
 		super(null, false);
-		name = "Viking Funeral";
-		desc = "Landing abilities on enemies sets them on fire.";
 	}
 
 	public VikingFuneralSkill(Entity entity, boolean learned) {
 		super(entity, learned);
+		name = "Viking Funeral";
+		desc = "Landing abilities on enemies sets them on fire.";
 	}
 
 	public void testfor(Entity targetEntity) {

@@ -5,6 +5,9 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.physicsobjects.InteractiveObject;
 import com.mygdx.game.physics.PhysicsManager.Tag;
 import com.mygdx.game.screens.PlayScreen;
@@ -21,6 +24,16 @@ public class Workbench extends InteractiveObject {
 	public void interact(PlayScreen playScreen) {
 		playScreen.ownStages.add(new WorkbenchStage(playScreen.game, playScreen.player.inventory()));
 		Gdx.input.setInputProcessor(new InputMultiplexer(playScreen.ownStages.get(playScreen.ownStages.size - 1).stage, playScreen));
+	}
+
+	@Override
+	public void save(Kryo kryo, Output output) {
+
+	}
+
+	@Override
+	public void load(Kryo kryo, Input input) {
+
 	}
 
 }

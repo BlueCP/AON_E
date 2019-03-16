@@ -31,9 +31,9 @@ public class Particle extends WorldObject implements Pool.Poolable {
 	private Matrix4 rigidBodyMatrix;
 	private Vector3 linearVelocity;
 	
-	btCollisionShape shape;
-	public btRigidBody rigidBody;
-	public Vector3 pos;
+	transient btCollisionShape shape;
+	public transient btRigidBody rigidBody;
+//	public Vector3 pos;
 	
 	Sprite sprite;
 	public Behaviour behaviour;
@@ -138,18 +138,16 @@ public class Particle extends WorldObject implements Pool.Poolable {
 		physicsId = Util.getParticleId(id);
 	}
 	
-	void prepareForSaveAndExit() {
+	/*void prepareForSaveAndExit() {
 		rigidBody.getWorldTransform(rigidBodyMatrix);
 		linearVelocity.set(rigidBody.getLinearVelocity());
-		shape = null;
-		rigidBody = null;
-	}
+	}*/
 
-	btRigidBody prepareForSave() {
+	/*btRigidBody prepareForSave() {
 		btRigidBody body = rigidBody;
 		prepareForSaveAndExit();
 		return body;
-	}
+	}*/
 
 	void processAfterLoading() {
 		loadRigidBody();
@@ -158,7 +156,7 @@ public class Particle extends WorldObject implements Pool.Poolable {
 	/*
 	 * Handles the physics interactions of the particle.
 	 */
-	void updateMovement() {
+	void update() {
 		switch (behaviour) {
 			case OSCILLATE_DOWN:
 				float xChange = MathUtils.sinDeg(lifeSoFar * 180) / 10; // The change in the x coord of the particle
@@ -175,6 +173,10 @@ public class Particle extends WorldObject implements Pool.Poolable {
 				// Just allow the particle to fall by gravity
 				break;
 		}
+
+		rigidBody.getWorldTransform().getTranslation(pos);
+		rigidBody.getWorldTransform(rigidBodyMatrix);
+		linearVelocity.set(rigidBody.getLinearVelocity());
 	}
 	
 	@Override

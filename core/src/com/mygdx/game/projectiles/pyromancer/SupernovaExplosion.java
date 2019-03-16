@@ -47,9 +47,10 @@ public class SupernovaExplosion extends StaticProjectile {
 
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
+		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
-			entity.dealtDamageBy(playScreen.entities.getEntity(owner, playScreen.player), damage);
-			playScreen.entities.getEntity(owner, playScreen.player).landAbility(entity, playScreen);
+			entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
+			offender.landAbility(entity, playScreen);
 			return true;
 		} else {
 			return false;

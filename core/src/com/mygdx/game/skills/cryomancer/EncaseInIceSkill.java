@@ -10,12 +10,12 @@ public class EncaseInIceSkill extends PassiveSkill {
 	 */
 	public EncaseInIceSkill() {
 		super(null, false);
-		name = "Encase in Ice";
-		desc = "At max chill stacks, enemies are frozen.";
 	}
 
 	public EncaseInIceSkill(Entity entity, boolean learned) {
 		super(entity, learned);
+		name = "Encase in Ice";
+		desc = "At max chill stacks, enemies are frozen.";
 	}
 
 }

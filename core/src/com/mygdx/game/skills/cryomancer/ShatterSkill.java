@@ -14,12 +14,12 @@ public class ShatterSkill extends TargetedSkill {
 	 */
 	public ShatterSkill() {
 		super(null);
-		name = "Shatter";
-		desc = "Target chilled enemy loses all stacks of chill, then deals damage in an area for each chill stack lost.";
 	}
 
 	public ShatterSkill(Entity entity) {
 		super(entity);
+		name = "Shatter";
+		desc = "Target chilled enemy loses all stacks of chill, then deals damage in an area for each chill stack lost.";
 	}
 
 	@Override

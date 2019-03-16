@@ -1,31 +1,34 @@
 package com.mygdx.game.items;
 
 public class Equipped {
-	
-	private boolean mainEquipped = false;
-	private boolean offEquipped = false;
+
+	private boolean weaponEquipped = false;
+//	private boolean mainEquipped = false;
+//	private boolean offEquipped = false;
 	private boolean armourEquipped = false;
 	private boolean equipment1Equipped = false;
 	private boolean equipment2Equipped = false;
 	private boolean equipment3Equipped = false;
-	
-	private Weapon selected; // Selected weapon
-	private Weapon main;
-	private Weapon off;
+
+	private Weapon weapon;
+//	private Weapon selected; // Selected weapon
+//	private Weapon main;
+//	private Weapon off;
 	private Armour armour;
 	private Equipment equipment1;
 	private Equipment equipment2;
 	private Equipment equipment3;
 	
-	public enum SelectedWeapon {
+	/*public enum SelectedWeapon {
 		MAIN,
 		OFF
-	}
+	}*/
 	
 	public Equipped() {
-		selected = new NullWeapon();
-		main = new NullWeapon();
-		off = new NullWeapon();
+		weapon = new NullWeapon();
+//		selected = new NullWeapon();
+//		main = new NullWeapon();
+//		off = new NullWeapon();
 		armour = new NullArmour();
 		equipment1 = new NullEquipment();
 		equipment2 = new NullEquipment();
@@ -33,8 +36,9 @@ public class Equipped {
 	}
 	
 	public void update(Inventory inventory) {
-		boolean noMain = true;
-		boolean noOff = true;
+//		boolean noMain = true;
+//		boolean noOff = true;
+		boolean noWeapon = true;
 		boolean noArmour = true;
 		boolean noEquipment1 = true;
 		boolean noEquipment2 = true;
@@ -45,11 +49,14 @@ public class Equipped {
 		// Instead of this:
 		// weapon.id == main.id
 		
-		for (Weapon weapon: inventory.weapons) {
-			if (weapon.id == main.id) {
+		for (Weapon invWeapon: inventory.weapons) {
+			/*if (weapon.id == main.id) {
 				noMain = false;
 			} else if (weapon.id == off.id) {
 				noOff = false;
+			}*/
+			if (invWeapon.id == weapon.id) {
+				noWeapon = false;
 			}
 		}
 		
@@ -69,11 +76,14 @@ public class Equipped {
 			}
 		}
 		
-		if (noMain) {
+		/*if (noMain) {
 			resetMain();
 		}
 		if (noOff) {
 			resetOff();
+		}*/
+		if (noWeapon) {
+			resetWeapon();
 		}
 		if (noArmour) {
 			resetArmour();
@@ -90,16 +100,17 @@ public class Equipped {
 	}
 
 	public boolean isWeaponEquipped() {
-		return mainEquipped || offEquipped;
+//		return mainEquipped || offEquipped;
+		return weaponEquipped;
 	}
 
-	public boolean isMainEquipped() {
+	/*public boolean isMainEquipped() {
 		return mainEquipped;
 	}
 
 	public boolean isOffEquipped() {
 		return offEquipped;
-	}
+	}*/
 
 	public boolean isArmourEquipped() {
 		return armourEquipped;
@@ -117,11 +128,11 @@ public class Equipped {
 		return equipment3Equipped;
 	}
 
-	public Weapon getSelected() {
+	/*public Weapon getSelected() {
 		return selected;
-	}
+	}*/
 
-	public void setSelected(SelectedWeapon selectedWeapon) {
+	/*public void setSelected(SelectedWeapon selectedWeapon) {
 		switch (selectedWeapon) {
 			case MAIN:
 				selected = main;
@@ -130,13 +141,13 @@ public class Equipped {
 				selected = off;
 				break;
 		}
-	}
+	}*/
 	
-	public void resetSelected() {
+	/*public void resetSelected() {
 		this.selected = new NullWeapon();
-	}
+	}*/
 
-	public Weapon getMain() {
+	/*public Weapon getMain() {
 		return main;
 	}
 
@@ -168,6 +179,23 @@ public class Equipped {
 		off.equipped = false;
 		off = new NullWeapon();
 		offEquipped = false;
+	}*/
+
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
+	public void setWeapon(Weapon newWeapon) {
+		weapon.equipped = false;
+		weapon = newWeapon;
+		weapon.equipped = true;
+		weaponEquipped = true;
+	}
+
+	public void resetWeapon() {
+		weapon.equipped = false;
+		weapon = new NullWeapon();
+		weaponEquipped = false;
 	}
 
 	public Armour getArmour() {

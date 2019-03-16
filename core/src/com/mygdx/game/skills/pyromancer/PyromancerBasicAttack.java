@@ -21,7 +21,7 @@ public class PyromancerBasicAttack extends BasicAttack {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(0.5f, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
+		defaultStart(0.5f, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
 	}
 
 	@Override

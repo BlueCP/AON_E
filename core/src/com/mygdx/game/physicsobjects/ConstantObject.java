@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.physics.PhysicsManager.Tag;
 import com.mygdx.game.physics.WorldObject;
@@ -18,7 +21,7 @@ import com.mygdx.game.rendering.IsometricRenderer.Visibility;
  */
 public abstract class ConstantObject extends WorldObject implements Disposable {
 
-	protected Vector3 pos;
+//	protected Vector3 pos;
 	private TextureRegion[] textures;
 	private boolean isAnimation;
 	private short animationFrame = 0; // If not an animation, stay at 0
@@ -26,6 +29,25 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 	private int spriteY;
 	public btCollisionObject collisionObject;
 	private Array<Tag> tags;
+	private Chunk chunk;
+
+	/**
+	 * The way to represent which chunk this object belongs to.
+	 * Because chunks are irregular, this is necessary to identify which objects are in a chunk.
+	 * For example, when unloading a single chunk, it's possible to only unload objects which belong to that chunk.
+	 */
+	public enum Chunk {
+
+		START("start"); // Just the default value for now, as there's only one chunk.
+
+		private String type;
+		public String type() { return type; }
+
+		Chunk(String type) {
+			this.type = type;
+		}
+
+	}
 	
 	ConstantObject(btCollisionObject collisionObject, TextureRegion[] textureRegions, String id, Array<Tag> newTags,
 				   int spriteX, int spriteY) {
@@ -41,6 +63,23 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 		pos = new Vector3();
 		collisionObject.getWorldTransform().getTranslation(pos);
 	}
+
+	/**
+	 * This method overrides getChunk in WorldObject. Unlike other world objects such as entities and projectiles,
+	 * the chunk of constant objects never changes, so it makes sense to put it in a field.
+	 * @return the chunk this constant object is in.
+	 */
+	public Chunk getChunk() {
+		return chunk;
+	}
+
+	public void setChunk(Chunk chunk) {
+		this.chunk = chunk;
+	}
+
+	public abstract void save(Kryo kryo, Output output);
+
+	public abstract void load(Kryo kryo, Input input);
 	
 	protected void update() {
 		collisionObject.getWorldTransform().getTranslation(pos);

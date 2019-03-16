@@ -1,13 +1,16 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -115,11 +118,11 @@ public class Entities {
 	}
 
 	public void saveEntities(String dir) {
-		Array<btRigidBody> tempBodies = new Array<>();
+		/*Array<btRigidBody> tempBodies = new Array<>();
 
 		for (Entity entity: allEntities) {
 			tempBodies.add(entity.prepareForSave());
-		}
+		}*/
 
 		try {
 			KryoManager.write(this, "saves/" + dir + "/world/entities.txt");
@@ -127,15 +130,25 @@ public class Entities {
 			e.printStackTrace();
 		}
 
-		for (int i = 0; i < tempBodies.size; i ++) {
+		/*for (int i = 0; i < tempBodies.size; i ++) {
 			allEntities.get(i).rigidBody = tempBodies.get(i);
+		}*/
+	}
+
+	public void saveEntities(String name, Kryo kryo) {
+		try {
+			Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath() + "/saves/" + name + "/world/entities.txt"));
+			kryo.writeObject(output, this);
+			output.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public void saveEntitiesAndExit(String dir) {
-		for (Entity entity: allEntities) {
+		/*for (Entity entity: allEntities) {
 			entity.prepareForSaveAndExit();
-		}
+		}*/
 		
 		try {
 			if (!(Gdx.files.local("saves/" + dir + "/world").exists())) {

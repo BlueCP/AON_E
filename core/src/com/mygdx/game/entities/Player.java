@@ -1,8 +1,12 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.mygdx.game.mobtypes.MobClass;
 import com.mygdx.game.mobtypes.MobRace;
 import com.mygdx.game.screens.PlayScreen;
@@ -14,6 +18,8 @@ import com.mygdx.game.skills.pyromancer.StokeTheFlamesSkill;
 import com.mygdx.game.skills.pyromancer.SupernovaSkill;
 import com.mygdx.game.skills.pyromancer.VikingFuneralSkill;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Map.Entry;
 
 public class Player extends Entity {
@@ -65,6 +71,7 @@ public class Player extends Entity {
 //		System.out.println(inventory.weapons.size);
 
 		inventory.addWeapon("Iron shortsword");
+//		inventory.addWeapon("Iron shortsword");
 //		newGameData.player.inventory.weapons.get(0).setDesc("Testing...");
 		inventory.addOtherItem("Iron ore");
 
@@ -145,13 +152,29 @@ public class Player extends Entity {
 	public void landBasicAttack(Entity entity, PlayScreen playScreen) {
 		fracturingBlast.testfor(entity, playScreen);
 	}
-	
+
+
+
+	@Override
+	void processAfterLoading() {
+		processAfterLoadingBase();
+
+		vikingFuneral.setEntity(this);
+		stokeTheFlames.setEntity(this);
+		flamingBarrage.setEntity(this);
+		supernovaSkill.setEntity(this);
+		lastingChill.setEntity(this);
+		bitingCold.setEntity(this);
+		encaseInIce.setEntity(this);
+		fracturingBlast.setEntity(this);
+	}
+
 	/*
 	 * Normal save, would be done from PlayScreen.
 	 */
 	public void saveAndExit() {
 		try {
-			prepareForSaveAndExit();
+//			prepareForSaveAndExit();
 			KryoManager.write(this, "saves/" + playerName + "/player.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,10 +183,20 @@ public class Player extends Entity {
 
 	public void save() {
 		try {
-			btRigidBody body = prepareForSave();
+//			btRigidBody body = prepareForSave();
 			KryoManager.write(this, "saves/" + playerName + "/player.txt");
-			rigidBody = body;
+//			rigidBody = body;
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void save(Kryo kryo) {
+		try {
+			Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath() + "/saves/" + playerName + "/player.txt"));
+			kryo.writeObject(output, this);
+			output.close();
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -175,7 +208,7 @@ public class Player extends Entity {
 		try {
 			rigidBody = null;
 			rigidBodyMatrix = new Matrix4();
-			rigidBodyMatrix.setTranslation(new Vector3(0, 0.6f, 0));
+			rigidBodyMatrix.setTranslation(new Vector3(0, 10f, 0));
 			setLinearVelocity(new Vector3());
 
 			KryoManager.write(this, "saves/" + playerName + "/player.txt");
@@ -191,7 +224,8 @@ public class Player extends Entity {
 		// We need to get session as a parameter because at initial loading, player would not have been updated and given session
 		try {
 			Player player = KryoManager.read("saves/" + session.playerName + "/player.txt", Player.class);
-			player.loadRigidBody();
+//			player.loadRigidBody();
+			player.processAfterLoading();
 			return player;
 		} catch (Exception e) {
 			e.printStackTrace();

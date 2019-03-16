@@ -1,6 +1,6 @@
 package com.mygdx.game.items;
 
-public abstract class OtherItem extends Item {
+public abstract class OtherItem extends NonGearItem {
 
 //	protected boolean consumable;
 	

@@ -32,6 +32,8 @@ public class Util {
 		return getPhysicsId(id, "3000");
 	}
 
+	public static int getDroppedItemId(int id) { return getPhysicsId(id, "4000"); }
+
 
 	public static int getImmobileTerrainId(int id) {
 		return getPhysicsId(id, "1100");

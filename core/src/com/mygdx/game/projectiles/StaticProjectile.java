@@ -9,7 +9,7 @@ import com.mygdx.game.entities.Entity;
 
 public abstract class StaticProjectile extends Projectile {
 
-	protected btCollisionObject collisionObject;
+	protected transient btCollisionObject collisionObject;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
@@ -22,18 +22,7 @@ public abstract class StaticProjectile extends Projectile {
 
 	void updatePos() {
 		collisionObject.getWorldTransform().getTranslation(pos);
-	}
-
-	public void prepareForSaveAndExit() {
 		collisionObject.getWorldTransform(worldTransform);
-		shape = null;
-		collisionObject = null;
-	}
-
-	public btCollisionObject prepareForSave() {
-		btCollisionObject obj = collisionObject;
-		prepareForSaveAndExit();
-		return obj;
 	}
 
 	public btCollisionObject getCollisionObject() {
@@ -56,6 +45,7 @@ public abstract class StaticProjectile extends Projectile {
 	}
 
 	public void destroy(btDynamicsWorld dynamicsWorld, ProjectileManager projectileManager) {
+		projectileManager.idPool.add(id);
 		dynamicsWorld.removeCollisionObject(collisionObject);
 		projectileManager.projectiles.removeValue(this, false);
 		shape.dispose();

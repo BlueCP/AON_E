@@ -104,6 +104,8 @@ public class InventoryScreen extends MyScreen {
 		Table weaponsTable = new Table();
 		weaponsTable.setName("weaponsTable");
 		weaponsTable.align(Align.center | Align.top);
+		ButtonGroup<TextButton> weaponEquipButtonGroup = new ButtonGroup<>();
+		weaponEquipButtonGroup.setMinCheckCount(0);
 		for (Weapon weapon: playScreen.player.inventory().weapons) {
 			TextButton infoButton = new TextButton(weapon.getName(), AON_E.SKIN);
 			infoButton.addListener(new ClickListener() {
@@ -145,11 +147,11 @@ public class InventoryScreen extends MyScreen {
 					statsTable.add(new Label("Range:", AON_E.SKIN)).row();
 					statsTable.add(new Label(String.valueOf(weapon.getRange()), AON_E.SKIN)).row();
 					
-					statsTable.add(new Label("Range type:", AON_E.SKIN)).row();
+					/*statsTable.add(new Label("Range type:", AON_E.SKIN)).row();
 					statsTable.add(new Label(String.valueOf(weapon.getRangeType()), AON_E.SKIN)).row();
 					
 					statsTable.add(new Label("Handedness:", AON_E.SKIN)).row();
-					statsTable.add(new Label(String.valueOf(weapon.getHands()), AON_E.SKIN));
+					statsTable.add(new Label(String.valueOf(weapon.getHands()), AON_E.SKIN));*/
 					
 					stage.addActor(statsTable);
 				}
@@ -168,8 +170,9 @@ public class InventoryScreen extends MyScreen {
 				}
 				
 			});
-			
+
 			TextButton equipButton = new TextButton("[equip]", AON_E.SKIN, "toggle");
+			equipButton.setChecked(weapon.isEquipped());
 			equipButton.setName(String.valueOf(weapon.getId()));
 			equipButton.addListener(new ClickListener() {
 
@@ -177,7 +180,7 @@ public class InventoryScreen extends MyScreen {
 				public void clicked(InputEvent event, float x, float y) {
 //					Weapon weapon = (Weapon)weapon;
 					Equipped equipped = playScreen.player.equipped();
-					if (weapon.isEquipped() && weapon.getId() == equipped.getMain().getId()) {
+					/*if (weapon.isEquipped() && weapon.getId() == equipped.getMain().getId()) {
 						equipped.resetMain();
 					} else if (weapon.isEquipped() && weapon.getId() == equipped.getOff().getId()) {
 						equipped.resetOff();
@@ -187,10 +190,16 @@ public class InventoryScreen extends MyScreen {
 						equipped.setOff(weapon);
 					} else {
 						// If 2 weapons are equipped
+					}*/
+					if (equipButton.isChecked()) {
+						equipped.setWeapon(weapon);
+					} else {
+						equipped.resetWeapon();
 					}
 				}
 				
 			});
+			weaponEquipButtonGroup.add(equipButton);
 			
 			weaponsTable.add(infoButton).padRight(20);
 			weaponsTable.add(equipButton);
@@ -203,6 +212,8 @@ public class InventoryScreen extends MyScreen {
 		Table armourTable = new Table();
 		armourTable.setName("armourTable");
 		armourTable.align(Align.center | Align.top);
+		ButtonGroup<TextButton> armourEquipButtonGroup = new ButtonGroup<>();
+		armourEquipButtonGroup.setMinCheckCount(0);
 		for (Armour armour: playScreen.player.inventory().armour) {
 			TextButton infoButton = new TextButton(armour.getName(), AON_E.SKIN);
 			infoButton.addListener(new ClickListener() {
@@ -256,6 +267,7 @@ public class InventoryScreen extends MyScreen {
 			});
 			
 			TextButton equipButton = new TextButton("[equip]", AON_E.SKIN, "toggle");
+			equipButton.setChecked(armour.isEquipped());
 			equipButton.setName(String.valueOf(armour.getId()));
 			equipButton.addListener(new ClickListener() {
 				
@@ -263,7 +275,12 @@ public class InventoryScreen extends MyScreen {
 				public void clicked(InputEvent event, float x, float y) {
 //					Armour armour = (Armour)armour;
 					Equipped equipped = playScreen.player.equipped();
-					if (armour.isEquipped()) {
+					/*if (armour.isEquipped()) {
+						equipped.resetArmour();
+					} else {
+						equipped.setArmour(armour);
+					}*/
+					if (equipButton.isChecked()) {
 						equipped.resetArmour();
 					} else {
 						equipped.setArmour(armour);
@@ -271,6 +288,7 @@ public class InventoryScreen extends MyScreen {
 				}
 				
 			});
+			armourEquipButtonGroup.add(equipButton);
 			
 			armourTable.add(infoButton).padRight(20);
 			armourTable.add(equipButton);
@@ -282,6 +300,8 @@ public class InventoryScreen extends MyScreen {
 		Table equipmentTable = new Table();
 		equipmentTable.setName("equipmentTable");
 		equipmentTable.align(Align.center | Align.top);
+		ButtonGroup<TextButton> equipmentEquipButtonGroup = new ButtonGroup<>();
+		equipmentEquipButtonGroup.setMinCheckCount(0);
 		for (Equipment equipment: playScreen.player.inventory().equipment) {
 			TextButton infoButton = new TextButton(equipment.getName(), AON_E.SKIN);
 			infoButton.addListener(new ClickListener() {
@@ -328,6 +348,7 @@ public class InventoryScreen extends MyScreen {
 			});
 			
 			TextButton equipButton = new TextButton("[equip]", AON_E.SKIN, "toggle");
+			equipButton.setChecked(equipment.isEquipped());
 			equipButton.setName(String.valueOf(equipment.getId()));
 			equipButton.addListener(new ClickListener() {
 
@@ -349,6 +370,7 @@ public class InventoryScreen extends MyScreen {
 				}
 				
 			});
+			equipmentEquipButtonGroup.add(equipButton);
 			
 			equipmentTable.add(infoButton).padRight(20);
 			equipmentTable.add(equipButton);
@@ -388,6 +410,9 @@ public class InventoryScreen extends MyScreen {
 					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
 					statsTable.add(new Label(otherItem.getRarity().type(), AON_E.SKIN)).row();
 
+					statsTable.add(new Label("Value:", AON_E.SKIN)).row();
+					statsTable.add(new Label(String.valueOf(otherItem.getCost()), AON_E.SKIN)).row();
+
 					stage.addActor(statsTable);
 				}
 
@@ -406,7 +431,7 @@ public class InventoryScreen extends MyScreen {
 
 			});
 			otherItemsTable.add(button);
-			otherItemsTable.row();
+			otherItemsTable.row().padTop(10);
 		}
 		otherItemsPane = new ScrollPane(otherItemsTable, AON_E.SKIN);
 		otherItemsPane.setVisible(false);
@@ -414,7 +439,7 @@ public class InventoryScreen extends MyScreen {
 		Table consumableItemsTable = new Table();
 		consumableItemsTable.setName("consumableItemsTable");
 		consumableItemsTable.align(Align.center | Align.top);
-		for (ConsumableItem consumableItem: playScreen.player.inventory().consumableItems) {
+		for (Consumable consumableItem: playScreen.player.inventory().consumables) {
 			TextButton button = new TextButton(consumableItem.getName(), AON_E.SKIN);
 			button.addListener(new ClickListener() {
 
@@ -440,6 +465,9 @@ public class InventoryScreen extends MyScreen {
 					statsTable.add(new Label("Rarity:", AON_E.SKIN)).row();
 					statsTable.add(new Label(consumableItem.getRarity().type(), AON_E.SKIN)).row();
 
+					statsTable.add(new Label("Value:", AON_E.SKIN)).row();
+					statsTable.add(new Label(String.valueOf(consumableItem.getCost()), AON_E.SKIN)).row();
+
 					stage.addActor(statsTable);
 				}
 
@@ -458,7 +486,7 @@ public class InventoryScreen extends MyScreen {
 
 			});
 			consumableItemsTable.add(button);
-			consumableItemsTable.row();
+			consumableItemsTable.row().padTop(10);
 		}
 		consumableItemsPane = new ScrollPane(consumableItemsTable, AON_E.SKIN);
 		consumableItemsPane.setVisible(false);
@@ -546,7 +574,7 @@ public class InventoryScreen extends MyScreen {
 	void update() {
 		universalUpdate();
 		
-		Table weaponsTable = table.findActor("weaponsTable");
+		/*Table weaponsTable = table.findActor("weaponsTable");
 		for (int i = 1; i < weaponsTable.getRows() * 2; i += 2) {
 			// This for loop skips over the even-numbered actors because those are the infoButtons; we want the equipButtons
 			if (Integer.parseInt(weaponsTable.getChildren().get(i).getName()) == (playScreen.player.equipped().getMain().getId()) ||
@@ -577,7 +605,7 @@ public class InventoryScreen extends MyScreen {
 			} else {
 				((TextButton)equipmentTable.getChildren().get(i)).setChecked(false);
 			}
-		}
+		}*/
 	}
 	
 	@Override

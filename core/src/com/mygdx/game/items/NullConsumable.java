@@ -2,9 +2,9 @@ package com.mygdx.game.items;
 
 import com.mygdx.game.screens.PlayScreen;
 
-public class NullConsumableItem extends ConsumableItem {
+public class NullConsumable extends Consumable {
 
-	public NullConsumableItem() {
+	public NullConsumable() {
 		id = -1;
 	}
 

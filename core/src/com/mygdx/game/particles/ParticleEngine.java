@@ -1,17 +1,22 @@
 package com.mygdx.game.particles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.particles.Particle.Behaviour;
 import com.mygdx.game.particles.Particle.Sprite;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.settings.VideoSettings;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class ParticleEngine {
 
@@ -19,7 +24,7 @@ public class ParticleEngine {
 	
 	Array<Integer> idPool = new Array<>();
 
-	private Pool<Particle> particlePool = Pools.get(Particle.class);
+	private transient Pool<Particle> particlePool;
 	
 	public Array<Particle> particles;
 	private Array<ParticleNode> particleNodes;
@@ -27,9 +32,12 @@ public class ParticleEngine {
 	public ParticleEngine() {
 		particles = new Array<>();
 		particleNodes = new Array<>();
+
+		particlePool = Pools.get(Particle.class);
 	}
 
 	public void removeParticle(Particle particle, btDynamicsWorld dynamicsWorld) {
+		idPool.add(particle.id);
 		dynamicsWorld.removeRigidBody(particle.rigidBody);
 		particle.shape.dispose();
 		particle.rigidBody.dispose();
@@ -66,8 +74,7 @@ public class ParticleEngine {
 					break;
 			}
 			
-			particle.updateMovement();
-			particle.rigidBody.getWorldTransform().getTranslation(particle.pos);
+			particle.update();
 		}
 		
 		for (ParticleNode node: particleNodes) {
@@ -76,14 +83,14 @@ public class ParticleEngine {
 	}
 
 	public void save(String dir) {
-		Array<btRigidBody> tempBodies = new Array<>();
+		/*Array<btRigidBody> tempBodies = new Array<>();
 
 		for (Particle particle: particles) {
 			tempBodies.add(particle.prepareForSave());
 		}
 
 		Pool<Particle> tempParticlePool = particlePool;
-		particlePool = null;
+		particlePool = null;*/
 
 		try {
 			KryoManager.write(this, "saves/" + dir + "/particles.txt");
@@ -91,21 +98,31 @@ public class ParticleEngine {
 			e.printStackTrace();
 		}
 
-		for (int i = 0; i < tempBodies.size; i ++) {
+		/*for (int i = 0; i < tempBodies.size; i ++) {
 			particles.get(i).rigidBody = tempBodies.get(i);
 			particles.get(i).shape = tempBodies.get(i).getCollisionShape();
 		}
 
-		particlePool = tempParticlePool;
+		particlePool = tempParticlePool;*/
+	}
+
+	public void save(String name, Kryo kryo) {
+		try {
+			Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath() + "/saves/" + name + "/particles.txt"));
+			kryo.writeObject(output, this);
+			output.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void saveAndExit(String dir) {
 		try {
-			for (Particle particle: particles) {
+			/*for (Particle particle: particles) {
 				particle.prepareForSaveAndExit();
 			}
 
-			particlePool = null;
+			particlePool = null;*/
 			
 			KryoManager.write(this, "saves/" + dir + "/particles.txt");
 			

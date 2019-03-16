@@ -10,6 +10,7 @@ public class IronShortswordWeapon extends SwordWeapon {
 
 		physDamage = 1;
 		magDamage = 1;
+		range = 50;
 	}
 
 }

@@ -14,8 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryo.Kryo;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.achievements.AchievementCollection;
+import com.mygdx.game.droppeditems.DroppedItemManager;
+import com.mygdx.game.droppeditems.DroppedItemSprites;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.entities.Entity.AnimationType;
 import com.mygdx.game.entities.Entity.Facing;
@@ -28,6 +31,7 @@ import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
 import com.mygdx.game.quests.Quests;
 import com.mygdx.game.rendering.IsometricRenderer;
+import com.mygdx.game.serialisation.GameSerialisationThread;
 import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.stages.FurnaceStage;
 import com.mygdx.game.stages.HudStage;
@@ -62,11 +66,14 @@ public class PlayScreen extends MyScreen {
 	public Array<OwnStage> ownStages = new Array<>();
 //	public boolean isoMovement = false;
 	Thread loadNewChunksThread;
+	public Thread gameSerialisationThread;
+	public Thread.State previousGameSerialisationThreadState = Thread.State.NEW;
 	
 	public IsometricRenderer isoRenderer;
 	public PhysicsManager physicsManager;
 	public ParticleEngine particleEngine;
 	public ProjectileManager projectileManager;
+	public DroppedItemManager droppedItemManager;
 	
 	private OwnStage hudStage; // Stage is visible to classes in the package so that screens can access stage when setting the input processor back to stage and this (e.g. inventory screen)
 	
@@ -98,6 +105,13 @@ public class PlayScreen extends MyScreen {
 			this.button = button;
 		}
 	}
+
+	/**
+	 * No-arg constructor for copying.
+	 */
+	private PlayScreen() {
+		super(null);
+	}
 	
 	public PlayScreen(AON_E game, String name) {
 		super(game);
@@ -109,10 +123,13 @@ public class PlayScreen extends MyScreen {
 		ParticleSprites.initialise(game);
 		ProjectileSprites.initialise(game);
 		StatusEffectSprites.init(game);
+		DroppedItemSprites.initialise(game);
 		
 		playerName = name;
 		loadGame();
 //		player.inventory.addWeapon("Iron shortsword");
+
+		gameSerialisationThread = new Thread(new GameSerialisationThread(this));
 
 		//particleEngine = new ParticleEngine();
 		
@@ -120,7 +137,7 @@ public class PlayScreen extends MyScreen {
 
 		skillCollection = new SkillCollection();
 
-		physicsManager = new PhysicsManager(game.manager, player, entities, particleEngine, projectileManager);
+		physicsManager = new PhysicsManager(this);
 		
 		//entities.addEntity(player, physicsManager);
 		
@@ -247,6 +264,14 @@ public class PlayScreen extends MyScreen {
 		for (OwnStage ownStage: ownStages) {
 			ownStage.render(this);
 		}
+
+		/*if (droppedItemManager.droppedItems.size > 0) {
+			System.out.println(droppedItemManager.droppedItems.get(0).pos);
+		}*/
+
+		/*if (player.inventory.contains("Iron ingot")) {
+			particleEngine.addFlyUpPoint(physicsManager.getDynamicsWorld(), new Vector3(0, 0.1f, 0), 1, 5, 2, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
+		}*/
 
 		/*
 		game.batch.begin();
@@ -491,7 +516,7 @@ public class PlayScreen extends MyScreen {
 		//mouseEvents.clear();
 
 		updateTick();
-		physicsManager.importNearbyChunks(player.pos);
+		physicsManager.importNearbyChunks(player);
 		physicsManager.unloadFarAwayChunks(this, player.pos);
 		time.update(((HudStage)hudStage).fastTime.isChecked());
 		player.update(this);
@@ -522,6 +547,11 @@ public class PlayScreen extends MyScreen {
 		}
 		*/
 		//movementLogic();
+		previousGameSerialisationThreadState = gameSerialisationThread.getState();
+		if (gameSerialisationThread.getState() == Thread.State.TERMINATED) {
+			gameSerialisationThread = new Thread(new GameSerialisationThread(this));
+		}
+
 		player.preUpdate();
 		entities.preUpdate();
 
@@ -532,7 +562,7 @@ public class PlayScreen extends MyScreen {
 		//mouseEvents.clear();
 
 		updateTick();
-		physicsManager.importNearbyChunks(player.pos);
+		physicsManager.importNearbyChunks(player);
 		physicsManager.unloadFarAwayChunks(this, player.pos);
 		time.update(((HudStage)hudStage).fastTime.isChecked());
 		player.update(this);
@@ -544,6 +574,7 @@ public class PlayScreen extends MyScreen {
 
 		particleEngine.update(delta, physicsManager.getDynamicsWorld());
 		projectileManager.update(delta, this);
+		droppedItemManager.update(delta, this);
 		physicsManager.update(delta, this);
 
 		player.postUpdate();
@@ -588,6 +619,12 @@ public class PlayScreen extends MyScreen {
 			}
 			else if (keycode == Keys.SPACE) {
 				testForJump();
+				/*if (!gameSerialisationThread.isAlive()) {
+					gameSerialisationThread.start();
+				}*/
+			}
+			else if (keycode == Keys.CONTROL_LEFT) {
+				droppedItemManager.addDroppedOtherItemFlyUp("Iron ore", new Vector3(2, 5, 2), 2, physicsManager.getDynamicsWorld());
 			}
 			else if (keycode == Keys.C) {
 				// Below is temporary testing code
@@ -908,12 +945,37 @@ public class PlayScreen extends MyScreen {
 			
 			// Saving stuff to projectiles.txt
 			projectileManager.saveAndExit(playerName);
+
+			// Saving stuff to droppedItems.txt
+			droppedItemManager.saveAndExit(playerName);
+
+			physicsManager.saveConstantObjectData(playerName);
 			
 			// Saving stuff to time.txt
 			time.saveTime(playerName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void save(Kryo kryo, String playerName, Player player, AchievementCollection achievements, Quests quests,
+							Entities entities, ParticleEngine particleEngine, ProjectileManager projectileManager,
+							DroppedItemManager droppedItemManager, PhysicsManager physicsManager) {
+		player.save(kryo);
+
+		achievements.savePlayerAchievements(playerName, kryo);
+
+		quests.save(playerName, kryo);
+
+		entities.saveEntities(playerName, kryo);
+
+		particleEngine.save(playerName, kryo);
+
+		projectileManager.save(playerName, kryo);
+
+		droppedItemManager.save(playerName, kryo);
+
+		physicsManager.saveConstantObjectData(playerName, kryo);
 	}
 
 	public void save() {
@@ -937,7 +999,9 @@ public class PlayScreen extends MyScreen {
 
 			projectileManager.save(playerName);
 
-			physicsManager.saveMobileObjectData(playerName);
+			droppedItemManager.save(playerName);
+
+			physicsManager.saveConstantObjectData(playerName);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -978,6 +1042,9 @@ public class PlayScreen extends MyScreen {
 			
 			// Loading stuff from projectiles.txt
 			projectileManager = ProjectileManager.load(playerName);
+
+			// Loading stuff from droppedItems.txt
+			droppedItemManager = DroppedItemManager.load(playerName);
 			
 			// Loading time
 			time = Time.loadTime(playerName);

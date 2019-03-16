@@ -1,7 +1,7 @@
 package com.mygdx.game.physics;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.*;
@@ -13,40 +13,45 @@ import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSol
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
+import com.mygdx.game.droppeditems.DroppedItem;
 import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.physicsobjects.*;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.utils.Util;
 import javafx.util.Pair;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 public class PhysicsManager {
 
-	Array<ConstantObject> allConstantObjects;
+	transient Array<ConstantObject> allConstantObjects;
 
-	Array<ImmobileTerrain> immobileTerrain;
-	Array<ImmobileController> immobileControllers;
-	Array<ImmobileControllable> immobileControllables;
-	Array<ImmobileInteractive> immobileInteractives;
+	transient Array<ImmobileTerrain> immobileTerrain;
+	transient Array<ImmobileController> immobileControllers;
+	transient Array<ImmobileControllable> immobileControllables;
+	transient Array<ImmobileInteractive> immobileInteractives;
 
-	Array<MobileTerrain> mobileTerrain;
-	Array<MobileController> mobileControllers;
-	Array<MobileControllable> mobileControllables;
-	Array<MobileInteractive> mobileInteractives;
+	transient Array<MobileTerrain> mobileTerrain;
+	transient Array<MobileController> mobileControllers;
+	transient Array<MobileControllable> mobileControllables;
+	transient Array<MobileInteractive> mobileInteractives;
 
 
-	public Array<ImmobileObject> renderableImmobileObjects = new Array<>();
-	public Array<MobileObject> renderableMobileObjects = new Array<>();
+	public transient Array<ImmobileObject> renderableImmobileObjects = new Array<>();
+	public transient Array<MobileObject> renderableMobileObjects = new Array<>();
 
-	public Array<Entity> renderableEntities = new Array<>();
-	public Array<Particle> renderableParticles = new Array<>();
-	public Array<Projectile> renderableProjectiles = new Array<>();
+	public transient Array<Entity> renderableEntities = new Array<>();
+	public transient Array<Particle> renderableParticles = new Array<>();
+	public transient Array<Projectile> renderableProjectiles = new Array<>();
+	public transient Array<DroppedItem> renderableDroppedItems = new Array<>();
 
 	/**
 	 * Key: this is the 'port'.
@@ -56,8 +61,8 @@ public class PhysicsManager {
 
 	private Entities entities;
 
-    private btCollisionShape renderableFinderOrig;
-    private btConvexShape renderableFinder;
+    private transient btCollisionShape renderableFinderOrig;
+    private transient btConvexShape renderableFinder;
     
 //    private MyContactListener contactListener;
     
@@ -66,10 +71,11 @@ public class PhysicsManager {
     public final static short HITBOX_FLAG = 1<<9;
     public final static short PARTICLE_FLAG = 1<<10;
     public final static short PROJECTILE_FLAG = 1<<11;
+    public final static short DROPPED_ITEM_FLAG = 1<<12;
     //public final static short TESTER_FLAG = 1<<12;
     public final static short IGNORE_FLAG = 1<<12;
     
-    public PhysicsWorldLoader physicsWorldLoader;
+    public transient PhysicsWorldBuilder physicsWorldBuilder;
     
     public static final Vector3 gravity = new Vector3(0, -5f, 0);
     public static final float lowestPoint = -10;
@@ -77,11 +83,11 @@ public class PhysicsManager {
     
     private Array<Integer> hitIds;
 
-	private btCollisionConfiguration collisionConfig;
-	private btDispatcher dispatcher;
-	private btBroadphaseInterface broadphase;
-	private btDynamicsWorld dynamicsWorld;
-	private btConstraintSolver constraintSolver;
+	private transient btCollisionConfiguration collisionConfig;
+	private transient btDispatcher dispatcher;
+	private transient btBroadphaseInterface broadphase;
+	private transient btDynamicsWorld dynamicsWorld;
+	private transient btConstraintSolver constraintSolver;
     
     /*
      * Tags are used to specify behaviours of static objects.
@@ -159,6 +165,10 @@ public class PhysicsManager {
     	return String.valueOf(id).startsWith("3000");
     }
 
+    private static boolean isDroppedItem(int id) {
+    	return String.valueOf(id).startsWith("4000");
+	}
+
     void removeImmobileTerrain(ImmobileTerrain obj) {
     	allConstantObjects.removeValue(obj, false);
     	immobileTerrain.removeValue(obj, false);
@@ -199,16 +209,28 @@ public class PhysicsManager {
 		mobileInteractives.removeValue(obj, false);
 	}
 
-    public void importNearbyChunks(Vector3 pos) {
-    	physicsWorldLoader.importNearbyChunks(pos);
+    public void importNearbyChunks(Player player) {
+    	physicsWorldBuilder.importNearbyChunks(this, player);
 	}
 
 	public void unloadFarAwayChunks(PlayScreen playScreen, Vector3 pos) {
-    	physicsWorldLoader.unloadFarAwayChunks(playScreen, pos);
+    	physicsWorldBuilder.unloadFarAwayChunks(playScreen, pos);
 	}
 
-    public void saveMobileObjectData(String name) {
-    	Array<Integer> ids = new Array<>();
+    public void saveConstantObjectData(String name) {
+		try {
+//			Gdx.files.local("saves/" + name + "/constObjData").mkdirs();
+			Kryo kryo = KryoManager.getKryo();
+			Output output = new Output(new FileOutputStream("saves/" + name + "/constObjData.txt"));
+
+			for (ConstantObject constantObject: allConstantObjects) {
+				constantObject.save(kryo, output);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+    	/*Array<Integer> ids = new Array<>();
     	Array<Matrix4> transforms = new Array<>();
     	Array<Vector3> velocities = new Array<>();
 
@@ -237,11 +259,23 @@ public class PhysicsManager {
 
 		KryoManager.write(ids, "saves/" + name + "/mobileObjData/ids.txt");
 		KryoManager.write(transforms, "saves/" + name + "/mobileObjData/transforms.txt");
-		KryoManager.write(velocities, "saves/" + name + "/mobileObjData/velocities.txt");
+		KryoManager.write(velocities, "saves/" + name + "/mobileObjData/velocities.txt");*/
 	}
 
-	void loadMobileObjectData(String name) {
-		if (Gdx.files.local("saves/" + name + "/mobileObjData/ids.txt").exists()) {
+	public void saveConstantObjectData(String name, Kryo kryo) {
+		try {
+			Output output = new Output(new FileOutputStream("saves/" + name + "/constObjData.txt"));
+
+			for (ConstantObject constantObject: allConstantObjects) {
+				constantObject.save(kryo, output);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*void loadConstantObjectData(String name, int x, int y) {
+		*//*if (Gdx.files.local("saves/" + name + "/mobileObjData/ids.txt").exists()) {
 			Array<Integer> ids = KryoManager.read("saves/" + name + "/mobileObjData/ids.txt", Array.class);
 			Array<Matrix4> transforms = KryoManager.read("saves/" + name + "/mobileObjData/transforms.txt", Array.class);
 			Array<Vector3> velocities = KryoManager.read("saves/" + name + "/mobileObjData/velocities.txt", Array.class);
@@ -251,8 +285,17 @@ public class PhysicsManager {
 				obj.collisionObject.setWorldTransform(transforms.get(i));
 				obj.setLinearVelocity(velocities.get(i));
 			}
+		}*//*
+
+		if (Gdx.files.local("saves/" + name + "constObjData.txt").exists()) {
+			try {
+				Kryo kryo = KryoManager.getKryo();
+				Input input = new Input(new FileInputStream("saves/" + name + "/world/chunks/" + x + "_" + y + "/constObjData.txt"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
-	}
+	}*/
     
     /*
      * Of all objects in the world, find those which can be rendered on the screen.
@@ -263,6 +306,7 @@ public class PhysicsManager {
     	renderableEntities.clear();
     	renderableParticles.clear();
     	renderableProjectiles.clear();
+    	renderableDroppedItems.clear();
     	
     	Array<Integer> hitIds = convexSweepTestAll(renderableFinder, playScreen.player.pos.cpy(), TestMode.TOP_TO_BOTTOM);
     	for (int i = 0; i < hitIds.size; i ++) {
@@ -287,6 +331,12 @@ public class PhysicsManager {
 				for (Projectile projectile: playScreen.projectileManager.projectiles) {
 					if (projectile.physicsId == id) {
 						renderableProjectiles.add(projectile);
+					}
+				}
+			} else if (isDroppedItem(id)) {
+    			for (DroppedItem droppedItem: playScreen.droppedItemManager.droppedItems) {
+    				if (droppedItem.physicsId == id) {
+    					renderableDroppedItems.add(droppedItem);
 					}
 				}
 			}
@@ -352,9 +402,14 @@ public class PhysicsManager {
 			//transform.set(worldTrans);
 		}
     }
+
+	/**
+	 * No-arg constructor, mainly for copying purposes.
+	 */
+	private PhysicsManager() { }
 	
-	public PhysicsManager(AssetManager manager, Player player, Entities entities, ParticleEngine particleEngine, ProjectileManager projectileManager) {
-		this.entities = entities;
+	public PhysicsManager(PlayScreen playScreen) {
+		this.entities = playScreen.entities;
 		
         collisionConfig = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -371,36 +426,55 @@ public class PhysicsManager {
 		renderableFinder = (btConvexShape)renderableFinderOrig;
 
         allConstantObjects = new Array<>();
+
+		immobileTerrain = new Array<>();
+		immobileControllers = new Array<>();
+		immobileControllables = new Array<>();
+		immobileInteractives = new Array<>();
+
+		mobileTerrain = new Array<>();
+		mobileControllers = new Array<>();
+		mobileControllables = new Array<>();
+		mobileInteractives = new Array<>();
         
-        physicsWorldLoader = new PhysicsWorldLoader(manager);
-        physicsWorldLoader.importNearbyChunks(player.pos);
+        physicsWorldBuilder = new PhysicsWorldBuilder(playScreen.game.manager, this);
+        importNearbyChunks(playScreen.player);
 
-        immobileTerrain = physicsWorldLoader.immobileTerrain;
-        immobileControllers = physicsWorldLoader.immobileControllers;
-        immobileControllables = physicsWorldLoader.immobileControllables;
-        immobileInteractives = physicsWorldLoader.immobileInteractives;
+        /*immobileTerrain = physicsWorldBuilder.immobileTerrain;
+        immobileControllers = physicsWorldBuilder.immobileControllers;
+        immobileControllables = physicsWorldBuilder.immobileControllables;
+        immobileInteractives = physicsWorldBuilder.immobileInteractives;
 
-        mobileTerrain = physicsWorldLoader.mobileTerrain;
-        mobileControllers = physicsWorldLoader.mobileControllers;
-        mobileControllables = physicsWorldLoader.mobileControllables;
-        mobileInteractives = physicsWorldLoader.mobileInteractives;
+        mobileTerrain = physicsWorldBuilder.mobileTerrain;
+        mobileControllers = physicsWorldBuilder.mobileControllers;
+        mobileControllables = physicsWorldBuilder.mobileControllables;
+        mobileInteractives = physicsWorldBuilder.mobileInteractives;*/
 
-        loadMobileObjectData(player.getPlayerName());
+		/*Vector2 chunkCoords = new Vector2(Math.floorDiv((int) player.pos.x, PhysicsWorldBuilder.chunkSize),
+										   Math.floorDiv((int) player.pos.z, PhysicsWorldBuilder.chunkSize));
+        loadConstantObjectData(player.getPlayerName(), (int)chunkCoords.x, (int)chunkCoords.y);*/
 
-//        immobileTerrain = physicsWorldLoader.loadStatics(dynamicsWorld);
+//        immobileTerrain = physicsWorldBuilder.loadStatics(dynamicsWorld);
         //allConstantObjects.get(0).getCollisionObject().setWorldTransform(allConstantObjects.get(0).getCollisionObject().getWorldTransform().setToRotation(new Vector3(0, 1, 0), 180));
-        //immobileControllers = physicsWorldLoader.loadControllers(dynamicsWorld);
-        //immobileControllables = physicsWorldLoader.loadControllables(dynamicsWorld);
+        //immobileControllers = physicsWorldBuilder.loadControllers(dynamicsWorld);
+        //immobileControllables = physicsWorldBuilder.loadControllables(dynamicsWorld);
 
-		Array<Integer> immobileRenderingIndexes = physicsWorldLoader.loadImmobileRenderingOrder();
+		/*ObjectMap<Integer, Integer> immobileRenderingIndexes = physicsWorldBuilder.loadImmobileRenderingOrder((int)chunkCoords.x, (int)chunkCoords.y);
 		for (int i = 0; i < immobileTerrain.size + immobileControllers.size + immobileControllables.size + immobileInteractives.size; i ++) {
 			ImmobileObject obj = findImmobileObject(Util.getImmobileTerrainId(i + 1));
 			obj.setRenderingIndex(immobileRenderingIndexes.get(i));
-			allConstantObjects.add(obj);
-			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
-		}
+//			allConstantObjects.add(obj);
+//			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+		}*/
 
-		/*Array<Integer> terrainRenderingIndexes = physicsWorldLoader.loadTerrainRenderingOrder();
+		/*ObjectMap<Integer, Integer> immobileRenderingIndexes = physicsWorldBuilder.loadImmobileRenderingOrder((int)chunkCoords.x, (int)chunkCoords.y);
+		Iterator<ObjectMap.Entry<Integer, Integer>> iterator = immobileRenderingIndexes.entries().iterator();
+		while (iterator.hasNext()) {
+			ObjectMap.Entry<Integer, Integer> entry = iterator.next();
+			findImmobileObjectNoPrefix(entry.key).setRenderingIndex(entry.value);
+		}*/
+
+		/*Array<Integer> terrainRenderingIndexes = physicsWorldBuilder.loadTerrainRenderingOrder();
 		for (int i = 0; i < immobileTerrain.size; i ++) {
 			ImmobileTerrain obj = immobileTerrain.get(i);
 			obj.setRenderingIndex(terrainRenderingIndexes.get(i));
@@ -408,7 +482,7 @@ public class PhysicsManager {
 			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
 		}
 
-		Array<Integer> controllerRenderingIndexes = physicsWorldLoader.loadControllerRenderingOrder();
+		Array<Integer> controllerRenderingIndexes = physicsWorldBuilder.loadControllerRenderingOrder();
 		for (int i = 0; i < immobileControllers.size; i ++) {
 			ImmobileController obj = immobileControllers.get(i);
 			obj.setRenderingIndex(controllerRenderingIndexes.get(i));
@@ -416,7 +490,7 @@ public class PhysicsManager {
 			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
 		}
 
-		Array<Integer> controllableRenderingIndexes = physicsWorldLoader.loadControllableRenderingOrder();
+		Array<Integer> controllableRenderingIndexes = physicsWorldBuilder.loadControllableRenderingOrder();
 		for (int i = 0; i < immobileControllables.size; i ++) {
 			ImmobileControllable obj = immobileControllables.get(i);
 			obj.setRenderingIndex(controllableRenderingIndexes.get(i));
@@ -424,7 +498,7 @@ public class PhysicsManager {
 			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
 		}
 
-		Array<Integer> interactiveRenderingIndexes = physicsWorldLoader.loadInteractiveRenderingOrder();
+		Array<Integer> interactiveRenderingIndexes = physicsWorldBuilder.loadInteractiveRenderingOrder();
 		for (int i = 0; i < immobileInteractives.size; i ++) {
 			ImmobileInteractive obj = immobileInteractives.get(i);
 			obj.setRenderingIndex(interactiveRenderingIndexes.get(i));
@@ -432,19 +506,23 @@ public class PhysicsManager {
 			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
 		}*/
 
-        dynamicsWorld.addRigidBody(player.rigidBody, HITBOX_FLAG, ALL_FLAG);
+        dynamicsWorld.addRigidBody(playScreen.player.rigidBody, HITBOX_FLAG, ALL_FLAG);
 
         for (Entity entity: entities.allEntities) {
         	dynamicsWorld.addRigidBody(entity.rigidBody, HITBOX_FLAG, ALL_FLAG);
         }
         
-        for (Particle particle: particleEngine.particles) {
+        for (Particle particle: playScreen.particleEngine.particles) {
         	dynamicsWorld.addRigidBody(particle.rigidBody, PARTICLE_FLAG, TERRAIN_FLAG);
         }
         
-        for (Projectile projectile: projectileManager.projectiles) {
+        for (Projectile projectile: playScreen.projectileManager.projectiles) {
         	projectile.addToDynamicsWorld(dynamicsWorld, PROJECTILE_FLAG, ALL_FLAG);
         }
+
+        for (DroppedItem droppedItem: playScreen.droppedItemManager.droppedItems) {
+        	dynamicsWorld.addRigidBody(droppedItem.rigidBody, DROPPED_ITEM_FLAG, ALL_FLAG ^ DROPPED_ITEM_FLAG);
+		}
         
         /*for (StaticObject obj: immobileTerrain) {
         	allConstantObjects.add(obj);
@@ -463,9 +541,19 @@ public class PhysicsManager {
         
         hitIds = new Array<>();
 	}
+
+	/**
+	 * Creates initial files.
+	 * @param name the name of the player.
+	 */
+	public static void createInitialFiles(String name) {
+		Gdx.files.local("saves/" + name + "/world/chunks/start").mkdirs();
+		FileHandle fileHandle = new FileHandle("saves/" + name + "/world/chunks/start/constObjData.txt");
+		fileHandle.writeString("", false);
+	}
 	
 	public void update(float delta, PlayScreen playScreen) {
-		for (Entity entity: this.entities.allEntities) {
+		/*for (Entity entity: this.entities.allEntities) {
 			if (!entities.allEntities.contains(entity, false)) {
 				this.entities.allEntities.removeValue(entity, false);
 				dynamicsWorld.removeRigidBody(entity.rigidBody);
@@ -476,7 +564,7 @@ public class PhysicsManager {
 				this.entities.allEntities.add(entity);
 				dynamicsWorld.addRigidBody(entity.rigidBody, HITBOX_FLAG, ALL_FLAG);
 			}
-		}
+		}*/
 
 		/*for (Entity entity: entities.allEntities) {
 //			System.out.println(entity.additionalMovementVector);
@@ -588,6 +676,33 @@ public class PhysicsManager {
 		return null;
 	}
 
+	/**
+	 * Finds the immobile object with the given id; the normal id, not the physics id.
+	 */
+	private ImmobileObject findImmobileObjectNoPrefix(int id) {
+		for (ImmobileTerrain obj: immobileTerrain) {
+			if (obj.physicsId == id) {
+				return obj;
+			}
+		}
+		for (ImmobileController obj: immobileControllers) {
+			if (obj.physicsId == id) {
+				return obj;
+			}
+		}
+		for (ImmobileControllable obj: immobileControllables) {
+			if (obj.physicsId == id) {
+				return obj;
+			}
+		}
+		for (ImmobileInteractive obj: immobileInteractives) {
+			if (obj.physicsId == id) {
+				return obj;
+			}
+		}
+		return null;
+	}
+
 	private MobileObject findMobileObject(int physicsId) {
 		if (isMobileTerrain(physicsId)) {
 			for (MobileTerrain obj: mobileTerrain) {
@@ -633,6 +748,7 @@ public class PhysicsManager {
 				testProjectileEntityCollision(objA, objB, playScreen);
 				testEntityStaticObjectCollision(objA, objB, playScreen);
 				testProjectileProjectileCollision(objA, objB, playScreen);
+				testEntityDroppedItemCollision(objA, objB, playScreen);
 			} else { // If the collision is just aabb
 				
 			}
@@ -683,6 +799,16 @@ public class PhysicsManager {
 			Projectile projectileB = playScreen.projectileManager.get(Util.getId(objB.getUserValue()));
 			projectileA.onHitProjectile(projectileB, playScreen);
 			projectileB.onHitProjectile(projectileA, playScreen);
+		}
+	}
+
+	private void testEntityDroppedItemCollision(btCollisionObject objA, btCollisionObject objB, PlayScreen playScreen) {
+		if (isEntityOrPlayer(objA.getUserValue()) && isDroppedItem(objB.getUserValue())) {
+			Entity entity = playScreen.entities.getEntity(Util.getId(objA.getUserValue()), playScreen.player);
+			DroppedItem droppedItem = playScreen.droppedItemManager.get(Util.getId(objB.getUserValue()));
+			droppedItem.pickedUpBy(entity, playScreen.physicsManager.getDynamicsWorld(), playScreen.droppedItemManager);
+		} else if (isEntityOrPlayer(objB.getUserValue()) && isDroppedItem(objA.getUserValue())) {
+			testEntityDroppedItemCollision(objB, objA, playScreen);
 		}
 	}
 	
@@ -937,7 +1063,7 @@ public class PhysicsManager {
 		btGhostObject ghostObj = new btGhostObject();
 		ghostObj.setCollisionShape(collisionObject.getCollisionShape());
 		
-		ghostObj.setUserValue(40000);
+		ghostObj.setUserValue(50000);
 		ghostObj.setWorldTransform(ghostObj.getWorldTransform().setTranslation(vectorFrom));
 		ghostObj.setCollisionFlags(ghostObj.getCollisionFlags() | CollisionFlags.CF_NO_CONTACT_RESPONSE);
 		//ghostObj.setWorldTransform(ghostObj.getWorldTransform().translate(0.2f, 0.2f, -0.2f));
@@ -1047,7 +1173,7 @@ public class PhysicsManager {
 		ghostObj.setCollisionShape(shape);
 		
 		ghostObj.setWorldTransform(ghostObj.getWorldTransform().setTranslation(pos));
-		ghostObj.setUserValue(40000);
+		ghostObj.setUserValue(50000);
 		ghostObj.setCollisionFlags(ghostObj.getCollisionFlags() | CollisionFlags.CF_NO_CONTACT_RESPONSE);
 		dynamicsWorld.addCollisionObject(ghostObj);
 		dynamicsWorld.performDiscreteCollisionDetection(); // Update the collisions (as we've just added the ghost object)
@@ -1076,7 +1202,7 @@ public class PhysicsManager {
 		dispatcher.dispose();
 		collisionConfig.dispose();
 //		contactListener.dispose();
-		physicsWorldLoader.importer.dispose();
+		physicsWorldBuilder.importer.dispose();
 		
 		renderableFinder.dispose();
 		renderableFinderOrig.dispose();

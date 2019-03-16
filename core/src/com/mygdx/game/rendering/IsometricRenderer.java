@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AON_E;
+import com.mygdx.game.droppeditems.DroppedItem;
 import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
@@ -273,6 +274,20 @@ public class IsometricRenderer {
 			}
 		}
 	}
+
+	private void calculateDroppedItemsRenderingOrder(PhysicsManager physicsManager) {
+		for (int i = 0; i < physicsManager.renderableDroppedItems.size; i ++) {
+			DroppedItem droppedItem = physicsManager.renderableDroppedItems.get(i);
+			Array<Integer> hitIds = physicsManager.convexSweepTestAll(droppedItem.rigidBody, droppedItem.pos);
+			int index = findLowestIndex(hitIds);
+			droppedItem.updateWorldObject(this);
+			if (hitIds.size == 0 || index == -1) { // If there are no objects blocking the projectile
+				orderedObjects.add(droppedItem);
+			} else {
+				orderedObjects.insert(index, droppedItem);
+			}
+		}
+	}
 	
 	private void calculateRenderingOrder(PhysicsManager physicsManager, Player player) {
 		orderedObjects.clear();
@@ -282,6 +297,7 @@ public class IsometricRenderer {
 		calculateEntitiesRenderingOrder(physicsManager);
 		calculateParticlesRenderingOrder(physicsManager);
 		calculateProjectilesRenderingOrder(physicsManager);
+		calculateDroppedItemsRenderingOrder(physicsManager);
 	}
 	
 	private void renderObjects(SpriteBatch spriteBatch, Entities entities) {

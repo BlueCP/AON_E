@@ -1,17 +1,24 @@
 package com.mygdx.game.projectiles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.projectiles.cryomancer.*;
 import com.mygdx.game.projectiles.pyromancer.*;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 
-public class ProjectileManager {
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+public class ProjectileManager implements Disposable {
 
 	Array<Integer> idPool = new Array<>();
 	
@@ -50,9 +57,9 @@ public class ProjectileManager {
 	
 	public void saveAndExit(String dir) {
 		try {
-			for (Projectile projectile: projectiles) {
+			/*for (Projectile projectile: projectiles) {
 				projectile.prepareForSaveAndExit();
-			}
+			}*/
 			
 			KryoManager.write(this, "saves/" + dir + "/projectiles.txt");
 		} catch (Exception e) {
@@ -61,7 +68,7 @@ public class ProjectileManager {
 	}
 
 	public void save(String dir) {
-		Array<btCollisionObject> colObjs = new Array<>();
+		/*Array<btCollisionObject> colObjs = new Array<>();
 		Array<btRigidBody> rigidBodies = new Array<>();
 
 		for (Projectile projectile: projectiles) {
@@ -70,11 +77,11 @@ public class ProjectileManager {
 			} else if (projectile instanceof StaticProjectile) {
 				colObjs.add(((StaticProjectile) projectile).prepareForSave());
 			}
-		}
+		}*/
 
 		try {
 			KryoManager.write(this, "saves/" + dir + "/projectiles.txt");
-			int dynamicCounter = 0;
+			/*int dynamicCounter = 0;
 			int staticCounter = 0;
 			for (int i = 0; i < projectiles.size; i ++) {
 				Projectile projectile = projectiles.get(i);
@@ -87,8 +94,18 @@ public class ProjectileManager {
 					projectile.shape = colObjs.get(staticCounter).getCollisionShape();
 					staticCounter ++;
 				}
-			}
+			}*/
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void save(String name, Kryo kryo) {
+		try {
+			Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath() + "/saves/" + name + "/projectiles.txt"));
+			kryo.writeObject(output, this);
+			output.close();
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}

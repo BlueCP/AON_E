@@ -10,7 +10,7 @@ import com.mygdx.game.projectiles.Projectile.ProjectileSprite;
 
 public class ProjectileSprites {
 
-private static Animation<AtlasRegion> fireballAnimation;
+	private static Animation<AtlasRegion> fireballAnimation;
 	
 	static TextureRegion getCurrentTexture(Projectile projectile) {
 		if (projectile.sprite == ProjectileSprite.FIREBOLT) {
