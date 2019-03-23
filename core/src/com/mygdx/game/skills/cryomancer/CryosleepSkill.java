@@ -1,6 +1,7 @@
 package com.mygdx.game.skills.cryomancer;
 
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.projectiles.cryomancer.Cryosleep;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.SimpleSkill;
 
@@ -26,7 +27,7 @@ public class CryosleepSkill extends SimpleSkill {
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		playScreen.projectileManager.addCryosleep(entity, playScreen.physicsManager.getDynamicsWorld(), entity.pos, 3);
+		playScreen.projectileManager.addProjectileNow(new Cryosleep(entity, entity.pos, 3), playScreen.physicsManager.getDynamicsWorld());
 		putOnCooldown(5);
 	}
 }

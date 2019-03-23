@@ -2,6 +2,7 @@ package com.mygdx.game.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -9,8 +10,6 @@ import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.KryoCopyable;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.items.Equipped;
 import com.mygdx.game.items.Inventory;
@@ -19,12 +18,14 @@ import com.mygdx.game.physics.Hitboxes;
 import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.IsometricRenderer.Visibility;
+import com.mygdx.game.rendering.RenderingUtils;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.ActiveSkill;
 import com.mygdx.game.skills.BasicAttack;
 import com.mygdx.game.skills.NullBasicAttack;
 import com.mygdx.game.skills.Skill;
 import com.mygdx.game.statuseffects.*;
+import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.utils.Util;
 
 import java.util.HashMap;
@@ -42,6 +43,7 @@ public abstract class Entity extends WorldObject {
 	public BurningEffect burningEffect;
 	public StunnedEffect stunnedEffect;
 	public SlowedEffect slowedEffect;
+	public SpeedEffect speedEffect;
 	public RootedEffect rootedEffect;
 	public ChilledEffect chilledEffect;
 	public FrozenEffect frozenEffect;
@@ -99,8 +101,10 @@ public abstract class Entity extends WorldObject {
 	public transient btRigidBody rigidBody;
 	float stateTime = 0f;
 	
-	public Queue<Array<EntityAction>> actions;
+	public Queue<EntityAction> actions;
 	private Vector3 targetLocation = new Vector3(); // The location that the player has targeted in the world (by clicking there), or that this entity is targeting.
+	private boolean targetedLocationThisTick = false; // True if the entity targeted a new location this tick, false if not.
+	private Vector2 movementLocation = new Vector2(); // The location that this entity will move to (usually walking). For now it is a 2D vector, may change to 3D when adding pathfinding.
 	
 	private boolean movementVectorWasChanged = false;
 	
@@ -139,12 +143,13 @@ public abstract class Entity extends WorldObject {
 		*/
 		
 		if (movementVectorWasChanged) {
-			applyMovementChanges();
+			/*applyMovementChanges();
 			if (rootedEffect.isActive() || stunnedEffect.isActive() || frozenEffect.isActive()) {
 				rigidBody.setLinearVelocity(parentVelocity);
 			} else {
 				rigidBody.setLinearVelocity(movementVector.add(parentVelocity));
-			}
+			}*/
+			rigidBody.setLinearVelocity(movementVector.add(parentVelocity));
 		}
 		
 		movementVectorWasChanged = false;
@@ -195,7 +200,82 @@ public abstract class Entity extends WorldObject {
 	 * Apply effects such as slows.
 	 */
 	private void applyMovementChanges() {
-		movementVector.scl(1 - (slowedEffect.movementDampening() + chilledEffect.movementDampening()));
+		realWalkSpeed *= (1 - (slowedEffect.movementDampening() + chilledEffect.movementDampening())) +
+							1 + (speedEffect.movementBoost());
+	}
+
+	private void rotate(Vector2 diff) {
+//		Vector2 diff = movementLocation.cpy().sub(new Vector2(pos.x, pos.z));
+		if (canRotate()) {
+			/*Vector2 renderPos2 = renderPos.cpy().add(getTexture().getRegionWidth()/2f * playScreen.isoRenderer.camera.getZoom(),
+					getTexture().getRegionHeight()/2f * playScreen.isoRenderer.camera.getZoom());
+
+			int screenX1 = (int) (playScreen.virtualCoords.x - renderPos2.x); // X distance relative to player
+			int halfScreenX1 = screenX1 / 2; // Reasons for this can be found in one of the notebooks.
+			int screenY1 = (int) (playScreen.virtualCoords.y - renderPos2.y); // Y distance relative to player*/
+
+			// TAN2 ANGLE CALCULATION STARTS HERE //
+			Vector2 newVector = RenderMath.cartToInvertedIso(diff.x, diff.y);
+
+			float angle = (float) Math.toDegrees(MathUtils.atan2(newVector.y, newVector.x / 2));
+
+			if (angle < 0) {
+				angle += 360;
+			}
+
+			/*angle += 90;
+			if (angle >= 360) {
+				angle -= 360;
+			}*/
+			// TAN2 ANGLE CALCULATION ENDS HERE //
+
+			// COSINE ANGLE CALCULATION STARTS HERE //
+			/*int b = (int) (renderPos.y);
+			double c = Math.sqrt(halfScreenX1*halfScreenX1 + screenY1*screenY1); // Total distance relative to the player
+			double a = Math.sqrt(halfScreenX1*halfScreenX1 + (virtualCoords.y)*(virtualCoords.y));
+			double cosx = (float) ((b*b + c*c - a*a)/(2 * b * c));
+			if (cosx > 1) { // In case a rounding error made cosx very slightly greater than 1
+				cosx = 1;
+			} else if (cosx < -1) {
+				cosx = -1;
+			}
+			double angle = Math.toDegrees(Math.acos(cosx)); // Using the cosine theorem to find the angle of the click
+			if (virtualCoords.x < player.renderPos.x) {
+				angle = 360 - angle;
+			}*/
+			// COSINE ANGLE CALCULATION ENDS HERE //
+
+			angle = (float) (Math.round(angle/22.5f) * 22.5); // Round to nearest 22.5 degrees (which is 360/number of directions)
+			String facing = "N" + String.valueOf(angle).replace('.', '_'); // Convert to the format for 'facing'
+			for (Facing facing0: Facing.values()) {
+				if (facing.equals(facing0.toString())) {
+					setFacing(facing0);
+				}
+			}
+		} // Don't bother rotating the player if they can't rotate
+
+	}
+
+	private void testForWalk(Vector2 diff) {
+		if (canWalk()) {
+			setAnimationType(AnimationType.WALK);
+
+			/*float angle = Float.parseFloat(getFacing().toString().substring(1).replace('_', '.'));
+			int angle1 = Math.floorMod((int)angle, 90);
+			double opposite = getRealWalkSpeed()*Math.sin(Math.toRadians(angle1));
+			double adjacent = getRealWalkSpeed()*Math.cos(Math.toRadians(angle1));
+			double xComponent = (angle < 90 || (angle >= 180 && angle < 270)) ? opposite : adjacent;
+			xComponent = (angle < 180) ? xComponent : -xComponent;
+			double yComponent = (angle < 90 || (angle >= 180 && angle < 270)) ? adjacent : opposite;
+			yComponent = (angle > 90 && angle < 270) ? yComponent : -yComponent;
+			Vector2 point = RenderMath.cartToInvertedIso((float)xComponent, (float)yComponent);*/
+
+			Vector2 movement = diff.cpy().setLength(realWalkSpeed);
+
+//			addMovementVector(point.x, 0, point.y);
+			addMovementVector(movement.x, 0, movement.y);
+		}  // Don't bother with walking logic if the player can't actually walk
+
 	}
 	
 	void generateId(Entities entities) {
@@ -224,7 +304,7 @@ public abstract class Entity extends WorldObject {
 	
 	@Override
 	public void updateWorldObject(IsometricRenderer renderer) {
-		Vector2 coords = renderer.cartesianToScreen(pos.x, pos.y, pos.z);
+		Vector2 coords = RenderMath.cartToScreen(renderer.camera, pos.x, pos.y, pos.z);
 		renderPos = new Vector2(coords.x - getTexture().getRegionWidth()/2f, coords.y - getTexture().getRegionHeight()/2f);
 		visibility = Visibility.VISIBLE;
 	}
@@ -315,7 +395,8 @@ public abstract class Entity extends WorldObject {
 		
 		realPhysDamage = basePhysDmg; // In future this calculation may take into account modifiers, buffs, etc
 		
-		realWalkSpeed = baseWalkSpeed;
+		realWalkSpeed = baseWalkSpeed * (1 - (slowedEffect.movementDampening() + chilledEffect.movementDampening()))
+				 						    + (speedEffect.movementBoost());
 		
 		//updateMovementFlags();
 	}
@@ -351,9 +432,10 @@ public abstract class Entity extends WorldObject {
 	 */
 	private void updateActionAnimations() {
 		if (actions.size > 0) {
-			for (EntityAction action: actions.first()) {
+			setAnimationType(actions.first().getAnimationType());
+			/*for (EntityAction action: actions.first()) {
 				setAnimationType(action.getAnimationType());
-			}
+			}*/
 		}
 	}
 	
@@ -387,20 +469,22 @@ public abstract class Entity extends WorldObject {
 	 * Iterate through and 1) update and 2) remove completed actions.
 	 */
 	private void updateActions(PlayScreen playScreen) {
+//		System.out.println(actions);
 		if (actions.size > 0) {
-			for (int i = 0; i < actions.first().size; i ++) {
-				EntityAction action = actions.first().get(i);
-				action.setCountUp(action.getCountUp() + Gdx.graphics.getDeltaTime());
-				action.update(this, playScreen);
-				if (action.wantsDeletion()) {
-					actions.first().removeIndex(i);
-					if (actions.first().size == 0) {
+			EntityAction action = actions.first();
+			action.setCountUp(action.getCountUp() + Gdx.graphics.getDeltaTime());
+			action.update(this, playScreen);
+			if (actions.size > 0) {
+				EntityAction action1 = actions.first();
+				if (action1.wantsDeletion()) {
+					actions.removeValue(action1, false);
+					/*if (actions.first().size == 0) {
 						actions.removeIndex(0);
 						if (actions.size == 0) {
 							break;
 						}
-					}
-					i --;
+					}*/
+//					i--;
 				}
 			}
 		}
@@ -419,13 +503,24 @@ public abstract class Entity extends WorldObject {
 	}
 
 	/**
-	 * Update the cooldowns of the basic attack (may be 0) and all active skills.
+	 * Update the cooldowns of the basic attack (may be 0) and all active skills, and updates all active skills.
 	 */
-	private void updateSkillCooldowns() {
+	private void updateSkills(PlayScreen playScreen) {
 		basicAttack.updateCooldown();
 
 		for (ActiveSkill skill: skills) {
 			skill.updateCooldown();
+			skill.update(playScreen);
+		}
+	}
+
+	private void updateMovement() {
+		Vector2 diff = movementLocation.cpy().sub(new Vector2(pos.x, pos.z));
+//		System.out.println(diff.len());
+//		System.out.println(realWalkSpeed * Gdx.graphics.getDeltaTime());
+		if (diff.len() > realWalkSpeed * Gdx.graphics.getDeltaTime() * 1.5f) { // If the distance to the location is more than ~1.5 frames worth. Otherwise stop moving.
+			rotate(diff);
+			testForWalk(diff);
 		}
 	}
 	
@@ -433,15 +528,18 @@ public abstract class Entity extends WorldObject {
 	 * An update that all entities go through.
 	 */
 	void universalUpdate(PlayScreen playScreen) {
+		updateStats();
+
+		updateMovement();
+
 		updateAnimationType();
 		updateAnimationState();
 		prevAnimationType = animationType;
 
-		updateStats();
 		updateTargetEntity(playScreen.entities);
 		equipped.update(inventory);
 		updateActions(playScreen);
-		updateSkillCooldowns();
+		updateSkills(playScreen);
 		
 		moveByMovementVector();
 		rigidBody.getWorldTransform().getTranslation(pos);
@@ -472,6 +570,13 @@ public abstract class Entity extends WorldObject {
 			setAnimationType(AnimationType.MIDAIR);
 		}
 	}
+
+	/**
+	 * Sets the current animation back to the starting frame.
+	 */
+	public void resetAnimation() {
+		stateTime = 0;
+	}
 	
 	/*
 	 * Update before anything else has happened in PlayScreen.executeLogic.
@@ -479,6 +584,7 @@ public abstract class Entity extends WorldObject {
 	public void preUpdate() {
 		resetAnimationType();
 		updateActionAnimations();
+		targetedLocationThisTick = false; // Assume no target location this tick until shown otherwise.
 		//updateAnimationType();
 	}
 
@@ -577,6 +683,7 @@ public abstract class Entity extends WorldObject {
 		for (Skill skill: skills) {
 			skill.setEntity(this);
 		}
+		basicAttack.setEntity(this);
 	}
 
 	/**
@@ -611,6 +718,7 @@ public abstract class Entity extends WorldObject {
 		burningEffect = new BurningEffect(this);
 		stunnedEffect = new StunnedEffect(this);
 		slowedEffect = new SlowedEffect(this);
+		speedEffect = new SpeedEffect(this);
 		rootedEffect = new RootedEffect(this);
 		chilledEffect = new ChilledEffect(this);
 		frozenEffect = new FrozenEffect(this);
@@ -634,6 +742,7 @@ public abstract class Entity extends WorldObject {
 		burningEffect.update();
 		stunnedEffect.update();
 		slowedEffect.update();
+		speedEffect.update();
 		rootedEffect.update();
 		chilledEffect.update();
 		frozenEffect.update();
@@ -675,7 +784,7 @@ public abstract class Entity extends WorldObject {
 	 * Custom implementations may take into account things that interact with burning, such as the Pyromancer passive 'Stoke the Flames'.
 	 */
 	public void burn(Entity entity, int power, float duration) {
-		burnBase(power, duration);
+		entity.burnBase(power, duration);
 	}
 
 	public void burnedBy(Entity entity, int power, float duration) {
@@ -687,7 +796,7 @@ public abstract class Entity extends WorldObject {
 	}
 
 	public void chill(Entity entity, int power, float duration) {
-		chillBase(power, duration);
+		entity.chillBase(power, duration);
 	}
 
 	public void chilledBy(Entity entity, int power, float duration) {
@@ -696,6 +805,18 @@ public abstract class Entity extends WorldObject {
 
 	private void chillBase(int power, float duration) {
 		chilledEffect.add(power, duration, false, false);
+	}
+
+	public void stun(Entity entity, float duration) {
+		entity.stunBase(duration);
+	}
+
+	public void stunnedBy(Entity entity, float duration) {
+		entity.stun(this, duration);
+	}
+
+	private void stunBase(float duration) {
+		stunnedEffect.add(duration);
 	}
 
 	/**
@@ -732,9 +853,23 @@ public abstract class Entity extends WorldObject {
 	}
 
 	/**
+	 * Procs any passives when an ability deals damage to an entity.
+	 */
+	public void landAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
+		// By default, does nothing. Custom implementations if wanted in subclasses.
+	}
+
+	/**
 	 * Procs any passives when this entity lands a basic attack on another entity.
 	 */
 	public void landBasicAttack(Entity entity, PlayScreen playScreen) {
+		// By default, does nothing. Custom implementations if wanted in subclasses.
+	}
+
+	/**
+	 * Procs any passives when this entity damages another entity with a basic attack.
+	 */
+	public void landBasicAttackDamage(Entity entity, float damage, PlayScreen playScreen) {
 		// By default, does nothing. Custom implementations if wanted in subclasses.
 	}
 	
@@ -1063,6 +1198,22 @@ public abstract class Entity extends WorldObject {
 
 	public void setBasicAttack(BasicAttack basicAttack) {
 		this.basicAttack = basicAttack;
+	}
+
+	public boolean hasTargetedLocationThisTick() {
+		return targetedLocationThisTick;
+	}
+
+	public void setTargetedLocationThisTick(boolean targetedLocationThisTick) {
+		this.targetedLocationThisTick = targetedLocationThisTick;
+	}
+
+	public Vector2 getMovementLocation() {
+		return movementLocation;
+	}
+
+	public void setMovementLocation(Vector2 movementLocation) {
+		this.movementLocation = movementLocation;
 	}
 
 }

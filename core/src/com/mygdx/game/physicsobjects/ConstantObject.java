@@ -14,6 +14,7 @@ import com.mygdx.game.physics.PhysicsManager.Tag;
 import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.IsometricRenderer.Visibility;
+import com.mygdx.game.utils.RenderMath;
 
 /**
  * Represents objects in the world; terrain, controllers, controllables, and interactives.
@@ -48,9 +49,15 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 		}
 
 	}
-	
-	ConstantObject(btCollisionObject collisionObject, TextureRegion[] textureRegions, String id, Array<Tag> newTags,
-				   int spriteX, int spriteY) {
+
+	/**
+	 * The normal constructor that most Constant Objects will use.
+	 * @param collisionObject the collision object of this object.
+	 * @param textureRegions the array of texture regions which will be used as the sprite/animation.
+	 * @param id the id of this constant object.
+	 * @param newTags the tags which this object has.
+	 */
+	ConstantObject(btCollisionObject collisionObject, TextureRegion[] textureRegions, String id, Array<Tag> newTags) {
 		this.collisionObject = collisionObject;
 		this.textures = textureRegions;
 		this.id = Integer.parseInt(id);
@@ -58,10 +65,29 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 		if (textureRegions.length > 1) {
 			isAnimation = true;
 		}
-		this.spriteX = spriteX;
-		this.spriteY = spriteY;
+		/*this.spriteX = spriteX;
+		this.spriteY = spriteY;*/
 		pos = new Vector3();
+//		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(new Vector3(0, 0, 0)));
+//		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(new Vector3(3, 3, 0)));
 		collisionObject.getWorldTransform().getTranslation(pos);
+		Vector2 renderCoords = RenderMath.cartToIso(pos.x, pos.y, pos.z);
+		this.spriteX = (int) (renderCoords.x - textureRegions[0].getRegionWidth()/2f); // Use the first element of texture regions as we assume they're all the same size.
+		this.spriteY = (int) (renderCoords.y - textureRegions[0].getRegionHeight()/2f);
+	}
+
+	/**
+	 * This constructor is used exclusively by NullConstantObject.
+	 */
+	ConstantObject() {
+		this.collisionObject = new btCollisionObject();
+		this.textures = new TextureRegion[1];
+		this.id = -1;
+		this.tags = new Array<>();
+		isAnimation = false;
+		pos = new Vector3();
+		spriteX = 0;
+		spriteY = 0;
 	}
 
 	/**

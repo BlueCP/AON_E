@@ -197,11 +197,11 @@ public class Camera {
 		unlimitedActions.add(new InstantZoomAction(zoom));
 	}
 	
-	float getZoom() {
+	public float getZoom() {
 		return orthographicCamera.zoom;
 	}
 	
-	void setZoom(float zoom) {
+	public void setZoom(float zoom) {
 		orthographicCamera.zoom = zoom;
 	}
 	

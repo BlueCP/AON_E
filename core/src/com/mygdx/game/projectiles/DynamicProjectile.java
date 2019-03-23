@@ -19,8 +19,8 @@ public abstract class DynamicProjectile extends Projectile {
 	 */
 	public DynamicProjectile() { }
 
-	protected DynamicProjectile(Entity entity, ProjectileManager projectileEngine, ProjectileSprite sprite, Vector3 pos, float lifetime) {
-		super(entity, projectileEngine, sprite, pos, lifetime);
+	protected DynamicProjectile(Entity entity, ProjectileSprite sprite, Vector3 pos, float lifetime) {
+		super(entity, sprite, pos, lifetime);
 		linearVelocity = new Vector3();
 	}
 

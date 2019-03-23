@@ -15,6 +15,7 @@ import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.IsometricRenderer.Visibility;
+import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.utils.Util;
 
 public class Particle extends WorldObject implements Pool.Poolable {
@@ -183,7 +184,7 @@ public class Particle extends WorldObject implements Pool.Poolable {
 	public void updateWorldObject(IsometricRenderer renderer) {
 		//physicsId = rigidBody.getUserValue();
 		//texture = getTexture();
-		Vector2 coords = renderer.cartesianToScreen(pos.x, pos.y, pos.z);
+		Vector2 coords = RenderMath.cartToScreen(renderer.camera, pos.x, pos.y, pos.z);
 		coords.sub(getTexture().getRegionWidth()/2f, getTexture().getRegionHeight()/2f);
 //		coords.x -= getTexture().getRegionWidth()/2f;
 //		coords.y -= getTexture().getRegionHeight()/2f;

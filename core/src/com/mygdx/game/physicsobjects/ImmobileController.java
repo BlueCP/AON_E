@@ -12,8 +12,8 @@ public abstract class ImmobileController extends ImmobileObject {
 	int[] ports; // The 'ports' that this controller has influence over
 
 	public ImmobileController(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags,
-							  int spriteX, int spriteY, int[] ports) {
-		super(collisionObject, texture, id, tags, spriteX, spriteY);
+							  int[] ports) {
+		super(collisionObject, texture, id, tags);
 
 		this.ports = ports;
 		physicsId = Util.getImmobileControllerId(this.id);

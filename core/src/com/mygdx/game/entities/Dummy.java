@@ -1,5 +1,6 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.screens.PlayScreen;
@@ -31,7 +32,7 @@ public class Dummy extends Entity {
 	
 	@Override
 	public void onUpdate(PlayScreen session) {
-
+		stunnedEffect.add(1); // To stop the dummy from constantly walking to (0, 0, 0).
 	}
 
 	@Override

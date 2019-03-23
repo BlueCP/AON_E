@@ -1,6 +1,7 @@
 package com.mygdx.game.skills.pyromancer;
 
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.projectiles.pyromancer.LavaSnare;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.TargetedSkill;
 
@@ -28,7 +29,7 @@ public class LavaSnareSkill extends TargetedSkill {
 	public void finish(PlayScreen playScreen) {
 		if (entity.getTargetEntity() != -1) {
 			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player);
-			playScreen.projectileManager.addLavaSnare(entity, playScreen.physicsManager.getDynamicsWorld(), targetEntity.pos.cpy(), 3, targetEntity);
+			playScreen.projectileManager.addProjectileNow(new LavaSnare(entity, targetEntity.pos.cpy(), 3, targetEntity), playScreen.physicsManager.getDynamicsWorld());
 			putOnCooldown(3);
 		} else {
 			failResolve();

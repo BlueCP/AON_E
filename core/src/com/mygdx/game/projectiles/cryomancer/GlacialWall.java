@@ -3,12 +3,9 @@ package com.mygdx.game.projectiles.cryomancer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
 
@@ -24,16 +21,15 @@ public class GlacialWall extends StaticProjectile {
 	 */
 	public GlacialWall() { }
 
-	public GlacialWall(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
-		super(entity, projectileEngine, ProjectileSprite.FIREBOLT, pos, lifetime);
+	public GlacialWall(Entity entity, Vector3 pos, float lifetime) {
+		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
 
 		name = "Glacial Wall";
 		startPos = entity.pos.cpy();
 
 		this.pos.add(0, halfExtents.y, 0);
-		loadPhysicsObject();
-		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
-		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
+//		loadPhysicsObject();
+//		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
 	}
 
 	@Override
@@ -68,6 +64,8 @@ public class GlacialWall extends StaticProjectile {
 		}
 
 		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setToRotation(Vector3.Y, -rotation));
+
+		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
 	}
 
 }

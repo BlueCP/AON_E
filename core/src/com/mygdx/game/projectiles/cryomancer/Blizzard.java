@@ -4,13 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
-import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
 
@@ -30,8 +27,8 @@ public class Blizzard extends StaticProjectile {
 	 */
 	public Blizzard() { }
 
-	public Blizzard(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
-		super(entity, projectileEngine, ProjectileSprite.FIREBOLT, pos, lifetime);
+	public Blizzard(Entity entity, Vector3 pos, float lifetime) {
+		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
 
 		name = "Blizzard";
 		hitEntities = new Array<>();
@@ -39,9 +36,9 @@ public class Blizzard extends StaticProjectile {
 		pushDirection = pos.cpy().sub(entity.pos).nor();
 
 		this.pos.add(0, height/2, 0);
-		loadPhysicsObject();
-		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
-		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
+
+//		loadPhysicsObject();
+//		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
 	}
 
 	@Override
@@ -61,6 +58,7 @@ public class Blizzard extends StaticProjectile {
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
 			entity.dealtDamageBy(offender, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage());
 			offender.landAbility(entity, playScreen);
+			offender.landAbilityDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage(), playScreen);
 			hitEntities.add(entity.id);
 		}
 
@@ -81,8 +79,8 @@ public class Blizzard extends StaticProjectile {
 	@Override
 	protected void loadPhysicsObject() {
 		defaultLoadCollisionObject(new btCylinderShape(new Vector3(radius, height/2, radius)));
-
 		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
+		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
 	}
 
 }

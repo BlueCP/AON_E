@@ -1,6 +1,7 @@
 package com.mygdx.game.skills.cryomancer;
 
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.projectiles.cryomancer.DefrostingArea;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.SimpleSkill;
 
@@ -26,7 +27,7 @@ public class RapidDefrostingSkill extends SimpleSkill {
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		playScreen.projectileManager.addDefrostingArea(entity, playScreen.physicsManager.getDynamicsWorld(), entity.pos);
+		playScreen.projectileManager.addProjectileNow(new DefrostingArea(entity, entity.pos), playScreen.physicsManager.getDynamicsWorld());
 		putOnCooldown(3);
 	}
 

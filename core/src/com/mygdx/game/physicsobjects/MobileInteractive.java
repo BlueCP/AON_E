@@ -9,8 +9,8 @@ import com.mygdx.game.utils.Util;
 
 public abstract class MobileInteractive extends MobileObject {
 
-	public MobileInteractive(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags, int spriteX, int spriteY) {
-		super(collisionObject, texture, id, tags, spriteX, spriteY);
+	public MobileInteractive(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags) {
+		super(collisionObject, texture, id, tags);
 
 		physicsId = Util.getMobileInteractiveId(this.id);
 		collisionObject.setUserValue(physicsId);

@@ -10,7 +10,7 @@ public abstract class InteractiveObject extends ConstantObject {
 
 	protected InteractiveObject(btCollisionObject collisionObject, TextureRegion[] TextureRegion, String id, Array<Tag> newTags,
 								int spriteX, int spriteY) {
-		super(collisionObject, TextureRegion, id, newTags, spriteX, spriteY);
+		super(collisionObject, TextureRegion, id, newTags);
 	}
 
 	public abstract void interact(PlayScreen playScreen);

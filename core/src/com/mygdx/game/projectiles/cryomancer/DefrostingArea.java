@@ -3,12 +3,9 @@ package com.mygdx.game.projectiles.cryomancer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
-import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
 
@@ -22,14 +19,13 @@ public class DefrostingArea extends StaticProjectile {
 	 */
 	public DefrostingArea() { }
 
-	public DefrostingArea(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos) {
-		super(entity, projectileEngine, ProjectileSprite.FIREBOLT, pos, -1);
+	public DefrostingArea(Entity entity, Vector3 pos) {
+		super(entity, ProjectileSprite.FIREBOLT, pos, -1);
 
 		name = "Rapid Defrosting";
 
-		loadPhysicsObject();
-		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(pos));
-		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
+//		loadPhysicsObject();
+//		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
 	}
 
 	@Override
@@ -46,6 +42,7 @@ public class DefrostingArea extends StaticProjectile {
 			entity.dealtDamageBy(offender, damagePerStack * entity.chilledEffect.numStacks() + offender.equipped().getWeapon().getMagDamage());
 			entity.chilledEffect.remove();
 			offender.landAbility(entity, playScreen);
+			offender.landAbilityDamage(entity, damagePerStack * entity.chilledEffect.numStacks() + offender.equipped().getWeapon().getMagDamage(), playScreen);
 			return true;
 		} else {
 			return false;
@@ -60,8 +57,8 @@ public class DefrostingArea extends StaticProjectile {
 	@Override
 	protected void loadPhysicsObject() {
 		defaultLoadCollisionObject(new btCylinderShape(new Vector3(radius, 1, radius)));
-
 		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
+		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(pos));
 	}
 
 }

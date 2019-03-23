@@ -3,12 +3,9 @@ package com.mygdx.game.projectiles.pyromancer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
-import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
 
@@ -22,21 +19,20 @@ public class SupernovaExplosion extends StaticProjectile {
 	 */
 	public SupernovaExplosion() { }
 
-	public SupernovaExplosion(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos) {
-		super(entity, projectileEngine, ProjectileSprite.FIREBOLT, pos, -1);
+	public SupernovaExplosion(Entity entity, Vector3 pos) {
+		super(entity, ProjectileSprite.FIREBOLT, pos, -1);
 
 		name = "Supernova Explosion";
 
-		loadPhysicsObject();
-		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(pos));
-		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
+//		loadPhysicsObject();
+//		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
 	}
 
 	@Override
 	protected void loadPhysicsObject() {
 		defaultLoadCollisionObject(new btSphereShape(radius));
-
 		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
+		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(pos));
 	}
 
 	@Override
@@ -51,6 +47,7 @@ public class SupernovaExplosion extends StaticProjectile {
 		if (entity.id != owner) {
 			entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
 			offender.landAbility(entity, playScreen);
+			offender.landAbilityDamage(entity, damage + offender.equipped().getWeapon().getMagDamage(), playScreen);
 			return true;
 		} else {
 			return false;

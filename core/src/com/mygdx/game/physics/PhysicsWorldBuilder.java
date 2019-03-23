@@ -625,15 +625,17 @@ public class PhysicsWorldBuilder {
 			if (textureRegionId.toString().equals(tempId) && !isAnimation) {
 				textureRegions = new TextureRegion[1];
 				textureRegions[0] = new TextureRegion(region);
-				int[] coords = textureRegionCoords.get(tempId);
-				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
+//				int[] coords = textureRegionCoords.get(tempId);
+//				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
+				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
 				setRenderingIndex(obj, immobileRenderingIndexes);
 				physicsManager.immobileTerrain.add(obj);
 				return obj;
 			} else if (textureRegionId.toString().equals(tempId) && isAnimation) {
 				textureRegions = buildAnimationFrames(regions, region, importer, collisionObject);
-				int[] coords = textureRegionCoords.get(tempId);
-				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
+//				int[] coords = textureRegionCoords.get(tempId);
+//				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
+				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
 				setRenderingIndex(obj, immobileRenderingIndexes);
 				physicsManager.immobileTerrain.add(obj);
 				return obj;

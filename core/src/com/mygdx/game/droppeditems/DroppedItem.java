@@ -10,9 +10,12 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.Player;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
+import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.utils.Util;
 
 public abstract class DroppedItem extends WorldObject {
@@ -51,10 +54,14 @@ public abstract class DroppedItem extends WorldObject {
 
 	abstract void findSprite();
 
-	void universalUpdate() {
+	void universalUpdate(PlayScreen playScreen) {
 		rigidBody.getWorldTransform().getTranslation(pos);
 		rigidBody.getWorldTransform(worldTransform);
 		linearVelocity.set(rigidBody.getLinearVelocity());
+
+		if (playScreen.player.pos.dst(pos) > 100) {
+			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.droppedItemManager);
+		}
 	}
 
 	private void loadRigidBody() {
@@ -92,7 +99,7 @@ public abstract class DroppedItem extends WorldObject {
 
 	@Override
 	public void updateWorldObject(IsometricRenderer renderer) {
-		Vector2 coords = renderer.cartesianToScreen(pos.x, pos.y, pos.z);
+		Vector2 coords = RenderMath.cartToScreen(renderer.camera, pos.x, pos.y, pos.z);
 		coords.x -= getTexture().getRegionWidth()/2f;
 		coords.y -= getTexture().getRegionHeight()/2f;
 		renderPos = coords;

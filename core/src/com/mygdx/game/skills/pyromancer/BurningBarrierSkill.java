@@ -1,6 +1,7 @@
 package com.mygdx.game.skills.pyromancer;
 
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.projectiles.pyromancer.BurningBarrier;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.LocationSkill;
 
@@ -21,12 +22,12 @@ public class BurningBarrierSkill extends LocationSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(5, 1, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen.player.getTargetLocation());
+		defaultStart(5, 1, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
 	}
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		playScreen.projectileManager.addBurningBarrier(entity, playScreen.physicsManager.getDynamicsWorld(), targetPos, 10);
+		playScreen.projectileManager.addProjectileNow(new BurningBarrier(entity, targetPos, 10), playScreen.physicsManager.getDynamicsWorld());
 		putOnCooldown(3);
 	}
 

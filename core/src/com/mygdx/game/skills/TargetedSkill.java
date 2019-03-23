@@ -25,9 +25,9 @@ public abstract class TargetedSkill extends ActiveSkill {
 			if (hasResource(entity, cost)) {
 				useSkill();
 				targetEntity = entity.getTargetEntity();
-				Array<EntityAction> array = new Array<>();
-				array.add(new SkillAction(this, animationType, time));
-				entity.actions.addFirst(array);
+//				Array<EntityAction> array = new Array<>();
+//				array.add(new SkillAction(this, animationType, time));
+				entity.actions.addFirst(new SkillAction(this, animationType, time));
 				entity.setAnimationType(animationType);
 				faceTarget(playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player));
 			}

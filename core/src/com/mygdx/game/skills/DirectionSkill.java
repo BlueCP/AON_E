@@ -20,9 +20,9 @@ public abstract class DirectionSkill extends ActiveSkill {
 		if (entity.actions.size == 0 && state == State.AVAILABLE) {
 			if (hasResource(entity, cost)) {
 				useSkill();
-				Array<EntityAction> array = new Array<>();
-				array.add(new SkillAction(this, animationType, time));
-				entity.actions.addLast(array);
+//				Array<EntityAction> array = new Array<>();
+//				array.add(new SkillAction(this, animationType, time));
+				entity.actions.addLast(new SkillAction(this, animationType, time));
 				entity.setAnimationType(animationType);
 			}
 		}

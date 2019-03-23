@@ -18,7 +18,7 @@ public class RazeZone extends StaticProjectile {
 	public RazeZone() { }
 	
 	RazeZone(Entity entity, ProjectileManager projectileManager, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
-		super(entity, projectileManager, ProjectileSprite.RAZE_ZONE, pos, lifetime);
+		super(entity, ProjectileSprite.RAZE_ZONE, pos, lifetime);
 		
 		//btGhostPairCallback ghostCall = new btGhostPairCallback();
 		//dynamicsWorld.getBroadphase().getOverlappingPairCache().setInternalGhostPairCallback(ghostCall);

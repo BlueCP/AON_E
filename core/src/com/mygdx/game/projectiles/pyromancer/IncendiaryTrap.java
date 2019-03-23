@@ -6,9 +6,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
 
@@ -21,20 +19,19 @@ public class IncendiaryTrap extends StaticProjectile {
 	 */
 	public IncendiaryTrap() { }
 
-	public IncendiaryTrap(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
-		super(entity, projectileEngine, ProjectileSprite.FIREBOLT, pos, lifetime);
+	public IncendiaryTrap(Entity entity, Vector3 pos, float lifetime) {
+		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
 
 		name = "Incendiary Trap";
 
-		loadPhysicsObject();
-		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
-		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
+//		loadPhysicsObject();
+//		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
 	}
 
 	protected void loadPhysicsObject() {
 		defaultLoadCollisionObject(new btBoxShape(halfExtents));
-
 		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
+		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
 	}
 
 	@Override
@@ -56,7 +53,7 @@ public class IncendiaryTrap extends StaticProjectile {
 			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 			projectile.destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
 
-			playScreen.projectileManager.futureProjectiles.add(new IncendiaryTrapExplosion(playScreen.entities.getEntity(owner, playScreen.player), playScreen.projectileManager, playScreen.physicsManager.getDynamicsWorld(), pos));
+			playScreen.projectileManager.addProjectileInFuture(new IncendiaryTrapExplosion(playScreen.entities.getEntity(owner, playScreen.player), pos));
 
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 4, 2,
 												Particle.Sprite.FIRE, Particle.Behaviour.POOF);

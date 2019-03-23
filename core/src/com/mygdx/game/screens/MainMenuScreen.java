@@ -180,6 +180,7 @@ public class MainMenuScreen extends MyScreen {
 	
 	@Override
 	public void show() {
+		game.soundManager.stopAll(); // To stop, rather than keep paused, any sounds that were playing in PlayScreen.
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
 

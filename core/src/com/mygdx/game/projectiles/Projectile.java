@@ -12,6 +12,7 @@ import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.IsometricRenderer.Visibility;
 import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.utils.Util;
 
 public abstract class Projectile extends WorldObject {
@@ -33,6 +34,7 @@ public abstract class Projectile extends WorldObject {
 	
 	public enum ProjectileSprite {
 		FIREBOLT,
+		LIGHTNING_BOLT,
 		RAZE_ZONE,
 		IMMOLATE_ZONE,
 		NO_SPRITE
@@ -43,8 +45,8 @@ public abstract class Projectile extends WorldObject {
 	 */
 	Projectile() { }
 	
-	Projectile(Entity entity, ProjectileManager projectileManager, ProjectileSprite sprite, Vector3 pos, float lifetime) {
-		generateId(projectileManager);
+	Projectile(Entity entity, ProjectileSprite sprite, Vector3 pos, float lifetime) {
+//		generateId(projectileManager);
 		this.owner = entity.getId();
 		
 		worldTransform = new Matrix4();
@@ -67,7 +69,7 @@ public abstract class Projectile extends WorldObject {
 	abstract void updatePos();
 	
 	public void updateWorldObject(IsometricRenderer renderer) {
-		Vector2 coords = renderer.cartesianToScreen(pos.x, pos.y, pos.z);
+		Vector2 coords = RenderMath.cartToScreen(renderer.camera, pos.x, pos.y, pos.z);
 		coords.sub(getTexture().getRegionWidth()/2f, getTexture().getRegionHeight()/2f);
 		/*coords.x -= getTexture().getRegionWidth()/2f;
 		coords.y -= getTexture().getRegionHeight()/2f;*/
@@ -101,7 +103,7 @@ public abstract class Projectile extends WorldObject {
 
 	protected abstract void loadPhysicsObject();
 
-	private void generateId(ProjectileManager projectileManager) {
+	void generateId(ProjectileManager projectileManager) {
 		if (projectileManager.idPool.size > 0) {
 			int lowest = Integer.MAX_VALUE; // Set it to the max value so that we can't accidentally be lower than the lowest int in the pool
 			for (Integer int0: projectileManager.idPool) {

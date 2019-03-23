@@ -9,8 +9,8 @@ import com.mygdx.game.utils.Util;
 
 public abstract class ImmobileInteractive extends ImmobileObject {
 
-	public ImmobileInteractive(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags, int spriteX, int spriteY) {
-		super(collisionObject, texture, id, tags, spriteX, spriteY);
+	public ImmobileInteractive(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags) {
+		super(collisionObject, texture, id, tags);
 
 		physicsId = Util.getImmobileInteractiveId(this.id);
 		collisionObject.setUserValue(physicsId);

@@ -16,7 +16,7 @@ public abstract class KinematicObject extends ConstantObject implements Disposab
 	
 	public KinematicObject(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<Tag> tags,
 			int spriteX, int spriteY) {
-		super(collisionObject, texture, id, tags, spriteX, spriteY);
+		super(collisionObject, texture, id, tags);
 		int physicsId = Util.getPhysicsId(Integer.parseInt(id), "5100");
 		collisionObject.setUserValue(physicsId);
 		this.physicsId = physicsId;

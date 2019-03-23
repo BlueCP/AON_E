@@ -1,6 +1,8 @@
 package com.mygdx.game.skills.pyromancer;
 
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.projectiles.pyromancer.IncendiaryTrap;
+import com.mygdx.game.projectiles.pyromancer.IncendiaryTrapExplosion;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.SimpleSkill;
 
@@ -26,7 +28,7 @@ public class IncendiaryTrapSkill extends SimpleSkill {
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		playScreen.projectileManager.addIncendiaryTrap(entity, playScreen.physicsManager.getDynamicsWorld(), entity.pos, 5);
+		playScreen.projectileManager.addProjectileNow(new IncendiaryTrap(entity, entity.pos, 5), playScreen.physicsManager.getDynamicsWorld());
 		putOnCooldown(3);
 	}
 

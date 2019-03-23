@@ -3,20 +3,19 @@ package com.mygdx.game.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.mygdx.game.mobtypes.MobClass;
 import com.mygdx.game.mobtypes.MobRace;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.skills.SkillBar;
-import com.mygdx.game.skills.cryomancer.*;
-import com.mygdx.game.skills.pyromancer.FlamingBarrageSkill;
-import com.mygdx.game.skills.pyromancer.StokeTheFlamesSkill;
-import com.mygdx.game.skills.pyromancer.SupernovaSkill;
-import com.mygdx.game.skills.pyromancer.VikingFuneralSkill;
+import com.mygdx.game.skills.cryomancer.BitingColdSkill;
+import com.mygdx.game.skills.cryomancer.EncaseInIceSkill;
+import com.mygdx.game.skills.cryomancer.FracturingBlastSkill;
+import com.mygdx.game.skills.cryomancer.LastingChillSkill;
+import com.mygdx.game.skills.electromancer.*;
+import com.mygdx.game.skills.pyromancer.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -55,6 +54,9 @@ public class Player extends Entity {
 	private EncaseInIceSkill encaseInIce;
 	private FracturingBlastSkill fracturingBlast;
 
+	private SamePlaceThriceSkill samePlaceThrice;
+	private ForkedLightningSkill forkedLightning;
+
 	public Player() {
 		id = 0;
 		physicsId = 10000;
@@ -66,7 +68,7 @@ public class Player extends Entity {
 		maxLife = 50;
 		maxSpirit = 50;
 		
-		baseWalkSpeed = 1.4f;
+		baseWalkSpeed = 1.8f;
 
 //		System.out.println(inventory.weapons.size);
 
@@ -93,7 +95,7 @@ public class Player extends Entity {
 
 		// CRYOMANCER
 
-		basicAttack = new CryomancerBasicAttack(this);
+		/*basicAttack = new CryomancerBasicAttack(this);
 
 		skills.add(new IceShardSkill(this));
 		skills.add(new BlizzardSkill(this));
@@ -102,7 +104,17 @@ public class Player extends Entity {
 		skills.add(new OverwhelmingFrostSkill(this));
 		skills.add(new CryosleepSkill(this));
 		skills.add(new ShatterSkill(this));
-		skills.add(new GlacialWallSkill(this));
+		skills.add(new GlacialWallSkill(this));*/
+
+
+		// ELECTROMANCER
+
+		basicAttack = new ElectromancerBasicAttack(this);
+
+		skills.add(new ThunderstrikeSkill(this));
+		skills.add(new StormcallerSkill(this));
+		skills.add(new ReenergiseSkill(this));
+		skills.add(new StaticShockSkill(this));
 
 
 		// Note: the player must have all of the passives loaded in like this at the start of the game.
@@ -115,10 +127,13 @@ public class Player extends Entity {
 		flamingBarrage = new FlamingBarrageSkill(this, false);
 		supernovaSkill = new SupernovaSkill(this, false);
 
-		lastingChill = new LastingChillSkill(this, true);
-		bitingCold = new BitingColdSkill(this, true);
-		encaseInIce = new EncaseInIceSkill(this, true);
-		fracturingBlast = new FracturingBlastSkill(this, true);
+		lastingChill = new LastingChillSkill(this, false);
+		bitingCold = new BitingColdSkill(this, false);
+		encaseInIce = new EncaseInIceSkill(this, false);
+		fracturingBlast = new FracturingBlastSkill(this, false);
+
+		samePlaceThrice = new SamePlaceThriceSkill(this, true);
+		forkedLightning = new ForkedLightningSkill(this, true);
 	}
 
 	@Override
@@ -146,6 +161,12 @@ public class Player extends Entity {
 		vikingFuneral.testfor(entity);
 		flamingBarrage.testfor();
 		lastingChill.testfor(entity);
+		samePlaceThrice.testfor(entity);
+	}
+
+	@Override
+	public void landAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
+		forkedLightning.testfor(entity, damage, playScreen);
 	}
 
 	@Override
@@ -163,10 +184,14 @@ public class Player extends Entity {
 		stokeTheFlames.setEntity(this);
 		flamingBarrage.setEntity(this);
 		supernovaSkill.setEntity(this);
+
 		lastingChill.setEntity(this);
 		bitingCold.setEntity(this);
 		encaseInIce.setEntity(this);
 		fracturingBlast.setEntity(this);
+
+		samePlaceThrice.setEntity(this);
+		forkedLightning.setEntity(this);
 	}
 
 	/*

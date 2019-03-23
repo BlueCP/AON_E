@@ -1,5 +1,6 @@
 package com.mygdx.game.physics;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -22,6 +23,14 @@ public abstract class WorldObject {
 	public abstract void updateWorldObject(IsometricRenderer renderer);
 	
 	public abstract TextureRegion getTexture();
+
+	/**
+	 * The default way that world objects are rendered. Can be overridden for custom rendering, such as for lightning bolts.
+	 * @param spriteBatch the sprite batch to be rendered to.
+	 */
+	public void render(SpriteBatch spriteBatch, IsometricRenderer isometricRenderer) {
+		spriteBatch.draw(getTexture(), renderPos.x, renderPos.y);
+	}
 
 	/**
 	 * Returns the chunk that this world object is currently in.

@@ -8,12 +8,14 @@ public abstract class EntityAction {
 	protected String name;
 	protected Entity.AnimationType animationType;
 	
-	protected float totalLifetime; // Maxiumum lifetime of action
+	float totalLifetime; // Maxiumum lifetime of action
 	private float countUp; // Time passed since creation of action
 
 	EntityAction(String name, Entity.AnimationType animationType) {
 		this.name = name;
 		this.animationType = animationType;
+
+		countUp = 0;
 	}
 
 	public abstract void update(Entity entity, PlayScreen playScreen);
@@ -31,6 +33,14 @@ public abstract class EntityAction {
 
 	public void setCountUp(float countUp) {
 		this.countUp = countUp;
+	}
+
+	public float getTotalLifetime() {
+		return totalLifetime;
+	}
+
+	public void setTotalLifetime(float totalLifetime) {
+		this.totalLifetime = totalLifetime;
 	}
 
 	public String getName() {

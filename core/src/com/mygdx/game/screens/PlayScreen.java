@@ -27,8 +27,10 @@ import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.particles.ParticleSprites;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.playerattributes.SkillCollection;
+import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
+import com.mygdx.game.projectiles.electromancer.LightningBolt;
 import com.mygdx.game.quests.Quests;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.serialisation.GameSerialisationThread;
@@ -38,6 +40,7 @@ import com.mygdx.game.stages.HudStage;
 import com.mygdx.game.stages.OwnStage;
 import com.mygdx.game.statuseffects.StatusEffectSprites;
 import com.mygdx.game.utils.Message;
+import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.utils.Util;
 import com.mygdx.game.world.Time;
 import javafx.util.Pair;
@@ -121,7 +124,7 @@ public class PlayScreen extends MyScreen {
 		
 		initialiseBlueprints(game);
 		ParticleSprites.initialise(game);
-		ProjectileSprites.initialise(game);
+		ProjectileSprites.init(game);
 		StatusEffectSprites.init(game);
 		DroppedItemSprites.initialise(game);
 		
@@ -351,8 +354,8 @@ public class PlayScreen extends MyScreen {
 	
 	private void rotatePlayer() {
 		if (player.canRotate()) {
-			Vector2 renderPos = player.renderPos.cpy().add(player.getTexture().getRegionWidth()/2f * isoRenderer.getEffectiveZoom(),
-														   player.getTexture().getRegionHeight()/2f * isoRenderer.getEffectiveZoom());
+			Vector2 renderPos = player.renderPos.cpy().add(player.getTexture().getRegionWidth()/2f * isoRenderer.camera.getZoom(),
+														   player.getTexture().getRegionHeight()/2f * isoRenderer.camera.getZoom());
 
 			int screenX1 = (int) (virtualCoords.x - renderPos.x); // X distance relative to player
 			int halfScreenX1 = screenX1 / 2; // Reasons for this can be found in one of the notebooks.
@@ -409,7 +412,7 @@ public class PlayScreen extends MyScreen {
 			xComponent = (angle < 180) ? xComponent : -xComponent;
 			double yComponent = (angle < 90 || (angle >= 180 && angle < 270)) ? adjacent : opposite;
 			yComponent = (angle > 90 && angle < 270) ? yComponent : -yComponent;
-			Vector2 point = isoRenderer.cartToInvertedIso((float)xComponent, (float)yComponent);
+			Vector2 point = RenderMath.cartToInvertedIso((float)xComponent, (float)yComponent);
 			player.addMovementVector(point.x, 0, point.y);
 		}  // Don't bother with walking logic if the player can't actually walk
 
@@ -591,7 +594,7 @@ public class PlayScreen extends MyScreen {
 
 			for (int i = 0; i < 8; i ++) {
 				if (keycode == ControlSettings.abilityKey(i + 1)) {
-					player.getSkills().get(i).start(this);
+					player.getSkills().get(i).invoke(this);
 					skip = true;
 				}
 			}
@@ -600,7 +603,7 @@ public class PlayScreen extends MyScreen {
 			}
 
 			if (keycode == ControlSettings.basicAttackKey()) {
-				player.getBasicAttack().start(this);
+				player.getBasicAttack().invoke(this);
 			}
 			else if (keycode == Keys.SHIFT_LEFT) {
 				entities.addEntity(new Dummy(entities, new Vector3(0, 5, 0)), physicsManager);
@@ -625,6 +628,9 @@ public class PlayScreen extends MyScreen {
 			}
 			else if (keycode == Keys.CONTROL_LEFT) {
 				droppedItemManager.addDroppedOtherItemFlyUp("Iron ore", new Vector3(2, 5, 2), 2, physicsManager.getDynamicsWorld());
+			}
+			else if (keycode == Keys.TAB) {
+				projectileManager.addProjectileNow(new LightningBolt(player, player.pos, 2), physicsManager.getDynamicsWorld());
 			}
 			else if (keycode == Keys.C) {
 				// Below is temporary testing code
@@ -784,15 +790,16 @@ public class PlayScreen extends MyScreen {
 			game.soundManager.click.play();
 		}
 		for (MouseEvent event: mouseEvents) {
-			if (event.button == Buttons.RIGHT) {
+			if (event.button == Buttons.LEFT) {
 				rayPick(event.screenX, event.screenY);
 			}
 		}
 		
 		for (Integer button: pressedMouseButtons) {
 			if (button == Buttons.LEFT) {
-				rotatePlayer();
-				testForWalk();
+				contRayPick(virtualCoords.x, virtualCoords.y);
+//				rotatePlayer();
+//				testForWalk();
 			}
 		}
 		mouseEvents.clear();
@@ -1060,7 +1067,7 @@ public class PlayScreen extends MyScreen {
 	}
 	
 	private void rayPick(int x, int y) {
-		Vector2 relativeCartPoint = isoRenderer.screenToRelativeCartesian(x, y);
+		Vector2 relativeCartPoint = RenderMath.screenToRelativeCart(isoRenderer.camera, x, y);
 		Pair<Integer, Vector3> pair = physicsManager.rayTestFirst(relativeCartPoint.x, isoRenderer.camera.pos.y, relativeCartPoint.y);
 		if (pair != null) {
 			if (PhysicsManager.isNonPlayerEntity(pair.getKey())) { // If the object is an entity which is not the player
@@ -1068,6 +1075,22 @@ public class PlayScreen extends MyScreen {
 				player.setTargetEntity(id);
 			} else {
 				player.setTargetLocation(pair.getValue());
+				player.setTargetedLocationThisTick(true);
+//				player.setTargetEntity(-1); // Make the player no longer target an entity.
+			}
+		}
+	}
+
+	/**
+	 * Unlike rayPick(), this is called every tick for as long as the left mouse button is held down.
+	 * This is useful for moving the location to which the player wants to move to.
+	 */
+	private void contRayPick(float x, float y) {
+		Vector2 relativeCartPoint = RenderMath.screenToRelativeCart(isoRenderer.camera, x, y);
+		Pair<Integer, Vector3> pair = physicsManager.rayTestFirst(relativeCartPoint.x, isoRenderer.camera.pos.y, relativeCartPoint.y);
+		if (pair != null) {
+			if (PhysicsManager.isConstObject(pair.getKey())) {
+				player.setMovementLocation(new Vector2(pair.getValue().x, pair.getValue().z));
 			}
 		}
 	}

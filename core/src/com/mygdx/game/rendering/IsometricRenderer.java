@@ -21,8 +21,10 @@ import com.mygdx.game.physicsobjects.ConstantObject;
 import com.mygdx.game.physicsobjects.ImmobileObject;
 import com.mygdx.game.physicsobjects.MobileObject;
 import com.mygdx.game.projectiles.Projectile;
+import com.mygdx.game.projectiles.electromancer.Thunderstrike;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.statuseffects.StatusEffectSprites;
+import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.world.Time;
 
 public class IsometricRenderer {
@@ -44,7 +46,7 @@ public class IsometricRenderer {
 	//private float sunAngleRadians;
 	
 //	private final int tileWidth = 128;
-	private final int tileHeight = 64;
+	public static final int tileHeight = 64;
 //	private final int pixelWorldWidth = 256000;
 //	private final int pixelWorldHeight = 128000;
 //	private final int physicsWorldSize = 2000;
@@ -82,7 +84,7 @@ public class IsometricRenderer {
 	private Texture vignette;
 	private Texture dayNightOverlay;
 	
-	private float effectiveZoom = 1; // A combination of the camera zoom and the zoom considering the screen size.
+//	private float effectiveZoom = 1; // A combination of the camera zoom and the zoom considering the screen size.
 	
 	public IsometricRenderer(AON_E game, Time time) {
 		this.time = time;
@@ -265,6 +267,7 @@ public class IsometricRenderer {
 				continue;
 			}
 			Array<Integer> hitIds = physicsManager.convexSweepTestAll(projectile.getCollisionObject(), projectile.pos);
+//			System.out.println(hitIds);
 			int index = findLowestIndex(hitIds);
 			projectile.updateWorldObject(this);
 			if (hitIds.size == 0 || index == -1) { // If there are no objects blocking the projectile
@@ -301,7 +304,7 @@ public class IsometricRenderer {
 	}
 	
 	private void renderObjects(SpriteBatch spriteBatch, Entities entities) {
-		effectiveZoom = camera.getZoom();
+//		effectiveZoom = camera.getZoom();
 		for (int i = 0; i < orderedObjects.size; i ++) {
 			/*switch (orderedObjects.get(i).visibility) {
 				case VISIBLE:
@@ -313,7 +316,6 @@ public class IsometricRenderer {
 					// Invisibility is handled in an if statement
 					break;
 			}*/
-			
 			if (orderedObjects.get(i).visibility == Visibility.INVISIBLE) {
 				continue;
 			} else if (orderedObjects.get(i).visibility == Visibility.TRANSLUCENT) {
@@ -328,7 +330,8 @@ public class IsometricRenderer {
 	}
 
 	private void renderSingleObject(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
-		spriteBatch.draw(worldObject.getTexture(), worldObject.renderPos.x, worldObject.renderPos.y);
+//		spriteBatch.draw(worldObject.getTexture(), worldObject.renderPos.x, worldObject.renderPos.y);
+		worldObject.render(spriteBatch, this);
 
 		if (PhysicsManager.isNonPlayerEntity(worldObject.physicsId)) {
 			Entity entity = entities.getEntity(worldObject.id);
@@ -369,11 +372,11 @@ public class IsometricRenderer {
 		Entities entities = playScreen.entities;
 		PhysicsManager physicsManager = playScreen.physicsManager;
 
-		isoPlayer = cartesianToIso(player.pos.x, player.pos.z);
+		isoPlayer = RenderMath.cartToIso(player.pos.x, player.pos.z);
 		isoPlayer.y += player.pos.y*tileHeight;
 
 		camera.update(player, playScreen);
-		camera.isoPos = cartesianToIso(camera.pos.x, camera.pos.z);
+		camera.isoPos = RenderMath.cartToIso(camera.pos.x, camera.pos.z);
 		camera.isoPos.y += camera.pos.y*tileHeight;
 		
 		calculateRenderingOrder(physicsManager, player);
@@ -537,74 +540,16 @@ public class IsometricRenderer {
 	}
 	*/
 	
-	/*
-	 * Whereas normally the cart world is turned clockwise (to form the diamond shape), here it is turned anti-clockwise.
-	 * In addition, the diamond, once it has been rotated from a square, is not squashed.
-	 * Finally, this method does not consider pixels, but instead, arbitrary units.
-	 */
-	public Vector2 cartToInvertedIso(float x, float y) {
-		Vector2 point = new Vector2();
-		point.x = x - y;
-		point.y = x + y;
-		return point;
-	}
-	
-	private Vector2 cartesianToIso(float x, float y) {
-		Vector2 point = new Vector2();
-		point.x = (x + y) * 64;
-		point.y = ((y - x)/2) * 64;
-		return point;
-	}
-	
-	private Vector2 isoToCartesian(float x, float y) {
-		Vector2 point = new Vector2();
-		point.x = (x - 2*y) / 128;
-		point.y = (x + 2*y) / 128;
-		return point;
-	}
-	
-	private Vector2 isoToScreen(float x, float y) {
-		Vector2 point = new Vector2();
-		point.x = (int)(x - camera.isoPos.x + AON_E.WORLD_WIDTH/2);
-		point.y = (int)(y - camera.isoPos.y + AON_E.WORLD_HEIGHT/2);
-		return point;
-	}
-	
-	public Vector2 cartesianToScreen(float x, float y, float z) {
-		Vector2 point = cartesianToIso(x, z);
-		point.y += y*tileHeight;
-		return isoToScreen(point.x, point.y);
-	}
-	
-	/*
-	 * Returns coords relative to the player's y plane
-	 */
-	public  Vector2 screenToRelativeCartesian(float x, float y) {
-		Vector2 point = screenToIso(x, y);
-		return isoToCartesian(point.x, point.y);
-	}
-	
-	public Vector2 screenToIso(float x, float y) {
-		Vector2 point = new Vector2();
-		float newX = (x - AON_E.WORLD_WIDTH/2) * (1 / effectiveZoom) + AON_E.WORLD_WIDTH/2;
-		float newY = (y - AON_E.WORLD_HEIGHT/2) * (1 / effectiveZoom) + AON_E.WORLD_HEIGHT/2;
-		//float newX = x;
-		//float newY = y;
-		point.x = newX - AON_E.WORLD_WIDTH/2 + camera.isoPos.x;
-		point.y = newY - AON_E.WORLD_HEIGHT/2 + camera.isoPos.y - camera.pos.y*tileHeight;
-		return point;
-	}
-	
 	public void dispose() {
 		shapeRenderer.dispose();
 	}
 
-	public float getEffectiveZoom() {
-		return effectiveZoom;
-	}
+//	public float getEffectiveZoom() {
+//		return effectiveZoom;
+//	}
 
-	public void setEffectiveZoom(float effectiveZoom) {
-		this.effectiveZoom = effectiveZoom;
-	}
+//	public void setEffectiveZoom(float effectiveZoom) {
+//		this.effectiveZoom = effectiveZoom;
+//	}
 	
 }

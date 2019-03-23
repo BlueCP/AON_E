@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entityactions.BasicAttackAction;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 import com.mygdx.game.screens.PlayScreen;
@@ -25,11 +26,22 @@ public abstract class BasicAttack extends ActiveSkill {
 			if (entity.pos.dst(playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player).pos) <= entity.equipped().getWeapon().getRange()) {
 				useSkill();
 				targetEntity = entity.getTargetEntity();
-				Array<EntityAction> array = new Array<>();
-				array.add(new SkillAction(this, animationType, time));
-				entity.actions.addFirst(array);
+//				Array<EntityAction> array = new Array<>();
+//				array.add(new BasicAttackAction(this, animationType, time));
+				entity.actions.addFirst(new BasicAttackAction(this, animationType, time));
 				entity.setAnimationType(animationType);
+				entity.resetAnimation(); // Cut the animation back to the beginning; necessary for automatic basic attacks.
 				faceTarget(playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player));
+			}
+		}
+	}
+
+	protected void nextBasicAttack(float time, Entity.AnimationType animationType, PlayScreen playScreen) {
+		if (entity.actions.size > 0) {
+			if (entity.actions.first().getName().equals(name)) { // If the current action is this basic attack
+				entity.actions.clear(); // Remove the finished basic attack.
+				makeAvailable(); // Make the basic attack skill available again.
+				defaultStart(time, animationType, playScreen); // Start the next basic attack.
 			}
 		}
 	}

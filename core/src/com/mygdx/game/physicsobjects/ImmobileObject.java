@@ -13,9 +13,8 @@ public abstract class ImmobileObject extends ConstantObject {
 
 	private int renderingIndex;
 
-	public ImmobileObject(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags,
-						int spriteX, int spriteY) {
-		super(collisionObject, texture, id, tags, spriteX, spriteY);
+	public ImmobileObject(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags) {
+		super(collisionObject, texture, id, tags);
 	}
 
 	public void update() {

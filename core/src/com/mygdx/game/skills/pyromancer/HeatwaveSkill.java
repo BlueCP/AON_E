@@ -1,6 +1,7 @@
 package com.mygdx.game.skills.pyromancer;
 
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.projectiles.pyromancer.Heatwave;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.SimpleSkill;
 
@@ -26,7 +27,7 @@ public class HeatwaveSkill extends SimpleSkill {
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		playScreen.projectileManager.addHeatwave(entity, playScreen.physicsManager.getDynamicsWorld(), entity.pos);
+		playScreen.projectileManager.addProjectileNow(new Heatwave(entity, entity.pos), playScreen.physicsManager.getDynamicsWorld());
 		putOnCooldown(3);
 	}
 

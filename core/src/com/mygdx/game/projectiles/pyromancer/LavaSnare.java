@@ -3,12 +3,9 @@ package com.mygdx.game.projectiles.pyromancer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
-import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
-import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.screens.PlayScreen;
 
@@ -25,22 +22,21 @@ public class LavaSnare extends StaticProjectile {
 	 */
 	public LavaSnare() { }
 
-	public LavaSnare(Entity entity, ProjectileManager projectileEngine, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime, Entity targetEntity) {
-		super(entity, projectileEngine, ProjectileSprite.FIREBOLT, pos, lifetime);
+	public LavaSnare(Entity entity, Vector3 pos, float lifetime, Entity targetEntity) {
+		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
 
 		name = "Lava Snare";
 		this.targetEntity = targetEntity.id;
 
-		loadPhysicsObject();
-		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
-		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
+//		loadPhysicsObject();
+//		addToDynamicsWorld(dynamicsWorld, PhysicsManager.PROJECTILE_FLAG, PhysicsManager.ALL_FLAG);
 	}
 
 	@Override
 	protected void loadPhysicsObject() {
 		defaultLoadCollisionObject(new btBoxShape(halfExtents));
-
 		collisionObject.setCollisionFlags(collisionObject.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
+		collisionObject.setWorldTransform(collisionObject.getWorldTransform().setTranslation(this.pos));
 	}
 
 	@Override

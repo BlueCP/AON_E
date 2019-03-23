@@ -12,8 +12,8 @@ public abstract class MobileController extends MobileObject {
 	int[] ports;
 
 	public MobileController(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags,
-							int spriteX, int spriteY, int[] ports) {
-		super(collisionObject, texture, id, tags, spriteX, spriteY);
+							int[] ports) {
+		super(collisionObject, texture, id, tags);
 
 		this.ports = ports;
 		physicsId = Util.getMobileControllerId(this.id);

@@ -153,19 +153,19 @@ public class PhysicsManager {
     	return String.valueOf(id).startsWith("1000") && !isPlayer(id);
     }
     
-    private static boolean isEntityOrPlayer(int id) {
+    public static boolean isEntityOrPlayer(int id) {
     	return String.valueOf(id).startsWith("1000");
     }
-    
-    private static boolean isProjectile(int id) {
+
+	public static boolean isProjectile(int id) {
     	return String.valueOf(id).startsWith("2000");
     }
-    
-    private static boolean isParticle(int id) {
+
+	public static boolean isParticle(int id) {
     	return String.valueOf(id).startsWith("3000");
     }
 
-    private static boolean isDroppedItem(int id) {
+	public static boolean isDroppedItem(int id) {
     	return String.valueOf(id).startsWith("4000");
 	}
 
@@ -767,8 +767,11 @@ public class PhysicsManager {
 			for (Tag tag: obj.getTags()) {
 				if (tag == Tag.WALKABLE) {
 					entity.setCollidingWithWalkable(true);
-					if (obj.collisionObject.isKinematicObject()) {
+					/*if (obj.collisionObject.isKinematicObject()) {
 						entity.setParentVelocity(((KinematicObject)obj).getLinearVelocity());
+					}*/
+					if (isMobileObject(obj.physicsId)) {
+						entity.setParentVelocity(findMobileObject(obj.physicsId).getLinearVelocity());
 					}
 				} else if (tag == Tag.CLIMBABLE) {
 					entity.setCollidingWithClimbable(true);
@@ -1163,6 +1166,48 @@ public class PhysicsManager {
 		//sweepTest.setMe(collisionObject);
 		
 		dynamicsWorld.convexSweepTest(shape, matrixFrom, matrixTo, sweepTest);
+
+		sweepTest.dispose();
+		return hitIds;
+	}
+
+	public Array<Integer> convexSweepTestAll(btConvexShape shape, Vector3 startPos, Vector3 endPos) {
+		hitIds.clear();
+
+		AllHitsConvexResultCallback sweepTest = new AllHitsConvexResultCallback(hitIds);
+		// Set the group and mask so that it can collide with, for example, particles.
+		sweepTest.setCollisionFilterGroup(PhysicsManager.ALL_FLAG);
+		sweepTest.setCollisionFilterMask(PhysicsManager.ALL_FLAG);
+
+		Matrix4 matrixFrom = new Matrix4();
+		matrixFrom.setTranslation(startPos.cpy());
+		Matrix4 matrixTo = new Matrix4();
+		matrixTo.setTranslation(endPos.cpy());
+		sweepTest.setClosestHitFraction(1f);
+		//sweepTest.setMe(collisionObject);
+
+		dynamicsWorld.convexSweepTest(shape, matrixFrom, matrixTo, sweepTest);
+
+		sweepTest.dispose();
+		return hitIds;
+	}
+
+	public Array<Integer> convexSweepTestAll(btCollisionShape shape, Vector3 startPos, Vector3 endPos) {
+		hitIds.clear();
+
+		AllHitsConvexResultCallback sweepTest = new AllHitsConvexResultCallback(hitIds);
+		// Set the group and mask so that it can collide with, for example, particles.
+		sweepTest.setCollisionFilterGroup(PhysicsManager.ALL_FLAG);
+		sweepTest.setCollisionFilterMask(PhysicsManager.ALL_FLAG);
+
+		Matrix4 matrixFrom = new Matrix4();
+		matrixFrom.setTranslation(startPos.cpy());
+		Matrix4 matrixTo = new Matrix4();
+		matrixTo.setTranslation(endPos.cpy());
+		sweepTest.setClosestHitFraction(1f);
+		//sweepTest.setMe(collisionObject);
+
+		dynamicsWorld.convexSweepTest((btConvexShape)shape, matrixFrom, matrixTo, sweepTest);
 
 		sweepTest.dispose();
 		return hitIds;

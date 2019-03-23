@@ -32,10 +32,10 @@ public class IncinerateSkill extends TargetedSkill {
 			if (entity.actions.size == 0 && targetEntity.burningEffect.isActive()) {
 				if (hasResource(entity, 20)) {
 					useSkill();
-					Array<EntityAction> array = new Array<>();
-					array.add(new SkillAction(this, Entity.AnimationType.SHOOT_PROJECTILE, 0.7f));
+//					Array<EntityAction> array = new Array<>();
+//					array.add(new SkillAction(this, Entity.AnimationType.SHOOT_PROJECTILE, 0.7f));
 //					array.add(new SkillAction(this, 0.7f));
-					entity.actions.addFirst(array);
+					entity.actions.addFirst(new SkillAction(this, Entity.AnimationType.SHOOT_PROJECTILE, 0.7f));
 					entity.setAnimationType(Entity.AnimationType.SHOOT_PROJECTILE);
 					faceTarget(targetEntity);
 				}

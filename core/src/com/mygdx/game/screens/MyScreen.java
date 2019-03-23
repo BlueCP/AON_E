@@ -6,11 +6,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.AON_E;
 
-abstract class MyScreen implements Screen, InputProcessor {
+public abstract class MyScreen implements Screen, InputProcessor {
 
 	public AON_E game;
 
-	Vector2 virtualCoords;
+	public Vector2 virtualCoords;
 
 	MyScreen(AON_E game) {
 		this.game = game;

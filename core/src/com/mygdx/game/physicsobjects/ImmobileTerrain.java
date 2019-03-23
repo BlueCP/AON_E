@@ -11,8 +11,8 @@ import com.mygdx.game.utils.Util;
 
 public class ImmobileTerrain extends ImmobileObject {
 
-	public ImmobileTerrain(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags, int spriteX, int spriteY) {
-		super(collisionObject, texture, id, tags, spriteX, spriteY);
+	public ImmobileTerrain(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags) {
+		super(collisionObject, texture, id, tags);
 
 		physicsId = Util.getImmobileTerrainId(this.id);
 		collisionObject.setUserValue(physicsId);

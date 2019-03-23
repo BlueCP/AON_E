@@ -16,9 +16,8 @@ public abstract class MobileObject extends ConstantObject {
 
 	private Vector3 linearVelocity;
 
-	public MobileObject(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags,
-						   int spriteX, int spriteY) {
-		super(collisionObject, texture, id, tags, spriteX, spriteY);
+	public MobileObject(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags) {
+		super(collisionObject, texture, id, tags);
 //		int physicsId = Util.getPhysicsId(Integer.parseInt(id), "5100");
 //		collisionObject.setUserValue(physicsId);
 //		this.physicsId = physicsId;

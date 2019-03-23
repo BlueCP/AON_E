@@ -81,10 +81,7 @@ public class DroppedItemManager implements Disposable {
 		for (int i = 0; i < droppedItems.size; i ++) {
 			DroppedItem droppedItem = droppedItems.get(i);
 
-			droppedItem.universalUpdate();
-			if (playScreen.player.pos.dst(droppedItem.pos) > 100) {
-				droppedItem.destroy(playScreen.physicsManager.getDynamicsWorld(), this);
-			}
+			droppedItem.universalUpdate(playScreen);
 		}
 	}
 

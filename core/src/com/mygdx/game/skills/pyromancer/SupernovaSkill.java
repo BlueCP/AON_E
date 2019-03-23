@@ -3,7 +3,10 @@ package com.mygdx.game.skills.pyromancer;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.projectiles.ProjectileManager;
+import com.mygdx.game.projectiles.pyromancer.SupernovaExplosion;
 import com.mygdx.game.skills.PassiveSkill;
+
+import javax.swing.text.PlainDocument;
 
 public class SupernovaSkill extends PassiveSkill {
 
@@ -22,7 +25,7 @@ public class SupernovaSkill extends PassiveSkill {
 
 	public void testfor(Entity entity, ProjectileManager projectileManager, btDynamicsWorld dynamicsWorld) {
 		if (isLearned() && entity.burningEffect.powers.size > 0) {
-			projectileManager.addSupernovaExplosion(this.entity, dynamicsWorld, entity.pos);
+			projectileManager.addProjectileNow(new SupernovaExplosion(this.entity, entity.pos), dynamicsWorld);
 		}
 	}
 

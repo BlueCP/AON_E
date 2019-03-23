@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
+import com.mygdx.game.projectiles.cryomancer.ShatterExplosion;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.TargetedSkill;
 
@@ -30,9 +31,9 @@ public class ShatterSkill extends TargetedSkill {
 				if (hasResource(entity, 20)) {
 					useSkill();
 					targetEntity = entity.getTargetEntity();
-					Array<EntityAction> array = new Array<>();
-					array.add(new SkillAction(this, Entity.AnimationType.SHOOT_PROJECTILE, 0.7f));
-					entity.actions.addFirst(array);
+//					Array<EntityAction> array = new Array<>();
+//					array.add(new SkillAction(this, Entity.AnimationType.SHOOT_PROJECTILE, 0.7f));
+					entity.actions.addFirst(new SkillAction(this, Entity.AnimationType.SHOOT_PROJECTILE, 0.7f));
 					entity.setAnimationType(Entity.AnimationType.SHOOT_PROJECTILE);
 					faceTarget(target);
 				}
@@ -45,8 +46,7 @@ public class ShatterSkill extends TargetedSkill {
 		Entity target = playScreen.entities.getEntity(targetEntity, playScreen.player);
 		if (target.id != -1) {
 			if (target.chilledEffect.isActive()) {
-				playScreen.projectileManager.addShatterExplosion(entity, playScreen.physicsManager.getDynamicsWorld(),
-						target.pos, target.chilledEffect.numStacks());
+				playScreen.projectileManager.addProjectileNow(new ShatterExplosion(entity, target.pos, target.chilledEffect.numStacks()), playScreen.physicsManager.getDynamicsWorld());
 				target.chilledEffect.remove();
 				putOnCooldown(2);
 				return;

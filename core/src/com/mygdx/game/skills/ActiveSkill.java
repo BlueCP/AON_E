@@ -2,6 +2,7 @@ package com.mygdx.game.skills;
 
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.screens.PlayScreen;
 
 /**
@@ -14,9 +15,10 @@ public abstract class ActiveSkill extends Skill {
 
 	public enum State {
 
-		AVAILABLE,
-		BEING_CAST,
-		ON_COOLDOWN
+		AVAILABLE, // The skill isn't being used, starting it will cause it proceed normally.
+		BEING_CAST, // The skill logic is currently being executed. It has called start() but not end().
+		ON_STANDBY, // Can mean different things in different cases. Either the skill is waiting for location input or it is a 'toggle' spell. Invoking the skill will end it.
+		ON_COOLDOWN // The skill cannot be used; it is on cooldown, with each frame decrementing the cooldown by delta.
 
 	}
 
@@ -25,8 +27,24 @@ public abstract class ActiveSkill extends Skill {
 		state = State.AVAILABLE;
 	}
 
+	public void invoke(PlayScreen playScreen) {
+		if (state == State.AVAILABLE) { // If the skill is available
+			start(playScreen); // Start executing its logic.
+		} else if (state == State.ON_STANDBY) { // If the skill is on standby
+			stop(); // Stop the skill; either stopping a 'toggle' type skill or a 'waiting for input' phase of a skill (i.e. waiting for location input).
+		}
+	}
+
 	/**
-	 * Invokes the skill action, causing the countdown to start.
+	 * Update method. Does nothing by default; however, skills which wait for user input to do something may want to override
+	 * to watch certain game state changes, e.g. the player targeting something.
+	 */
+	public void update(PlayScreen playScreen) {
+
+	}
+
+	/**
+	 * Starts the skill action, caused by pressing the keyboard shortcut for that skill.
 	 */
 	public abstract void start(PlayScreen playScreen);
 
@@ -43,20 +61,52 @@ public abstract class ActiveSkill extends Skill {
 	}
 
 	/**
-	 * Tells this class that this skill failed to resolve and should be made available again.
+	 * Tells this class that the skill has now been put on standby; it will keep doing its own thing until it gets some input from the user.
+	 */
+	protected void putOnStandby() {
+		state = State.ON_STANDBY;
+	}
+
+	/**
+	 * Tells this class that this skill failed to resolve and should be made available again. Skips the cooldown.
 	 */
 	protected void failResolve() {
 		state = State.AVAILABLE;
 	}
 
 	/**
-	 * Put this skill on cooldown.
+	 * The skill available to use again.
+	 */
+	protected void makeAvailable() {
+		state = State.AVAILABLE;
+	}
+
+	/**
+	 * Cancels the casting of ths skill, making it available again. Also removes the SkillAction from the entity.
+	 * Useful for toggling/'waiting for input' type skills as stopping the skill is dependent on user input,
+	 * not a cooldown which is always the same (which could be handled by the SkillAction).
+	 */
+	public void stop() {
+		state = State.AVAILABLE;
+		if (entity.actions.size > 0) {
+			EntityAction entityAction = entity.actions.first();
+			if (entityAction.getName().equals(name)) {
+				entity.actions.removeValue(entityAction, false); // Removes the action from the entity's list of actions.
+			}
+		}
+	}
+
+	/**
+	 * Put this skill on cooldown for the given number of seconds.
 	 */
 	public void putOnCooldown(float cooldown) {
 		this.cooldown = cooldown;
 		state = State.ON_COOLDOWN;
 	}
 
+	/**
+	 * Reduce the cooldown by the given number of seconds.
+	 */
 	public void reduceCooldown(float reduction) {
 		cooldown -= reduction;
 		if (cooldown < 0) {
@@ -74,7 +124,7 @@ public abstract class ActiveSkill extends Skill {
 		if (cooldown < 0) {
 			cooldown = 0;
 		}
-		if (cooldown <= 0 && state != State.BEING_CAST) {
+		if (cooldown <= 0 && state != State.BEING_CAST && state != State.ON_STANDBY) {
 			state = State.AVAILABLE;
 		}
 	}

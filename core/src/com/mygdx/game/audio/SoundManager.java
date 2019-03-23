@@ -58,4 +58,17 @@ public class SoundManager {
 		click.resume();
 	}
 
+	public void stopAll() {
+		// Environmental
+
+		// Sound FX
+		fireballTravel.stop();
+		fireballExplosion.stop();
+
+		// Creatures
+
+		// UI
+		click.stop();
+	}
+
 }

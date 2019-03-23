@@ -11,16 +11,21 @@ import com.mygdx.game.projectiles.Projectile.ProjectileSprite;
 public class ProjectileSprites {
 
 	private static Animation<AtlasRegion> fireballAnimation;
+	private static TextureRegion lightningBolt;
 	
 	static TextureRegion getCurrentTexture(Projectile projectile) {
-		if (projectile.sprite == ProjectileSprite.FIREBOLT) {
-			return fireballAnimation.getKeyFrame(projectile.getStateTime());
+		switch (projectile.sprite) {
+			case FIREBOLT:
+				return fireballAnimation.getKeyFrame(projectile.getStateTime());
+			case LIGHTNING_BOLT:
+				return lightningBolt;
+			default:
+				return null;
 		}
-		return null;
 	}
 	
 	static boolean hasTexture(ProjectileSprite sprite) {
-		switch (sprite) {
+		/*switch (sprite) {
 			case FIREBOLT:
 				return true;
 			case RAZE_ZONE:
@@ -31,24 +36,25 @@ public class ProjectileSprites {
 				return false;
 			default:
 				return false;
-			}
+		}*/
+		return sprite != ProjectileSprite.NO_SPRITE;
 	}
 	
-	public static void initialise(AON_E game) {
+	public static void init(AON_E game) {
 		Array<AtlasRegion> allFrames = game.projectilesAtlas.getRegions();
-		initialiseFireball(allFrames);
-	}
-	
-	private static void initialiseFireball(Array<AtlasRegion> allFrames) {
+
 		Array<AtlasRegion> fireballFrames = new Array<>();
-		
+
 		for (AtlasRegion region: allFrames) {
 			if (region.name.equals("fireball")) {
 				fireballFrames.add(region);
+			} else if (region.name.equals("lightning bolt")) {
+				lightningBolt = region;
 			}
 		}
-		
+
 		fireballAnimation = new Animation<>(0.2f, fireballFrames, PlayMode.LOOP);
+//		initialiseFireball(allFrames);
 	}
 	
 }

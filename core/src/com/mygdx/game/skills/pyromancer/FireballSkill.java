@@ -1,6 +1,7 @@
 package com.mygdx.game.skills.pyromancer;
 
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.projectiles.pyromancer.Fireball;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.TargetedSkill;
 
@@ -27,7 +28,7 @@ public class FireballSkill extends TargetedSkill {
 	@Override
 	public void finish(PlayScreen playScreen) {
 		if (playScreen.entities.getEntity(targetEntity, playScreen.player).id != -1) {
-			playScreen.projectileManager.addFireball(entity, playScreen, entity.pos, playScreen.entities.getEntity(targetEntity, playScreen.player).pos, 5);
+			playScreen.projectileManager.addProjectileNow(new Fireball(entity, entity.pos, playScreen.entities.getEntity(targetEntity, playScreen.player).pos, 5), playScreen.physicsManager.getDynamicsWorld());
 			putOnCooldown(2);
 		} else {
 			failResolve();

@@ -16,8 +16,8 @@ public abstract class StaticProjectile extends Projectile {
 	 */
 	public StaticProjectile() { }
 
-	protected StaticProjectile(Entity entity, ProjectileManager projectileEngine, ProjectileSprite sprite, Vector3 pos, float lifetime) {
-		super(entity, projectileEngine, sprite, pos, lifetime);
+	protected StaticProjectile(Entity entity, ProjectileSprite sprite, Vector3 pos, float lifetime) {
+		super(entity, sprite, pos, lifetime);
 	}
 
 	void updatePos() {
