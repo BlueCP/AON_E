@@ -43,6 +43,8 @@ public class PlayerBlueprint {
 			}
 		} else if (currentState.contains("MIDAIR")) {
 			return standMap.get(getAngle(facing));
+		} else if (currentState.contains("PRONE")) {
+			return standMap.get(getAngle(facing));
 		} else if (currentState.contains("SHOOT_PROJECTILE")) {
 			return attackMap.get(getAngle(facing)).getKeyFrame(stateTime);
 		} else {

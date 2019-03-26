@@ -26,11 +26,16 @@ public class StokeTheFlamesSkill extends PassiveSkill {
 		}
 	}
 
-	public void damage(Entity entity, float damage) {
-		if (entity.burningEffect.powers.size > 0){
+	public float damage(Entity entity, float damage) {
+		/*if (entity.burningEffect.powers.size > 0){
 			entity.takeDamage(this.entity, damage * 2);
 		} else {
 			entity.takeDamage(this.entity, damage);
+		}*/
+		if (isLearned() && entity.burningEffect.isActive()) {
+			return damage;
+		} else {
+			return 0;
 		}
 	}
 

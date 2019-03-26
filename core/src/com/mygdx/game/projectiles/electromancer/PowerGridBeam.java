@@ -19,31 +19,31 @@ import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.utils.Util;
 
-/**
- * Represents lightning that could be between any two points (unlike lightning bolt, which is only vertical).
- * Uses constant convex shape casting to test for collisions with entities.
- */
-public class GenericLightning extends StaticProjectile {
+public class PowerGridBeam extends StaticProjectile {
 
 	private static final float radius = 0.2f;
 
 	private Array<Integer> hitEntities;
 	private Vector3 startPoint;
 	private Vector3 endPoint;
+	private Projectile projectile1; // One of the power grid conductors that this beam comes from.
+	private Projectile projectile2; // The other conductor that this beam comes from.
 
 	private float damage;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public GenericLightning() { }
+	public PowerGridBeam() { }
 
-	public GenericLightning(Entity entity, Vector3 startPoint, Vector3 endPoint, float lifetime, float damage) {
-//		super(entity, ProjectileSprite.LIGHTNING_BOLT, startPoint, lifetime);
+	public PowerGridBeam(Entity entity, Vector3 startPoint, Vector3 endPoint, Projectile projectile1, Projectile projectile2, float lifetime, float damage) {
 		super(entity, ProjectileSprite.LIGHTNING_BOLT, startPoint.cpy().lerp(endPoint, 0.5f), lifetime);
 
-		name = "Generic Lightning";
+		name = "Power Grid Beam";
 		hitEntities = new Array<>();
+
+		this.projectile1 = projectile1;
+		this.projectile2 = projectile2;
 
 		this.startPoint = startPoint.cpy();
 		this.endPoint = endPoint.cpy();
@@ -71,9 +71,6 @@ public class GenericLightning extends StaticProjectile {
 	}
 
 	protected void loadPhysicsObject() {
-//		Vector3 midPos = startPoint.lerp(endPoint, 0.5f);
-
-//		btCollisionShape shape = new btCylinderShape(new Vector3(radius, startPoint.dst(endPoint), radius));
 		btCollisionShape shape = new btSphereShape(radius);
 		defaultLoadCollisionObject(shape);
 
@@ -85,6 +82,10 @@ public class GenericLightning extends StaticProjectile {
 
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
+		if (projectile1.isDestroyed() || projectile2.isDestroyed()) {
+			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
+			return;
+		}
 		Array<Integer> hitIds = playScreen.physicsManager.convexSweepTestAll(shape, startPoint, endPoint); // Cast the shape from the start to the end.
 		for (Integer id: hitIds) {
 			if (PhysicsManager.isEntityOrPlayer(id)) { // If the cast hit an entity, hit that entity with the lightning bolt effect.
@@ -92,8 +93,7 @@ public class GenericLightning extends StaticProjectile {
 				Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 				if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
 					entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
-//					offender.landAbility(entity, playScreen);
-					// Don't call offender.landAbilityDamage here, in order to prevent an infinite loop of lightning bounces to the same entities.
+					offender.landAbility(entity, playScreen);
 					hitEntities.add(entity.id);
 				}
 			}

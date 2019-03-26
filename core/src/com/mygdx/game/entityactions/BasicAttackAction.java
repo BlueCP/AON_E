@@ -34,7 +34,7 @@ public class BasicAttackAction extends EntityAction {
 		if (wantsDeletion()) {
 			basicAttack.finish(playScreen);
 		} else if (entity.hasTargetedLocationThisTick()) {
-			basicAttack.stop(); // If the entity has targeted another location this frame, stop auto attacking.
+			basicAttack.stop(playScreen); // If the entity has targeted another location this frame, stop auto attacking.
 		}
 	}
 

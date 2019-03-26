@@ -27,14 +27,13 @@ import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.particles.ParticleSprites;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.playerattributes.SkillCollection;
-import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
-import com.mygdx.game.projectiles.electromancer.LightningBolt;
 import com.mygdx.game.quests.Quests;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.serialisation.GameSerialisationThread;
 import com.mygdx.game.settings.ControlSettings;
+import com.mygdx.game.skills.ActiveSkill;
 import com.mygdx.game.stages.FurnaceStage;
 import com.mygdx.game.stages.HudStage;
 import com.mygdx.game.stages.OwnStage;
@@ -614,8 +613,11 @@ public class PlayScreen extends MyScreen {
 				entity.setLife(1000);
 				entities.addEntity(entity, physicsManager);
 			}
-			else if (keycode == Keys.ESCAPE) {
+			else if (keycode == Keys.M) {
 				game.setScreen(new OptionsScreen(game, this));
+			}
+			else if (keycode == Keys.ESCAPE) {
+				player.resetMovementLocation();
 			}
 			else if (keycode == ControlSettings.openInventoryKey()) {
 				game.setScreen(new InventoryScreen(game, this));
@@ -630,7 +632,7 @@ public class PlayScreen extends MyScreen {
 				droppedItemManager.addDroppedOtherItemFlyUp("Iron ore", new Vector3(2, 5, 2), 2, physicsManager.getDynamicsWorld());
 			}
 			else if (keycode == Keys.TAB) {
-				projectileManager.addProjectileNow(new LightningBolt(player, player.pos, 2), physicsManager.getDynamicsWorld());
+				player.knockBack(new Vector3(0, 0, 2));
 			}
 			else if (keycode == Keys.C) {
 				// Below is temporary testing code
@@ -1089,7 +1091,9 @@ public class PlayScreen extends MyScreen {
 		Vector2 relativeCartPoint = RenderMath.screenToRelativeCart(isoRenderer.camera, x, y);
 		Pair<Integer, Vector3> pair = physicsManager.rayTestFirst(relativeCartPoint.x, isoRenderer.camera.pos.y, relativeCartPoint.y);
 		if (pair != null) {
-			if (PhysicsManager.isConstObject(pair.getKey())) {
+//			System.out.println(player.currentSkill.state);
+			if (PhysicsManager.isConstObject(pair.getKey()) && player.currentSkill.state != ActiveSkill.State.ON_STANDBY &&
+			player.currentSkill.state != ActiveSkill.State.BEING_CAST) { // If the player is inputting a target location for a skill, don't take that as the movement location.
 				player.setMovementLocation(new Vector2(pair.getValue().x, pair.getValue().z));
 			}
 		}

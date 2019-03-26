@@ -45,6 +45,7 @@ public abstract class StaticProjectile extends Projectile {
 	}
 
 	public void destroy(btDynamicsWorld dynamicsWorld, ProjectileManager projectileManager) {
+		isDestroyed = true;
 		projectileManager.idPool.add(id);
 		dynamicsWorld.removeCollisionObject(collisionObject);
 		projectileManager.projectiles.removeValue(this, false);

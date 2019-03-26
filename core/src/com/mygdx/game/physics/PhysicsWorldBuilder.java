@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
@@ -31,7 +30,6 @@ import com.mygdx.game.serialisation.KryoManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 

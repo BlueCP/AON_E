@@ -29,6 +29,8 @@ public class DummyBlueprint {
 			return standMap.get(getAngle(facing));
 		} else if (currentState.contains("WALK")) {
 			return walkMap.get(getAngle(facing)).getKeyFrame(stateTime);
+		} else if (currentState.contains("PRONE")) {
+			return standMap.get(getAngle(facing));
 		} else if (currentState.contains("MIDAIR")) {
 			return standMap.get(getAngle(facing));
 		} else {

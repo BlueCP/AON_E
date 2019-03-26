@@ -21,7 +21,6 @@ import com.mygdx.game.physicsobjects.ConstantObject;
 import com.mygdx.game.physicsobjects.ImmobileObject;
 import com.mygdx.game.physicsobjects.MobileObject;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.electromancer.Thunderstrike;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.statuseffects.StatusEffectSprites;
 import com.mygdx.game.utils.RenderMath;

@@ -1,5 +1,6 @@
 package com.mygdx.game.projectiles.electromancer;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,46 +10,36 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.projectiles.StaticProjectile;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.RenderMath;
-import com.mygdx.game.utils.Util;
 
-/**
- * Represents lightning that could be between any two points (unlike lightning bolt, which is only vertical).
- * Uses constant convex shape casting to test for collisions with entities.
- */
-public class GenericLightning extends StaticProjectile {
+public class EnergySurge extends StaticProjectile {
 
 	private static final float radius = 0.2f;
+	private static final float dps = 2;
 
-	private Array<Integer> hitEntities;
+	private int targetEntity;
 	private Vector3 startPoint;
 	private Vector3 endPoint;
-
-	private float damage;
+	private boolean firstTick = true;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public GenericLightning() { }
+	public EnergySurge() { }
 
-	public GenericLightning(Entity entity, Vector3 startPoint, Vector3 endPoint, float lifetime, float damage) {
-//		super(entity, ProjectileSprite.LIGHTNING_BOLT, startPoint, lifetime);
-		super(entity, ProjectileSprite.LIGHTNING_BOLT, startPoint.cpy().lerp(endPoint, 0.5f), lifetime);
+	public EnergySurge(Entity entity, Entity targetEntity) {
+		super(entity, ProjectileSprite.LIGHTNING_BOLT, entity.pos, Float.MAX_VALUE);
 
-		name = "Generic Lightning";
-		hitEntities = new Array<>();
+		name = "Energy Surge";
 
-		this.startPoint = startPoint.cpy();
-		this.endPoint = endPoint.cpy();
-
-		this.damage = damage;
+		this.targetEntity = targetEntity.id;
+		this.startPoint = entity.pos;
+		this.endPoint = targetEntity.pos;
 	}
 
 	@Override
@@ -71,9 +62,6 @@ public class GenericLightning extends StaticProjectile {
 	}
 
 	protected void loadPhysicsObject() {
-//		Vector3 midPos = startPoint.lerp(endPoint, 0.5f);
-
-//		btCollisionShape shape = new btCylinderShape(new Vector3(radius, startPoint.dst(endPoint), radius));
 		btCollisionShape shape = new btSphereShape(radius);
 		defaultLoadCollisionObject(shape);
 
@@ -85,19 +73,15 @@ public class GenericLightning extends StaticProjectile {
 
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
-		Array<Integer> hitIds = playScreen.physicsManager.convexSweepTestAll(shape, startPoint, endPoint); // Cast the shape from the start to the end.
-		for (Integer id: hitIds) {
-			if (PhysicsManager.isEntityOrPlayer(id)) { // If the cast hit an entity, hit that entity with the lightning bolt effect.
-				Entity entity = playScreen.entities.getEntity(Util.getId(id), playScreen.player);
-				Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
-				if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-					entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
-//					offender.landAbility(entity, playScreen);
-					// Don't call offender.landAbilityDamage here, in order to prevent an infinite loop of lightning bounces to the same entities.
-					hitEntities.add(entity.id);
-				}
-			}
+		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
+		Entity target = playScreen.entities.getEntity(targetEntity, playScreen.player);
+
+		if (firstTick) {
+			offender.landAbility(target, playScreen);
 		}
+
+		offender.dealDamage(target, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage());
+		offender.landAbilityDamage(target, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage(), playScreen);
 	}
 
 	@Override

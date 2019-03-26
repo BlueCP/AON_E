@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entities.Player;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;

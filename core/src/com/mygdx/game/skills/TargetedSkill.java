@@ -2,9 +2,7 @@ package com.mygdx.game.skills;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.Util;

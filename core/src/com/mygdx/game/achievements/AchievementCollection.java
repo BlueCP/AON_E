@@ -2,7 +2,6 @@ package com.mygdx.game.achievements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.cyphercove.gdx.gdxtokryo.GdxToKryo;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.screens.PlayScreen;

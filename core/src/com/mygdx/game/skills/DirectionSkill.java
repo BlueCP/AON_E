@@ -1,8 +1,6 @@
 package com.mygdx.game.skills;
 
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 import com.mygdx.game.utils.Util;
 

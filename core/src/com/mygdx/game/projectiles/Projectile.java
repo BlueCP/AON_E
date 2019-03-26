@@ -23,6 +23,7 @@ public abstract class Projectile extends WorldObject {
 	private float stateTime;
 	protected float lifetime;
 	protected int ticksPast;
+	protected boolean isDestroyed;
 	
 	Matrix4 worldTransform;
 
@@ -56,6 +57,8 @@ public abstract class Projectile extends WorldObject {
 		this.stateTime = 0;
 		this.ticksPast = 0;
 		this.lifetime = lifetime;
+
+		isDestroyed = false;
 	}
 	
 	void universalUpdate(float delta) {
@@ -165,5 +168,20 @@ public abstract class Projectile extends WorldObject {
 	public void setTicksPast(int ticksPast) {
 		this.ticksPast = ticksPast;
 	}
-	
+
+	public int getOwner() {
+		return owner;
+	}
+
+	public void setOwner(int owner) {
+		this.owner = owner;
+	}
+
+	public boolean isDestroyed() {
+		return isDestroyed;
+	}
+
+	public void setDestroyed(boolean destroyed) {
+		isDestroyed = destroyed;
+	}
 }

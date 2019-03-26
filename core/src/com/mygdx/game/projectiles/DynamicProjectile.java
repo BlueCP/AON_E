@@ -65,6 +65,7 @@ public abstract class DynamicProjectile extends Projectile {
 	}
 
 	public void destroy(btDynamicsWorld dynamicsWorld, ProjectileManager projectileManager) {
+		isDestroyed = true;
 		projectileManager.idPool.add(id);
 		dynamicsWorld.removeRigidBody(rigidBody);
 		projectileManager.projectiles.removeValue(this, false);

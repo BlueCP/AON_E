@@ -10,12 +10,12 @@ import com.mygdx.game.mobtypes.MobRace;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.skills.SkillBar;
-import com.mygdx.game.skills.cryomancer.BitingColdSkill;
-import com.mygdx.game.skills.cryomancer.EncaseInIceSkill;
-import com.mygdx.game.skills.cryomancer.FracturingBlastSkill;
-import com.mygdx.game.skills.cryomancer.LastingChillSkill;
+import com.mygdx.game.skills.cryomancer.*;
 import com.mygdx.game.skills.electromancer.*;
-import com.mygdx.game.skills.pyromancer.*;
+import com.mygdx.game.skills.pyromancer.FlamingBarrageSkill;
+import com.mygdx.game.skills.pyromancer.StokeTheFlamesSkill;
+import com.mygdx.game.skills.pyromancer.SupernovaSkill;
+import com.mygdx.game.skills.pyromancer.VikingFuneralSkill;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -56,6 +56,8 @@ public class Player extends Entity {
 
 	private SamePlaceThriceSkill samePlaceThrice;
 	private ForkedLightningSkill forkedLightning;
+	private ChargeBuildupSkill chargeBuildup;
+	private VoltaicOverloadSkill voltaicOverload;
 
 	public Player() {
 		id = 0;
@@ -115,6 +117,10 @@ public class Player extends Entity {
 		skills.add(new StormcallerSkill(this));
 		skills.add(new ReenergiseSkill(this));
 		skills.add(new StaticShockSkill(this));
+		skills.add(new RepulsionFieldSkill(this));
+		skills.add(new CracklingOrbSkill(this));
+		skills.add(new PowerGridSkill(this));
+		skills.add(new EnergySurgeSkill(this));
 
 
 		// Note: the player must have all of the passives loaded in like this at the start of the game.
@@ -134,11 +140,19 @@ public class Player extends Entity {
 
 		samePlaceThrice = new SamePlaceThriceSkill(this, true);
 		forkedLightning = new ForkedLightningSkill(this, true);
+		chargeBuildup = new ChargeBuildupSkill(this, true);
+		voltaicOverload = new VoltaicOverloadSkill(this, true);
 	}
 
 	@Override
 	public void dealDamage(Entity entity, float damage) {
-		stokeTheFlames.damage(entity, damage);
+		float newDamage = damage;
+
+		newDamage += stokeTheFlames.damage(entity, damage);
+
+		newDamage += voltaicOverload.damage(entity, damage);
+
+		entity.takeDamage(this, newDamage);
 	}
 
 	@Override
@@ -160,8 +174,11 @@ public class Player extends Entity {
 	public void landAbility(Entity entity, PlayScreen playScreen) {
 		vikingFuneral.testfor(entity);
 		flamingBarrage.testfor();
+
 		lastingChill.testfor(entity);
+
 		samePlaceThrice.testfor(entity);
+		chargeBuildup.testfor(entity);
 	}
 
 	@Override
@@ -172,6 +189,8 @@ public class Player extends Entity {
 	@Override
 	public void landBasicAttack(Entity entity, PlayScreen playScreen) {
 		fracturingBlast.testfor(entity, playScreen);
+
+		voltaicOverload.charge(entity);
 	}
 
 
@@ -267,8 +286,6 @@ public class Player extends Entity {
 				getOffensiveEnemies().remove(entry.getKey());
 			}
 		}
-		
-		applyEffects(playScreen);
 		
 		universalUpdate(playScreen);
 	}

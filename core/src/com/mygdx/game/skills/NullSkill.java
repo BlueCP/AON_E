@@ -9,6 +9,8 @@ public class NullSkill extends Skill {
 	 */
 	public NullSkill() {
 		super(null);
+		name = "[No skill]";
+		desc = "";
 	}
 
 	NullSkill(Entity entity) {

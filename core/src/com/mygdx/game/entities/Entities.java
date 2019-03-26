@@ -66,13 +66,10 @@ public class Entities {
 		removeDeadEntities(playScreen);
 		removeLostEntities(playScreen);
 		
-		for (Entity entity: allEntities) {
+		for (int i = 0; i < allEntities.size; i ++) {
+			Entity entity = allEntities.get(i);
 			entity.universalUpdate(playScreen);
 			entity.onUpdate(playScreen);
-		}
-		
-		for (Entity entity: allEntities) {
-			entity.applyEffects(playScreen);
 		}
 	}
 	
@@ -115,6 +112,45 @@ public class Entities {
 		} else {
 			return getEntity(id);
 		}
+	}
+
+	/**
+	 * Returns the given number of nearest entities to the given entity.
+	 * @param entity the entity which others should be near to.
+	 * @param num the number of nearest entities that will be returned.
+	 * @param maxDistance the maximum distance an entity can be away from the given entity.
+	 * @return an array of the nearest entities.
+	 */
+	public Array<Entity> getNearestEntities(Entity entity, int num, float maxDistance) {
+		Array<Entity> nearestEntities = new Array<>(); // The two nearest entities to the entity that has been damaged.
+		for (Entity entity1: allEntities) {
+			if (entity.id == entity1.id) { // If the current entity is the same as the target entity
+				continue; // Skip it, since we want nearby entities, not just the same entity.
+			} else if (nearestEntities.size < num && entity1.pos.dst(entity.pos) <= maxDistance) {
+				nearestEntities.add(entity1);
+			} else {
+				for (int i = 0; i < nearestEntities.size; i ++) {
+					if (entity1.pos.dst(entity.pos) < nearestEntities.get(i).pos.dst(entity.pos) &&
+							entity1.pos.dst(entity.pos) <= maxDistance) { // If the entity is nearer to the target entity that the entity in nearestEntities AND within max range
+						nearestEntities.removeIndex(i); // Remove the (farther away) entity.
+						nearestEntities.insert(i, entity1); // Add the (nearer) entity.
+						break;
+					}
+				}
+			}
+		}
+		return nearestEntities;
+	}
+
+	/**
+	 * Returns the given number of nearest entities to the given entity.
+	 * @param entity the entity which others should be near to.
+	 * @param num the number of nearest entities that will be returned.
+	 * @return an array of the nearest entities.
+	 */
+	public Array<Entity> getNearestEntities(Entity entity, int num) {
+		return getNearestEntities(entity, num, Integer.MAX_VALUE); // No max distance limit (kind of)
+		// Technically the limit is Integer.maxvalue but this is so large the distances between entities would never exceed this.
 	}
 
 	public void saveEntities(String dir) {

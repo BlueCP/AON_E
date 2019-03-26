@@ -72,7 +72,7 @@ public class ForkedLightningSkill extends PassiveSkill {
 
 	public void testfor(Entity targetEntity, float damage, PlayScreen playScreen) {
 		if (isLearned()) {
-			Array<Entity> nearestEntities = new Array<>(); // The two nearest entities to the entity that has been damaged.
+			/*Array<Entity> nearestEntities = new Array<>(); // The two nearest entities to the entity that has been damaged.
 			for (Entity entity1: playScreen.entities.allEntities) {
 				if (targetEntity.id == entity1.id) { // If the current entity is the same as the target entity
 					continue; // Skip it, since we want nearby entities, not just the same entity.
@@ -88,7 +88,8 @@ public class ForkedLightningSkill extends PassiveSkill {
 						}
 					}
 				}
-			}
+			}*/
+			Array<Entity> nearestEntities = playScreen.entities.getNearestEntities(targetEntity, chainLength, maxDistanceTotal);
 			Array<Integer> hitEntities = new Array<>();
 //			Array<Entity> entitiesToChain = new Array<>();
 			chainToNext(targetEntity, nearestEntities, hitEntities, damage, 1, playScreen);

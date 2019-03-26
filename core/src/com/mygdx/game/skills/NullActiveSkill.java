@@ -3,20 +3,17 @@ package com.mygdx.game.skills;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.screens.PlayScreen;
 
-public class NullBasicAttack extends BasicAttack {
+public class NullActiveSkill extends ActiveSkill {
 
-	/**
-	 * No-arg constructor for serialisation purposes.
-	 */
-	public NullBasicAttack() {
+	public NullActiveSkill() {
 		super(null);
-		name = "[No basic attack]";
+		name = "[No active skill]";
 		desc = "";
 	}
 
-	NullBasicAttack(Entity entity) {
+	public NullActiveSkill(Entity entity) {
 		super(entity);
-		name = "[No basic attack]";
+		name = "[No active skill]";
 		desc = "";
 	}
 
@@ -29,5 +26,4 @@ public class NullBasicAttack extends BasicAttack {
 	public void finish(PlayScreen playScreen) {
 
 	}
-
 }

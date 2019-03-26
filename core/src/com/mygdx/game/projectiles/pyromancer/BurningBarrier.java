@@ -74,7 +74,8 @@ public class BurningBarrier extends StaticProjectile {
 			entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
 			offender.landAbility(entity, playScreen);
 			offender.landAbilityDamage(entity, damage + offender.equipped().getWeapon().getMagDamage(), playScreen);
-			entity.stunnedEffect.add(stunDuration);
+			offender.stun(entity, stunDuration);
+//			entity.stunnedEffect.add(stunDuration);
 
 			hitEntities.add(entity.id);
 			return true;

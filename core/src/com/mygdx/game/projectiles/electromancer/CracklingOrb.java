@@ -11,59 +11,71 @@ import com.mygdx.game.projectiles.DynamicProjectile;
 import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.screens.PlayScreen;
 
-public class StaticShockArea extends DynamicProjectile {
+public class CracklingOrb extends DynamicProjectile {
 
-	private static final int damage = 1;
-	private static final float stunDuration = 1f;
+	private static final float speed = 5; // m/s
+	private static final int damage = 3;
 
-	private Array<Integer> hitEntities;
+	private long travelSoundId;
 
-	/**
+	private Vector3 targetPos;
+
+	private Array<Integer> hitIds;
+
+	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public StaticShockArea() { }
+	public CracklingOrb() { }
 
-	public StaticShockArea(Entity entity, Vector3 pos, float lifetime) {
-		super(entity, ProjectileSprite.NO_SPRITE, pos, lifetime);
+	public CracklingOrb(Entity entity, Vector3 pos, Vector3 targetPos, float lifetime) {
+		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
 
-		name = "Static Shock area";
+		name = "Crackling Orb";
 
-		hitEntities = new Array<>();
+		hitIds = new Array<>();
+
+		this.targetPos = targetPos.cpy();
 	}
 
 	protected void loadPhysicsObject() {
-		defaultLoadRigidBody(new btSphereShape(1f));
+		defaultLoadRigidBody(new btSphereShape(0.1f));
 		rigidBody.setCollisionFlags(rigidBody.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
+		calcLinearProjectileMotion(targetPos, speed);
+
+		travelSoundId = -1;
 	}
 
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
-		Entity entity = playScreen.entities.getEntity(owner, playScreen.player);
-		rigidBody.setWorldTransform(rigidBody.getWorldTransform().setTranslation(entity.pos)); // Follow the entity that created this projectile.
-
 		universalUpdate();
 
-		if (Math.floorMod(ticksPast, 3) == 0) {
-			Vector3 particlePos = pos.cpy().add(new Vector3().setToRandomDirection());
-			playScreen.particleEngine.addFloatingParticles(playScreen.physicsManager.getDynamicsWorld(), particlePos, 1, 1, 2, Particle.Sprite.FIRE);
+		if (travelSoundId == -1) {
+			travelSoundId = playScreen.game.soundManager.fireballTravel.play(0.7f, playScreen.isoRenderer.camera.pos, pos);
 		}
+
+		if (Math.floorMod(ticksPast, 15) == 0) {
+			playScreen.particleEngine.addParticle(playScreen.physicsManager.getDynamicsWorld(), pos, 1f, Particle.Sprite.FIRE, Particle.Behaviour.OSCILLATE_DOWN);
+		}
+
+		playScreen.game.soundManager.fireballTravel.updateVolumeAndPan(travelSoundId, playScreen.isoRenderer.camera.pos, pos);
 	}
 
 	@Override
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
-		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
+		if (entity.id != owner && !hitIds.contains(entity.id, true)) {
 			entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
-//			entity.stunnedEffect.add(stunDuration);
-			offender.stun(entity, stunDuration);
 			offender.landAbility(entity, playScreen);
 			offender.landAbilityDamage(entity, damage + offender.equipped().getWeapon().getMagDamage(), playScreen);
 
-			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, 1.5f,
+			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, 2,
 					Particle.Sprite.FIRE, Particle.Behaviour.POOF);
+			playScreen.isoRenderer.camera.screenShake(0.2f, 0.2f);
 
-			hitEntities.add(entity.id);
+			playScreen.game.soundManager.fireballTravel.stop(travelSoundId);
+			playScreen.game.soundManager.fireballExplosion.play(playScreen.isoRenderer.camera.pos, entity.pos);
 
+			hitIds.add(entity.id);
 		}
 
 		return true;

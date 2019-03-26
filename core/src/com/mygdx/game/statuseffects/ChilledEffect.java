@@ -46,6 +46,9 @@ public class ChilledEffect extends Effect {
 	public void add(int power, float duration, boolean isBitingCold, boolean isEncaseInIce) {
 		this.duration += duration;
 		for (int i = 0; i < power; i ++) {
+			if (this.isBitingCold.size >= maxStacks) {
+				break;
+			}
 			this.isBitingCold.add(isBitingCold);
 			this.isEncaseInIce.add(isEncaseInIce);
 		}
@@ -53,12 +56,18 @@ public class ChilledEffect extends Effect {
 
 	public void addOne(float duration, boolean isBitingCold, boolean isEncaseInIce) {
 		this.duration += duration;
+		if (this.isBitingCold.size >= maxStacks) {
+			return;
+		}
 		this.isBitingCold.add(isBitingCold);
 		this.isEncaseInIce.add(isEncaseInIce);
 	}
 
 	public void addStacks(int power, boolean isBitingCold, boolean isEncaseInIce) {
 		for (int i = 0; i < power; i ++) {
+			if (this.isBitingCold.size >= maxStacks) {
+				break;
+			}
 			this.isBitingCold.add(isBitingCold);
 			this.isEncaseInIce.add(isEncaseInIce);
 		}

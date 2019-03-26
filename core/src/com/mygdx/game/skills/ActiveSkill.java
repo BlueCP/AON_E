@@ -28,10 +28,11 @@ public abstract class ActiveSkill extends Skill {
 	}
 
 	public void invoke(PlayScreen playScreen) {
+		entity.currentSkill = this;
 		if (state == State.AVAILABLE) { // If the skill is available
 			start(playScreen); // Start executing its logic.
 		} else if (state == State.ON_STANDBY) { // If the skill is on standby
-			stop(); // Stop the skill; either stopping a 'toggle' type skill or a 'waiting for input' phase of a skill (i.e. waiting for location input).
+			stop(playScreen); // Stop the skill; either stopping a 'toggle' type skill or a 'waiting for input' phase of a skill (i.e. waiting for location input).
 		}
 	}
 
@@ -70,7 +71,7 @@ public abstract class ActiveSkill extends Skill {
 	/**
 	 * Tells this class that this skill failed to resolve and should be made available again. Skips the cooldown.
 	 */
-	protected void failResolve() {
+	public void failResolve() {
 		state = State.AVAILABLE;
 	}
 
@@ -86,7 +87,7 @@ public abstract class ActiveSkill extends Skill {
 	 * Useful for toggling/'waiting for input' type skills as stopping the skill is dependent on user input,
 	 * not a cooldown which is always the same (which could be handled by the SkillAction).
 	 */
-	public void stop() {
+	public void stop(PlayScreen playScreen) {
 		state = State.AVAILABLE;
 		if (entity.actions.size > 0) {
 			EntityAction entityAction = entity.actions.first();

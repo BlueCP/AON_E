@@ -1,6 +1,5 @@
 package com.mygdx.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.screens.PlayScreen;
@@ -27,7 +26,7 @@ public class Dummy extends Entity {
 		matrix.setTranslation(pos);
 		rigidBodyMatrix = matrix;
 		
-		loadRigidBody();
+		loadRigidBody(); // We need to load rigid body here because unlike the player, a new Dummy may be added mid-game.
 	}
 	
 	@Override

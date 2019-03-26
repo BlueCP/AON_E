@@ -18,12 +18,8 @@ import com.mygdx.game.physics.Hitboxes;
 import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.IsometricRenderer.Visibility;
-import com.mygdx.game.rendering.RenderingUtils;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.skills.ActiveSkill;
-import com.mygdx.game.skills.BasicAttack;
-import com.mygdx.game.skills.NullBasicAttack;
-import com.mygdx.game.skills.Skill;
+import com.mygdx.game.skills.*;
 import com.mygdx.game.statuseffects.*;
 import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.utils.Util;
@@ -47,6 +43,7 @@ public abstract class Entity extends WorldObject {
 	public RootedEffect rootedEffect;
 	public ChilledEffect chilledEffect;
 	public FrozenEffect frozenEffect;
+	public ChargedEffect chargedEffect;
 
 	protected float realPhysDamage;
 	protected float realMagDamage;
@@ -69,6 +66,8 @@ public abstract class Entity extends WorldObject {
 	private Array<Integer> entitiesThatHit = new Array<>(); // An array of all the ids of entities that hit this entity (not necessarily damaged, could also be non-damage harmful effects).
 	int lastHitBy = -1; // The id of the entity that last hit this entity.
 
+	private boolean isProne = false; // If true, this entity is prone and will keep being prone until they stop moving.
+
 	private boolean canWalk;
 	private float realWalkSpeed;
 	private boolean canRotate;
@@ -85,6 +84,7 @@ public abstract class Entity extends WorldObject {
 
 	protected BasicAttack basicAttack;
 	protected Array<ActiveSkill> skills;
+	public ActiveSkill currentSkill = new NullActiveSkill(); // The (active) skill that is currently being cast, or is on standby (waiting for input).
 	
 	private String animationState;
 	private String prevAnimationState;
@@ -97,7 +97,8 @@ public abstract class Entity extends WorldObject {
 	
 	Matrix4 rigidBodyMatrix;
 	private Vector3 linearVelocity;
-	
+
+	public Vector3 hitboxExtents; // The dimensions of the hitbox.
 	public transient btRigidBody rigidBody;
 	float stateTime = 0f;
 	
@@ -141,7 +142,7 @@ public abstract class Entity extends WorldObject {
 		}
 		rigidBody.setLinearVelocity(lV);
 		*/
-		
+
 		if (movementVectorWasChanged) {
 			/*applyMovementChanges();
 			if (rootedEffect.isActive() || stunnedEffect.isActive() || frozenEffect.isActive()) {
@@ -197,11 +198,30 @@ public abstract class Entity extends WorldObject {
 	}*/
 
 	/**
+	 * Knocks this entity back with the given velocity, and also makes them prone.
+	 */
+	public void knockBack(Vector3 velocity) {
+		isProne = true;
+		setAnimationType(AnimationType.PRONE); // Make the enitity prone.
+		rigidBody.setLinearVelocity(velocity); // Change the velocity to the given one.
+		currentSkill.failResolve(); // Stop the current skill.
+		actions.clear(); // Stop all other actions.
+	}
+
+	/**
 	 * Apply effects such as slows.
 	 */
 	private void applyMovementChanges() {
 		realWalkSpeed *= (1 - (slowedEffect.movementDampening() + chilledEffect.movementDampening())) +
 							1 + (speedEffect.movementBoost());
+	}
+
+	/**
+	 * Sets the target location for movement for this entity to its current position.
+	 * Useful to make the entity stop moving.
+	 */
+	public void resetMovementLocation() {
+		movementLocation.set(pos.x, pos.z);
 	}
 
 	private void rotate(Vector2 diff) {
@@ -379,10 +399,11 @@ public abstract class Entity extends WorldObject {
 	 * The animation type the entity is in.
 	 */
 	public enum AnimationType {
-		STAND,
-		WALK,
-		MIDAIR,
-		SHOOT_PROJECTILE,
+		STAND, // The entity will stand and attempt to move to its target movement location.
+		WALK, // The entity is walking.
+		MIDAIR, // The entity is free-falling through the air.
+		PRONE, // The entity is prone (for example from knockback), and will resume standing when it stops moving.
+		SHOOT_PROJECTILE, // The entity is throwing a projectile.
 		NO_ANIMATION
 	}
 	
@@ -406,13 +427,15 @@ public abstract class Entity extends WorldObject {
 	 */
 	private void updateMovementFlags() {
 		canWalk = animationType != AnimationType.SHOOT_PROJECTILE && animationType != AnimationType.MIDAIR &&
-		!stunnedEffect.isActive() && !rootedEffect.isActive() && !frozenEffect.isActive();
-
-		canRotate = animationType != AnimationType.SHOOT_PROJECTILE && !stunnedEffect.isActive() &&
+		animationType != AnimationType.PRONE && !stunnedEffect.isActive() && !rootedEffect.isActive() &&
 		!frozenEffect.isActive();
 
+		canRotate = animationType != AnimationType.SHOOT_PROJECTILE && animationType != AnimationType.PRONE &&
+		!stunnedEffect.isActive() && !frozenEffect.isActive();
+
 		canJump = animationType != AnimationType.SHOOT_PROJECTILE && animationType != AnimationType.MIDAIR &&
-		!stunnedEffect.isActive() && !rootedEffect.isActive() && !frozenEffect.isActive();
+		animationType != AnimationType.PRONE && !stunnedEffect.isActive() && !rootedEffect.isActive() &&
+		!frozenEffect.isActive();
 	}
 	
 	/*
@@ -494,11 +517,17 @@ public abstract class Entity extends WorldObject {
 		if (life > maxLife) {
 			life = maxLife;
 		}
+		if (life < 0) {
+			life = 0;
+		}
 	}
 	
 	private void applySpiritCap() {
 		if (spirit > maxSpirit) {
 			spirit = maxSpirit;
+		}
+		if (spirit < 0) {
+			spirit = 0;
 		}
 	}
 
@@ -522,6 +551,25 @@ public abstract class Entity extends WorldObject {
 			rotate(diff);
 			testForWalk(diff);
 		}
+	}
+
+	private void updateProne() {
+		if (rigidBody.getLinearVelocity().dst(parentVelocity) < 0.01f) { // If the entity has stopped moving.
+			// We use dst instead of just using equals, as there are always very small values even when the player appears to be still.
+			isProne = false; // Make the entity no longer prone.
+		}
+	}
+
+	/*
+	 * Update before anything else has happened in PlayScreen.executeLogic.
+	 */
+	public void preUpdate() {
+//		System.out.println(animationType);
+		updateProne();
+		resetAnimationType();
+		updateActionAnimations();
+		targetedLocationThisTick = false; // Assume no target location this tick until shown otherwise.
+		//updateAnimationType();
 	}
 	
 	/*
@@ -548,6 +596,8 @@ public abstract class Entity extends WorldObject {
 		
 		collidingWithWalkable = false;
 		collidingWithClimbable = false;
+
+		applyEffects(playScreen);
 	}
 	
 	/*
@@ -563,7 +613,9 @@ public abstract class Entity extends WorldObject {
 	 * This is used as a baseline. If there are no other animation types to take into account, it will stay as this.
 	 */
 	private void resetAnimationType() {
-		if (collidingWithWalkable) {
+		if (isProne) {
+			setAnimationType(AnimationType.PRONE);
+		} else if (collidingWithWalkable) {
 			setAnimationType(AnimationType.STAND);
 			rigidBody.setFriction(0.7f);
 		} else if (!collidingWithWalkable && !collidingWithClimbable) {
@@ -576,16 +628,6 @@ public abstract class Entity extends WorldObject {
 	 */
 	public void resetAnimation() {
 		stateTime = 0;
-	}
-	
-	/*
-	 * Update before anything else has happened in PlayScreen.executeLogic.
-	 */
-	public void preUpdate() {
-		resetAnimationType();
-		updateActionAnimations();
-		targetedLocationThisTick = false; // Assume no target location this tick until shown otherwise.
-		//updateAnimationType();
 	}
 
 	/**
@@ -674,9 +716,18 @@ public abstract class Entity extends WorldObject {
 		prepareForSaveAndExit();
 		return body;
 	}*/
+
+	private void calculateHitboxExtents() {
+		Vector3 min = new Vector3();
+		Vector3 max = new Vector3();
+		rigidBody.getCollisionShape().getAabb(new Matrix4(), min, max);
+		hitboxExtents = max.sub(min);
+	}
 	
 	final void processAfterLoadingBase() {
 		loadRigidBody();
+		calculateHitboxExtents();
+//		System.out.println(hitboxExtents);
 
 		// The entity field of a Skill object is transient (to prevent headaches with circular references).
 		// Thus the reference to this entity must be reconstructed.
@@ -722,6 +773,7 @@ public abstract class Entity extends WorldObject {
 		rootedEffect = new RootedEffect(this);
 		chilledEffect = new ChilledEffect(this);
 		frozenEffect = new FrozenEffect(this);
+		chargedEffect = new ChargedEffect(this);
 	}
 	
 	/*
@@ -731,6 +783,7 @@ public abstract class Entity extends WorldObject {
 		burningEffect.apply(playScreen);
 		chilledEffect.bitingColdDamage();
 		chilledEffect.testEncaseInIce(playScreen);
+		chargedEffect.randomDischarge(playScreen);
 
 		updateAllEffects();
 	}
@@ -746,6 +799,7 @@ public abstract class Entity extends WorldObject {
 		rootedEffect.update();
 		chilledEffect.update();
 		frozenEffect.update();
+		chargedEffect.update();
 	}
 
 	/**
