@@ -50,8 +50,8 @@ public class IncendiaryTrap extends StaticProjectile {
 	public boolean onHitProjectile(Projectile projectile, PlayScreen playScreen) {
 		// If the hit projectile is associated with fire, destroy both this trap and the projectile that triggered it.
 		if (projectile.name.equals("Fireball") || projectile.name.equals("Firebolt")) {
-			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
-			projectile.destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
+			destroy(playScreen);
+			projectile.destroy(playScreen);
 
 			playScreen.projectileManager.addProjectileInFuture(new IncendiaryTrapExplosion(playScreen.entities.getEntity(owner, playScreen.player), pos));
 

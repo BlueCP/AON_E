@@ -10,13 +10,13 @@ public class Cat extends Entity {
 		generateId(entities);
 		super.setName("Cat");
 		super.setLife(20);
-		super.basePhysDmg = 0;
+//		super.basePhysDmg = 0;
 		super.setBehaviour(Behaviour.IDLE);
 		super.setNature(Nature.PASSIVE);
 	}
 
 	@Override
-	public void onUpdate(PlayScreen session) {
+	public void individualUpdate(PlayScreen session) {
 		if (this.isFollowingPlayer()) {
 			//this.follow(session, session.player);
 		} else {

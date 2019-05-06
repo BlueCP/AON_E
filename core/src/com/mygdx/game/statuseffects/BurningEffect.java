@@ -5,7 +5,7 @@ import com.mygdx.game.entities.Entity;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.screens.PlayScreen;
 
-public class BurningEffect extends ProcEffect {
+public class BurningEffect extends ProcEffectDisc {
 
 	/**
 	 * No-arg constructor for serialisation purposes.
@@ -22,7 +22,7 @@ public class BurningEffect extends ProcEffect {
 	public void apply(PlayScreen playScreen) {
 		boolean burningParticlesAdded = false;
 		for (int power: powers) {
-			entity.takeDamageBase(2 * Gdx.graphics.getDeltaTime() * power);
+			entity.takeDamageNoEntity(2 * Gdx.graphics.getDeltaTime() * power);
 			if (!burningParticlesAdded) {
 				playScreen.particleEngine.addFlyUpPillar(playScreen.physicsManager.getDynamicsWorld(), entity.pos, 1,
 						4, 1f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);

@@ -39,10 +39,10 @@ public class DefrostingArea extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
-			entity.dealtDamageBy(offender, damagePerStack * entity.chilledEffect.numStacks() + offender.equipped().getWeapon().getMagDamage());
+			float finalDamage = offender.dealDamage(entity, damagePerStack * entity.chilledEffect.numStacks() + offender.getRealDamage());
 			entity.chilledEffect.remove();
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, damagePerStack * entity.chilledEffect.numStacks() + offender.equipped().getWeapon().getMagDamage(), playScreen);
+			offender.landAbilityDamage(entity, finalDamage, playScreen);
 			return true;
 		} else {
 			return false;

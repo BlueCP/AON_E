@@ -7,13 +7,13 @@ public class Rabbit extends Entity {
 	public Rabbit() {
 		super.name = "Rabbit";
 		super.setLife(5);
-		super.basePhysDmg = 0;
+//		super.basePhysDmg = 0;
 		super.setBehaviour(Behaviour.FLEE);
 		super.setNature(Nature.PASSIVE);
 	}
 
 	@Override
-	public void onUpdate(PlayScreen session) {
+	public void individualUpdate(PlayScreen session) {
 
 	}
 

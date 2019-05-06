@@ -7,6 +7,7 @@ public abstract class Skill {
 	protected String name;
 	protected String desc;
 	protected transient Entity entity; // The entity which used this skill.
+	protected boolean castWithLife; // Whether or not this skill was cast using life.
 
 	public Skill(Entity entity) {
 		this.entity = entity;
@@ -22,14 +23,16 @@ public abstract class Skill {
 	 * @param cost the cost in spirit (or, if there is insufficient spirit, use life instead).
 	 * @return whether or not the spell can be cast with the available spirit and life.
 	 */
-	protected static boolean hasResource(Entity entity, int cost) {
+	protected boolean hasResource(Entity entity, int cost) {
 		if (entity.getSpirit() >= cost) {
 			entity.changeSpirit(-cost);
+			castWithLife = false;
 			return true;
 		} else if (entity.getLife() >= cost) {
 			int remainder = (int) (cost - entity.getSpirit());
 			entity.setSpirit(0);
 			entity.changeLife(-remainder);
+			castWithLife = true;
 			return true;
 		} else {
 			return false;
@@ -46,6 +49,14 @@ public abstract class Skill {
 
 	public void setEntity(Entity entity) {
 		this.entity = entity;
+	}
+
+	public boolean isCastWithLife() {
+		return castWithLife;
+	}
+
+	public void setCastWithLife(boolean castWithLife) {
+		this.castWithLife = castWithLife;
 	}
 
 }

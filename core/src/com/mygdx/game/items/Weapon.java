@@ -3,8 +3,8 @@ package com.mygdx.game.items;
 public abstract class Weapon extends GearItem {
 	
 	protected Type type;
-	protected int physDamage;
-	protected int magDamage;
+	protected int damage;
+//	protected int magDamage;
 	protected int range;
 //	protected String rangeType;
 //	private int hands;
@@ -66,20 +66,12 @@ public abstract class Weapon extends GearItem {
 		this.type = type;
 	}
 
-	public int getPhysDamage() {
-		return physDamage;
+	public int getDamage() {
+		return damage;
 	}
 
-	void setPhysDamage(int physDamage) {
-		this.physDamage = physDamage;
-	}
-
-	public int getMagDamage() {
-		return magDamage;
-	}
-
-	void setMagDamage(int magDamage) {
-		this.magDamage = magDamage;
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 
 	public int getRange() {

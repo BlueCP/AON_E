@@ -69,7 +69,7 @@ public class Entities {
 		for (int i = 0; i < allEntities.size; i ++) {
 			Entity entity = allEntities.get(i);
 			entity.universalUpdate(playScreen);
-			entity.onUpdate(playScreen);
+			entity.individualUpdate(playScreen);
 		}
 	}
 	

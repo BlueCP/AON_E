@@ -17,10 +17,6 @@ public abstract class ImmobileObject extends ConstantObject {
 		super(collisionObject, texture, id, tags);
 	}
 
-	public void update() {
-		super.update();
-	}
-
 	public int getRenderingIndex() {
 		return renderingIndex;
 	}

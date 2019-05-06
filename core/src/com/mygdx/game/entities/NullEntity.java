@@ -9,7 +9,7 @@ public class NullEntity extends Entity {
 	}
 
 	@Override
-	public void onUpdate(PlayScreen session) {
+	public void individualUpdate(PlayScreen session) {
 
 	}
 

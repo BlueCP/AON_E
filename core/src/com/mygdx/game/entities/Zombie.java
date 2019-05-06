@@ -9,13 +9,13 @@ public class Zombie extends Entity {
 	public Zombie() {
 		super.setName("Zombie");
 		super.setLife(10);
-		super.basePhysDmg = 5;
+//		super.basePhysDmg = 5;
 		super.setBehaviour(Behaviour.FOLLOW);
 		super.setNature(Nature.AGGRESSIVE);
 	}
 
 	@Override
-	public void onUpdate(PlayScreen session) {
+	public void individualUpdate(PlayScreen session) {
 		if (isFollowingPlayer()) {
 			int chance = ThreadLocalRandom.current().nextInt(1, 101);
 			if (chance <= 80) {

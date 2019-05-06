@@ -7,13 +7,13 @@ public class Bandit extends Entity {
 	public Bandit() {
 		super.setName("Bandit");
 		super.setLife(6);
-		super.basePhysDmg = 3;
+//		super.basePhysDmg = 3;
 		super.setBehaviour(Behaviour.FOLLOW);
 		super.setNature(Nature.AGGRESSIVE);
 	}
 
 	@Override
-	public void onUpdate(PlayScreen session) {
+	public void individualUpdate(PlayScreen session) {
 		if (this.isFollowingPlayer()) {
 			//follow(session, session.player);
 			/*

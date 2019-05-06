@@ -11,13 +11,13 @@ public class BoneDemidemon extends Entity {
 		generateId(entities);
 		super.setName("Bone Demidemon");
 		super.setLife(15);
-		super.basePhysDmg = 8;
+//		super.basePhysDmg = 8;
 		super.setBehaviour(Behaviour.IDLE);
 		super.setNature(Nature.NEUTRAL);
 	}
 	
 	@Override
-	public void onUpdate(PlayScreen session) {
+	public void individualUpdate(PlayScreen session) {
 		if (nature == Nature.AGGRESSIVE && isFollowingPlayer()) {
 			//this.follow(session, session.player);
 			attack(session.player, 1, session);

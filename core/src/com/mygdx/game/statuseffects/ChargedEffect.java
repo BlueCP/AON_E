@@ -64,19 +64,17 @@ public class ChargedEffect extends Effect {
 	}
 
 	public void add(int power) {
-		durations.add(stackLifetime);
 		for (int i = 0; i < power; i ++) {
+			durations.add(stackLifetime);
 			if (durations.size >= maxStacks) {
 				break;
 			}
-//			this.isDischarge.add(isDischarge);
 		}
 	}
 
 	public void addOne() {
-		durations.add(stackLifetime);
-		if (durations.size >= maxStacks) {
-			return;
+		if (durations.size < maxStacks) {
+			durations.add(stackLifetime);
 		}
 //		this.isDischarge.add(isDischarge);
 	}

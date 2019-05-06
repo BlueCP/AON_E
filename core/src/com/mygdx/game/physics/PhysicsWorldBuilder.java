@@ -23,8 +23,9 @@ import com.mygdx.game.particles.Particle;
 import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.physics.PhysicsManager.Tag;
 import com.mygdx.game.physicsobjects.*;
+import com.mygdx.game.physicsobjects.immobilecontrollables.LightControllable;
+import com.mygdx.game.physicsobjects.immobilecontrollers.SwitchController;
 import com.mygdx.game.projectiles.Projectile;
-import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 
@@ -81,14 +82,24 @@ public class PhysicsWorldBuilder {
 		this.physicsManager = physicsManager;
 
 		immobileTerrainTypes = new Array<>();
+
 		immobileControllerTypes = new Array<>();
+		immobileControllerTypes.add("switch");
+
 		immobileControllableTypes = new Array<>();
+		immobileControllableTypes.add("light");
+
 		immobileInteractiveTypes = new Array<>();
 
+
 		mobileTerrainTypes = new Array<>();
+
 		mobileControllerTypes = new Array<>();
+
 		mobileControllableTypes = new Array<>();
+
 		mobileInteractiveTypes = new Array<>();
+
 
 		tempSubType = new StringBuilder();
 		tempIdBuilder = new StringBuilder();
@@ -98,16 +109,16 @@ public class PhysicsWorldBuilder {
 	}
 
 	/*
-	 * Turns an unordered arrow of regions into an array of frames (of an animation).
+	 * Turns an unordered array of regions into an array of frames (of an animation).
 	 */
-	private TextureRegion[] buildAnimationFrames(Array<AtlasRegion> regions, AtlasRegion region, btBulletWorldImporter importer, btCollisionObject collisionObject) {
+	private TextureRegion[] buildAnimationFrames(Array<AtlasRegion> regions, AtlasRegion region, btBulletWorldImporter importer, int id) {
 		HashMap<Integer, AtlasRegion> regionMap = new HashMap<>();
 		for (int i = 0; i < regions.size; i ++) {
 			AtlasRegion region0 = regions.get(i);
 			StringBuilder id0 = new StringBuilder();
 			StringBuilder frame = new StringBuilder();
 			boolean ontoFrameNum = false;
-			for (char character: region.name.toCharArray()) {
+			for (char character: region0.name.toCharArray()) {
     			if (character == '-') {
     				ontoFrameNum = true;
     				continue;
@@ -118,15 +129,15 @@ public class PhysicsWorldBuilder {
     				id0.append(character);
     			}
     		}
-			if (id0.toString().equals(importer.getNameForPointer(collisionObject.getCPointer()))) {
+			if (Integer.parseInt(id0.toString()) == id) {
 				regionMap.put(Integer.parseInt(frame.toString()), region0);
 			}
 		}
-		TextureRegion[] TextureRegions = new TextureRegion[regionMap.size()];
+		TextureRegion[] textureRegions = new TextureRegion[regionMap.size()];
 		for (int i = 0; i < regionMap.size(); i ++) {
-			TextureRegions[i] = new TextureRegion(regionMap.get(i));
+			textureRegions[i] = new TextureRegion(regionMap.get(i + 1));
 		}
-		return TextureRegions;
+		return textureRegions;
 	}
 
 	private void findNameData(String name) {
@@ -135,7 +146,7 @@ public class PhysicsWorldBuilder {
 		// 1: reading port
 		// 2: reading id
 		// 3: reading tags
-		short reading = -1;
+		short reading;
 		StringBuilder tempTag = new StringBuilder();
 		StringBuilder tempPort = new StringBuilder();
 		if (name.contains("_")) {
@@ -178,6 +189,7 @@ public class PhysicsWorldBuilder {
 					tempTags.add(tag);
 				}
 			}
+			tempPorts.add(tempPort.toString());
 		} else { // If the object is generic terrain (without a subtype)
 			reading = 2;
 			for (char character: name.toCharArray()) {
@@ -200,17 +212,16 @@ public class PhysicsWorldBuilder {
 					tempTag.append(character);
 				}
 			}
-
-			tempTag.setLength(0);
-
+//			tempTag.setLength(0);
 			for (Tag tag: Tag.values()) {
 				if (tag.id().equals(tempTag.toString())) {
 					tempTags.add(tag);
 				}
 			}
+			tempPorts.add(tempPort.toString());
 		}
 
-		tempTags.add(Tag.WALKABLE); // TODO: remove this temp. code eventually, when Will starts using the new naming syntax with tags.
+//		tempTags.add(Tag.WALKABLE); // TODO: remove this temp. code eventually, when Will starts using the new naming syntax with tags.
 
 		tempId = String.valueOf(Integer.parseInt(tempIdBuilder.toString())); // To get rid of 0s at the start of the string.
 	}
@@ -287,9 +298,11 @@ public class PhysicsWorldBuilder {
 				} else {
 					tempIndex.append(character);
 				}
-			} else {
+			} else if (character == '\r') { // Only trigger this block on reaching \r so that it's not executed twice for each newline.
 				readingId = true;
 				indexes.put(Integer.parseInt(tempId.toString()), Integer.parseInt(tempIndex.toString()));
+				tempId.setLength(0);
+				tempIndex.setLength(0);
 			}
 		}
 
@@ -444,11 +457,11 @@ public class PhysicsWorldBuilder {
 		}
 	}
 
-	private void removeProjectiles(ProjectileManager projectileManager, PhysicsManager physicsManager, Vector3 vector, Vector2 chunkCoords, Vector2 lower, Vector2 higher) {
-		for (int i = 0; i < projectileManager.projectiles.size; i ++) {
-			Projectile projectile = projectileManager.projectiles.get(i);
+	private void removeProjectiles(PlayScreen playScreen, Vector3 vector, Vector2 chunkCoords, Vector2 lower, Vector2 higher) {
+		for (int i = 0; i < playScreen.projectileManager.projectiles.size; i ++) {
+			Projectile projectile = playScreen.projectileManager.projectiles.get(i);
 			if (projectile.pos.x < lower.x || projectile.pos.z < lower.y || projectile.pos.x > higher.x || projectile.pos.z > higher.y) {
-				projectile.destroy(physicsManager.getDynamicsWorld(), projectileManager);
+				projectile.destroy(playScreen);
 				i --;
 			}
 		}
@@ -486,7 +499,7 @@ public class PhysicsWorldBuilder {
 
 			removeEntities(playScreen.entities, playScreen, vector, chunkCoords, lower, higher);
 			removeParticles(playScreen.particleEngine, physicsManager, vector, chunkCoords, lower, higher);
-			removeProjectiles(playScreen.projectileManager, physicsManager, vector, chunkCoords, lower, higher);
+			removeProjectiles(playScreen, vector, chunkCoords, lower, higher);
 		}
 	}
 
@@ -532,7 +545,7 @@ public class PhysicsWorldBuilder {
 		Array<AtlasRegion> regions = atlas.getRegions(); // Create temp. array of regions
 		//ConstantObject[] instances = new ConstantObject[importer.getNumRigidBodies()];
 //		Array<StaticObject> objs = new Array<>();
-		HashMap<String, int[]> textureRegionCoords = loadCoordValues(path + "coords.txt");
+//		HashMap<String, int[]> textureRegionCoords = loadCoordValues(path + "coords.txt");
 
 		Kryo kryo = KryoManager.getKryo();
 		Input input = null;
@@ -542,8 +555,12 @@ public class PhysicsWorldBuilder {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		FileHandle fileHandle = new FileHandle("saves/" + player.getPlayerName() + "/controllableFlags.txt");
+		String constObjString = fileHandle.readString();
 
 		ObjectMap<Integer, Integer> immobileRenderingIndexes = loadImmobileRenderingOrder(currentChunk);
+
+//		System.out.println(immobileRenderingIndexes);
 
 		System.out.println(importer.getNumRigidBodies());
 		System.out.println(importer.getNumCollisionShapes());
@@ -567,13 +584,15 @@ public class PhysicsWorldBuilder {
 
 			findNameData(importer.getNameForPointer(collisionObject.getCPointer()));
 
+//			System.out.println(importer.getNameForPointer(collisionObject.getCPointer()));
+
 			ConstantObject constantObject = new NullConstantObject();
 			if (immobileTerrainTypes.contains(tempSubType.toString(), false)) {
-				constantObject = buildImmobileTerrain(immobileRenderingIndexes, collisionObject, regions, textureRegionCoords);
+				constantObject = buildImmobileTerrain(immobileRenderingIndexes, collisionObject, regions);
 			} else if (immobileControllerTypes.contains(tempSubType.toString(), false)) {
-
+				constantObject = buildImmobileController(immobileRenderingIndexes, collisionObject, regions);
 			} else if (immobileControllableTypes.contains(tempSubType.toString(), false)) {
-
+				constantObject = buildImmobileControllable(immobileRenderingIndexes, collisionObject, regions);
 			} else if (immobileInteractiveTypes.contains(tempSubType.toString(), false)) {
 
 			} else if (mobileTerrainTypes.contains(tempSubType.toString(), false)) {
@@ -585,13 +604,21 @@ public class PhysicsWorldBuilder {
 			} else if (mobileInteractiveTypes.contains(tempSubType.toString(), false)) {
 
 			} else { // If the object doesn't have a subtype, assume it's a generic terrain object.
-				constantObject = buildImmobileTerrain(immobileRenderingIndexes, collisionObject, regions, textureRegionCoords);
+				constantObject = buildImmobileTerrain(immobileRenderingIndexes, collisionObject, regions);
 			}
 			constantObject.setChunk(ConstantObject.Chunk.START);
-			constantObject.load(kryo, input);
+
+			/*System.out.println(123);
+			System.out.println(constObjString);
+			System.out.println(123);*/
+			if (constObjString.equals("")) { // If the constant object data for this chunk has not yet been initialised
+				constantObject.initialise(physicsManager);
+			} else {
+				constantObject.load(kryo, input);
+			}
 
 			physicsManager.allConstantObjects.add(constantObject);
-			physicsManager.getDynamicsWorld().addCollisionObject(constantObject.collisionObject, PhysicsManager.TERRAIN_FLAG, PhysicsManager.ALL_FLAG);
+			physicsManager.getDynamicsWorld().addCollisionObject(constantObject.collisionObject, PhysicsManager.CONST_OBJ_FLAG, PhysicsManager.ALL_FLAG);
 
 			resetTempVars();
 		}
@@ -609,18 +636,20 @@ public class PhysicsWorldBuilder {
 		}
 	}
 
-	private ConstantObject buildImmobileTerrain(ObjectMap<Integer, Integer> immobileRenderingIndexes, btCollisionObject collisionObject, Array<AtlasRegion> regions, HashMap<String, int[]> textureRegionCoords) {
-		boolean isAnimation = false;
+	private ConstantObject buildImmobileTerrain(ObjectMap<Integer, Integer> immobileRenderingIndexes, btCollisionObject collisionObject, Array<AtlasRegion> regions) {
+		boolean isAnimation;
 		for (AtlasRegion region: regions) {
+			isAnimation = false;
 			StringBuilder textureRegionId = new StringBuilder();
 			for (char character: region.name.toCharArray()) {
-				textureRegionId.append(character);
 				if (character == '-') {
 					isAnimation = true;
+					break;
 				}
+				textureRegionId.append(character);
 			}
 			TextureRegion[] textureRegions;
-			if (textureRegionId.toString().equals(tempId) && !isAnimation) {
+			if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && !isAnimation) {
 				textureRegions = new TextureRegion[1];
 				textureRegions[0] = new TextureRegion(region);
 //				int[] coords = textureRegionCoords.get(tempId);
@@ -629,13 +658,108 @@ public class PhysicsWorldBuilder {
 				setRenderingIndex(obj, immobileRenderingIndexes);
 				physicsManager.immobileTerrain.add(obj);
 				return obj;
-			} else if (textureRegionId.toString().equals(tempId) && isAnimation) {
-				textureRegions = buildAnimationFrames(regions, region, importer, collisionObject);
+			} else if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && isAnimation) {
+				textureRegions = buildAnimationFrames(regions, region, importer, Integer.parseInt(textureRegionId.toString()));
 //				int[] coords = textureRegionCoords.get(tempId);
 //				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
 				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
 				setRenderingIndex(obj, immobileRenderingIndexes);
 				physicsManager.immobileTerrain.add(obj);
+				return obj;
+			}
+
+		}
+		return new NullConstantObject();
+	}
+
+	private ConstantObject buildImmobileController(ObjectMap<Integer, Integer> immobileRenderingIndexes, btCollisionObject collisionObject, Array<AtlasRegion> regions) {
+		boolean isAnimation;
+		for (AtlasRegion region: regions) {
+			isAnimation = false;
+			StringBuilder textureRegionId = new StringBuilder();
+			for (char character: region.name.toCharArray()) {
+				if (character == '-') {
+					isAnimation = true;
+					break;
+				}
+				textureRegionId.append(character);
+			}
+			TextureRegion[] textureRegions;
+			if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && !isAnimation) {
+				textureRegions = new TextureRegion[1];
+				textureRegions[0] = new TextureRegion(region);
+				ImmobileController obj;
+				switch (tempSubType.toString()) {
+					case "": // Placeholder for now; code gets angry if it's not there.
+						obj = new SwitchController(collisionObject, textureRegions, tempId, tempTags, tempPorts, 0);
+						break;
+					default:
+						return new NullConstantObject();
+				}
+				setRenderingIndex(obj, immobileRenderingIndexes);
+				physicsManager.immobileControllers.add(obj);
+				return obj;
+			} else if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && isAnimation) {
+				textureRegions = buildAnimationFrames(regions, region, importer, Integer.parseInt(textureRegionId.toString()));
+				ImmobileController obj;
+				switch (tempSubType.toString()) {
+					case "switch":
+						obj = new SwitchController(collisionObject, textureRegions, tempId, tempTags, tempPorts, 0);
+						break;
+					case "switch-on":
+						obj = new SwitchController(collisionObject, textureRegions, tempId, tempTags, tempPorts, 1);
+						break;
+					default:
+						return new NullConstantObject();
+				}
+				setRenderingIndex(obj, immobileRenderingIndexes);
+				physicsManager.immobileControllers.add(obj);
+				return obj;
+			}
+
+		}
+		return new NullConstantObject();
+	}
+
+	private ConstantObject buildImmobileControllable(ObjectMap<Integer, Integer> immobileRenderingIndexes, btCollisionObject collisionObject, Array<AtlasRegion> regions) {
+		boolean isAnimation;
+		for (AtlasRegion region: regions) {
+			isAnimation = false;
+			StringBuilder textureRegionId = new StringBuilder();
+			for (char character: region.name.toCharArray()) {
+				if (character == '-') {
+					isAnimation = true;
+					break;
+				}
+				textureRegionId.append(character);
+			}
+			TextureRegion[] textureRegions;
+			if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && !isAnimation) {
+				textureRegions = new TextureRegion[1];
+				textureRegions[0] = new TextureRegion(region);
+				ImmobileControllable obj;
+				switch (tempSubType.toString()) {
+					case "": // Placeholder for now; code gets angry if it's not there.
+						obj = new LightControllable(collisionObject, textureRegions, tempId, tempTags, tempPorts);
+						break;
+					default:
+						return new NullConstantObject();
+				}
+				setRenderingIndex(obj, immobileRenderingIndexes);
+				physicsManager.immobileControllables.add(obj);
+				return obj;
+			} else if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && isAnimation) {
+				textureRegions = buildAnimationFrames(regions, region, importer, Integer.parseInt(textureRegionId.toString()));
+				ImmobileControllable obj;
+				switch (tempSubType.toString()) {
+					case "light":
+						obj = new LightControllable(collisionObject, textureRegions, tempId, tempTags, tempPorts);
+						break;
+					default:
+						return new NullConstantObject();
+				}
+				setRenderingIndex(obj, immobileRenderingIndexes);
+				physicsManager.immobileControllables.add(obj);
 				return obj;
 			}
 

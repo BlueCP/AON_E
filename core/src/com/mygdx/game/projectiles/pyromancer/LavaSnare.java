@@ -41,13 +41,14 @@ public class LavaSnare extends StaticProjectile {
 
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
+		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		Entity target = playScreen.entities.getEntity(targetEntity, playScreen.player);
 
 		if (target.id == -1) {
-			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
+			destroy(playScreen);
 		} else if (!alreadyHit) {
 			playScreen.entities.getEntity(owner, playScreen.player).landAbility(target, playScreen);
-			target.burnedBy(playScreen.entities.getEntity(owner, playScreen.player), burnPower, lifetime);
+			offender.burn(target, burnPower, lifetime);
 			target.rootedEffect.add(lifetime);
 			alreadyHit = true;
 		}

@@ -16,6 +16,6 @@ public abstract class MobileInteractive extends MobileObject {
 		collisionObject.setUserValue(physicsId);
 	}
 
-	public abstract void clicked(PlayScreen.MouseEvent mouseEvent, PlayScreen playScreen);
+//	public abstract void clicked(PlayScreen.MouseEvent mouseEvent, PlayScreen playScreen);
 
 }

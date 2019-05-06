@@ -86,7 +86,7 @@ public class ChooseRaceAndClassScreen implements Screen, InputProcessor {
 		classGroup.add(chooseMage);
 		
 		okay = new TextButton("Okay", AON_E.SKIN);
-		okay.addListener(new ClickListener() {
+		/*okay.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				switch (String.valueOf(raceGroup.getChecked().getText())) {
@@ -116,7 +116,7 @@ public class ChooseRaceAndClassScreen implements Screen, InputProcessor {
 				}
 //				game.setScreen(new EnterNameScreen(game, newGame));
 			}
-		});
+		});*/
 		
 		goBack = new TextButton("Go back", AON_E.SKIN);
 		goBack.addListener(new ClickListener() {

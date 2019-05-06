@@ -138,11 +138,11 @@ public class InventoryScreen extends MyScreen {
 					statsTable.add(new Label("Type", AON_E.SKIN)).row();
 					statsTable.add(new Label(weapon.getType().type(), AON_E.SKIN)).row();
 					
-					statsTable.add(new Label("Physical damage:", AON_E.SKIN)).row();
-					statsTable.add(new Label(String.valueOf(weapon.getPhysDamage()), AON_E.SKIN)).row();
+					statsTable.add(new Label("Damage:", AON_E.SKIN)).row();
+					statsTable.add(new Label(String.valueOf(weapon.getDamage()), AON_E.SKIN)).row();
 					
-					statsTable.add(new Label("Magical damage:", AON_E.SKIN)).row();
-					statsTable.add(new Label(String.valueOf(weapon.getMagDamage()), AON_E.SKIN)).row();
+					/*statsTable.add(new Label("Magical damage:", AON_E.SKIN)).row();
+					statsTable.add(new Label(String.valueOf(weapon.getMagDamage()), AON_E.SKIN)).row();*/
 					
 					statsTable.add(new Label("Range:", AON_E.SKIN)).row();
 					statsTable.add(new Label(String.valueOf(weapon.getRange()), AON_E.SKIN)).row();

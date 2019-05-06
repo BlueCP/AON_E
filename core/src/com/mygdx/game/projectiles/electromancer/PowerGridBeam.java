@@ -83,7 +83,7 @@ public class PowerGridBeam extends StaticProjectile {
 	@Override
 	public void update(float delta, PlayScreen playScreen) {
 		if (projectile1.isDestroyed() || projectile2.isDestroyed()) {
-			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
+			destroy(playScreen);
 			return;
 		}
 		Array<Integer> hitIds = playScreen.physicsManager.convexSweepTestAll(shape, startPoint, endPoint); // Cast the shape from the start to the end.
@@ -92,8 +92,9 @@ public class PowerGridBeam extends StaticProjectile {
 				Entity entity = playScreen.entities.getEntity(Util.getId(id), playScreen.player);
 				Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 				if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-					entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
+					float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 					offender.landAbility(entity, playScreen);
+					offender.landAbilityDamage(entity, finalDamage, playScreen);
 					hitEntities.add(entity.id);
 				}
 			}

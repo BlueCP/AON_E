@@ -89,7 +89,7 @@ public abstract class Projectile extends WorldObject {
 
 	public abstract boolean onHitProjectile(Projectile projectile, PlayScreen playScreen);
 	
-	public abstract void destroy(btDynamicsWorld dynamicsWorld, ProjectileManager projectileManager);
+	public abstract void destroy(PlayScreen playScreen);
 	
 	public abstract btCollisionObject getCollisionObject();
 	

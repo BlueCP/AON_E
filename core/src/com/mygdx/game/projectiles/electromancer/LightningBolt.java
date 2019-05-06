@@ -70,9 +70,9 @@ public class LightningBolt extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner && !hitEntities.contains(entity.id, true)) {
-			entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
+			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, damage + offender.equipped().getWeapon().getMagDamage(), playScreen);
+			offender.landAbilityDamage(entity, finalDamage, playScreen);
 			hitEntities.add(entity.id);
 			return true;
 		} else {

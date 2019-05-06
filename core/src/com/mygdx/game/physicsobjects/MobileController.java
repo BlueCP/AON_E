@@ -9,13 +9,19 @@ import com.mygdx.game.utils.Util;
 
 public abstract class MobileController extends MobileObject {
 
-	int[] ports;
+	public Array<Integer> ports;
+	public int startingState; // The state that the ports for this controller start in.
 
 	public MobileController(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags,
-							int[] ports) {
+							Array<String> ports, int startingState) {
 		super(collisionObject, texture, id, tags);
 
-		this.ports = ports;
+		this.ports = new Array<>();
+		for (String port: ports) {
+			this.ports.add(Integer.parseInt(port));
+		}
+		this.startingState = startingState;
+//		this.ports = ports;
 		physicsId = Util.getMobileControllerId(this.id);
 		collisionObject.setUserValue(physicsId);
 	}
@@ -25,6 +31,6 @@ public abstract class MobileController extends MobileObject {
 	 * E.g. a three-way switch vs a two-way switch.
 	 * @param mouseEvent the mouse event of the click on this object.
 	 */
-	public abstract void clicked(PlayScreen.MouseEvent mouseEvent, PhysicsManager physicsManager);
+//	public abstract void clicked(PlayScreen.MouseEvent mouseEvent, PhysicsManager physicsManager);
 
 }

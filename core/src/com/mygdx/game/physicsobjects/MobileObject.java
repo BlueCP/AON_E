@@ -27,9 +27,9 @@ public abstract class MobileObject extends ConstantObject {
 		linearVelocity = new Vector3();
 	}
 
-	public void update() {
+	public void basicUpdate() {
 		collisionObject.setWorldTransform(collisionObject.getWorldTransform().translate(linearVelocity.cpy().scl(Gdx.graphics.getDeltaTime())));
-		super.update(); // Update the transform after translating this object
+		super.basicUpdate(); // Update the transform after translating this object
 	}
 
 	public Vector3 getLinearVelocity() {

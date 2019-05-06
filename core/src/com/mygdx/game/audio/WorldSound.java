@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class WorldSound extends TrueSound {
 
+	private static final float cutOffDistance = 20; // The distance after which a sound will not be heard.
+
 	WorldSound(Sound sound, Type type) {
 		super(sound, type);
 	}
@@ -21,14 +23,18 @@ public class WorldSound extends TrueSound {
 
 	private float calcVolume(Vector3 cameraPos, Vector3 soundPos) {
 		float dist = cameraPos.dst(soundPos);
+		float volume = -(1/cutOffDistance) * dist + 1;
 
-		return calcVolume((float) Math.pow(1.072, -dist));
+//		return calcVolume((float) Math.pow(1.072, -dist));
+		return volume >= 0 ? volume : 0; // If volume is +ve, return it. If it is -ve, return 0 (not audible).
 	}
 
 	private float calcVolume(float volume, Vector3 cameraPos, Vector3 soundPos) {
 		float dist = cameraPos.dst(soundPos);
+		float newVolume = (-(1/cutOffDistance) * dist + 1) * volume;
 
-		return calcVolume((float) Math.pow(1.072, -dist) * volume);
+//		return calcVolume((float) Math.pow(1.072, -dist) * volume);
+		return newVolume >= 0 ? newVolume : 0;
 	}
 
 	/**
@@ -39,6 +45,9 @@ public class WorldSound extends TrueSound {
 	 */
 	private float calcPan(Vector3 cameraPos, Vector3 soundPos) {
 		Vector3 diff = soundPos.cpy().sub(cameraPos);
+		float dist = cameraPos.dst(soundPos);
+		float factor = (float) (-Math.pow(1.2, -dist) + 1); // The further away the sound, the stronger the pan.
+
 		float rotation = (float) Math.toDegrees(MathUtils.atan2(diff.z, diff.x));
 
 		if (rotation < 0) {
@@ -50,7 +59,7 @@ public class WorldSound extends TrueSound {
 			rotation -= 360;
 		}
 
-		return MathUtils.sinDeg(rotation);
+		return MathUtils.sinDeg(rotation) * factor;
 	}
 
 	public long play(Vector3 cameraPos, Vector3 soundPos) {

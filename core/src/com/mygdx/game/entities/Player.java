@@ -10,8 +10,16 @@ import com.mygdx.game.mobtypes.MobRace;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.skills.SkillBar;
-import com.mygdx.game.skills.cryomancer.*;
-import com.mygdx.game.skills.electromancer.*;
+import com.mygdx.game.skills.cryomancer.BitingColdSkill;
+import com.mygdx.game.skills.cryomancer.EncaseInIceSkill;
+import com.mygdx.game.skills.cryomancer.FracturingBlastSkill;
+import com.mygdx.game.skills.cryomancer.LastingChillSkill;
+import com.mygdx.game.skills.electromancer.ChargeBuildupSkill;
+import com.mygdx.game.skills.electromancer.ForkedLightningSkill;
+import com.mygdx.game.skills.electromancer.SamePlaceThriceSkill;
+import com.mygdx.game.skills.electromancer.VoltaicOverloadSkill;
+import com.mygdx.game.skills.necromancer.*;
+import com.mygdx.game.skills.paladin.*;
 import com.mygdx.game.skills.pyromancer.FlamingBarrageSkill;
 import com.mygdx.game.skills.pyromancer.StokeTheFlamesSkill;
 import com.mygdx.game.skills.pyromancer.SupernovaSkill;
@@ -37,8 +45,8 @@ public class Player extends Entity {
 
 	private String playerName;
 	public SkillBar skillBar;
-	private MobRace mobRace;
-	private MobClass mobClass;
+//	private MobRace mobRace;
+//	private MobClass mobClass;
 	public static final int basicLvlReq = 10;
 
 	static final int fps = 24;
@@ -59,6 +67,16 @@ public class Player extends Entity {
 	private ChargeBuildupSkill chargeBuildup;
 	private VoltaicOverloadSkill voltaicOverload;
 
+	private SoulStealerSkill soulStealer;
+	private UnderworldDenizenSkill underworldDenizen;
+	private IntangibleGhostSkill intangibleGhost;
+	private DrainEssenceSkill drainEssence;
+
+	private DivineProtectionSkill divineProtectionSkill;
+	private DivineRetaliationSkill divineRetaliationSkill;
+	private DivinePunishmentSkill divinePunishmentSkill;
+	private DivineBlessingSkill divineBlessingSkill;
+
 	public Player() {
 		id = 0;
 		physicsId = 10000;
@@ -69,8 +87,11 @@ public class Player extends Entity {
 
 		maxLife = 50;
 		maxSpirit = 50;
+		baseDefense = 5;
 		
 		baseWalkSpeed = 1.8f;
+
+		baseDamage = 1;
 
 //		System.out.println(inventory.weapons.size);
 
@@ -111,7 +132,7 @@ public class Player extends Entity {
 
 		// ELECTROMANCER
 
-		basicAttack = new ElectromancerBasicAttack(this);
+		/*basicAttack = new ElectromancerBasicAttack(this);
 
 		skills.add(new ThunderstrikeSkill(this));
 		skills.add(new StormcallerSkill(this));
@@ -120,7 +141,35 @@ public class Player extends Entity {
 		skills.add(new RepulsionFieldSkill(this));
 		skills.add(new CracklingOrbSkill(this));
 		skills.add(new PowerGridSkill(this));
-		skills.add(new EnergySurgeSkill(this));
+		skills.add(new EnergySurgeSkill(this));*/
+
+
+		// NECROMANCER
+
+		/*basicAttack = new NecromancerBasicAttack(this);
+
+		skills.add(new RendSoulSkill(this));
+		skills.add(new PossessSkill(this));
+		skills.add(new RestlessDeadSkill(this));
+		skills.add(new SiphoningStrikeSkill(this));
+		skills.add(new DeathKnellSkill(this));
+		skills.add(new UnearthlyMiasmaSkill(this));
+		skills.add(new SacrificialPactSkill(this));
+		skills.add(new SpiritSnareSkill(this));*/
+
+
+		// PALADIN
+
+		basicAttack = new PaladinBasicAttack(this);
+
+		skills.add(new CleansingStrikeSkill(this));
+		skills.add(new HolyFireSkill(this));
+		skills.add(new RetributionSkill(this));
+		skills.add(new SoothingLightSkill(this));
+		skills.add(new DetainSkill(this));
+		skills.add(new BlindingRaysSkill(this));
+		skills.add(new EnforcementZoneSkill(this));
+		skills.add(new SeraphicFlareSkill(this));
 
 
 		// Note: the player must have all of the passives loaded in like this at the start of the game.
@@ -138,21 +187,58 @@ public class Player extends Entity {
 		encaseInIce = new EncaseInIceSkill(this, false);
 		fracturingBlast = new FracturingBlastSkill(this, false);
 
-		samePlaceThrice = new SamePlaceThriceSkill(this, true);
-		forkedLightning = new ForkedLightningSkill(this, true);
-		chargeBuildup = new ChargeBuildupSkill(this, true);
-		voltaicOverload = new VoltaicOverloadSkill(this, true);
+		samePlaceThrice = new SamePlaceThriceSkill(this, false);
+		forkedLightning = new ForkedLightningSkill(this, false);
+		chargeBuildup = new ChargeBuildupSkill(this, false);
+		voltaicOverload = new VoltaicOverloadSkill(this, false);
+
+		soulStealer = new SoulStealerSkill(this, true);
+		underworldDenizen = new UnderworldDenizenSkill(this, true);
+		intangibleGhost = new IntangibleGhostSkill(this, true);
+		drainEssence = new DrainEssenceSkill(this, true);
+
+		divineProtectionSkill = new DivineProtectionSkill(this, false);
+		divineRetaliationSkill = new DivineRetaliationSkill(this, false);
+		divinePunishmentSkill = new DivinePunishmentSkill(this, false);
+		divineBlessingSkill = new DivineBlessingSkill(this, false);
 	}
 
 	@Override
-	public void dealDamage(Entity entity, float damage) {
+	void updatePassiveSkills(PlayScreen playScreen) {
+		soulStealer.update();
+		drainEssence.update();
+
+		divineBlessingSkill.update();
+	}
+
+	@Override
+	public float dealDamage(Entity entity, float damage) {
 		float newDamage = damage;
 
 		newDamage += stokeTheFlames.damage(entity, damage);
 
 		newDamage += voltaicOverload.damage(entity, damage);
 
-		entity.takeDamage(this, newDamage);
+		newDamage += soulStealer.damage(damage);
+
+		newDamage *= divineRetaliationSkill.damageBoost();
+		newDamage *= divinePunishmentSkill.damage(entity);
+
+//		entity.takeDamage(this, newDamage);
+		newDamage = dealDamageBase(entity, newDamage);
+
+		return newDamage;
+	}
+
+	@Override
+	public void takeDamage(Entity entity, float damage) {
+		float newDamage = damage;
+
+		newDamage *= intangibleGhost.reduceDamage();
+
+		takeDamageBase(entity, newDamage);
+
+		divineBlessingSkill.recordDamageTaken();
 	}
 
 	@Override
@@ -168,6 +254,8 @@ public class Player extends Entity {
 	@Override
 	public void procKillEffects(Entity entity, PlayScreen playScreen) {
 		supernovaSkill.testfor(entity, playScreen.projectileManager, playScreen.physicsManager.getDynamicsWorld());
+
+		soulStealer.enemyKill();
 	}
 
 	@Override
@@ -182,8 +270,16 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void landAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
+	public float landAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
 		forkedLightning.testfor(entity, damage, playScreen);
+
+		float newDamage = 0; // Default to not dealing any extra damage, as damage will have already been done through dealDamage().
+
+		newDamage += underworldDenizen.damage(damage);
+
+		entity.takeDamage(this, newDamage);
+
+		return 0; // No extra damage was added to entity; therefore, return 0.
 	}
 
 	@Override
@@ -193,7 +289,11 @@ public class Player extends Entity {
 		voltaicOverload.charge(entity);
 	}
 
-
+	@Override
+	public float landBasicAttackDamage(Entity entity, float damage, PlayScreen playScreen) {
+		soulStealer.basicAttackLifesteal(damage);
+		return 0; // No extra damage was added to entity; therefore, return 0.
+	}
 
 	@Override
 	void processAfterLoading() {
@@ -211,6 +311,18 @@ public class Player extends Entity {
 
 		samePlaceThrice.setEntity(this);
 		forkedLightning.setEntity(this);
+		chargeBuildup.setEntity(this);
+		voltaicOverload.setEntity(this);
+
+		soulStealer.setEntity(this);
+		underworldDenizen.setEntity(this);
+		intangibleGhost.setEntity(this);
+		drainEssence.setEntity(this);
+
+		divineProtectionSkill.setEntity(this);
+		divineRetaliationSkill.setEntity(this);
+		divinePunishmentSkill.setEntity(this);
+		divineBlessingSkill.setEntity(this);
 	}
 
 	/*
@@ -288,8 +400,14 @@ public class Player extends Entity {
 		}
 		
 		universalUpdate(playScreen);
+		individualUpdate(playScreen);
 	}
-	
+
+	@Override
+	public void individualUpdate(PlayScreen playScreen) {
+		realDefense *= divineProtectionSkill.defenseBoost();
+	}
+
 	private void testforTurnHostile(Entity entity) {
 		if (entity.getNature() == Nature.NEUTRAL) {
 			entity.setNature(Nature.AGGRESSIVE);
@@ -315,7 +433,7 @@ public class Player extends Entity {
 			// Otherwise, use mag damage
 			damageRoll += weapon.getMagDamage();
 		}
-		damageRoll += this.eStats().getRealPhysDamage();
+		damageRoll += this.eStats().getRealDamage();
 		int critRoll = ThreadLocalRandom.current().nextInt(1,101);
 		if (critRoll <= this.eStats().getRealCritChance()) {
 			damageRoll *= 1.2;
@@ -333,8 +451,8 @@ public class Player extends Entity {
 	}
 	
 	public void doMove(int i) {
-		/*this.physDamage = this.eStats().getRealPhysDamage();
-		this.magDamage = this.eStats().getRealMagDamage();
+		/*this.physDamage = this.eStats().getRealDamage();
+		this.magDamage = this.eStats().getRealDamage();
 		Move move = this.moveBar.getMove(i);
 		if (move == null) {
 			session.newMessage("No move equipped to this slot!", Color.RED);
@@ -354,8 +472,8 @@ public class Player extends Entity {
 	}
 	
 	public void castSpell(int i) {
-		/*this.physDamage = this.eStats().getRealPhysDamage();
-		this.magDamage = this.eStats().getRealMagDamage();
+		/*this.physDamage = this.eStats().getRealDamage();
+		this.magDamage = this.eStats().getRealDamage();
 		Spell spell = this.spellBar.getSpell(i);
 		if (spell == null) {
 			session.newMessage("No spell equipped to this slot!", Color.RED);
@@ -576,9 +694,6 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void onUpdate(PlayScreen session) {}
-
-	@Override
 	public void onInteract(PlayScreen session) {
 
 	}
@@ -594,22 +709,6 @@ public class Player extends Entity {
 
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
-	}
-	
-	public MobRace getMobRace() {
-		return mobRace;
-	}
-
-	public void setMobRace(MobRace mobRace) {
-		this.mobRace = mobRace;
-	}
-
-	public MobClass getMobClass() {
-		return mobClass;
-	}
-
-	public void setMobClass(MobClass mobClass) {
-		this.mobClass = mobClass;
 	}
 
 }

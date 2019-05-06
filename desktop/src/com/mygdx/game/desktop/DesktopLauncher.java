@@ -20,8 +20,8 @@ public class DesktopLauncher {
 //		config.height = 500;
 //		config.width = 1920;
 //		config.height = 1080;
-		config.width = Integer.MAX_VALUE;
-		config.height = Integer.MAX_VALUE;
+//		config.width = Integer.MAX_VALUE;
+//		config.height = Integer.MAX_VALUE;
 		config.title = AON_E.TITLE;
 		config.addIcon("textures/blueFlame.jpg", Files.FileType.Internal);
 //		config.fullscreen = true;

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.droppeditems.DroppedItem;
@@ -25,6 +26,7 @@ import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.statuseffects.StatusEffectSprites;
 import com.mygdx.game.utils.RenderMath;
 import com.mygdx.game.world.Time;
+import javafx.util.Pair;
 
 public class IsometricRenderer {
 
@@ -248,7 +250,11 @@ public class IsometricRenderer {
 	private void calculateParticlesRenderingOrder(PhysicsManager physicsManager) {
 		for (int i = 0; i < physicsManager.renderableParticles.size; i ++) {
 			Particle particle = physicsManager.renderableParticles.get(i);
-			Array<Integer> hitIds = physicsManager.rayTestAll(particle.pos, TestMode.UPWARDS);
+			Array<Pair<Integer, Vector3>> hits = physicsManager.rayTestAll(particle.pos, TestMode.UPWARDS);
+			Array<Integer> hitIds = new Array<>();
+			for (Pair<Integer, Vector3> pair: hits) {
+				hitIds.add(pair.getKey());
+			}
 			int index = findLowestIndex(hitIds);
 			particle.updateWorldObject(this);
 			if (hitIds.size == 0 || index == -1) { // If there are no objects blocking the particle
@@ -302,7 +308,7 @@ public class IsometricRenderer {
 		calculateDroppedItemsRenderingOrder(physicsManager);
 	}
 	
-	private void renderObjects(SpriteBatch spriteBatch, Entities entities) {
+	private void renderObjects(SpriteBatch spriteBatch, Entities entities, Player player) {
 //		effectiveZoom = camera.getZoom();
 		for (int i = 0; i < orderedObjects.size; i ++) {
 			/*switch (orderedObjects.get(i).visibility) {
@@ -319,23 +325,26 @@ public class IsometricRenderer {
 				continue;
 			} else if (orderedObjects.get(i).visibility == Visibility.TRANSLUCENT) {
 				spriteBatch.setColor(1, 1, 1, 0.5f);
-				renderSingleObject(orderedObjects.get(i), spriteBatch, entities);
+				renderSingleObject(orderedObjects.get(i), spriteBatch, entities, player);
 			} else {
-				renderSingleObject(orderedObjects.get(i), spriteBatch, entities);
+				renderSingleObject(orderedObjects.get(i), spriteBatch, entities, player);
 			}
 
 			spriteBatch.setColor(1, 1, 1, 1);
 		}
 	}
 
-	private void renderSingleObject(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities) {
+	private void renderSingleObject(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities, Player player) {
 //		spriteBatch.draw(worldObject.getTexture(), worldObject.renderPos.x, worldObject.renderPos.y);
 		worldObject.render(spriteBatch, this);
 
+		if (PhysicsManager.isEntityOrPlayer(worldObject.physicsId)) {
+			Entity entity = entities.getEntity(worldObject.id, player);
+			drawStackEffects(entity, spriteBatch);
+		}
 		if (PhysicsManager.isNonPlayerEntity(worldObject.physicsId)) {
 			Entity entity = entities.getEntity(worldObject.id);
 			drawEntityLifeBar(entity, spriteBatch);
-			drawStackEffects(entity, spriteBatch);
 		}
 	}
 
@@ -355,12 +364,23 @@ public class IsometricRenderer {
 
 		// Chill
 		for (int i = 0; i < entity.chilledEffect.numStacks(); i ++) {
+			spriteBatch.draw(StatusEffectSprites.soul,
+					entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - fullEntityLifeBar.getWidth()/2f + 5 * i,
+					yCoord);
+		}
+		if (entity.chilledEffect.isActive()) {
+			yCoord -= 5;
+		}
+
+		// Souls
+		for (int i = 0; i < entity.soulsEffect.numStacks(); i ++) {
 			spriteBatch.draw(StatusEffectSprites.chill,
 					entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - fullEntityLifeBar.getWidth()/2f + 5 * i,
 					yCoord);
 		}
-
-		yCoord -= 5;
+		if (entity.soulsEffect.isActive()) {
+			yCoord -= 5;
+		}
 
 		// More effects will go here in future.
 	}
@@ -383,7 +403,7 @@ public class IsometricRenderer {
 //		camera.viewport.apply();
 		spriteBatch.setProjectionMatrix(camera.orthographicCamera.combined);
 		spriteBatch.begin();
-		renderObjects(spriteBatch, entities);
+		renderObjects(spriteBatch, entities, player);
 		spriteBatch.end();
 
 //		playScreen.game.viewport.apply();

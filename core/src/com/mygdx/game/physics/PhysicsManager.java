@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.droppeditems.DroppedItem;
 import com.mygdx.game.entities.Entities;
@@ -27,10 +28,13 @@ import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.utils.Util;
 import javafx.util.Pair;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class PhysicsManager {
+
+	boolean firstTime;
 
 	transient Array<ConstantObject> allConstantObjects;
 
@@ -57,7 +61,7 @@ public class PhysicsManager {
 	 * Key: this is the 'port'.
 	 * Value: this is the value of the port. E.g. if the port is for a two-way switch, 0 = off, and 1 = on.
 	 */
-	private ObjectMap<Integer, Integer> controllableFlags = new ObjectMap<>();
+	public ObjectMap<Integer, Integer> controllableFlags = new ObjectMap<>();
 
 	private Entities entities;
 
@@ -67,7 +71,7 @@ public class PhysicsManager {
 //    private MyContactListener contactListener;
     
     public final static short ALL_FLAG = -1;
-    public final static short TERRAIN_FLAG = 1<<8;
+    public final static short CONST_OBJ_FLAG = 1<<8;
     public final static short HITBOX_FLAG = 1<<9;
     public final static short PARTICLE_FLAG = 1<<10;
     public final static short PROJECTILE_FLAG = 1<<11;
@@ -217,15 +221,29 @@ public class PhysicsManager {
     	physicsWorldBuilder.unloadFarAwayChunks(playScreen, pos);
 	}
 
-    public void saveConstantObjectData(String name) {
+    public void saveConstantObjectData(Player player) {
 		try {
 //			Gdx.files.local("saves/" + name + "/constObjData").mkdirs();
-			Kryo kryo = KryoManager.getKryo();
-			Output output = new Output(new FileOutputStream("saves/" + name + "/constObjData.txt"));
 
-			for (ConstantObject constantObject: allConstantObjects) {
-				constantObject.save(kryo, output);
+			Kryo kryo = KryoManager.getKryo();
+
+			// Writing the array of controllable flags to its own file.
+			Output output = new Output(new FileOutputStream("saves/" + player.getPlayerName() + "/controllableFlags.txt"));
+			kryo.writeObject(output, controllableFlags);
+			output.close();
+
+			// Writing const object data to respective files.
+			Array<ConstantObject.Chunk> adjacentChunks = player.getAdjacentChunksInclusive();
+			for (ConstantObject.Chunk chunk: adjacentChunks) {
+				Output output1 = new Output(new FileOutputStream("saves/" + player.getPlayerName() + "/world/chunks/" + chunk.type() + "/constObjData.txt"));
+				for (ConstantObject constantObject: allConstantObjects) {
+					if (adjacentChunks.contains(constantObject.getChunk(), true)) {
+						constantObject.save(kryo, output1);
+					}
+				}
+				output1.close();
 			}
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -262,16 +280,70 @@ public class PhysicsManager {
 		KryoManager.write(velocities, "saves/" + name + "/mobileObjData/velocities.txt");*/
 	}
 
-	public void saveConstantObjectData(String name, Kryo kryo) {
+	public void saveConstantObjectData(Player player, Kryo kryo) {
 		try {
-			Output output = new Output(new FileOutputStream("saves/" + name + "/constObjData.txt"));
+			/*Output output = new Output(new FileOutputStream("saves/" + name + "/constObjData.txt"));
+
+			kryo.writeObject(output, controllableFlags);
 
 			for (ConstantObject constantObject: allConstantObjects) {
 				constantObject.save(kryo, output);
+			}*/
+
+			// Writing the array of controllable flags to its own file.
+			Output output = new Output(new FileOutputStream("saves/" + player.getPlayerName() + "/controllableFlags.txt"));
+			kryo.writeObject(output, controllableFlags);
+
+			// Writing const object data to respective files.
+			Array<ConstantObject.Chunk> adjacentChunks = player.getAdjacentChunksInclusive();
+			for (ConstantObject.Chunk chunk: adjacentChunks) {
+				Output output1 = new Output(new FileOutputStream("saves/" + player.getPlayerName() + "/world/chunks/" + chunk.type() + "/constObjData.txt"));
+				for (ConstantObject constantObject: allConstantObjects) {
+					if (adjacentChunks.contains(constantObject.getChunk(), true)) {
+						constantObject.save(kryo, output1);
+					}
+				}
 			}
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Creates initial files.
+	 * @param name the name of the player.
+	 */
+	public static void createInitialFiles(String name) {
+		FileHandle fileHandle = new FileHandle("saves/" + name + "/controllableFlags.txt");
+		fileHandle.writeString("", false);
+
+		Gdx.files.local("saves/" + name + "/world/chunks/start").mkdirs();
+		FileHandle fileHandle1 = new FileHandle("saves/" + name + "/world/chunks/start/constObjData.txt");
+		fileHandle1.writeString("", false);
+	}
+
+	public static PhysicsManager load(PlayScreen playScreen) {
+		PhysicsManager physicsManager = new PhysicsManager(playScreen);
+
+		try {
+
+			Kryo kryo = KryoManager.getKryo();
+
+			// Reading the array of controllable flags.
+			if (!physicsManager.firstTime) { // If this is not the first time loading this save,
+				Input input = new Input(new FileInputStream("saves/" + playScreen.player.getPlayerName() + "/controllableFlags.txt"));
+				physicsManager.controllableFlags = kryo.readObject(input, ObjectMap.class);
+				// Even if the controllable flags were already initialised, this will overwrite the existing object map.
+			}
+
+			// We don't need to read const obj data: that's done for each object when it's created (over in PhysicsWorldBuilder).
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return physicsManager;
 	}
 
 	/*void loadConstantObjectData(String name, int x, int y) {
@@ -436,7 +508,13 @@ public class PhysicsManager {
 		mobileControllers = new Array<>();
 		mobileControllables = new Array<>();
 		mobileInteractives = new Array<>();
-        
+
+		firstTime = false;
+		FileHandle fileHandle = new FileHandle("saves/" + playScreen.player.getPlayerName() + "/controllableFlags.txt");
+		if (fileHandle.readString().equals("")) { // If the file is empty, i.e. the world hasn't been initially saved yet.
+			firstTime = true;
+		}
+
         physicsWorldBuilder = new PhysicsWorldBuilder(playScreen.game.manager, this);
         importNearbyChunks(playScreen.player);
 
@@ -464,7 +542,7 @@ public class PhysicsManager {
 			ImmobileObject obj = findImmobileObject(Util.getImmobileTerrainId(i + 1));
 			obj.setRenderingIndex(immobileRenderingIndexes.get(i));
 //			allConstantObjects.add(obj);
-//			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+//			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), CONST_OBJ_FLAG, ALL_FLAG);
 		}*/
 
 		/*ObjectMap<Integer, Integer> immobileRenderingIndexes = physicsWorldBuilder.loadImmobileRenderingOrder((int)chunkCoords.x, (int)chunkCoords.y);
@@ -479,7 +557,7 @@ public class PhysicsManager {
 			ImmobileTerrain obj = immobileTerrain.get(i);
 			obj.setRenderingIndex(terrainRenderingIndexes.get(i));
 			allConstantObjects.add(obj);
-			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), CONST_OBJ_FLAG, ALL_FLAG);
 		}
 
 		Array<Integer> controllerRenderingIndexes = physicsWorldBuilder.loadControllerRenderingOrder();
@@ -487,7 +565,7 @@ public class PhysicsManager {
 			ImmobileController obj = immobileControllers.get(i);
 			obj.setRenderingIndex(controllerRenderingIndexes.get(i));
 			allConstantObjects.add(obj);
-			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), CONST_OBJ_FLAG, ALL_FLAG);
 		}
 
 		Array<Integer> controllableRenderingIndexes = physicsWorldBuilder.loadControllableRenderingOrder();
@@ -495,7 +573,7 @@ public class PhysicsManager {
 			ImmobileControllable obj = immobileControllables.get(i);
 			obj.setRenderingIndex(controllableRenderingIndexes.get(i));
 			allConstantObjects.add(obj);
-			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), CONST_OBJ_FLAG, ALL_FLAG);
 		}
 
 		Array<Integer> interactiveRenderingIndexes = physicsWorldBuilder.loadInteractiveRenderingOrder();
@@ -503,7 +581,7 @@ public class PhysicsManager {
 			ImmobileInteractive obj = immobileInteractives.get(i);
 			obj.setRenderingIndex(interactiveRenderingIndexes.get(i));
 			allConstantObjects.add(obj);
-			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+			dynamicsWorld.addCollisionObject(obj.getCollisionObject(), CONST_OBJ_FLAG, ALL_FLAG);
 		}*/
 
         dynamicsWorld.addRigidBody(playScreen.player.rigidBody, HITBOX_FLAG, ALL_FLAG);
@@ -513,7 +591,7 @@ public class PhysicsManager {
         }
         
         for (Particle particle: playScreen.particleEngine.particles) {
-        	dynamicsWorld.addRigidBody(particle.rigidBody, PARTICLE_FLAG, TERRAIN_FLAG);
+        	dynamicsWorld.addRigidBody(particle.rigidBody, PARTICLE_FLAG, CONST_OBJ_FLAG);
         }
         
         for (Projectile projectile: playScreen.projectileManager.projectiles) {
@@ -526,30 +604,27 @@ public class PhysicsManager {
         
         /*for (StaticObject obj: immobileTerrain) {
         	allConstantObjects.add(obj);
-        	dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+        	dynamicsWorld.addCollisionObject(obj.getCollisionObject(), CONST_OBJ_FLAG, ALL_FLAG);
         }*/
         /*
         for (ControllerObject obj: immobileControllers) {
         	immobileTerrain.add(obj);
-        	dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+        	dynamicsWorld.addCollisionObject(obj.getCollisionObject(), CONST_OBJ_FLAG, ALL_FLAG);
         }
         for (ControllableObject obj: immobileControllables) {
         	immobileTerrain.add(obj);
-        	dynamicsWorld.addCollisionObject(obj.getCollisionObject(), TERRAIN_FLAG, ALL_FLAG);
+        	dynamicsWorld.addCollisionObject(obj.getCollisionObject(), CONST_OBJ_FLAG, ALL_FLAG);
         }
         */
         
         hitIds = new Array<>();
-	}
 
-	/**
-	 * Creates initial files.
-	 * @param name the name of the player.
-	 */
-	public static void createInitialFiles(String name) {
-		Gdx.files.local("saves/" + name + "/world/chunks/start").mkdirs();
-		FileHandle fileHandle = new FileHandle("saves/" + name + "/world/chunks/start/constObjData.txt");
-		fileHandle.writeString("", false);
+        /*for (ImmobileController obj: immobileControllers) {
+        	System.out.println(obj.ports);
+		}
+        for (ImmobileControllable obj: immobileControllables) {
+        	System.out.println(obj.ports);
+		}*/
 	}
 	
 	public void update(float delta, PlayScreen playScreen) {
@@ -579,11 +654,20 @@ public class PhysicsManager {
 		
 		findRenderable(playScreen);
 
+		updateConstObjects(playScreen);
+
 		/*for (Entity entity: entities.allEntities) {
 //			entity.rigidBody.setLinearVelocity(entity.rigidBody.getLinearVelocity().sub(entity.additionalMovementVector));
 		}*/
 	}
-	
+
+	private void updateConstObjects(PlayScreen playScreen) {
+		for (ConstantObject obj: allConstantObjects) {
+			obj.basicUpdate();
+			obj.update(playScreen);
+		}
+	}
+
 	private ConstantObject findStaticObject(int physicsId) {
 		int id = Util.getId(physicsId);
 		for (ConstantObject obj: allConstantObjects) {
@@ -594,7 +678,7 @@ public class PhysicsManager {
 		return null;
 	}
 
-	private ConstantObject findConstantObject(int physicsId) {
+	public ConstantObject findConstantObject(int physicsId) {
 		if (isImmobileTerrain(physicsId)) {
 			for (ImmobileTerrain obj: immobileTerrain) {
 				if (obj.physicsId == physicsId) {
@@ -887,6 +971,29 @@ public class PhysicsManager {
 			return null;
 		}
 	}
+
+	/**
+	 * This takes a mask as a parameter so that it only searches for certain types of objects.
+	 */
+	public Pair<Integer, Vector3> rayTestFirst(float x, float y, float z, int mask) {
+		ClosestRayResultCallback rayTest = new ClosestRayResultCallback(Vector3.Zero, Vector3.Zero);
+		Vector3 rayFrom = new Vector3(x + highestPoint - y, highestPoint, z - (highestPoint - y));
+		Vector3 rayTo = new Vector3(x - (y - lowestPoint), lowestPoint, z + y - lowestPoint);
+		rayTest.setClosestHitFraction(1f);
+		rayTest.setRayFromWorld(rayFrom);
+		rayTest.setRayToWorld(rayTo);
+		rayTest.setCollisionFilterMask(mask);
+
+		dynamicsWorld.rayTest(rayFrom, rayTo, rayTest);
+
+		if (rayTest.hasHit()) {
+			Vector3 vector = new Vector3();
+			rayTest.getHitPointWorld(vector);
+			return new Pair<>(rayTest.getCollisionObject().getUserValue(), vector);
+		} else {
+			return null;
+		}
+	}
 	
 	public int rayTestFirst(Vector3 pos) {
 		ClosestRayResultCallback rayTest = new ClosestRayResultCallback(Vector3.Zero, Vector3.Zero);
@@ -902,8 +1009,8 @@ public class PhysicsManager {
 		}
 	}
 	
-	public Array<Integer> rayTestAll(float x, float y, float z, TestMode mode) {
-		hitIds.clear();
+	public Array<Pair<Integer, Vector3>> rayTestAll(float x, float y, float z, TestMode mode) {
+		/*hitIds.clear();
 		
 		AllHitsRayResultCallback rayTest = new AllHitsRayResultCallback(Vector3.Zero, Vector3.Zero);
 		
@@ -934,12 +1041,48 @@ public class PhysicsManager {
 		for (int i = 0; i < rayTest.getCollisionObjects().size(); i ++) {
 			hitIds.add(rayTest.getCollisionObjects().atConst(i).getUserValue());
 		}
-		return hitIds;
+		return hitIds;*/
+		AllHitsRayResultCallback rayTest = new AllHitsRayResultCallback(Vector3.Zero, Vector3.Zero);
+
+		Vector3 rayFrom;
+		Vector3 rayTo;
+
+		switch (mode) {
+			case TOP_TO_BOTTOM:
+				rayFrom = new Vector3(x + highestPoint - y, highestPoint, z - (highestPoint - y));
+				rayTo = new Vector3(x - (y - lowestPoint), lowestPoint, z + y - lowestPoint);
+				break;
+			case UPWARDS:
+				rayFrom = new Vector3(x, y, z);
+				rayTo = new Vector3(x + highestPoint - y, highestPoint, z - (highestPoint - y));
+				break;
+			case DOWNWARDS:
+				rayFrom = new Vector3(x, y, z);
+				rayTo = new Vector3(x - (y - lowestPoint), lowestPoint, z + y - lowestPoint);
+				break;
+			default:
+				rayFrom = null;
+				rayTo = null;
+		}
+
+		rayTest.setClosestHitFraction(1f);
+		rayTest.setRayFromWorld(rayFrom);
+		rayTest.setRayToWorld(rayTo);
+
+		dynamicsWorld.rayTest(rayFrom, rayTo, rayTest);
+
+		Array<Pair<Integer, Vector3>> array = new Array<>();
+		for (int i = 0; i < rayTest.getCollisionObjects().size(); i ++) {
+			Vector3 vector = new Vector3();
+			vector.set(rayTest.getHitPointWorld().atConst(i));
+			array.add(new Pair<>(rayTest.getCollisionObjects().atConst(i).getUserValue(), vector));
+//			array.add(new Pair<>()rayTest.getCollisionObjects().atConst(i).getUserValue());
+		}
+
+		return array;
 	}
 	
-	public Array<Integer> rayTestAll(Vector3 pos, TestMode mode) {
-		hitIds.clear();
-		
+	public Array<Pair<Integer, Vector3>> rayTestAll(Vector3 pos, TestMode mode) {
 		AllHitsRayResultCallback rayTest = new AllHitsRayResultCallback(Vector3.Zero, Vector3.Zero);
 		
 		Vector3 rayFrom;
@@ -968,12 +1111,16 @@ public class PhysicsManager {
 		rayTest.setRayToWorld(rayTo);
 
 		dynamicsWorld.rayTest(rayFrom, rayTo, rayTest);
-		
+
+		Array<Pair<Integer, Vector3>> array = new Array<>();
 		for (int i = 0; i < rayTest.getCollisionObjects().size(); i ++) {
-			hitIds.add(rayTest.getCollisionObjects().atConst(i).getUserValue());
+			Vector3 vector = new Vector3();
+			vector.set(rayTest.getHitPointWorld().atConst(i));
+			array.add(new Pair<>(rayTest.getCollisionObjects().atConst(i).getUserValue(), vector));
+//			array.add(new Pair<>()rayTest.getCollisionObjects().atConst(i).getUserValue());
 		}
 		
-		return hitIds;
+		return array;
 	}
 	
 	public int convexSweepTestFirst(btCollisionShape collisionShape, Vector3 pos) {

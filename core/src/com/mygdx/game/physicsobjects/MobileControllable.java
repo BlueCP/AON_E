@@ -9,13 +9,17 @@ import com.mygdx.game.utils.Util;
 
 public abstract class MobileControllable extends MobileObject {
 
-	int[] ports;
+	public Array<Integer> ports;
 
 	public MobileControllable(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags,
-							  int[] ports) {
+							  Array<String> ports) {
 		super(collisionObject, texture, id, tags);
 
-		this.ports = ports;
+		this.ports = new Array<>();
+		for (String port: ports) {
+			this.ports.add(Integer.parseInt(port));
+		}
+//		this.ports = ports;
 		physicsId = Util.getMobileControllerId(this.id);
 		collisionObject.setUserValue(physicsId);
 	}
@@ -23,6 +27,6 @@ public abstract class MobileControllable extends MobileObject {
 	/**
 	 * This is overridden to execute some behaviour based on the states of the ports.
 	 */
-	public abstract void update(ObjectMap<Integer, Integer> objectMap);
+//	public abstract void update(ObjectMap<Integer, Integer> objectMap);
 
 }

@@ -28,7 +28,7 @@ public abstract class KinematicObject extends ConstantObject implements Disposab
 	
 	public void update() {
 		collisionObject.setWorldTransform(collisionObject.getWorldTransform().translate(linearVelocity));
-		super.update(); // Update the transform after translating this object
+//		super.update(); // Update the transform after translating this object
 	}
 	
 	public Vector3 getLinearVelocity() {

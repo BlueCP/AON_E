@@ -84,7 +84,7 @@ public class Particle extends WorldObject implements Pool.Poolable {
 
 		loadRigidBody();
 
-		dynamicsWorld.addRigidBody(rigidBody, PhysicsManager.PARTICLE_FLAG, PhysicsManager.TERRAIN_FLAG);
+		dynamicsWorld.addRigidBody(rigidBody, PhysicsManager.PARTICLE_FLAG, PhysicsManager.CONST_OBJ_FLAG);
 	}
 
 	/**

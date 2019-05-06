@@ -24,7 +24,7 @@ public class Quests {
 		currentQuest = new NullQuest();
 		currentQuest.inProgress = true;
 
-		chooseQuest("Edgy");
+		chooseQuest("To the Edge");
 	}
 
 	public void update(PlayScreen playScreen) {

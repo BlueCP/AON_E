@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.screens.PlayScreen;
 
 public abstract class DynamicProjectile extends Projectile {
 
@@ -64,11 +65,11 @@ public abstract class DynamicProjectile extends Projectile {
 		dynamicsWorld.addRigidBody(rigidBody, group, mask);
 	}
 
-	public void destroy(btDynamicsWorld dynamicsWorld, ProjectileManager projectileManager) {
+	public void destroy(PlayScreen playScreen) {
 		isDestroyed = true;
-		projectileManager.idPool.add(id);
-		dynamicsWorld.removeRigidBody(rigidBody);
-		projectileManager.projectiles.removeValue(this, false);
+		playScreen.projectileManager.idPool.add(id);
+		playScreen.physicsManager.getDynamicsWorld().removeRigidBody(rigidBody);
+		playScreen.projectileManager.projectiles.removeValue(this, false);
 		shape.dispose();
 		rigidBody.dispose();
 	}

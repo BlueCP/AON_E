@@ -9,7 +9,7 @@ public class Infected extends Entity {
 	public Infected() {
 		super.setName("Infected");
 		super.setLife(15);
-		super.basePhysDmg = 5;
+//		super.basePhysDmg = 5;
 		super.setBehaviour(Behaviour.FOLLOW);
 		super.setNature(Nature.AGGRESSIVE);
 	}
@@ -20,7 +20,7 @@ public class Infected extends Entity {
 	}
 
 	@Override
-	public void onUpdate(PlayScreen session) {
+	public void individualUpdate(PlayScreen session) {
 		if (isFollowingPlayer()) {
 			//this.follow(session, session.player);
 		} else {

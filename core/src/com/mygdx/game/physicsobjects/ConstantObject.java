@@ -10,10 +10,12 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.AON_E;
+import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.physics.PhysicsManager.Tag;
 import com.mygdx.game.physics.WorldObject;
 import com.mygdx.game.rendering.IsometricRenderer;
 import com.mygdx.game.rendering.IsometricRenderer.Visibility;
+import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.RenderMath;
 
 /**
@@ -25,7 +27,7 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 //	protected Vector3 pos;
 	private TextureRegion[] textures;
 	private boolean isAnimation;
-	private short animationFrame = 0; // If not an animation, stay at 0
+	private int animationFrame = 0; // If not an animation, stay at 0
 	private int spriteX;
 	private int spriteY;
 	public btCollisionObject collisionObject;
@@ -106,10 +108,28 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 	public abstract void save(Kryo kryo, Output output);
 
 	public abstract void load(Kryo kryo, Input input);
-	
-	protected void update() {
+
+	/**
+	 * Called when the save is loaded for the first time. Empty body by default; custom implementations in subclasses.
+	 * Especially useful so that controllers/controllables can set up their ports in controllableFlags.
+	 */
+	public void initialise(PhysicsManager physicsManager) {
+
+	}
+
+	public void basicUpdate() {
 		collisionObject.getWorldTransform().getTranslation(pos);
 	}
+
+	/**
+	 * By default, does nothing. Custom implementations possible in subclasses.
+	 */
+	public void update(PlayScreen playScreen) { }
+
+	/**
+	 * By default, does nothing. Custom implementations possible in subclasses.
+	 */
+	public void clicked(PlayScreen playScreen) { }
 	
 	@Override
 	public void updateWorldObject(IsometricRenderer renderer) {
@@ -178,11 +198,11 @@ public abstract class ConstantObject extends WorldObject implements Disposable {
 		this.pos = pos;
 	}
 
-	public short getAnimationFrame() {
+	public int getAnimationFrame() {
 		return animationFrame;
 	}
 
-	public void setAnimationFrame(short animationFrame) {
+	public void setAnimationFrame(int animationFrame) {
 		this.animationFrame = animationFrame;
 	}
 

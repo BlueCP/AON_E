@@ -94,7 +94,7 @@ public class ChilledEffect extends Effect {
 	public void bitingColdDamage() {
 		for (boolean bitingCold: isBitingCold) {
 			if (bitingCold) {
-				entity.takeDamageBase(2 * Gdx.graphics.getDeltaTime());
+				entity.takeDamageNoEntity(2 * Gdx.graphics.getDeltaTime());
 			}
 		}
 	}

@@ -1,24 +1,24 @@
-package com.mygdx.game.skills.cryomancer;
+package com.mygdx.game.skills.necromancer;
 
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.projectiles.electromancer.RepulsionField;
+import com.mygdx.game.projectiles.necromancer.UnearthlyMiasmaArea;
 import com.mygdx.game.projectiles.pyromancer.Heatwave;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.SimpleSkill;
 
-public class RepulsionFieldSkill extends SimpleSkill {
+public class UnearthlyMiasmaSkill extends SimpleSkill {
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public RepulsionFieldSkill() {
+	public UnearthlyMiasmaSkill() {
 		super(null);
 	}
 
-	public RepulsionFieldSkill(Entity entity) {
+	public UnearthlyMiasmaSkill(Entity entity) {
 		super(entity);
-		name = "Repulsion Field";
-		desc = "Knock back and stun nearby enemies.";
+		name = "Unearthly Miasma";
+		desc = "Nearby enemies take damage and are slowed per soul you have.";
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class RepulsionFieldSkill extends SimpleSkill {
 
 	@Override
 	public void finish(PlayScreen playScreen) {
-		playScreen.projectileManager.addProjectileNow(new RepulsionField(entity, entity.pos), playScreen.physicsManager.getDynamicsWorld());
+		playScreen.projectileManager.addProjectileNow(new UnearthlyMiasmaArea(entity, entity.pos), playScreen.physicsManager.getDynamicsWorld());
 		putOnCooldown(3);
 	}
 

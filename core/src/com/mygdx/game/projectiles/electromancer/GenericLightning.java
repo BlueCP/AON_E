@@ -91,7 +91,7 @@ public class GenericLightning extends StaticProjectile {
 				Entity entity = playScreen.entities.getEntity(Util.getId(id), playScreen.player);
 				Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 				if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-					entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
+					offender.dealDamage(entity, damage + offender.getRealDamage());
 //					offender.landAbility(entity, playScreen);
 					// Don't call offender.landAbilityDamage here, in order to prevent an infinite loop of lightning bounces to the same entities.
 					hitEntities.add(entity.id);

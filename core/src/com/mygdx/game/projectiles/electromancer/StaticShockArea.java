@@ -53,11 +53,11 @@ public class StaticShockArea extends DynamicProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-			entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
+			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 //			entity.stunnedEffect.add(stunDuration);
 			offender.stun(entity, stunDuration);
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, damage + offender.equipped().getWeapon().getMagDamage(), playScreen);
+			offender.landAbilityDamage(entity, finalDamage, playScreen);
 
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, 1.5f,
 					Particle.Sprite.FIRE, Particle.Behaviour.POOF);

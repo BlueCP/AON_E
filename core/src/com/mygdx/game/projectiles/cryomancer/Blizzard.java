@@ -56,9 +56,9 @@ public class Blizzard extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-			entity.dealtDamageBy(offender, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage());
+			float finalDamage = offender.dealDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage(), playScreen);
+			offender.landAbilityDamage(entity, finalDamage, playScreen);
 			hitEntities.add(entity.id);
 		}
 

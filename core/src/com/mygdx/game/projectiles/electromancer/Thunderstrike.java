@@ -78,12 +78,12 @@ public class Thunderstrike extends StaticProjectile {
 		Entity target = playScreen.entities.getEntity(targetEntity, playScreen.player);
 
 		if (target.id == -1) {
-			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
+			destroy(playScreen);
 		} else if (!alreadyHit) {
 //			playScreen.entities.getEntity(owner, playScreen.player).landAbility(target, playScreen);
-			target.dealtDamageBy(offender, 2);
+			float finalDamage = offender.dealDamage(target, damage);
 			offender.landAbility(target, playScreen);
-			offender.landAbilityDamage(target, 2, playScreen);
+			offender.landAbilityDamage(target, finalDamage, playScreen);
 			alreadyHit = true;
 			playScreen.particleEngine.addFlyUpPoint(playScreen.physicsManager.getDynamicsWorld(), endPoint, 10, 7, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
 		}

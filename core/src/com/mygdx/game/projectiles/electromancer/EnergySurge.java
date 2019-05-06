@@ -20,7 +20,7 @@ import com.mygdx.game.utils.RenderMath;
 public class EnergySurge extends StaticProjectile {
 
 	private static final float radius = 0.2f;
-	private static final float dps = 2;
+	private static final float dps = 2f;
 
 	private int targetEntity;
 	private Vector3 startPoint;
@@ -80,8 +80,8 @@ public class EnergySurge extends StaticProjectile {
 			offender.landAbility(target, playScreen);
 		}
 
-		offender.dealDamage(target, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage());
-		offender.landAbilityDamage(target, dps * Gdx.graphics.getDeltaTime() + offender.equipped().getWeapon().getMagDamage(), playScreen);
+		float finalDamage = offender.dealDamage(target, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage());
+		offender.landAbilityDamage(target, finalDamage, playScreen);
 	}
 
 	@Override

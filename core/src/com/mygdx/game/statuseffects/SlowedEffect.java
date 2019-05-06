@@ -2,7 +2,7 @@ package com.mygdx.game.statuseffects;
 
 import com.mygdx.game.entities.Entity;
 
-public class SlowedEffect extends ProcEffect {
+public class SlowedEffect extends ProcEffectDisc {
 
 	/**
 	 * No-arg constructor for serialisation purposes.
@@ -25,16 +25,16 @@ public class SlowedEffect extends ProcEffect {
 		for (int power: powers) {
 			switch (power) {
 				case 1:
-					totalMovementDampening += 0.05f;
+					totalMovementDampening += 0.3f;
 					break;
 				case 2:
-					totalMovementDampening += 0.1f;
+					totalMovementDampening += 0.4f;
 					break;
 				case 3:
-					totalMovementDampening += 0.15f;
+					totalMovementDampening += 0.5f;
 					break;
 				case 4:
-					totalMovementDampening += 0.2f;
+					totalMovementDampening += 0.6f;
 					break;
 			}
 		}

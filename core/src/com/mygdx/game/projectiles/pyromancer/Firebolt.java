@@ -58,11 +58,11 @@ public class Firebolt extends DynamicProjectile {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
 			offender.changeSpirit(spiritGain);
-			entity.dealtDamageBy(offender, damage + offender.equipped().getWeapon().getMagDamage());
+			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landBasicAttack(entity, playScreen);
-			offender.landBasicAttackDamage(entity, damage + offender.equipped().getWeapon().getMagDamage(), playScreen);
+			offender.landBasicAttackDamage(entity, finalDamage, playScreen);
 
-			destroy(playScreen.physicsManager.getDynamicsWorld(), playScreen.projectileManager);
+			destroy(playScreen);
 
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 2, 2,
 					Particle.Sprite.FIRE, Particle.Behaviour.POOF);

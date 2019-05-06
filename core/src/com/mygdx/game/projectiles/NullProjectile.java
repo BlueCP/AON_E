@@ -33,7 +33,7 @@ public class NullProjectile extends Projectile {
 	}
 
 	@Override
-	public void destroy(btDynamicsWorld dynamicsWorld, ProjectileManager projectileManager) {
+	public void destroy(PlayScreen playScreen) {
 
 	}
 

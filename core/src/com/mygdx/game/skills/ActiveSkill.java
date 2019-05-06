@@ -17,7 +17,8 @@ public abstract class ActiveSkill extends Skill {
 
 		AVAILABLE, // The skill isn't being used, starting it will cause it proceed normally.
 		BEING_CAST, // The skill logic is currently being executed. It has called start() but not end().
-		ON_STANDBY, // Can mean different things in different cases. Either the skill is waiting for location input or it is a 'toggle' spell. Invoking the skill will end it.
+		WAITING_FOR_LOCATION, // The skill is waiting for location input.
+		ON_STANDBY, // The skill is a 'toggle' spell and is just doing its thing. Invoking the skill will end it.
 		ON_COOLDOWN // The skill cannot be used; it is on cooldown, with each frame decrementing the cooldown by delta.
 
 	}
@@ -31,7 +32,7 @@ public abstract class ActiveSkill extends Skill {
 		entity.currentSkill = this;
 		if (state == State.AVAILABLE) { // If the skill is available
 			start(playScreen); // Start executing its logic.
-		} else if (state == State.ON_STANDBY) { // If the skill is on standby
+		} else if (state == State.ON_STANDBY || state == State.WAITING_FOR_LOCATION) { // If the skill is on standby or waiting for location input
 			stop(playScreen); // Stop the skill; either stopping a 'toggle' type skill or a 'waiting for input' phase of a skill (i.e. waiting for location input).
 		}
 	}
@@ -69,6 +70,13 @@ public abstract class ActiveSkill extends Skill {
 	}
 
 	/**
+	 * Tells this class that the skill is waiting for location input; the next place the player clicks will be used as the target location.
+	 */
+	protected void waitForLocation() {
+		state = State.WAITING_FOR_LOCATION;
+	}
+
+	/**
 	 * Tells this class that this skill failed to resolve and should be made available again. Skips the cooldown.
 	 */
 	public void failResolve() {
@@ -89,6 +97,13 @@ public abstract class ActiveSkill extends Skill {
 	 */
 	public void stop(PlayScreen playScreen) {
 		state = State.AVAILABLE;
+		removeAction();
+	}
+
+	/**
+	 * Removes the action associated with this skill from the entity's array of actions.
+	 */
+	public void removeAction() {
 		if (entity.actions.size > 0) {
 			EntityAction entityAction = entity.actions.first();
 			if (entityAction.getName().equals(name)) {
@@ -125,7 +140,7 @@ public abstract class ActiveSkill extends Skill {
 		if (cooldown < 0) {
 			cooldown = 0;
 		}
-		if (cooldown <= 0 && state != State.BEING_CAST && state != State.ON_STANDBY) {
+		if (cooldown <= 0 && state != State.BEING_CAST && state != State.ON_STANDBY && state != State.WAITING_FOR_LOCATION) {
 			state = State.AVAILABLE;
 		}
 	}

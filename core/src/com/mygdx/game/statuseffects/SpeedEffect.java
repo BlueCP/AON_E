@@ -2,7 +2,7 @@ package com.mygdx.game.statuseffects;
 
 import com.mygdx.game.entities.Entity;
 
-public class SpeedEffect extends ProcEffect {
+public class SpeedEffect extends ProcEffectDisc {
 
 	/**
 	 * No-arg constructor for serialisation purposes.

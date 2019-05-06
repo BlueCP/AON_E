@@ -8,9 +8,9 @@ public class IronShortswordWeapon extends SwordWeapon {
 		desc = "The trusty companion of many an adventurer.";
 		rarity = Rarity.COMMON;
 
-		physDamage = 1;
-		magDamage = 1;
-		range = 50;
+		damage = 1;
+//		magDamage = 1;
+		range = 2;
 	}
 
 }

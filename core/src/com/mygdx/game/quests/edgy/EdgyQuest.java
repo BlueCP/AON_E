@@ -6,8 +6,8 @@ import com.mygdx.game.screens.PlayScreen;
 public class EdgyQuest extends Quest {
 
 	public EdgyQuest() {
-		name = "Edgy";
-		desc = "Fall off the edge of the world.";
+		name = "To the Edge";
+		desc = "A journey to where the world ends.";
 		questType = QuestType.MAIN_QUEST;
 		visible = true;
 

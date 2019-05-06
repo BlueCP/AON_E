@@ -32,27 +32,44 @@ public abstract class Entity extends WorldObject {
 	
 	protected String name;
 
-	float life;
-	float spirit;
 //	public Vector3 pos;
 
-	public BurningEffect burningEffect;
 	public StunnedEffect stunnedEffect;
 	public SlowedEffect slowedEffect;
 	public SpeedEffect speedEffect;
 	public RootedEffect rootedEffect;
+	public DamageEffect damageEffect;
+//	public MagDamageEffect magDamageEffect;
+
+	public BurningEffect burningEffect;
+
 	public ChilledEffect chilledEffect;
 	public FrozenEffect frozenEffect;
+
 	public ChargedEffect chargedEffect;
 
-	protected float realPhysDamage;
-	protected float realMagDamage;
+	public SoulsEffect soulsEffect;
+	public SoulsRegenEffect soulsRegenEffect;
+	public WitherEffect witherEffect;
+
+	public BlindedEffect blindedEffect;
+	public LightFireEffect lightFireEffect;
+	public PaladinShieldEffect paladinShieldEffect;
 	
 	float maxLife;
 	float maxSpirit;
-	float basePhysDmg;
-	private float baseMagDmg;
+	float baseDamage;
+//	private float baseMagDmg;
+	float baseDefense;
 	float baseWalkSpeed;
+
+	float life;
+	float spirit;
+	protected float realDamage;
+//	protected float realMagDamage;
+	float realDefense;
+	private float realWalkSpeed;
+
 	private int xpLevel;
 	private int xpProg;
 	private int skillPoints;
@@ -69,7 +86,6 @@ public abstract class Entity extends WorldObject {
 	private boolean isProne = false; // If true, this entity is prone and will keep being prone until they stop moving.
 
 	private boolean canWalk;
-	private float realWalkSpeed;
 	private boolean canRotate;
 	private boolean canJump;
 	
@@ -85,6 +101,7 @@ public abstract class Entity extends WorldObject {
 	protected BasicAttack basicAttack;
 	protected Array<ActiveSkill> skills;
 	public ActiveSkill currentSkill = new NullActiveSkill(); // The (active) skill that is currently being cast, or is on standby (waiting for input).
+	// currentSkill is not reset, meaning that it also refers to the last skill cast if no skill is currently being cast.
 	
 	private String animationState;
 	private String prevAnimationState;
@@ -98,7 +115,7 @@ public abstract class Entity extends WorldObject {
 	Matrix4 rigidBodyMatrix;
 	private Vector3 linearVelocity;
 
-	public Vector3 hitboxExtents; // The dimensions of the hitbox.
+	public Vector3 hitboxExtents; // The dimensions of the hitbox. Full extents, not half.
 	public transient btRigidBody rigidBody;
 	float stateTime = 0f;
 	
@@ -235,13 +252,22 @@ public abstract class Entity extends WorldObject {
 			int screenY1 = (int) (playScreen.virtualCoords.y - renderPos2.y); // Y distance relative to player*/
 
 			// TAN2 ANGLE CALCULATION STARTS HERE //
-			Vector2 newVector = RenderMath.cartToInvertedIso(diff.x, diff.y);
+//			Vector2 newVector = RenderMath.cartToInvertedIso(diff.x, diff.y);
+			Vector2 newVector = RenderMath.cartToIso(diff.x, diff.y);
 
+//			float angle = (float) Math.toDegrees(MathUtils.atan2(newVector.y, newVector.x / 2));
 			float angle = (float) Math.toDegrees(MathUtils.atan2(newVector.y, newVector.x / 2));
 
-			if (angle < 0) {
+			if (angle < 0) { // Adjust negative values for angle.
 				angle += 360;
 			}
+
+			angle += 90;
+			if (angle >= 360) {
+				angle -= 360;
+			}
+
+//			angle = 360 - angle;
 
 			/*angle += 90;
 			if (angle >= 360) {
@@ -265,7 +291,11 @@ public abstract class Entity extends WorldObject {
 			}*/
 			// COSINE ANGLE CALCULATION ENDS HERE //
 
-			angle = (float) (Math.round(angle/22.5f) * 22.5); // Round to nearest 22.5 degrees (which is 360/number of directions)
+			angle = (float) (Math.round(angle/22.5f) * 22.5); // Round to nearest 22.5 degrees (which is 360/number of directions).
+			if (angle == 360) { // 0 = 360 when it comes to facing directions, as the maximum facing angle the system will recognise is 337.5.
+				angle = 0;
+			}
+
 			String facing = "N" + String.valueOf(angle).replace('.', '_'); // Convert to the format for 'facing'
 			for (Facing facing0: Facing.values()) {
 				if (facing.equals(facing0.toString())) {
@@ -413,8 +443,11 @@ public abstract class Entity extends WorldObject {
 	private void updateStats() {
 		applyLifeCap();
 		applySpiritCap();
-		
-		realPhysDamage = basePhysDmg; // In future this calculation may take into account modifiers, buffs, etc
+
+		realDamage = (baseDamage + equipped.getWeapon().getDamage()) * damageEffect.totalBuff();
+//		realMagDamage = (baseMagDmg + equipped.getWeapon().getMagDamage()) * magDamageEffect.totalBuff();
+
+		realDefense = baseDefense;
 		
 		realWalkSpeed = baseWalkSpeed * (1 - (slowedEffect.movementDampening() + chilledEffect.movementDampening()))
 				 						    + (speedEffect.movementBoost());
@@ -543,6 +576,13 @@ public abstract class Entity extends WorldObject {
 		}
 	}
 
+	/**
+	 * Updates passive skills (unique to each entity). Overridable for that purpose.
+	 */
+	void updatePassiveSkills(PlayScreen playScreen) {
+
+	}
+
 	private void updateMovement() {
 		Vector2 diff = movementLocation.cpy().sub(new Vector2(pos.x, pos.z));
 //		System.out.println(diff.len());
@@ -584,10 +624,13 @@ public abstract class Entity extends WorldObject {
 		updateAnimationState();
 		prevAnimationType = animationType;
 
+		updateAllEffects();
+
 		updateTargetEntity(playScreen.entities);
 		equipped.update(inventory);
 		updateActions(playScreen);
 		updateSkills(playScreen);
+		updatePassiveSkills(playScreen);
 		
 		moveByMovementVector();
 		rigidBody.getWorldTransform().getTranslation(pos);
@@ -637,7 +680,10 @@ public abstract class Entity extends WorldObject {
 
 	}*/
 
-	public abstract void onUpdate(PlayScreen session);
+	/**
+	 * Each entity will have individual, different update logic.
+	 */
+	public abstract void individualUpdate(PlayScreen playScreen);
 	
 	public abstract void onInteract(PlayScreen session);
 	
@@ -657,11 +703,11 @@ public abstract class Entity extends WorldObject {
 			int enemyAttackRoll = ThreadLocalRandom.current().nextInt(1,11);
 			if (enemyAttackRoll >= target.eStats.getRealDex()) { // If the entity's attack roll is >= the target's dexterity
 				hit = true; // Sucessful hit
-				//target.status.changeStat("life", -(this.eStats.getRealPhysDamage())); // Target loses life
+				//target.status.changeStat("life", -(this.eStats.getRealDamage())); // Target loses life
 				if (target.name.equalsIgnoreCase("Player")) { // If the entity hit was the player
-					session.newSubMessage(String.format("A %s hits you for %s damage.", this.name, this.eStats.getRealPhysDamage()));
+					session.newSubMessage(String.format("A %s hits you for %s damage.", this.name, this.eStats.getRealDamage()));
 				} else {
-					session.newSubMessage(String.format("A %s hits a %s for %s damage.", this.name, target.name, this.eStats.getRealPhysDamage()));
+					session.newSubMessage(String.format("A %s hits a %s for %s damage.", this.name, target.name, this.eStats.getRealDamage()));
 				}
 			} else { // If the entity failed to hit its target
 				if (target.name.equalsIgnoreCase("Player")) {
@@ -766,14 +812,27 @@ public abstract class Entity extends WorldObject {
 	}
 	
 	private void initialiseEffects() {
-		burningEffect = new BurningEffect(this);
 		stunnedEffect = new StunnedEffect(this);
 		slowedEffect = new SlowedEffect(this);
 		speedEffect = new SpeedEffect(this);
 		rootedEffect = new RootedEffect(this);
+		damageEffect = new DamageEffect(this);
+//		magDamageEffect = new MagDamageEffect(this);
+
+		burningEffect = new BurningEffect(this);
+
 		chilledEffect = new ChilledEffect(this);
 		frozenEffect = new FrozenEffect(this);
+
 		chargedEffect = new ChargedEffect(this);
+
+		soulsEffect = new SoulsEffect(this);
+		soulsRegenEffect = new SoulsRegenEffect(this);
+		witherEffect = new WitherEffect(this);
+
+		blindedEffect = new BlindedEffect(this);
+		lightFireEffect = new LightFireEffect(this);
+		paladinShieldEffect = new PaladinShieldEffect(this);
 	}
 	
 	/*
@@ -781,58 +840,95 @@ public abstract class Entity extends WorldObject {
 	 */
 	void applyEffects(PlayScreen playScreen) {
 		burningEffect.apply(playScreen);
+
 		chilledEffect.bitingColdDamage();
 		chilledEffect.testEncaseInIce(playScreen);
+
 		chargedEffect.randomDischarge(playScreen);
 
-		updateAllEffects();
+		witherEffect.apply(playScreen);
+
+		lightFireEffect.apply(playScreen);
 	}
 	
 	/*
 	 * Update the duration for all effects.
 	 */
 	private void updateAllEffects() {
-		burningEffect.update();
 		stunnedEffect.update();
 		slowedEffect.update();
 		speedEffect.update();
 		rootedEffect.update();
+		damageEffect.update();
+//		magDamageEffect.update();
+
+		burningEffect.update();
+
 		chilledEffect.update();
 		frozenEffect.update();
+
 		chargedEffect.update();
+
+		soulsEffect.update();
+		soulsRegenEffect.update();
+		witherEffect.update();
+
+		blindedEffect.update();
+		lightFireEffect.update();
+		paladinShieldEffect.update();
 	}
 
 	/**
 	 * Allows custom behaviours for each entity when it's damaged.
 	 */
 	public void takeDamage(Entity entity, float damage) {
-		takeDamageBase(damage);
+		takeDamageBase(entity, damage);
+	}
+
+	/**
+	 * This method also makes sure that the offending entity's actions have been recorded (for death procs, for example).
+	 */
+	public void takeDamageBase(Entity entity, float damage) {
+		float newDamage = paladinShieldEffect.reflectDamage(entity, damage);
+		newDamage *= Math.pow(1.1, -realDefense); // Graph of damage reduction against defense follows exponential decay.
+
+		takeDamageNoEntity(newDamage);
+
 		entitiesThatHit.add(entity.id);
 		lastHitBy = entity.id;
+	}
+
+	/**
+	 * The receiving end of the damage, universal to all entities. In future, this will take into account things like armour.
+	 * The 'no entity' refers to the fact that this method doesn't care about the offending entity; it only takes
+	 * into account the reaction of the defending (this) entity.
+	 */
+	public void takeDamageNoEntity(float damage) {
+		changeLife(-damage);
 	}
 
 	/**
 	 * This entity deals damage to the given entity. Doesn't check whether this entity is null or not (that's done in another method).
 	 * A default behaviour is defined here as most entities will use this default behaviours.
 	 * If an entity wants a custom behaviour (which is the minority of entities), that class can override this method.
+	 * @return the final amount of damage dealt to the defending entity. Useful when damage is manipulated in custom implementations (this method is overridden).
 	 */
-	public void dealDamage(Entity entity, float damage) {
-		entity.takeDamage(this, damage); // Assuming there are no behaviours on the attacking side to proc.
+	public float dealDamage(Entity entity, float damage) {
+		return dealDamageBase(entity, damage);
+	}
+
+	public float dealDamageBase(Entity entity, float damage) {
+		float finalDamage = damage * blindedEffect.damageDamping();
+		entity.takeDamage(this, finalDamage); // Assuming there are no behaviours on the attacking side to proc.
+		return finalDamage;
 	}
 
 	/**
 	 * A reversed dealDamage(). Useful if you don't know whether the parameter 'entity' is null or not.
 	 */
-	public void dealtDamageBy(Entity entity, float damage) {
-		entity.dealDamage(this, damage);
-	}
-
-	/**
-	 * The receiving end of the damage, universal to all entities. In future, this will take into account things like armour.
-	 */
-	public void takeDamageBase(float damage) {
-		changeLife(-damage);
-	}
+//	public float dealtDamageBy(Entity entity, float damage) {
+//		return entity.dealDamage(this, damage);
+//	}
 
 	/**
 	 * Custom implementations may take into account things that interact with burning, such as the Pyromancer passive 'Stoke the Flames'.
@@ -841,9 +937,9 @@ public abstract class Entity extends WorldObject {
 		entity.burnBase(power, duration);
 	}
 
-	public void burnedBy(Entity entity, int power, float duration) {
+	/*public void burnedBy(Entity entity, int power, float duration) {
 		entity.burn(this, power, duration);
-	}
+	}*/
 
 	private void burnBase(int power, float duration) {
 		burningEffect.add(power, duration);
@@ -853,9 +949,9 @@ public abstract class Entity extends WorldObject {
 		entity.chillBase(power, duration);
 	}
 
-	public void chilledBy(Entity entity, int power, float duration) {
-		entity.chill(this, power, duration);
-	}
+//	public void chilledBy(Entity entity, int power, float duration) {
+//		entity.chill(this, power, duration);
+//	}
 
 	private void chillBase(int power, float duration) {
 		chilledEffect.add(power, duration, false, false);
@@ -865,9 +961,9 @@ public abstract class Entity extends WorldObject {
 		entity.stunBase(duration);
 	}
 
-	public void stunnedBy(Entity entity, float duration) {
-		entity.stun(this, duration);
-	}
+//	public void stunnedBy(Entity entity, float duration) {
+//		entity.stun(this, duration);
+//	}
 
 	private void stunBase(float duration) {
 		stunnedEffect.add(duration);
@@ -909,8 +1005,9 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * Procs any passives when an ability deals damage to an entity.
 	 */
-	public void landAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
+	public float landAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
 		// By default, does nothing. Custom implementations if wanted in subclasses.
+		return 0;
 	}
 
 	/**
@@ -923,8 +1020,9 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * Procs any passives when this entity damages another entity with a basic attack.
 	 */
-	public void landBasicAttackDamage(Entity entity, float damage, PlayScreen playScreen) {
+	public float landBasicAttackDamage(Entity entity, float damage, PlayScreen playScreen) {
 		// By default, does nothing. Custom implementations if wanted in subclasses.
+		return 0;
 	}
 	
 	@Override
@@ -1086,20 +1184,12 @@ public abstract class Entity extends WorldObject {
 		this.maxSpirit = maxSpirit;
 	}
 
-	public float getBasePhysDmg() {
-		return basePhysDmg;
+	public float getBaseDamage() {
+		return baseDamage;
 	}
 
-	public void setBasePhysDmg(float basePhysDmg) {
-		this.basePhysDmg = basePhysDmg;
-	}
-
-	public float getBaseMagDmg() {
-		return baseMagDmg;
-	}
-
-	public void setBaseMagDmg(float baseMagDmg) {
-		this.baseMagDmg = baseMagDmg;
+	public void setBaseDamage(float baseDamage) {
+		this.baseDamage = baseDamage;
 	}
 
 	public int getXpLevel() {
@@ -1268,6 +1358,14 @@ public abstract class Entity extends WorldObject {
 
 	public void setMovementLocation(Vector2 movementLocation) {
 		this.movementLocation = movementLocation;
+	}
+
+	public float getRealDamage() {
+		return realDamage;
+	}
+
+	public void setRealDamage(float realDamage) {
+		this.realDamage = realDamage;
 	}
 
 }

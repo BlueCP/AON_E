@@ -27,11 +27,12 @@ public class Dummy extends Entity {
 		rigidBodyMatrix = matrix;
 		
 		loadRigidBody(); // We need to load rigid body here because unlike the player, a new Dummy may be added mid-game.
+		rigidBody.setWorldTransform(rigidBody.getWorldTransform().setTranslation(new Vector3(4, 1, 4)));
 	}
 	
 	@Override
-	public void onUpdate(PlayScreen session) {
-		stunnedEffect.add(1); // To stop the dummy from constantly walking to (0, 0, 0).
+	public void individualUpdate(PlayScreen session) {
+//		stunnedEffect.add(1); // To stop the dummy from constantly walking to (0, 0, 0).
 	}
 
 	@Override

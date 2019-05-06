@@ -9,13 +9,20 @@ import com.mygdx.game.utils.Util;
 
 public abstract class ImmobileControllable extends ImmobileObject {
 
-	int[] ports;
+	public Array<Integer> ports;
 
 	public ImmobileControllable(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<PhysicsManager.Tag> tags,
-								int[] ports) {
+								Array<String> ports) {
 		super(collisionObject, texture, id, tags);
 
-		this.ports = ports;
+		this.ports = new Array<>();
+		for (String port: ports) {
+			this.ports.add(Integer.parseInt(port));
+		}
+		/*for (int i = 0; i < ports.length; i++) {
+			this.ports[i] = Integer.parseInt(ports[i]);
+		}*/
+//		this.ports = ports;
 		physicsId = Util.getImmobileControllableId(this.id);
 		collisionObject.setUserValue(physicsId);
 	}
@@ -23,6 +30,6 @@ public abstract class ImmobileControllable extends ImmobileObject {
 	/**
 	 * This is overridden to execute some behaviour based on the states of the ports.
 	 */
-	public abstract void update(ObjectMap<Integer, Integer> objectMap);
+//	public abstract void update(ObjectMap<Integer, Integer> objectMap);
 
 }

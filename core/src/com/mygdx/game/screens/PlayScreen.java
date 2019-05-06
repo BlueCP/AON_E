@@ -26,6 +26,8 @@ import com.mygdx.game.items.AllItems;
 import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.particles.ParticleSprites;
 import com.mygdx.game.physics.PhysicsManager;
+import com.mygdx.game.physicsobjects.ConstantObject;
+import com.mygdx.game.physicsobjects.ImmobileControllable;
 import com.mygdx.game.playerattributes.SkillCollection;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
@@ -120,7 +122,7 @@ public class PlayScreen extends MyScreen {
 		
 		game.musicManager.travelMusic.setLooping(true);
 //		game.musicManager.travelMusic.play();
-		
+
 		initialiseBlueprints(game);
 		ParticleSprites.initialise(game);
 		ProjectileSprites.init(game);
@@ -131,6 +133,9 @@ public class PlayScreen extends MyScreen {
 		loadGame();
 //		player.inventory.addWeapon("Iron shortsword");
 
+//		player.takeDamageBase(40);
+//		player.soulsRegenEffect.add(2, 10);
+
 		gameSerialisationThread = new Thread(new GameSerialisationThread(this));
 
 		//particleEngine = new ParticleEngine();
@@ -139,7 +144,7 @@ public class PlayScreen extends MyScreen {
 
 		skillCollection = new SkillCollection();
 
-		physicsManager = new PhysicsManager(this);
+//		physicsManager = new PhysicsManager(this);
 		
 		//entities.addEntity(player, physicsManager);
 		
@@ -266,6 +271,16 @@ public class PlayScreen extends MyScreen {
 		for (OwnStage ownStage: ownStages) {
 			ownStage.render(this);
 		}
+
+		/*System.out.println(player.getAnimationType());
+		if (player.actions.size > 0) {
+			System.out.println(player.actions.first());
+		}*/
+		/*if (!player.canWalk()) {
+			System.out.println(player.canWalk());
+		}*/
+
+//		System.out.println(player.getFacing());
 
 		/*if (droppedItemManager.droppedItems.size > 0) {
 			System.out.println(droppedItemManager.droppedItems.get(0).pos);
@@ -609,8 +624,8 @@ public class PlayScreen extends MyScreen {
 			}
 			else if (keycode == Keys.SHIFT_RIGHT) {
 				Entity entity = new Dummy(entities, new Vector3(0, 5, 0));
-				entity.setMaxLife(1000);
-				entity.setLife(1000);
+				entity.setMaxLife(200);
+				entity.setLife(200);
 				entities.addEntity(entity, physicsManager);
 			}
 			else if (keycode == Keys.M) {
@@ -633,6 +648,10 @@ public class PlayScreen extends MyScreen {
 			}
 			else if (keycode == Keys.TAB) {
 				player.knockBack(new Vector3(0, 0, 2));
+//				player.takeDamage(new NullEntity(), 10);
+//				player.magDamageEffect.add(1, 5);
+//				player.blindedEffect.add(0.1f, 10);
+//				entities.allEntities.get(0).dealDamage(player, 10);
 			}
 			else if (keycode == Keys.C) {
 				// Below is temporary testing code
@@ -958,7 +977,7 @@ public class PlayScreen extends MyScreen {
 			// Saving stuff to droppedItems.txt
 			droppedItemManager.saveAndExit(playerName);
 
-			physicsManager.saveConstantObjectData(playerName);
+			physicsManager.saveConstantObjectData(player);
 			
 			// Saving stuff to time.txt
 			time.saveTime(playerName);
@@ -984,7 +1003,7 @@ public class PlayScreen extends MyScreen {
 
 		droppedItemManager.save(playerName, kryo);
 
-		physicsManager.saveConstantObjectData(playerName, kryo);
+		physicsManager.saveConstantObjectData(player, kryo);
 	}
 
 	public void save() {
@@ -1010,7 +1029,7 @@ public class PlayScreen extends MyScreen {
 
 			droppedItemManager.save(playerName);
 
-			physicsManager.saveConstantObjectData(playerName);
+			physicsManager.saveConstantObjectData(player);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1054,6 +1073,9 @@ public class PlayScreen extends MyScreen {
 
 			// Loading stuff from droppedItems.txt
 			droppedItemManager = DroppedItemManager.load(playerName);
+
+			// Loading physics stuff.
+			physicsManager = PhysicsManager.load(this);
 			
 			// Loading time
 			time = Time.loadTime(playerName);
@@ -1075,6 +1097,8 @@ public class PlayScreen extends MyScreen {
 			if (PhysicsManager.isNonPlayerEntity(pair.getKey())) { // If the object is an entity which is not the player
 				int id = Util.getId(pair.getKey());
 				player.setTargetEntity(id);
+			} else if (PhysicsManager.isControllerObject(pair.getKey()) || PhysicsManager.isInteractiveObject(pair.getKey())) {
+				physicsManager.findConstantObject(pair.getKey()).clicked(this);
 			} else {
 				player.setTargetLocation(pair.getValue());
 				player.setTargetedLocationThisTick(true);
@@ -1089,11 +1113,15 @@ public class PlayScreen extends MyScreen {
 	 */
 	private void contRayPick(float x, float y) {
 		Vector2 relativeCartPoint = RenderMath.screenToRelativeCart(isoRenderer.camera, x, y);
-		Pair<Integer, Vector3> pair = physicsManager.rayTestFirst(relativeCartPoint.x, isoRenderer.camera.pos.y, relativeCartPoint.y);
+		Pair<Integer, Vector3> pair = physicsManager.rayTestFirst(relativeCartPoint.x, isoRenderer.camera.pos.y, relativeCartPoint.y, PhysicsManager.CONST_OBJ_FLAG | PhysicsManager.HITBOX_FLAG);
+		// We use a mask so that we only see collisions with constant objects. This is so that movement location
+		// targeting is not impeded by projectiles or particles in the way.
+		// However, we allow ourselves to see collisions with entity hitboxes. This is so that the player doesn't
+		// walk towards an entity when clicking on it.
 		if (pair != null) {
-//			System.out.println(player.currentSkill.state);
-			if (PhysicsManager.isConstObject(pair.getKey()) && player.currentSkill.state != ActiveSkill.State.ON_STANDBY &&
-			player.currentSkill.state != ActiveSkill.State.BEING_CAST) { // If the player is inputting a target location for a skill, don't take that as the movement location.
+			if (PhysicsManager.isConstObject(pair.getKey()) && player.currentSkill.state != ActiveSkill.State.WAITING_FOR_LOCATION &&
+					player.currentSkill.state != ActiveSkill.State.BEING_CAST &&
+			!PhysicsManager.isControllerObject(pair.getKey()) && !PhysicsManager.isInteractiveObject(pair.getKey())) { // If the player is inputting a target location for a skill, don't take that as the movement location.
 				player.setMovementLocation(new Vector2(pair.getValue().x, pair.getValue().z));
 			}
 		}

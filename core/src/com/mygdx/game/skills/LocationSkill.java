@@ -31,13 +31,13 @@ public abstract class LocationSkill extends ActiveSkill {
 			this.time = time;
 			this.cost = cost;
 			this.range = range;
-			putOnStandby();
+			waitForLocation();
 		}
 	}
 
 	@Override
 	public void update(PlayScreen playScreen) {
-		if (state == State.ON_STANDBY && playScreen.player.hasTargetedLocationThisTick() && entity.pos.dst(entity.getTargetLocation()) <= range) { // If the player has just targeted a location
+		if (state == State.WAITING_FOR_LOCATION && playScreen.player.hasTargetedLocationThisTick() && entity.pos.dst(entity.getTargetLocation()) <= range) { // If the player has just targeted a location
 			if (hasResource(entity, cost)) {
 				useSkill();
 //				Array<EntityAction> array = new Array<>();

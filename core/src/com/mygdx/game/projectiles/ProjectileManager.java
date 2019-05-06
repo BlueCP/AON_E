@@ -46,7 +46,7 @@ public class ProjectileManager implements Disposable {
 				projectile.lifetime = 0; // Give it a chance to do its thing
 				projectile.update(delta, playScreen);
 			} else if (projectiles.get(i).getLifetime() <= 0) {
-				projectile.destroy(playScreen.physicsManager.getDynamicsWorld(), this);
+				projectile.destroy(playScreen);
 //				i --;
 			} else {
 				projectile.update(delta, playScreen);

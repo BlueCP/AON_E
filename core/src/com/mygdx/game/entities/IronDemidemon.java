@@ -10,7 +10,7 @@ public class IronDemidemon extends Entity {
 	public IronDemidemon() {
 		super.setName("Iron Demidemon");
 		super.setLife(20);
-		super.basePhysDmg = 5;
+//		super.basePhysDmg = 5;
 		super.setBehaviour(Behaviour.IDLE);
 		super.setNature(Nature.NEUTRAL);
 	}
@@ -21,7 +21,7 @@ public class IronDemidemon extends Entity {
 	}
 
 	@Override
-	public void onUpdate(PlayScreen session) {
+	public void individualUpdate(PlayScreen session) {
 		if (nature == Nature.AGGRESSIVE && isFollowingPlayer()) {
 			//this.follow(session, session.player);
 			attack(session.player, 1, session);

@@ -128,11 +128,11 @@ public class EntityStats {
 	public int getRealCritChance() { return statsReal.get("critChance"); }
 	public void setRealCritChance(int critChance) { this.statsReal.put("critChance", critChance); }
 	
-	public int getRealPhysDamage() { return statsReal.get("physDamage"); }
+	/*public int getRealDamage() { return statsReal.get("physDamage"); }
 	public void setRealPhysDamage(int physDamage) { this.statsReal.put("physDamage", physDamage); }
 	
-	public int getRealMagDamage() { return statsReal.get("magDamage"); }
-	public void setRealMagDamage(int magDamage) { this.statsReal.put("magDamage", magDamage); }
+	public int getRealDamage() { return statsReal.get("magDamage"); }
+	public void setRealMagDamage(int magDamage) { this.statsReal.put("magDamage", magDamage); }*/
 	
 	public int getRealLifesteal() { return statsReal.get("lifesteal"); }
 	public void setRealLifesteal(int lifesteal) { this.statsReal.put("lifesteal", lifesteal); }
