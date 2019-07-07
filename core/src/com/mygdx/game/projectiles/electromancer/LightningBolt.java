@@ -28,7 +28,7 @@ public class LightningBolt extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public LightningBolt() { }
+	private LightningBolt() { }
 
 	public LightningBolt(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.LIGHTNING_BOLT, pos, lifetime);
@@ -70,9 +70,9 @@ public class LightningBolt extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner && !hitEntities.contains(entity.id, true)) {
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, damage + offender.getRealDamage(), playScreen);
 			hitEntities.add(entity.id);
 			return true;
 		} else {

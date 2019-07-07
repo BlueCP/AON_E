@@ -10,7 +10,7 @@ public class PyromancerBasicAttack extends BasicAttack {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public PyromancerBasicAttack() {
+	private PyromancerBasicAttack() {
 		super(null);
 	}
 

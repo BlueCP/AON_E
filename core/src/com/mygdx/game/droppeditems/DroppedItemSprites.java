@@ -11,6 +11,7 @@ public class DroppedItemSprites {
 
 	private static TextureRegion ironOreTexture;
 	private static TextureRegion ironIngotTexture;
+	private static TextureRegion silverheartTexture;
 
 	static TextureRegion getCurrentTexture(DroppedItem droppedItem) {
 		switch (droppedItem.sprite) {
@@ -20,6 +21,8 @@ public class DroppedItemSprites {
 				return ironOreTexture;
 			case IRON_INGOT:
 				return ironIngotTexture;
+			case SILVERHEART:
+				return silverheartTexture;
 			default:
 				return null;
 		}
@@ -35,6 +38,8 @@ public class DroppedItemSprites {
 
 					ironOreTexture = region;
 					ironIngotTexture = region;
+					silverheartTexture = region;
+
 					break;
 			}
 		}

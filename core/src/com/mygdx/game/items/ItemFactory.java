@@ -1,7 +1,9 @@
 package com.mygdx.game.items;
 
+import com.mygdx.game.items.otheritems.ContinuumFragmentOtherItem;
 import com.mygdx.game.items.otheritems.IronIngotOtherItem;
 import com.mygdx.game.items.otheritems.IronOreOtherItem;
+import com.mygdx.game.items.otheritems.SilverheartOtherItem;
 import com.mygdx.game.items.weapons.IronShortswordWeapon;
 
 public class ItemFactory {
@@ -35,6 +37,10 @@ public class ItemFactory {
 				return new IronOreOtherItem();
 			case "Iron ingot":
 				return new IronIngotOtherItem();
+			case "Silverheart":
+				return new SilverheartOtherItem();
+			case "Continuum Fragment":
+				return new ContinuumFragmentOtherItem();
 			default:
 				return new NullOtherItem();
 		}

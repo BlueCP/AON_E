@@ -6,12 +6,14 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -22,7 +24,7 @@ public class ProjectileManager implements Disposable {
 	public Array<Projectile> projectiles;
 
 	// This is a list of projectiles which will be added next frame.
-	public Array<Projectile> futureProjectiles;
+	private Array<Projectile> futureProjectiles;
 	
 	public ProjectileManager() {
 		projectiles = new Array<>();
@@ -117,6 +119,22 @@ public class ProjectileManager implements Disposable {
 		try {
 			ProjectileManager projectileManager = KryoManager.read("saves/" + dir + "/projectiles.txt", ProjectileManager.class);
 			
+			for (Projectile projectile: projectileManager.projectiles) {
+				projectile.processAfterLoading();
+			}
+			return projectileManager;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static ProjectileManager load(String dir, Kryo kryo) {
+		try {
+			Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "saves/" + dir + "/projectiles.txt"));
+			ProjectileManager projectileManager = kryo.readObject(input, ProjectileManager.class);
+			input.close();
+
 			for (Projectile projectile: projectileManager.projectiles) {
 				projectile.processAfterLoading();
 			}
@@ -233,11 +251,11 @@ public class ProjectileManager implements Disposable {
 	}*/
 	
 	public void addRazeZone(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
-		projectiles.add(new RazeZone(entity, this, dynamicsWorld, pos, lifetime));
+		projectiles.add(new RazeZone(entity, dynamicsWorld, pos, lifetime));
 	}
 	
 	public void addImmolateZone(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos) {
-		projectiles.add(new ImmolateZone(entity, this, dynamicsWorld, pos));
+		projectiles.add(new ImmolateZone(entity, dynamicsWorld, pos));
 	}
 	
 	public void dispose() {

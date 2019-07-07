@@ -9,6 +9,16 @@ import com.badlogic.gdx.Graphics.DisplayMode;
  */
 public class VideoSettings extends Settings {
 
+	public static void reset() {
+		preferences.putBoolean("Fullscreen", true);
+		preferences.putBoolean("VSync", false);
+		preferences.putInteger("Framerate", 60);
+		preferences.putBoolean("Particles", true);
+		preferences.putBoolean("Screen shake", true);
+
+		preferences.flush();
+	}
+
 	public static boolean isFullscreen() {
 		return preferences.getBoolean("Fullscreen", true);
 	}

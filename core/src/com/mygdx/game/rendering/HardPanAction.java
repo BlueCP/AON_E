@@ -13,7 +13,7 @@ public class HardPanAction extends LimitedCameraAction {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public HardPanAction() { }
+	private HardPanAction() { }
 	
 	HardPanAction(float lifetime, Vector3 startingPos, Vector3 targetPos) {
 		this.lifetime = lifetime;

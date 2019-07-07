@@ -92,6 +92,77 @@ public class Inventory {
 	public void addConsumableItem(String name) {
 		consumables.add(ItemFactory.createConsumableItem(name));
 	}
+
+	public boolean removeItem(String name) {
+		if (AllItems.weaponNames.contains(name, false)) {
+			return removeWeapon(name);
+		} else if (AllItems.armourNames.contains(name, false)) {
+			return removeArmour(name);
+		} else if (AllItems.equipmentNames.contains(name, false)) {
+			return removeEquipment(name);
+		} else if (AllItems.otherItemNames.contains(name, false)) {
+			return removeOtherItem(name);
+		} else if (AllItems.consumableItemNames.contains(name, false)) {
+			return removeConsumableItem(name);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Removes the first item with the same name as that given.
+	 * @param name the name of the item to be removed.
+	 * @return true if an item was removed. false if not (happens if the item is not there).
+	 */
+	public boolean removeWeapon(String name) {
+		for (Weapon weapon: weapons) {
+			if (weapon.origName.equals(name)) {
+				weapons.removeValue(weapon, false);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean removeArmour(String name) {
+		for (Armour armour0: armour) {
+			if (armour0.origName.equals(name)) {
+				armour.removeValue(armour0, false);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean removeEquipment(String name) {
+		for (Equipment equipment0: equipment) {
+			if (equipment0.origName.equals(name)) {
+				equipment.removeValue(equipment0, false);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean removeOtherItem(String name) {
+		for (OtherItem otherItem: otherItems) {
+			if (otherItem.origName.equals(name)) {
+				otherItems.removeValue(otherItem, false);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean removeConsumableItem(String name) {
+		for (Consumable consumable: consumables) {
+			if (consumable.origName.equals(name)) {
+				consumables.removeValue(consumable, false);
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/*public void addItem(Item itemToAdd) {
 		if (itemToAdd instanceof Weapon) {

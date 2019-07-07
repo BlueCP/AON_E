@@ -10,7 +10,7 @@ public class LightFireEffect extends ProcEffectDisc {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public LightFireEffect() { }
+	private LightFireEffect() { }
 
 	public LightFireEffect(Entity entity) {
 		super(entity);

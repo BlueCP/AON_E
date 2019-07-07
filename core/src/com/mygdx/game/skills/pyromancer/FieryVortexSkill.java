@@ -10,7 +10,7 @@ public class FieryVortexSkill extends LocationSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public FieryVortexSkill() {
+	private FieryVortexSkill() {
 		super(null);
 	}
 
@@ -22,7 +22,7 @@ public class FieryVortexSkill extends LocationSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(15, 1f, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
+		defaultStart(15, 1f, 10, Entity.AnimationType.SHOOT_PROJECTILE);
 	}
 
 	@Override

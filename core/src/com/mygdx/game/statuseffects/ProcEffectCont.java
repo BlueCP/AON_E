@@ -25,7 +25,7 @@ public class ProcEffectCont extends Effect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ProcEffectCont() { }
+	ProcEffectCont() { }
 
 	ProcEffectCont(Entity entity) {
 		super(entity);

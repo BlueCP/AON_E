@@ -17,23 +17,24 @@ import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.achievements.AchievementCollection;
+import com.mygdx.game.dialog.DialogManager;
 import com.mygdx.game.droppeditems.DroppedItemManager;
 import com.mygdx.game.droppeditems.DroppedItemSprites;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.entities.Entity.AnimationType;
 import com.mygdx.game.entities.Entity.Facing;
+import com.mygdx.game.entities.characters.DeltisBlueprint;
+import com.mygdx.game.entities.characters.SilverStatueBlueprint;
 import com.mygdx.game.items.AllItems;
 import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.particles.ParticleSprites;
 import com.mygdx.game.physics.PhysicsManager;
-import com.mygdx.game.physicsobjects.ConstantObject;
-import com.mygdx.game.physicsobjects.ImmobileControllable;
-import com.mygdx.game.playerattributes.SkillCollection;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.ProjectileSprites;
 import com.mygdx.game.quests.Quests;
 import com.mygdx.game.rendering.IsometricRenderer;
-import com.mygdx.game.serialisation.GameSerialisationThread;
+import com.mygdx.game.serialisation.GameLoadingThread;
+import com.mygdx.game.serialisation.GameSavingThread;
 import com.mygdx.game.settings.ControlSettings;
 import com.mygdx.game.skills.ActiveSkill;
 import com.mygdx.game.stages.FurnaceStage;
@@ -48,17 +49,20 @@ import javafx.util.Pair;
 
 public class PlayScreen extends MyScreen {
 
+	public static final float respawnFadeTime = 2; // The time it takes for the screen to fade to black when the player respawns.
+	public static final float minimumRespawnBlackTime = 2; // The minimum time it takes for the screen to remain black when respawning. More time may be taken to finish loading in the game if necessary.
+
 	public static int foo = 1;
 	
 	public Screen subscreen = null;
 	public String playerName;
 	public Player player;
 	public Time time; // Pointer to the time of the current world
-	private AllItems allItems = new AllItems();
+//	private AllItems allItems = new AllItems();
 	public AchievementCollection achievements = new AchievementCollection(); // New achievements object
 //	private SkillCollection skillCollection = new SkillCollection(true); // New skills object
 
-	private SkillCollection skillCollection;
+//	private SkillCollection skillCollection;
 	public Quests quests;
 
 	public Entities entities;
@@ -70,16 +74,24 @@ public class PlayScreen extends MyScreen {
 	public Array<OwnStage> ownStages = new Array<>();
 //	public boolean isoMovement = false;
 	Thread loadNewChunksThread;
-	public Thread gameSerialisationThread;
-	public Thread.State previousGameSerialisationThreadState = Thread.State.NEW;
+
+	public Thread gameSavingThread;
+	public Thread.State previousGameSavingThreadState = Thread.State.NEW;
+
+	private Thread gameLoadingThread;
+	public float respawnTimePassed;
+	public float additionalRespawnBlackTime; // Additional time for the screen to be black so the game can be fully loaded in.
+	public boolean respawning = false;
+	private boolean stopGameLogic = false; // Whether or not the game logic should be temporarily stopped whilst the game is reloaded during respawning.
 	
 	public IsometricRenderer isoRenderer;
 	public PhysicsManager physicsManager;
 	public ParticleEngine particleEngine;
 	public ProjectileManager projectileManager;
 	public DroppedItemManager droppedItemManager;
+	public DialogManager dialogManager;
 	
-	private OwnStage hudStage; // Stage is visible to classes in the package so that screens can access stage when setting the input processor back to stage and this (e.g. inventory screen)
+	public HudStage hudStage; // Stage is visible to classes in the package so that screens can access stage when setting the input processor back to stage and this (e.g. inventory screen)
 	
 	private Array<Integer> keyboardEvents;
 	private Array<Integer> pressedKeys;
@@ -128,6 +140,7 @@ public class PlayScreen extends MyScreen {
 		ProjectileSprites.init(game);
 		StatusEffectSprites.init(game);
 		DroppedItemSprites.initialise(game);
+		AllItems.init();
 		
 		playerName = name;
 		loadGame();
@@ -136,13 +149,15 @@ public class PlayScreen extends MyScreen {
 //		player.takeDamageBase(40);
 //		player.soulsRegenEffect.add(2, 10);
 
-		gameSerialisationThread = new Thread(new GameSerialisationThread(this));
+		gameSavingThread = new Thread(new GameSavingThread(this));
+
+		gameLoadingThread = new Thread(new GameLoadingThread(this));
 
 		//particleEngine = new ParticleEngine();
 		
 		//projectileManager = new ProjectileManager();
 
-		skillCollection = new SkillCollection();
+//		skillCollection = new SkillCollection();
 
 //		physicsManager = new PhysicsManager(this);
 		
@@ -165,9 +180,10 @@ public class PlayScreen extends MyScreen {
 		overflowMouseEvents = new Array<>();
 
 		isoRenderer = new IsometricRenderer(game, time);
+		dialogManager = new DialogManager();
 
 //		executeLogic(0);
-		initialExecuteLogic(0);
+		initialExecuteLogic();
 
 		//travelMusic.play(); // So that it only starts playing when the player can see the world, i.e. when it has been loaded
 		
@@ -247,6 +263,8 @@ public class PlayScreen extends MyScreen {
 		isoRenderer.camera.orthographicCamera.update();
 
 //		testforMovement();
+
+		updateRespawnSequence();
 
 		executeLogic(Gdx.graphics.getDeltaTime());
 	}
@@ -511,7 +529,30 @@ public class PlayScreen extends MyScreen {
 		*/
 	}
 
-	private void initialExecuteLogic(float delta) {
+	private void updateRespawnSequence() {
+		if (respawning) {
+			respawnTimePassed += Gdx.graphics.getDeltaTime();
+		} else {
+			return;
+		}
+
+		if (respawnTimePassed > respawnFadeTime && respawnTimePassed <= respawnFadeTime + minimumRespawnBlackTime + additionalRespawnBlackTime) {
+			if (gameLoadingThread.getState() == Thread.State.NEW) {
+				gameLoadingThread.start();
+				stopGameLogic = true;
+			} else if (gameLoadingThread.getState() == Thread.State.RUNNABLE && respawnFadeTime + minimumRespawnBlackTime + additionalRespawnBlackTime - respawnTimePassed < 0.1f) {
+				// If the thread is still running but the time until the screen fades back to the world is almost up.
+				additionalRespawnBlackTime += 1;
+			}
+		} else if (respawnTimePassed > respawnFadeTime + minimumRespawnBlackTime + additionalRespawnBlackTime) {
+			respawning = false;
+			stopGameLogic = false;
+			player.setLife(player.getMaxLife()); // Reset life and spirit.
+			player.setSpirit(player.getMaxSpirit());
+		}
+	}
+
+	private void initialExecuteLogic() {
 		/*
 		if (delta !=0 && !(loadNewChunksThread.isAlive())) {
 			loadNewChunksThread = new Thread(new LoadNewChunksRunner(playerName, player.getStatus().getYMap(), player.getStatus().getXMap(), player.getStatus().getYPos(), player.getStatus().getXPos(), map));
@@ -543,12 +584,12 @@ public class PlayScreen extends MyScreen {
 //		moveCollection.updateMoves(tick);
 		regenCriticalStats();
 
-		particleEngine.update(delta, physicsManager.getDynamicsWorld());
-		projectileManager.update(delta, this);
-		physicsManager.update(delta, this);
+		particleEngine.update(0, physicsManager.getDynamicsWorld());
+		projectileManager.update(0, this);
+		physicsManager.update(0, this);
 
 		player.postUpdate();
-		entities.postUpdate(this);
+		entities.postUpdate();
 		//entities.spawnEntities(player.getStatus(), map.chunkNum(), map); // Spawn enemies after moving them, so player has a chance to react to newly spawned enemies
 	}
 	
@@ -564,9 +605,17 @@ public class PlayScreen extends MyScreen {
 		}
 		*/
 		//movementLogic();
-		previousGameSerialisationThreadState = gameSerialisationThread.getState();
-		if (gameSerialisationThread.getState() == Thread.State.TERMINATED) {
-			gameSerialisationThread = new Thread(new GameSerialisationThread(this));
+		if (stopGameLogic) {
+			return;
+		}
+
+		previousGameSavingThreadState = gameSavingThread.getState();
+		if (gameSavingThread.getState() == Thread.State.TERMINATED) {
+			gameSavingThread = new Thread(new GameSavingThread(this));
+		}
+
+		if (gameLoadingThread.getState() == Thread.State.TERMINATED) {
+			gameLoadingThread = new Thread(new GameLoadingThread(this));
 		}
 
 		player.preUpdate();
@@ -581,7 +630,7 @@ public class PlayScreen extends MyScreen {
 		updateTick();
 		physicsManager.importNearbyChunks(player);
 		physicsManager.unloadFarAwayChunks(this, player.pos);
-		time.update(((HudStage)hudStage).fastTime.isChecked());
+		time.update(hudStage.fastTime.isChecked());
 		player.update(this);
 		entities.update(this);
 		achievements.updateAchievements(this);
@@ -591,11 +640,11 @@ public class PlayScreen extends MyScreen {
 
 		particleEngine.update(delta, physicsManager.getDynamicsWorld());
 		projectileManager.update(delta, this);
-		droppedItemManager.update(delta, this);
+		droppedItemManager.update(this);
 		physicsManager.update(delta, this);
 
 		player.postUpdate();
-		entities.postUpdate(this);
+		entities.postUpdate();
 		//entities.spawnEntities(player.getStatus(), map.chunkNum(), map); // Spawn enemies after moving them, so player has a chance to react to newly spawned enemies
 	}
 	
@@ -604,6 +653,12 @@ public class PlayScreen extends MyScreen {
 		boolean skip;
 
 		for (Integer keycode: keyboardEvents) {
+
+			if (hudStage.isDisplayingDialog()) {
+				hudStage.progressDialog();
+				break; // Don't want to take in any other input.
+			}
+
 			skip = false;
 
 			for (int i = 0; i < 8; i ++) {
@@ -614,6 +669,10 @@ public class PlayScreen extends MyScreen {
 			}
 			if (skip) {
 				continue;
+			}
+
+			if (keycode == ControlSettings.respawnKey()) {
+				player.respawn(this);
 			}
 
 			if (keycode == ControlSettings.basicAttackKey()) {
@@ -628,10 +687,10 @@ public class PlayScreen extends MyScreen {
 				entity.setLife(200);
 				entities.addEntity(entity, physicsManager);
 			}
-			else if (keycode == Keys.M) {
+			else if (keycode == ControlSettings.optionsScreenKey()) {
 				game.setScreen(new OptionsScreen(game, this));
 			}
-			else if (keycode == Keys.ESCAPE) {
+			else if (keycode == ControlSettings.cancelMovementKey()) {
 				player.resetMovementLocation();
 			}
 			else if (keycode == ControlSettings.openInventoryKey()) {
@@ -639,12 +698,13 @@ public class PlayScreen extends MyScreen {
 			}
 			else if (keycode == Keys.SPACE) {
 				testForJump();
-				/*if (!gameSerialisationThread.isAlive()) {
-					gameSerialisationThread.start();
+				/*if (!gameSavingThread.isAlive()) {
+					gameSavingThread.start();
 				}*/
 			}
 			else if (keycode == Keys.CONTROL_LEFT) {
-				droppedItemManager.addDroppedOtherItemFlyUp("Iron ore", new Vector3(2, 5, 2), 2, physicsManager.getDynamicsWorld());
+//				droppedItemManager.addDroppedOtherItemFlyUp("Iron ore", new Vector3(2, 5, 2), 2, physicsManager.getDynamicsWorld());
+				player.respawn(this);
 			}
 			else if (keycode == Keys.TAB) {
 				player.knockBack(new Vector3(0, 0, 2));
@@ -671,11 +731,18 @@ public class PlayScreen extends MyScreen {
 				}
 				// End of temporary testing code
 			}
-			else if (keycode == Keys.Q) {
+			else if (keycode == ControlSettings.questScreenKey()) {
 				game.setScreen(new QuestScreen(game, this));
 			}
-			else if (keycode == Keys.A) {
+			else if (keycode == ControlSettings.achivementsScreenKey()) {
 				game.setScreen(new AchievementsScreen(game, this));
+			} else if (keycode == ControlSettings.interactKey()) {
+				for (Entity entity: entities.allEntities) {
+					if (entity.isWaitingToBeInteracted()) {
+						entity.interact(this);
+						break;
+					}
+				}
 			}
 			/*switch (keycode) {
 				case Keys.W:
@@ -1045,7 +1112,7 @@ public class PlayScreen extends MyScreen {
 			player = Player.load(this);
 			
 			// Loading stuff from allItems.txt
-			allItems = AllItems.init();
+//			allItems = AllItems.init();
 			
 			// Loading stuff from playerAchievements.txt and allAchievements.txt
 			achievements = AchievementCollection.loadAll(playerName);
@@ -1084,10 +1151,61 @@ public class PlayScreen extends MyScreen {
 			e.printStackTrace();
 		}
 	}
+
+	public void loadGame(Kryo kryo) {
+		updateTick();
+
+		try {
+
+			// Loading stuff from player.txt
+			player = Player.load(this, kryo);
+
+			// Loading stuff from allItems.txt
+//			allItems = AllItems.init();
+
+			// Loading stuff from playerAchievements.txt and allAchievements.txt
+			achievements = AchievementCollection.loadAll(playerName, kryo);
+
+			// Loading stuff from quests.txt
+			quests = Quests.load(playerName, kryo);
+
+			/*// Loading stuff from skills.txt
+			skillCollection = SkillCollection.loadSkills(playerName);*/
+
+			/*// Loading stuff from playerMoves.txt and allMoves.txt
+			moveCollection = MoveCollection.loadAll(playerName);
+
+			// Loading stuff from playerSpells.txt and allSpells.txt
+			spellCollection = SpellCollection.loadAll(playerName);*/
+
+			// Loading stuff from entities.txt
+			entities = Entities.loadEntities(playerName, kryo);
+
+			// Loading stuff from particles.txt
+			particleEngine = ParticleEngine.load(playerName, kryo);
+
+			// Loading stuff from projectiles.txt
+			projectileManager = ProjectileManager.load(playerName, kryo);
+
+			// Loading stuff from droppedItems.txt
+			droppedItemManager = DroppedItemManager.load(playerName, kryo);
+
+			// Loading physics stuff.
+			physicsManager = PhysicsManager.load(this, kryo);
+
+			// Loading time
+			time = Time.loadTime(playerName, kryo);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private void initialiseBlueprints(AON_E game) {
 		PlayerBlueprint.initialise(game);
 		DummyBlueprint.initialise(game);
+		DeltisBlueprint.initialise(game);
+		SilverStatueBlueprint.initialise(game);
 	}
 	
 	private void rayPick(int x, int y) {

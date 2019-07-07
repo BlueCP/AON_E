@@ -9,7 +9,7 @@ public class FlamingBarrageSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public FlamingBarrageSkill() {
+	private FlamingBarrageSkill() {
 		super(null, false);
 	}
 

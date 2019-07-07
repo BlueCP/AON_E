@@ -4,7 +4,7 @@ import com.mygdx.game.screens.PlayScreen;
 
 public abstract class Consumable extends NonGearItem {
 
-	public Consumable() {
+	Consumable() {
 
 	}
 

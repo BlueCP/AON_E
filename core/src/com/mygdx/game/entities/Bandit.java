@@ -27,7 +27,7 @@ public class Bandit extends Entity {
 	}
 
 	@Override
-	public void onInteract(PlayScreen session) {
+	public void interact(PlayScreen session) {
 		session.newMessage("The bandit looks at you slyly.");
 	}
 

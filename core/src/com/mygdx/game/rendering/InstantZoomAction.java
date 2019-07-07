@@ -9,7 +9,7 @@ public class InstantZoomAction extends UnlimitedCameraAction {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public InstantZoomAction() { }
+	private InstantZoomAction() { }
 	
 	InstantZoomAction(float zoom) {
 		this.zoom = zoom;

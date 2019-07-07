@@ -39,6 +39,14 @@ public class SettingsScreen extends MyScreen {
 			}
 		});
 
+		TextButton gameplaySettingsButton = new TextButton("Gameplay settings", AON_E.SKIN);
+		gameplaySettingsButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new GameplaySettingsScreen(game, game.getScreen()));
+			}
+		});
+
 		TextButton controlSettingsButton = new TextButton("Controls", AON_E.SKIN);
 		controlSettingsButton.addListener(new ClickListener() {
 			@Override
@@ -63,6 +71,7 @@ public class SettingsScreen extends MyScreen {
 		table.align(Align.center);
 		table.add(videoSettingsButton).width(400).padBottom(50).row();
 		table.add(audioSettingsButton).fillX().padBottom(50).row();
+		table.add(gameplaySettingsButton).fillX().padBottom(50).row();
 		table.add(controlSettingsButton).fillX().padBottom(50).row();
 		table.add(backButton).fillX();
 

@@ -24,7 +24,7 @@ public class PowerGridConductor extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public PowerGridConductor() { }
+	private PowerGridConductor() { }
 
 	public PowerGridConductor(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);

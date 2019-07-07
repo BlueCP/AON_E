@@ -17,7 +17,7 @@ public class DefrostingArea extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DefrostingArea() { }
+	private DefrostingArea() { }
 
 	public DefrostingArea(Entity entity, Vector3 pos) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);
@@ -39,10 +39,10 @@ public class DefrostingArea extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
-			float finalDamage = offender.dealDamage(entity, damagePerStack * entity.chilledEffect.numStacks() + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damagePerStack * entity.chilledEffect.numStacks() + offender.getRealDamage());
 			entity.chilledEffect.remove();
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, damagePerStack * entity.chilledEffect.numStacks() + offender.getRealDamage(), playScreen);
 			return true;
 		} else {
 			return false;

@@ -25,7 +25,7 @@ public class Cat extends Entity {
 	}
 
 	@Override
-	public void onInteract(PlayScreen session) {
+	public void interact(PlayScreen session) {
 		if (ThreadLocalRandom.current().nextInt(1, 101) <= 20) { // 20% chance of taming
 			super.setBehaviour(Behaviour.FOLLOW);
 			session.newMessage("You have tamed the cat!");

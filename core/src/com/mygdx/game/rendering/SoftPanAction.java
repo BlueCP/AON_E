@@ -13,7 +13,7 @@ public class SoftPanAction extends LimitedCameraAction {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SoftPanAction() { }
+	private SoftPanAction() { }
 	
 	SoftPanAction(float lifetime, Vector3 startingPos, Vector3 targetPos) {
 		this.lifetime = lifetime;

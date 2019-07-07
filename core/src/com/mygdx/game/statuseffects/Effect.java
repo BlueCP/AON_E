@@ -40,9 +40,9 @@ public abstract class Effect {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Effect() { }
+	Effect() { }
 	
-	public Effect(Entity entity) {
+	Effect(Entity entity) {
 		this.entity = entity;
 	}
 

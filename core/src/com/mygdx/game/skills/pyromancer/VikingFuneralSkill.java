@@ -8,7 +8,7 @@ public class VikingFuneralSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public VikingFuneralSkill() {
+	private VikingFuneralSkill() {
 		super(null, false);
 	}
 

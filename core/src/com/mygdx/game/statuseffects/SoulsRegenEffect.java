@@ -13,7 +13,7 @@ public class SoulsRegenEffect extends ProcEffectCont {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SoulsRegenEffect() { }
+	private SoulsRegenEffect() { }
 
 	public SoulsRegenEffect(Entity entity) {
 		super(entity);

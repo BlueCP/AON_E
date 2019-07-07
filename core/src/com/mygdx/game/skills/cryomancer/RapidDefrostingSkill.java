@@ -10,7 +10,7 @@ public class RapidDefrostingSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public RapidDefrostingSkill() {
+	private RapidDefrostingSkill() {
 		super(null);
 	}
 

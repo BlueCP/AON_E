@@ -6,14 +6,12 @@ import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.projectiles.pyromancer.SupernovaExplosion;
 import com.mygdx.game.skills.PassiveSkill;
 
-import javax.swing.text.PlainDocument;
-
 public class SupernovaSkill extends PassiveSkill {
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SupernovaSkill() {
+	private SupernovaSkill() {
 		super(null, false);
 	}
 

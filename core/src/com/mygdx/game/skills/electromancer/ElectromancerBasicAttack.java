@@ -10,7 +10,7 @@ public class ElectromancerBasicAttack extends BasicAttack {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ElectromancerBasicAttack() {
+	private ElectromancerBasicAttack() {
 		super(null);
 	}
 

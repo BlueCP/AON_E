@@ -21,7 +21,7 @@ public class UnearthlyMiasmaArea extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public UnearthlyMiasmaArea() { }
+	private UnearthlyMiasmaArea() { }
 
 	public UnearthlyMiasmaArea(Entity entity, Vector3 pos) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);
@@ -49,8 +49,8 @@ public class UnearthlyMiasmaArea extends StaticProjectile {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
 			offender.landAbility(entity, playScreen);
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+			offender.dealAbilityDamage(entity, damage + offender.getRealDamage(), playScreen);
 			entity.slowedEffect.add(baseSlowPower * offender.soulsEffect.numStacks(), slowDuration);
 			return true;
 		} else {

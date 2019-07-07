@@ -19,10 +19,10 @@ import com.mygdx.game.utils.Util;
 
 public abstract class DroppedItem extends WorldObject {
 
-	Vector3 linearVelocity;
-	Matrix4 worldTransform;
+	private Vector3 linearVelocity;
+	private Matrix4 worldTransform;
 
-	transient btCollisionShape collisionShape;
+	private transient btCollisionShape collisionShape;
 	public transient btRigidBody rigidBody;
 
 	Sprite sprite;
@@ -30,7 +30,8 @@ public abstract class DroppedItem extends WorldObject {
 	public enum Sprite {
 		IRON_SHORTSWORD,
 		IRON_ORE,
-		IRON_INGOT
+		IRON_INGOT,
+		SILVERHEART
 	}
 
 	/**
@@ -78,7 +79,7 @@ public abstract class DroppedItem extends WorldObject {
 		rigidBody.setFriction(0.7f);
 	}
 
-	public void processAfterLoading() {
+	void processAfterLoading() {
 		loadRigidBody();
 	}
 

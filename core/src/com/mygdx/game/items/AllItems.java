@@ -15,19 +15,20 @@ public class AllItems {
 //	private static Array<Item> allEquipment = new Array<>();
 //	private static Array<Item> allOtherItems = new Array<>();
 	
-	public static AllItems init() {
-		AllItems allItems = new AllItems();
+	public static void init() {
+//		AllItems allItems = new AllItems();
 
-		allItems.initItemNames();
+//		allItems.initItemNames();
+		AllItems.initItemNames();
 
 		/*allItems.loadAllWeapons();
 		allItems.loadAllArmour();
 		allItems.loadAllEquipment();
 		allItems.loadAllOtherItems();*/
-		return allItems;
+//		return allItems;
 	}
 
-	private void initItemNames() {
+	private static void initItemNames() {
 		weaponNames = new Array<>();
 		weaponNames.add("Iron shortsword");
 
@@ -38,6 +39,8 @@ public class AllItems {
 		otherItemNames = new Array<>();
 		otherItemNames.add("Iron ore");
 		otherItemNames.add("Iron ingot");
+		otherItemNames.add("Silverheart");
+		otherItemNames.add("Continuum Fragment");
 
 		consumableItemNames = new Array<>();
 	}

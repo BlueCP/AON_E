@@ -21,7 +21,7 @@ public class EnforcementZone extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public EnforcementZone() { }
+	private EnforcementZone() { }
 
 	public EnforcementZone(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);

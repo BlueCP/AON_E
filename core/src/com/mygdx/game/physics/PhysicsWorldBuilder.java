@@ -36,9 +36,9 @@ import java.util.Iterator;
 
 public class PhysicsWorldBuilder {
 
-	public static final int worldSize = 100; // Temporary, to avoid creating masses of unnecessary chunk folders.
-	public static final int chunkSize = 100;
-	public static final int numChunks = worldSize / chunkSize;
+//	private static final int worldSize = 100; // Temporary, to avoid creating masses of unnecessary chunk folders.
+	private static final int chunkSize = 100;
+//	public static final int numChunks = worldSize / chunkSize;
 
 	btBulletWorldImporter importer;
 	private AssetManager manager;
@@ -111,7 +111,7 @@ public class PhysicsWorldBuilder {
 	/*
 	 * Turns an unordered array of regions into an array of frames (of an animation).
 	 */
-	private TextureRegion[] buildAnimationFrames(Array<AtlasRegion> regions, AtlasRegion region, btBulletWorldImporter importer, int id) {
+	private TextureRegion[] buildAnimationFrames(Array<AtlasRegion> regions, int id) {
 		HashMap<Integer, AtlasRegion> regionMap = new HashMap<>();
 		for (int i = 0; i < regions.size; i ++) {
 			AtlasRegion region0 = regions.get(i);
@@ -155,7 +155,7 @@ public class PhysicsWorldBuilder {
 				if (character == '{' && reading != 1) {
 					reading = 1;
 					continue;
-				} else if (character == '{' && reading == 1) {
+				} else if (character == '{') {
 					tempPorts.add(tempPort.toString());
 					tempPort.setLength(0);
 				} else if (character == '_') {
@@ -164,7 +164,7 @@ public class PhysicsWorldBuilder {
 				} else if (character == '<' && reading != 3) {
 					reading = 3;
 					continue;
-				} else if (character == '<' && reading == 3) {
+				} else if (character == '<') {
 					for (Tag tag: Tag.values()) {
 						if (tag.id().equals(tempTag.toString())) {
 							tempTags.add(tag);
@@ -180,7 +180,7 @@ public class PhysicsWorldBuilder {
 					tempPort.append(character);
 				} else if (reading == 2) {
 					tempIdBuilder.append(character);
-				} else if (reading == 3) {
+				} else {
 					tempTag.append(character);
 				}
 			}
@@ -196,7 +196,7 @@ public class PhysicsWorldBuilder {
 				if (character == '<' && reading != 3) {
 					reading = 3;
 					continue;
-				} else if (character == '<' && reading == 3) {
+				} else if (character == '<') {
 					for (Tag tag: Tag.values()) {
 						if (tag.id().equals(tempTag.toString())) {
 							tempTags.add(tag);
@@ -208,7 +208,7 @@ public class PhysicsWorldBuilder {
 
 				if (reading == 2) {
 					tempIdBuilder.append(character);
-				} else if (reading == 3) {
+				} else {
 					tempTag.append(character);
 				}
 			}
@@ -229,7 +229,7 @@ public class PhysicsWorldBuilder {
 	/*
 	 * Method used by loadTextureRegionCoords and loadHighestLowest to provide a common method of interpreting the same coord syntax in .txt files
 	 */
-	private HashMap<String, int[]> loadCoordValues(String path) {
+	/*private HashMap<String, int[]> loadCoordValues(String path) {
 		FileHandle file = Gdx.files.internal(path);
 		String fileString = file.readString();
 		StringBuilder strippedString = new StringBuilder();
@@ -273,14 +273,14 @@ public class PhysicsWorldBuilder {
 			}
 		}
 		return map;
-	}
+	}*/
 
 	/**
 	 *
 	 * @param chunk the chunk to have its immobile rendering order loaded in.
 	 * @return a map of ids of immobile objects in this chunk and their indexes.
 	 */
-	ObjectMap<Integer, Integer> loadImmobileRenderingOrder(ConstantObject.Chunk chunk) {
+	private ObjectMap<Integer, Integer> loadImmobileRenderingOrder(ConstantObject.Chunk chunk) {
 		ObjectMap<Integer, Integer> indexes = new ObjectMap<>();
 		FileHandle file = Gdx.files.internal("world/chunks/" + chunk.type() + "/immobileRenderingOrder.txt");
 		String fileString = file.readString();
@@ -291,7 +291,6 @@ public class PhysicsWorldBuilder {
 			if (character != '\n' && character != '\r') {
 				if (character == ':') {
 					readingId = false;
-					continue;
 				} else if (readingId) {
 					tempId.append(character);
 //					indexes.add(Integer.parseInt(String.valueOf(character)));
@@ -471,12 +470,12 @@ public class PhysicsWorldBuilder {
 		// If more chunks are loaded than those immediately surrounding the player.
 		PhysicsManager physicsManager = playScreen.physicsManager;
 		if (loadedChunks.size > 9) {
-			if (playScreen.previousGameSerialisationThreadState == Thread.State.NEW) {
+			if (playScreen.previousGameSavingThreadState == Thread.State.NEW) {
 				// If the thread is new, start it.
 				// Use the previous state as this means the thread was new since at least last frame; using the current state
 				// could mean that the thread was just terminated and made new again (we only want to detect the former).
-				playScreen.gameSerialisationThread.start();
-			} else if (playScreen.gameSerialisationThread.getState() == Thread.State.RUNNABLE) {
+				playScreen.gameSavingThread.start();
+			} else if (playScreen.gameSavingThread.getState() == Thread.State.RUNNABLE) {
 				// If the thread is running, wait until it has terminated before executing any unloading logic.
 				return;
 			}
@@ -503,7 +502,7 @@ public class PhysicsWorldBuilder {
 		}
 	}
 
-	public void importNearbyChunks(PhysicsManager physicsManager, Player player) {
+	public void importNearbyChunks(Player player) {
 		/*Array<btBulletWorldImporter> importers = new Array<>();
 		Vector2 chunkCoords = new Vector2(Math.floorDiv((int) player.pos.x, chunkSize), Math.floorDiv((int) player.pos.z, chunkSize));
 		for (int x = -1; x <= 1; x ++) {
@@ -519,7 +518,7 @@ public class PhysicsWorldBuilder {
 			break; // Temp. code (see above).
 		}*/
 
-		Array<btBulletWorldImporter> importers = new Array<>();
+//		Array<btBulletWorldImporter> importers = new Array<>();
 		Array<ConstantObject.Chunk> chunks = player.getAdjacentChunksInclusive();
 		for (ConstantObject.Chunk chunk: chunks) {
 			if (!loadedChunks.contains(chunk, false)) {
@@ -654,15 +653,29 @@ public class PhysicsWorldBuilder {
 				textureRegions[0] = new TextureRegion(region);
 //				int[] coords = textureRegionCoords.get(tempId);
 //				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
-				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
+				ImmobileTerrain obj;
+				switch (tempSubType.toString()) {
+					case "": // Placeholder for now; code gets angry if it's not there.
+						obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
+						break;
+					default:
+						obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
+				}
 				setRenderingIndex(obj, immobileRenderingIndexes);
 				physicsManager.immobileTerrain.add(obj);
 				return obj;
 			} else if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && isAnimation) {
-				textureRegions = buildAnimationFrames(regions, region, importer, Integer.parseInt(textureRegionId.toString()));
+				textureRegions = buildAnimationFrames(regions, Integer.parseInt(textureRegionId.toString()));
 //				int[] coords = textureRegionCoords.get(tempId);
 //				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags, coords[0], coords[1]);
-				ImmobileTerrain obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
+				ImmobileTerrain obj;
+				switch (tempSubType.toString()) {
+					case "": // Placeholder for now; code gets angry if it's not there.
+						obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
+						break;
+					default:
+						obj = new ImmobileTerrain(collisionObject, textureRegions, tempId, tempTags);
+				}
 				setRenderingIndex(obj, immobileRenderingIndexes);
 				physicsManager.immobileTerrain.add(obj);
 				return obj;
@@ -700,7 +713,7 @@ public class PhysicsWorldBuilder {
 				physicsManager.immobileControllers.add(obj);
 				return obj;
 			} else if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && isAnimation) {
-				textureRegions = buildAnimationFrames(regions, region, importer, Integer.parseInt(textureRegionId.toString()));
+				textureRegions = buildAnimationFrames(regions, Integer.parseInt(textureRegionId.toString()));
 				ImmobileController obj;
 				switch (tempSubType.toString()) {
 					case "switch":
@@ -749,7 +762,7 @@ public class PhysicsWorldBuilder {
 				physicsManager.immobileControllables.add(obj);
 				return obj;
 			} else if (Integer.parseInt(textureRegionId.toString()) == Integer.parseInt(tempId) && isAnimation) {
-				textureRegions = buildAnimationFrames(regions, region, importer, Integer.parseInt(textureRegionId.toString()));
+				textureRegions = buildAnimationFrames(regions, Integer.parseInt(textureRegionId.toString()));
 				ImmobileControllable obj;
 				switch (tempSubType.toString()) {
 					case "light":

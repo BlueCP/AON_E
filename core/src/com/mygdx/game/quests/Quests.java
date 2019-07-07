@@ -3,11 +3,14 @@ package com.mygdx.game.quests;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.quests.edgy.EdgyQuest;
+import com.mygdx.game.quests.searchforthesilverheart.SearchForTheSilverheartQuest;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -20,11 +23,12 @@ public class Quests {
 		quests = new Array<>();
 
 		quests.add(new EdgyQuest());
+		quests.add(new SearchForTheSilverheartQuest());
 
 		currentQuest = new NullQuest();
 		currentQuest.inProgress = true;
 
-		chooseQuest("To the Edge");
+//		chooseQuest("To the Edge");
 	}
 
 	public void update(PlayScreen playScreen) {
@@ -120,6 +124,18 @@ public class Quests {
 
 	public static Quests load(String dir) {
 		return KryoManager.read("saves/" + dir + "/quests.txt", Quests.class);
+	}
+
+	public static Quests load(String dir, Kryo kryo) {
+		try {
+			Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "saves/" + dir + "/quests.txt"));
+			Quests quests = kryo.readObject(input, Quests.class);
+			input.close();
+			return quests;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

@@ -2,7 +2,11 @@ package com.mygdx.game.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.mygdx.game.serialisation.KryoManager;
+
+import java.io.FileInputStream;
 
 public class Time {
 	
@@ -32,6 +36,15 @@ public class Time {
 	public static Time loadTime(String dir) {
 		try {
 			return KryoManager.read("saves/" + dir + "/world/time.txt", Time.class);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static Time loadTime(String dir, Kryo kryo) {
+		try {
+			Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "saves/" + dir + "/world/time.txt"));
+			return kryo.readObject(input, Time.class);
 		} catch (Exception e) {
 			return null;
 		}

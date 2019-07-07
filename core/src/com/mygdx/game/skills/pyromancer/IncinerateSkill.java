@@ -1,8 +1,6 @@
 package com.mygdx.game.skills.pyromancer;
 
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 import com.mygdx.game.particles.Particle;
 import com.mygdx.game.screens.PlayScreen;
@@ -15,7 +13,7 @@ public class IncinerateSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public IncinerateSkill() {
+	private IncinerateSkill() {
 		super(null);
 	}
 
@@ -48,7 +46,8 @@ public class IncinerateSkill extends TargetedSkill {
 		if (entity.getTargetEntity() != -1) {
 			Entity targetEntity = playScreen.entities.getEntity(entity.getTargetEntity(), playScreen.player);
 			if (targetEntity.burningEffect.powers.size > 0) {
-				entity.dealDamage(targetEntity, damage);
+//				entity.dealDamage(targetEntity, damage);
+				entity.dealAbilityDamage(targetEntity, damage, playScreen);
 				entity.landAbility(targetEntity, playScreen);
 //				targetEntity.dealDamageOLD(entity.id, playScreen.player, damage);
 //				playScreen.player.flamingBarrage.testfor(entity.id);

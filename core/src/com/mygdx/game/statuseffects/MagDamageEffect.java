@@ -10,7 +10,7 @@ public class MagDamageEffect extends ProcEffectCont {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public MagDamageEffect() { }
+	private MagDamageEffect() { }
 
 	public MagDamageEffect(Entity entity) {
 		super(entity);

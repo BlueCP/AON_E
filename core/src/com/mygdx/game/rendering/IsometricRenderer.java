@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AON_E;
 import com.mygdx.game.droppeditems.DroppedItem;
-import com.mygdx.game.entities.Entities;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.particles.Particle;
@@ -53,8 +53,6 @@ public class IsometricRenderer {
 //	private final int physicsWorldSize = 2000;
 	//private final int constA = (pixelWorldHeight - 1) - (int)(pixelWorldHeight / 2);
 	//private final int constA = 0;
-	
-	private Vector2 isoPlayer;
 
 	//private Point3 selectedCartesian = new Point3();
 	//private Point2 selectedScreen = new Point2();
@@ -308,7 +306,7 @@ public class IsometricRenderer {
 		calculateDroppedItemsRenderingOrder(physicsManager);
 	}
 	
-	private void renderObjects(SpriteBatch spriteBatch, Entities entities, Player player) {
+	private void renderObjects(SpriteBatch spriteBatch, PlayScreen playScreen) {
 //		effectiveZoom = camera.getZoom();
 		for (int i = 0; i < orderedObjects.size; i ++) {
 			/*switch (orderedObjects.get(i).visibility) {
@@ -325,26 +323,28 @@ public class IsometricRenderer {
 				continue;
 			} else if (orderedObjects.get(i).visibility == Visibility.TRANSLUCENT) {
 				spriteBatch.setColor(1, 1, 1, 0.5f);
-				renderSingleObject(orderedObjects.get(i), spriteBatch, entities, player);
+				renderSingleObject(orderedObjects.get(i), spriteBatch, playScreen);
 			} else {
-				renderSingleObject(orderedObjects.get(i), spriteBatch, entities, player);
+				renderSingleObject(orderedObjects.get(i), spriteBatch, playScreen);
 			}
 
 			spriteBatch.setColor(1, 1, 1, 1);
 		}
 	}
 
-	private void renderSingleObject(WorldObject worldObject, SpriteBatch spriteBatch, Entities entities, Player player) {
+	private void renderSingleObject(WorldObject worldObject, SpriteBatch spriteBatch, PlayScreen playScreen) {
 //		spriteBatch.draw(worldObject.getTexture(), worldObject.renderPos.x, worldObject.renderPos.y);
 		worldObject.render(spriteBatch, this);
 
 		if (PhysicsManager.isEntityOrPlayer(worldObject.physicsId)) {
-			Entity entity = entities.getEntity(worldObject.id, player);
+			Entity entity = playScreen.entities.getEntity(worldObject.id, playScreen.player);
 			drawStackEffects(entity, spriteBatch);
 		}
 		if (PhysicsManager.isNonPlayerEntity(worldObject.physicsId)) {
-			Entity entity = entities.getEntity(worldObject.id);
+			Entity entity = playScreen.entities.getEntity(worldObject.id);
 			drawEntityLifeBar(entity, spriteBatch);
+			drawInteractiveIndicator(entity, spriteBatch, playScreen.game);
+			drawSpeechBubble(entity, spriteBatch);
 		}
 	}
 
@@ -354,6 +354,24 @@ public class IsometricRenderer {
 		//TextureRegion entityLifeBar = new TextureRegion(fullEntityLifeBar);
 		entityLifeBar.setRegionWidth(barLength); ///
 		spriteBatch.draw(entityLifeBar, entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - fullEntityLifeBar.getWidth()/2f, entity.renderPos.y + entity.getTexture().getRegionHeight() + 20);
+	}
+
+	/**
+	 * Draws the indicator showing the player that this entity can be interacted with.
+	 */
+	private void drawInteractiveIndicator(Entity entity, SpriteBatch spriteBatch, AON_E game) {
+		if (entity.isWaitingToBeInteracted()) {
+			spriteBatch.draw(game.exclaimationMark, entity.renderPos.x + entity.getTexture().getRegionWidth() * 3f/4f, entity.renderPos.y + entity.getTexture().getRegionHeight() * 3f/4f, 50, 50);
+		}
+	}
+
+	/**
+	 * Draws a speech bubble for this entity, if it has text to show.
+	 */
+	private void drawSpeechBubble(Entity entity, SpriteBatch spriteBatch) {
+		if (entity.isShowSpeechBubble()) {
+			AON_E.DEFAULT_FONT.draw(spriteBatch, entity.getSpeechBubbleText(), entity.renderPos.x + entity.getTexture().getRegionWidth()/2f - 500, entity.renderPos.y + entity.getTexture().getRegionHeight() + 80, 1000, Align.center, true);
+		}
 	}
 
 	/**
@@ -388,10 +406,10 @@ public class IsometricRenderer {
 	public void render(PlayScreen playScreen) {
 		SpriteBatch spriteBatch = playScreen.game.batch;
 		Player player = playScreen.player;
-		Entities entities = playScreen.entities;
+//		Entities entities = playScreen.entities;
 		PhysicsManager physicsManager = playScreen.physicsManager;
 
-		isoPlayer = RenderMath.cartToIso(player.pos.x, player.pos.z);
+		Vector2 isoPlayer = RenderMath.cartToIso(player.pos.x, player.pos.z);
 		isoPlayer.y += player.pos.y*tileHeight;
 
 		camera.update(player, playScreen);
@@ -403,7 +421,7 @@ public class IsometricRenderer {
 //		camera.viewport.apply();
 		spriteBatch.setProjectionMatrix(camera.orthographicCamera.combined);
 		spriteBatch.begin();
-		renderObjects(spriteBatch, entities, player);
+		renderObjects(spriteBatch, playScreen);
 		spriteBatch.end();
 
 //		playScreen.game.viewport.apply();

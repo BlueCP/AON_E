@@ -10,7 +10,7 @@ public class CryomancerBasicAttack extends BasicAttack {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public CryomancerBasicAttack() {
+	private CryomancerBasicAttack() {
 		super(null);
 	}
 

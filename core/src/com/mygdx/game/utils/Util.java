@@ -143,7 +143,7 @@ public class Util {
 	}*/
 
 	public static ArrayList<String> generateArrayList(String[] array) {
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		for (String item: array) {
 			list.add(item);
 		}

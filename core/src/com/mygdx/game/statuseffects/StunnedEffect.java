@@ -7,7 +7,7 @@ public class StunnedEffect extends BinaryEffect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public StunnedEffect() { }
+	private StunnedEffect() { }
 
 	public StunnedEffect(Entity entity) {
 		super(entity);

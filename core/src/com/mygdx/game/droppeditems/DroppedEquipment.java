@@ -7,14 +7,14 @@ import com.mygdx.game.items.Equipment;
 
 public class DroppedEquipment extends DroppedItem {
 
-	Equipment equipment; // The equipment that this dropped item represents.
+	private Equipment equipment; // The equipment that this dropped item represents.
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
 	private DroppedEquipment() { }
 
-	public DroppedEquipment(Equipment equipment, Vector3 pos, btDynamicsWorld dynamicsWorld) {
+	DroppedEquipment(Equipment equipment, Vector3 pos, btDynamicsWorld dynamicsWorld) {
 		super(equipment.getId(), pos, dynamicsWorld);
 
 		this.equipment = equipment;

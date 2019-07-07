@@ -10,7 +10,7 @@ public class ThunderstrikeSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ThunderstrikeSkill() {
+	private ThunderstrikeSkill() {
 		super(null);
 	}
 

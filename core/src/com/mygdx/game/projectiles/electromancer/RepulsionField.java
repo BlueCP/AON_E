@@ -19,7 +19,7 @@ public class RepulsionField extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public RepulsionField() { }
+	private RepulsionField() { }
 
 	public RepulsionField(Entity entity, Vector3 pos) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);

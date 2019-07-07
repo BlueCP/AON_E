@@ -19,7 +19,7 @@ public class ShatterExplosion extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ShatterExplosion() { }
+	private ShatterExplosion() { }
 
 	public ShatterExplosion(Entity entity, Vector3 pos, int stacks) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);
@@ -43,9 +43,9 @@ public class ShatterExplosion extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
-			float finalDamage = offender.dealDamage(entity, totalDamage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, totalDamage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, totalDamage + offender.getRealDamage(), playScreen);
 			return true;
 		} else {
 			return false;

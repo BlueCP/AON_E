@@ -29,7 +29,7 @@ public class Infected extends Entity {
 	}
 	
 	@Override
-	public void onInteract(PlayScreen session) {
+	public void interact(PlayScreen session) {
 		session.newMessage("The infected looks at you ravenously.");
 	}
 	

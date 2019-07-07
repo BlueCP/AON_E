@@ -10,7 +10,7 @@ public class DivineRetaliationSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DivineRetaliationSkill() {
+	private DivineRetaliationSkill() {
 		super(null, false);
 	}
 
@@ -22,9 +22,9 @@ public class DivineRetaliationSkill extends PassiveSkill {
 
 	public float damageBoost() {
 		if (isLearned()) {
-			return ((1 - maxDamageBoost) / entity.getMaxLife()) * entity.getLife() + maxDamageBoost;
+			return ((1 - maxDamageBoost) / entity.getMaxLife()) * entity.getLife() + maxDamageBoost - 1;
 		} else {
-			return 1;
+			return 0;
 		}
 	}
 

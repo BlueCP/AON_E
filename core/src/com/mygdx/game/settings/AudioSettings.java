@@ -5,6 +5,17 @@ package com.mygdx.game.settings;
  */
 public class AudioSettings extends Settings {
 
+	public static void reset() {
+		preferences.putInteger("masterVolume", 1);
+		preferences.putInteger("musicVolume", 1);
+		preferences.putInteger("environmentalVolume", 1);
+		preferences.putInteger("soundFXVolume", 1);
+		preferences.putInteger("creatureVolume", 1);
+		preferences.putInteger("UIVolume", 1);
+
+		preferences.flush();
+	}
+
 	public static float masterVolume() {
 		return preferences.getFloat("masterVolume", 1);
 	}
@@ -28,7 +39,7 @@ public class AudioSettings extends Settings {
 	}
 
 	public static void setEnvironmentalVolume(float volume) {
-		preferences.putFloat("environmental", volume);
+		preferences.putFloat("environmentalVolume", volume);
 		preferences.flush();
 	}
 

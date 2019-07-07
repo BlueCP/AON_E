@@ -9,7 +9,7 @@ public class PaladinShieldEffect extends BinaryEffect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public PaladinShieldEffect() { }
+	private PaladinShieldEffect() { }
 
 	public PaladinShieldEffect(Entity entity) {
 		super(entity);

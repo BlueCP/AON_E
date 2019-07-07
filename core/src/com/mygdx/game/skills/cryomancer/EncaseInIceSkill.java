@@ -8,7 +8,7 @@ public class EncaseInIceSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public EncaseInIceSkill() {
+	private EncaseInIceSkill() {
 		super(null, false);
 	}
 

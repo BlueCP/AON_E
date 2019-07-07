@@ -12,7 +12,7 @@ public class SoftZoomAction extends LimitedCameraAction {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SoftZoomAction() { }
+	private SoftZoomAction() { }
 	
 	SoftZoomAction(float lifetime, float initialZoom, float targetZoom) {
 		this.lifetime = lifetime;

@@ -7,7 +7,7 @@ public class SlowedEffect extends ProcEffectDisc {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SlowedEffect() { }
+	private SlowedEffect() { }
 
 	public SlowedEffect(Entity entity) {
 		super(entity);

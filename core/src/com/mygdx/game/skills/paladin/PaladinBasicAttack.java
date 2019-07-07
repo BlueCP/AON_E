@@ -10,7 +10,7 @@ public class PaladinBasicAttack extends BasicAttack {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public PaladinBasicAttack() {
+	private PaladinBasicAttack() {
 		super(null);
 	}
 

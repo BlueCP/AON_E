@@ -20,7 +20,7 @@ public class DetainArea extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DetainArea() { }
+	private DetainArea() { }
 
 	public DetainArea(Entity entity, Vector3 pos, float lifetime, Entity targetEntity) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
@@ -44,9 +44,9 @@ public class DetainArea extends StaticProjectile {
 		if (target.id == -1) {
 			destroy(playScreen);
 		} else if (!alreadyHit) {
-			float finalDamage = offender.dealDamage(target, baseDamage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(target, baseDamage + offender.getRealDamage());
 			offender.landAbility(target, playScreen);
-			offender.landAbilityDamage(target, finalDamage, playScreen);
+			offender.dealAbilityDamage(target, baseDamage + offender.getRealDamage(), playScreen);
 			target.rootedEffect.add(rootDuration);
 			alreadyHit = true;
 			playScreen.particleEngine.addFlyUpPoint(playScreen.physicsManager.getDynamicsWorld(), pos, 10, 7, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);

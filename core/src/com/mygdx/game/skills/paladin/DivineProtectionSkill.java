@@ -5,12 +5,12 @@ import com.mygdx.game.skills.PassiveSkill;
 
 public class DivineProtectionSkill extends PassiveSkill {
 
-	public static final float defenseInc = 3f; // The amount defense is to be multiplied by.
+	private static final float defenseInc = 3f; // The amount defense is to be multiplied by.
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DivineProtectionSkill() {
+	private DivineProtectionSkill() {
 		super(null, false);
 	}
 

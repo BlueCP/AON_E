@@ -18,7 +18,7 @@ public class SpiritSnareArea extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SpiritSnareArea() { }
+	private SpiritSnareArea() { }
 
 	public SpiritSnareArea(Entity entity, Vector3 pos) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);

@@ -7,7 +7,7 @@ public abstract class Skill {
 	protected String name;
 	protected String desc;
 	protected transient Entity entity; // The entity which used this skill.
-	protected boolean castWithLife; // Whether or not this skill was cast using life.
+	private boolean castWithLife; // Whether or not this skill was cast using life.
 
 	public Skill(Entity entity) {
 		this.entity = entity;
@@ -53,10 +53,6 @@ public abstract class Skill {
 
 	public boolean isCastWithLife() {
 		return castWithLife;
-	}
-
-	public void setCastWithLife(boolean castWithLife) {
-		this.castWithLife = castWithLife;
 	}
 
 }

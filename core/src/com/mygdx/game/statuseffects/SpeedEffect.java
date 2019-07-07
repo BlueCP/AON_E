@@ -7,7 +7,7 @@ public class SpeedEffect extends ProcEffectDisc {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SpeedEffect() { }
+	private SpeedEffect() { }
 
 	public SpeedEffect(Entity entity) {
 		super(entity);

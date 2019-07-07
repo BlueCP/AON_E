@@ -10,7 +10,7 @@ public class IceShardSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public IceShardSkill() {
+	private IceShardSkill() {
 		super(null);
 	}
 

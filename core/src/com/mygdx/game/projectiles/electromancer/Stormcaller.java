@@ -16,7 +16,7 @@ public class Stormcaller extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Stormcaller() { }
+	private Stormcaller() { }
 
 	public Stormcaller(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);

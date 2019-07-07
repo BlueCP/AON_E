@@ -10,7 +10,7 @@ public class NecromancerBasicAttack extends BasicAttack {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public NecromancerBasicAttack() {
+	private NecromancerBasicAttack() {
 		super(null);
 	}
 

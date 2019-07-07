@@ -8,7 +8,7 @@ public class VoltaicOverloadSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public VoltaicOverloadSkill() {
+	private VoltaicOverloadSkill() {
 		super(null, false);
 	}
 
@@ -24,9 +24,9 @@ public class VoltaicOverloadSkill extends PassiveSkill {
 		}
 	}
 
-	public float damage(Entity targetEntity, float damage) {
+	public float damage(Entity targetEntity) {
 		if (isLearned() && targetEntity.chargedEffect.isActive()) {
-			return damage;
+			return 1;
 		} else {
 			return 0;
 		}

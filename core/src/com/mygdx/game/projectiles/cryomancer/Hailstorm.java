@@ -22,7 +22,7 @@ public class Hailstorm extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Hailstorm() { }
+	private Hailstorm() { }
 
 	public Hailstorm(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
@@ -56,8 +56,8 @@ public class Hailstorm extends StaticProjectile {
 		}
 
 		if (entity.id != owner) {
-			float finalDamage = offender.dealDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage());
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+//			float finalDamage = offender.dealDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage());
+			offender.dealAbilityDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage(), playScreen);
 			return true;
 		} else {
 			return false;

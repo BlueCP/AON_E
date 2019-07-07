@@ -8,7 +8,7 @@ public class UnderworldDenizenSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public UnderworldDenizenSkill() {
+	private UnderworldDenizenSkill() {
 		super(null, false);
 	}
 
@@ -18,9 +18,9 @@ public class UnderworldDenizenSkill extends PassiveSkill {
 		desc = "Spells cast with health deal additional damage.";
 	}
 
-	public float damage(float damage) {
+	public float damage() {
 		if (isLearned() && entity.currentSkill.isCastWithLife()) {
-			return damage;
+			return 1;
 		} else {
 			return 0;
 		}

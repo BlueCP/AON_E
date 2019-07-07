@@ -7,7 +7,7 @@ public class BlindedEffect extends ProcEffectCont {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public BlindedEffect() { }
+	private BlindedEffect() { }
 
 	public BlindedEffect(Entity entity) {
 		super(entity);

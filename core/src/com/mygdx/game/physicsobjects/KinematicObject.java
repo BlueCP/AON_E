@@ -14,8 +14,7 @@ public abstract class KinematicObject extends ConstantObject implements Disposab
 	
 	private Vector3 linearVelocity;
 	
-	public KinematicObject(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<Tag> tags,
-			int spriteX, int spriteY) {
+	public KinematicObject(btCollisionObject collisionObject, TextureRegion[] texture, String id, Array<Tag> tags) {
 		super(collisionObject, texture, id, tags);
 		int physicsId = Util.getPhysicsId(Integer.parseInt(id), "5100");
 		collisionObject.setUserValue(physicsId);

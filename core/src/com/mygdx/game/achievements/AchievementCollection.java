@@ -3,10 +3,12 @@ package com.mygdx.game.achievements;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -37,13 +39,19 @@ public class AchievementCollection {
 	}
 	
 	public static AchievementCollection loadAll(String name) {
-		return loadPlayerAchievements(name);
-//		achievements.createAllAchievements();
-//		return achievements;
-	}
-	
-	private static AchievementCollection loadPlayerAchievements(String name) {
 		return KryoManager.read("saves/" + name + "/playerAchievements.txt", AchievementCollection.class);
+	}
+
+	public static AchievementCollection loadAll(String name, Kryo kryo) {
+		try {
+			Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "saves/" + name + "/playerAchievements.txt"));
+			AchievementCollection achievementCollection = kryo.readObject(input, AchievementCollection.class);
+			input.close();
+			return achievementCollection;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/*private void loadAllAchievements() {

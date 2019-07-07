@@ -9,12 +9,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.particles.Particle.Behaviour;
 import com.mygdx.game.particles.Particle.Sprite;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.settings.VideoSettings;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -149,6 +151,25 @@ public class ParticleEngine {
 		}
 	}
 
+	public static ParticleEngine load(String dir, Kryo kryo) {
+		try {
+			Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "saves/" + dir + "/particles.txt"));
+			ParticleEngine particleEngine = kryo.readObject(input, ParticleEngine.class);
+			input.close();
+
+			for (Particle particle: particleEngine.particles) {
+				particle.processAfterLoading();
+			}
+
+			particleEngine.particlePool = Pools.get(Particle.class);
+
+			return particleEngine;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	private Particle getParticle(btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime, Sprite sprite, Behaviour behaviour) {
 		Particle particle = particlePool.obtain();
 		particle.init(this, dynamicsWorld, pos, lifetime, sprite, behaviour);
@@ -274,13 +295,13 @@ public class ParticleEngine {
 		addWave(dynamicsWorld, pos, num, speed, Sprite.FIRE, behaviour);
 	}*/
 	
-	public void addFireNode(Vector3 pos, Vector3 area) {
+	/*public void addFireNode(Vector3 pos, Vector3 area) {
 		particleNodes.add(new ParticleNode(pos, area, Particle.Sprite.FIRE, Behaviour.OSCILLATE_DOWN, 6f, 1f));
 	}
 	
 	public void addFireNode(Vector3 pos, Vector3 area, float lifetime) {
 		particleNodes.add(new ParticleNode(pos, area, Sprite.FIRE, Behaviour.OSCILLATE_DOWN, lifetime, 1f));
-	}
+	}*/
 	
 	public void dispose() {
 		for (Particle particle: particles) {

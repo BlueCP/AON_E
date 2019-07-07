@@ -4,7 +4,7 @@ import com.mygdx.game.screens.PlayScreen;
 
 public class NullEntity extends Entity {
 
-	public NullEntity() {
+	NullEntity() {
 		id = -1;
 	}
 
@@ -14,7 +14,7 @@ public class NullEntity extends Entity {
 	}
 
 	@Override
-	public void onInteract(PlayScreen session) {
+	public void interact(PlayScreen session) {
 
 	}
 

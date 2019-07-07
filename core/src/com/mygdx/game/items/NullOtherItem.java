@@ -1,8 +1,8 @@
 package com.mygdx.game.items;
 
-public class NullOtherItem extends OtherItem {
+class NullOtherItem extends OtherItem {
 
-	public NullOtherItem() {
+	NullOtherItem() {
 		id = -1;
 	}
 

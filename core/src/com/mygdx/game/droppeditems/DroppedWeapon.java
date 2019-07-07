@@ -7,7 +7,7 @@ import com.mygdx.game.items.Weapon;
 
 public class DroppedWeapon extends DroppedItem {
 
-	Weapon weapon; // The weapon that this dropped item represents.
+	private Weapon weapon; // The weapon that this dropped item represents.
 
 	/**
 	 * No-arg constructor for serialisation purposes.

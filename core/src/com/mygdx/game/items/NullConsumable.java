@@ -4,7 +4,7 @@ import com.mygdx.game.screens.PlayScreen;
 
 public class NullConsumable extends Consumable {
 
-	public NullConsumable() {
+	NullConsumable() {
 		id = -1;
 	}
 

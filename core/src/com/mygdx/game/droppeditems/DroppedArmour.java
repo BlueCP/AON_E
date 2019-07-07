@@ -7,14 +7,14 @@ import com.mygdx.game.items.Armour;
 
 public class DroppedArmour extends DroppedItem {
 
-	Armour armour; // The armour that this dropped item represents.
+	private Armour armour; // The armour that this dropped item represents.
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
 	private DroppedArmour() { }
 
-	public DroppedArmour(Armour armour, Vector3 pos, btDynamicsWorld dynamicsWorld) {
+	DroppedArmour(Armour armour, Vector3 pos, btDynamicsWorld dynamicsWorld) {
 		super(armour.getId(), pos, dynamicsWorld);
 
 		this.armour = armour;

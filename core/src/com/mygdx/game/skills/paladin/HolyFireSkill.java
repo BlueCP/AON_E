@@ -10,7 +10,7 @@ public class HolyFireSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public HolyFireSkill() {
+	private HolyFireSkill() {
 		super(null);
 	}
 

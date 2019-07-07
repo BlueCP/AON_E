@@ -1,6 +1,6 @@
 package com.mygdx.game.items;
 
-public class NonGearItem extends Item {
+public abstract class NonGearItem extends Item {
 
 	protected int cost; // The monetary value of this item (buying price).
 

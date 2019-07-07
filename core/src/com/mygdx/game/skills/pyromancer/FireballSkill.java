@@ -10,7 +10,7 @@ public class FireballSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public FireballSkill() {
+	private FireballSkill() {
 		super(null);
 	}
 

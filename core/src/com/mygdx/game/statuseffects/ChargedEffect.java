@@ -16,12 +16,12 @@ public class ChargedEffect extends Effect {
 	private Array<Float> durations; // The duration of each stack (as they decay individually).
 //	private Array<Boolean> isDischarge; // For each stack, whether or not it will discharge to a nearby enemy when it decays.
 
-	boolean dischargeNow = false; // Whether or not a random discharge should be attempted this tick.
+	private boolean dischargeNow = false; // Whether or not a random discharge should be attempted this tick.
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ChargedEffect() { }
+	private ChargedEffect() { }
 
 	public ChargedEffect(Entity entity) {
 		super(entity);

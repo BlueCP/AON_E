@@ -10,7 +10,7 @@ public class CleansingStrikeSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public CleansingStrikeSkill() {
+	private CleansingStrikeSkill() {
 		super(null);
 	}
 

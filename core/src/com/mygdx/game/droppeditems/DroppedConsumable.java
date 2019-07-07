@@ -7,14 +7,14 @@ import com.mygdx.game.items.Consumable;
 
 public class DroppedConsumable extends DroppedItem {
 
-	Consumable consumable; // The consumable that this dropped item represents.
+	private Consumable consumable; // The consumable that this dropped item represents.
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
 	private DroppedConsumable() { }
 
-	public DroppedConsumable(Consumable consumable, Vector3 pos, btDynamicsWorld dynamicsWorld) {
+	DroppedConsumable(Consumable consumable, Vector3 pos, btDynamicsWorld dynamicsWorld) {
 		super(consumable.getId(), pos, dynamicsWorld);
 
 		this.consumable = consumable;

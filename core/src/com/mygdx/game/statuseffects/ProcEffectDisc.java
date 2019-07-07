@@ -25,7 +25,7 @@ public class ProcEffectDisc extends Effect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ProcEffectDisc() { }
+	ProcEffectDisc() { }
 
 	ProcEffectDisc(Entity entity) {
 		super(entity);

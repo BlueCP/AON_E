@@ -9,7 +9,7 @@ public class DrainEssenceSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DrainEssenceSkill() {
+	private DrainEssenceSkill() {
 		super(null, false);
 	}
 

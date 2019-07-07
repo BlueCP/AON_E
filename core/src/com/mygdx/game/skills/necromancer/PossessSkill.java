@@ -11,7 +11,7 @@ public class PossessSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public PossessSkill() {
+	private PossessSkill() {
 		super(null);
 	}
 

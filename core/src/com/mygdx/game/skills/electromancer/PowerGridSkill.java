@@ -2,7 +2,6 @@ package com.mygdx.game.skills.electromancer;
 
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.projectiles.electromancer.PowerGridConductor;
-import com.mygdx.game.projectiles.electromancer.Stormcaller;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.LocationSkill;
 
@@ -11,7 +10,7 @@ public class PowerGridSkill extends LocationSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public PowerGridSkill() {
+	private PowerGridSkill() {
 		super(null);
 	}
 
@@ -23,7 +22,7 @@ public class PowerGridSkill extends LocationSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(15, 1f, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
+		defaultStart(15, 1f, 10, Entity.AnimationType.SHOOT_PROJECTILE);
 	}
 
 	@Override

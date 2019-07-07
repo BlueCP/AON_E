@@ -34,7 +34,7 @@ public class PowerGridBeam extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public PowerGridBeam() { }
+	private PowerGridBeam() { }
 
 	public PowerGridBeam(Entity entity, Vector3 startPoint, Vector3 endPoint, Projectile projectile1, Projectile projectile2, float lifetime, float damage) {
 		super(entity, ProjectileSprite.LIGHTNING_BOLT, startPoint.cpy().lerp(endPoint, 0.5f), lifetime);
@@ -92,9 +92,9 @@ public class PowerGridBeam extends StaticProjectile {
 				Entity entity = playScreen.entities.getEntity(Util.getId(id), playScreen.player);
 				Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 				if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-					float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//					float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 					offender.landAbility(entity, playScreen);
-					offender.landAbilityDamage(entity, finalDamage, playScreen);
+					offender.dealAbilityDamage(entity, damage + offender.getRealDamage(), playScreen);
 					hitEntities.add(entity.id);
 				}
 			}

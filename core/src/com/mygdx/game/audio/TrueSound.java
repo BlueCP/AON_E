@@ -6,7 +6,7 @@ import com.mygdx.game.settings.AudioSettings;
 public class TrueSound {
 
 	Sound sound;
-	Type type;
+	private Type type;
 
 	public enum Type {
 		ENVIRONMENTAL,

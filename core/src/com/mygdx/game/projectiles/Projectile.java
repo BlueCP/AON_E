@@ -23,7 +23,7 @@ public abstract class Projectile extends WorldObject {
 	private float stateTime;
 	protected float lifetime;
 	protected int ticksPast;
-	protected boolean isDestroyed;
+	boolean isDestroyed;
 	
 	Matrix4 worldTransform;
 
@@ -100,7 +100,7 @@ public abstract class Projectile extends WorldObject {
 
 //	public abstract void prepareForSaveAndExit();
 	
-	public void processAfterLoading() {
+	void processAfterLoading() {
 		loadPhysicsObject();
 	}
 
@@ -149,10 +149,6 @@ public abstract class Projectile extends WorldObject {
 		return stateTime;
 	}
 
-	public void setStateTime(float stateTime) {
-		this.stateTime = stateTime;
-	}
-
 	public float getLifetime() {
 		return lifetime;
 	}
@@ -181,7 +177,4 @@ public abstract class Projectile extends WorldObject {
 		return isDestroyed;
 	}
 
-	public void setDestroyed(boolean destroyed) {
-		isDestroyed = destroyed;
-	}
 }

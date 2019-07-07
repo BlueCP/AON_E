@@ -15,7 +15,7 @@ public class ScreenShakeAction extends LimitedCameraAction {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ScreenShakeAction() { }
+	ScreenShakeAction() { }
 
 	void build(float lifetime, float magnitude) {
 		this.lifetime = lifetime;

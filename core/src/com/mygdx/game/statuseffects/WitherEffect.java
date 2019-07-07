@@ -13,7 +13,7 @@ public class WitherEffect extends ProcEffectDisc {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public WitherEffect() { }
+	private WitherEffect() { }
 
 	public WitherEffect(Entity entity) {
 		super(entity);

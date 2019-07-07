@@ -63,8 +63,4 @@ public abstract class Armour extends GearItem {
 		return defense;
 	}
 
-	public void setDefense(float defense) {
-		this.defense = defense;
-	}
-	
 }

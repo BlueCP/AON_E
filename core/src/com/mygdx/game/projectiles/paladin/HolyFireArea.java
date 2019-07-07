@@ -20,7 +20,7 @@ public class HolyFireArea extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public HolyFireArea() { }
+	private HolyFireArea() { }
 
 	public HolyFireArea(Entity entity, Vector3 pos) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);

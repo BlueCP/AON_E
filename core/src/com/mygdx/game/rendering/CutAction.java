@@ -9,7 +9,7 @@ public class CutAction extends LimitedCameraAction {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public CutAction() { }
+	private CutAction() { }
 	
 	CutAction(float lifetime, Vector3 pos) {
 		this.lifetime = lifetime;

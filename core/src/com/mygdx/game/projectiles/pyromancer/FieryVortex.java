@@ -24,7 +24,7 @@ public class FieryVortex extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public FieryVortex() { }
+	private FieryVortex() { }
 
 	public FieryVortex(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);

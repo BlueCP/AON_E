@@ -3,7 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.AON_E;
-import com.mygdx.game.runners.SaveNewGameRunner;
+import com.mygdx.game.serialisation.SaveNewGameRunner;
 import com.mygdx.game.utils.NewGameData;
 
 public class CreatingCharacterScreen extends MyScreen {

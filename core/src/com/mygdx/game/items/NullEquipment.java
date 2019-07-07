@@ -1,8 +1,8 @@
 package com.mygdx.game.items;
 
-public class NullEquipment extends Equipment {
+class NullEquipment extends Equipment {
 
-	public NullEquipment() {
+	NullEquipment() {
 		id = -1;
 	}
 

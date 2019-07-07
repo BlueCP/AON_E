@@ -10,7 +10,7 @@ public class BurningBarrierSkill extends LocationSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public BurningBarrierSkill() {
+	private BurningBarrierSkill() {
 		super(null);
 	}
 
@@ -22,7 +22,7 @@ public class BurningBarrierSkill extends LocationSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(5, 1, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
+		defaultStart(5, 1, 10, Entity.AnimationType.SHOOT_PROJECTILE);
 	}
 
 	@Override

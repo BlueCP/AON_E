@@ -32,7 +32,7 @@ public class StoneDemidemon extends Entity {
 	}
 	
 	@Override
-	public void onInteract(PlayScreen session) {
+	public void interact(PlayScreen session) {
 		if (nature == Nature.AGGRESSIVE) {
 			session.newMessage("The Stone Demidemon looks at you with hatred.");
 		} else if (nature == Nature.FRIENDLY) {

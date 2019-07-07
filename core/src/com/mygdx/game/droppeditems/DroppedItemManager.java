@@ -6,11 +6,13 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.items.ItemFactory;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -77,7 +79,7 @@ public class DroppedItemManager implements Disposable {
 		droppedItems.add(droppedOtherItem);
 	}
 
-	public void update(float delta, PlayScreen playScreen) {
+	public void update(PlayScreen playScreen) {
 		for (int i = 0; i < droppedItems.size; i ++) {
 			DroppedItem droppedItem = droppedItems.get(i);
 
@@ -123,6 +125,22 @@ public class DroppedItemManager implements Disposable {
 	public static DroppedItemManager load(String dir) {
 		try {
 			DroppedItemManager droppedItemManager = KryoManager.read("saves/" + dir + "/droppedItems.txt", DroppedItemManager.class);
+
+			for (DroppedItem droppedItem: droppedItemManager.droppedItems) {
+				droppedItem.processAfterLoading();
+			}
+			return droppedItemManager;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static DroppedItemManager load(String dir, Kryo kryo) {
+		try {
+			Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "saves/" + dir + "/droppedItems.txt"));
+			DroppedItemManager droppedItemManager = kryo.readObject(input, DroppedItemManager.class);
+			input.close();
 
 			for (DroppedItem droppedItem: droppedItemManager.droppedItems) {
 				droppedItem.processAfterLoading();

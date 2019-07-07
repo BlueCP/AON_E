@@ -15,9 +15,9 @@ public class RazeZone extends StaticProjectile {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public RazeZone() { }
+	private RazeZone() { }
 	
-	RazeZone(Entity entity, ProjectileManager projectileManager, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
+	RazeZone(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.RAZE_ZONE, pos, lifetime);
 		
 		//btGhostPairCallback ghostCall = new btGhostPairCallback();

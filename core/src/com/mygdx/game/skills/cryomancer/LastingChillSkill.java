@@ -8,7 +8,7 @@ public class LastingChillSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public LastingChillSkill() {
+	private LastingChillSkill() {
 		super(null, false);
 	}
 

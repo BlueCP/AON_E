@@ -25,7 +25,7 @@ public class RestlessDeadArea extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public RestlessDeadArea() { }
+	private RestlessDeadArea() { }
 
 	public RestlessDeadArea(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);

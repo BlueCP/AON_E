@@ -10,7 +10,7 @@ public class GlacialWallSkill extends LocationSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public GlacialWallSkill() {
+	private GlacialWallSkill() {
 		super(null);
 	}
 
@@ -22,7 +22,7 @@ public class GlacialWallSkill extends LocationSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(15, 1f, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
+		defaultStart(15, 1f, 10, Entity.AnimationType.SHOOT_PROJECTILE);
 	}
 
 	@Override

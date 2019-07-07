@@ -10,7 +10,7 @@ public class IntangibleGhostSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public IntangibleGhostSkill() {
+	private IntangibleGhostSkill() {
 		super(null, false);
 	}
 

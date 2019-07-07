@@ -4,7 +4,7 @@ import com.mygdx.game.screens.PlayScreen;
 
 public class NullQuest extends Quest {
 
-	public NullQuest() {
+	NullQuest() {
 		name = "No quest";
 		desc = "No quest chosen.";
 		questType = QuestType.NO_QUEST;
@@ -14,6 +14,11 @@ public class NullQuest extends Quest {
 	@Override
 	void updateObjectives(PlayScreen playScreen) {
 		// There are no objectives to update, so just don't do anything.
+	}
+
+	@Override
+	public void onCompletion(PlayScreen playScreen) {
+
 	}
 
 	@Override

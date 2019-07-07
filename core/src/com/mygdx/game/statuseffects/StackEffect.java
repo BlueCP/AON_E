@@ -14,9 +14,9 @@ public class StackEffect extends Effect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public StackEffect() { }
+	StackEffect() { }
 
-	public StackEffect(Entity entity) {
+	StackEffect(Entity entity) {
 		super(entity);
 		stacks = 0;
 		duration = 0;

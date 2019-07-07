@@ -20,4 +20,9 @@ public class EdgyQuest extends Quest {
 
 	}
 
+	@Override
+	public void onCompletion(PlayScreen playScreen) {
+
+	}
+
 }

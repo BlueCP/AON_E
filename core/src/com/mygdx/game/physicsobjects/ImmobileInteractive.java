@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.physics.PhysicsManager;
-import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.Util;
 
 public abstract class ImmobileInteractive extends ImmobileObject {

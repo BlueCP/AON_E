@@ -8,7 +8,7 @@ public class StokeTheFlamesSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public StokeTheFlamesSkill() {
+	private StokeTheFlamesSkill() {
 		super(null, false);
 	}
 
@@ -26,14 +26,14 @@ public class StokeTheFlamesSkill extends PassiveSkill {
 		}
 	}
 
-	public float damage(Entity entity, float damage) {
+	public float damage(Entity entity) {
 		/*if (entity.burningEffect.powers.size > 0){
 			entity.takeDamage(this.entity, damage * 2);
 		} else {
 			entity.takeDamage(this.entity, damage);
 		}*/
 		if (isLearned() && entity.burningEffect.isActive()) {
-			return damage;
+			return 1;
 		} else {
 			return 0;
 		}

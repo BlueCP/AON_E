@@ -7,14 +7,14 @@ import com.mygdx.game.items.OtherItem;
 
 public class DroppedOtherItem extends DroppedItem {
 
-	OtherItem otherItem; // The other item that this dropped item represents.
+	private OtherItem otherItem; // The other item that this dropped item represents.
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
 	private DroppedOtherItem() { }
 
-	public DroppedOtherItem(OtherItem otherItem, Vector3 pos, btDynamicsWorld dynamicsWorld) {
+	DroppedOtherItem(OtherItem otherItem, Vector3 pos, btDynamicsWorld dynamicsWorld) {
 		super(otherItem.getId(), pos, dynamicsWorld);
 
 		this.otherItem = otherItem;
@@ -29,6 +29,9 @@ public class DroppedOtherItem extends DroppedItem {
 				break;
 			case "Iron ingot":
 				sprite = Sprite.IRON_INGOT;
+				break;
+			case "Silverheart":
+				sprite = Sprite.SILVERHEART;
 				break;
 		}
 	}

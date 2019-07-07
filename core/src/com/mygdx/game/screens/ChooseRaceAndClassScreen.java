@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.AON_E;
-import com.mygdx.game.mobtypes.*;
 import com.mygdx.game.utils.NewGameData;
 
 public class ChooseRaceAndClassScreen implements Screen, InputProcessor {

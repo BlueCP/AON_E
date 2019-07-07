@@ -15,7 +15,7 @@ public class SacrificialPactSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SacrificialPactSkill() {
+	private SacrificialPactSkill() {
 		super(null);
 	}
 

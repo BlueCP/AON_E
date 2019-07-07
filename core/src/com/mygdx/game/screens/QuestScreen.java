@@ -19,9 +19,6 @@ public class QuestScreen extends MyScreen {
 	private PlayScreen playScreen;
 
 	private Stage stage;
-	private Table table;
-
-	private Label conditionLabel;
 
 	QuestScreen(AON_E game, PlayScreen playScreen) {
 		super(game);
@@ -32,8 +29,6 @@ public class QuestScreen extends MyScreen {
 
 		ButtonGroup<TextButton> questsButtonGroup = new ButtonGroup<>();
 		questsButtonGroup.setMinCheckCount(0);
-
-		conditionLabel = new Label("", AON_E.SKIN);
 
 		Table questsTable = new Table();
 		questsTable.setWidth(stage.getWidth());
@@ -56,6 +51,8 @@ public class QuestScreen extends MyScreen {
 				button.getLabel().setColor(Color.WHITE);
 				button.setChecked(false);
 			}
+			Label conditionLabel = new Label("", AON_E.SKIN);
+
 			button.addListener(new ClickListener() {
 
 				@Override
@@ -65,15 +62,15 @@ public class QuestScreen extends MyScreen {
 
 						conditionLabel.setText("In progress.");
 						conditionLabel.setColor(Color.YELLOW);
-					} else {
+					} else if (!button.isChecked() && !quest.isCompleted()) {
 						playScreen.quests.setNoQuest();
 						questsButtonGroup.uncheckAll();
 
 						conditionLabel.setText("");
+					} else {
+						button.setChecked(false); // If the quest has been completed, stop the button from being checked (no reason to let it be checked).
 					}
 				}
-
-
 
 				@Override
 				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -86,22 +83,23 @@ public class QuestScreen extends MyScreen {
 					infoTable.setHeight(stage.getHeight());
 					infoTable.align(Align.right);
 
-					infoTable.add(new Label(quest.getName(), AON_E.SKIN)).padBottom(30).row();
-					infoTable.add(new Label(quest.getDesc(), AON_E.SKIN)).padBottom(30).row();
+					Label nameLabel = new Label(quest.getName(), AON_E.SKIN);
+					nameLabel.setWrap(true);
+					Label descLabel = new Label(quest.getDesc(), AON_E.SKIN);
+					descLabel.setWrap(true);
+					infoTable.add(nameLabel).width(400).padBottom(30).row();
+					infoTable.add(descLabel).width(400).padBottom(30).row();
 //					Label conditionLabel;
 					if (quest.isCompleted()) {
 //						infoTable.add(new Label("Completed!", new Label.LabelStyle(AON_E.DEFAULT_FONT, Color.GREEN)));
 						conditionLabel.setText("Completed!");
 						conditionLabel.setColor(Color.GREEN);
-						infoTable.add(conditionLabel);
 					} else if (quest.isInProgress()) {
 //						infoTable.add(new Label("In progress.", new Label.LabelStyle(AON_E.DEFAULT_FONT, Color.YELLOW)));
 						conditionLabel.setText("In progress.");
 						conditionLabel.setColor(Color.YELLOW);
-						infoTable.add(conditionLabel);
-					} else {
-						infoTable.add(conditionLabel);
 					}
+					infoTable.add(conditionLabel).width(400);
 
 					stage.addActor(infoTable);
 				}
@@ -121,12 +119,12 @@ public class QuestScreen extends MyScreen {
 
 			});
 			questsButtonGroup.add(button);
-			questsTable.add(button).padBottom(10);
+			questsTable.add(button).padBottom(10).row();
 		}
 
 		ScrollPane questsPane = new ScrollPane(questsTable, AON_E.SKIN);
 
-		table = new Table();
+		Table table = new Table();
 		table.setWidth(stage.getWidth());
 		table.setHeight(stage.getHeight());
 		table.align(Align.center);

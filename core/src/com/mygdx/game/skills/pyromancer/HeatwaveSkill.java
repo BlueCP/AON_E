@@ -10,7 +10,7 @@ public class HeatwaveSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public HeatwaveSkill() {
+	private HeatwaveSkill() {
 		super(null);
 	}
 

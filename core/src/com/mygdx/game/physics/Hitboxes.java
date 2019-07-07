@@ -27,6 +27,8 @@ public class Hitboxes {
 
 		initEntity("player");
 		initEntity("dummy");
+		initEntity("Deltis");
+		initEntity("Silver statue");
 
 		importer.dispose();
 	}

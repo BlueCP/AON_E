@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.bullet.dynamics.btConstraintSolver;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
-import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryo.Kryo;
@@ -34,7 +33,7 @@ import java.io.FileOutputStream;
 
 public class PhysicsManager {
 
-	boolean firstTime;
+	private boolean firstTime;
 
 	transient Array<ConstantObject> allConstantObjects;
 
@@ -63,9 +62,7 @@ public class PhysicsManager {
 	 */
 	public ObjectMap<Integer, Integer> controllableFlags = new ObjectMap<>();
 
-	private Entities entities;
-
-    private transient btCollisionShape renderableFinderOrig;
+	private transient btCollisionShape renderableFinderOrig;
     private transient btConvexShape renderableFinder;
     
 //    private MyContactListener contactListener;
@@ -79,7 +76,7 @@ public class PhysicsManager {
     //public final static short TESTER_FLAG = 1<<12;
     public final static short IGNORE_FLAG = 1<<12;
     
-    public transient PhysicsWorldBuilder physicsWorldBuilder;
+    private transient PhysicsWorldBuilder physicsWorldBuilder;
     
     public static final Vector3 gravity = new Vector3(0, -5f, 0);
     public static final float lowestPoint = -10;
@@ -214,7 +211,7 @@ public class PhysicsManager {
 	}
 
     public void importNearbyChunks(Player player) {
-    	physicsWorldBuilder.importNearbyChunks(this, player);
+    	physicsWorldBuilder.importNearbyChunks(player);
 	}
 
 	public void unloadFarAwayChunks(PlayScreen playScreen, Vector3 pos) {
@@ -334,6 +331,29 @@ public class PhysicsManager {
 			if (!physicsManager.firstTime) { // If this is not the first time loading this save,
 				Input input = new Input(new FileInputStream("saves/" + playScreen.player.getPlayerName() + "/controllableFlags.txt"));
 				physicsManager.controllableFlags = kryo.readObject(input, ObjectMap.class);
+				input.close();
+				// Even if the controllable flags were already initialised, this will overwrite the existing object map.
+			}
+
+			// We don't need to read const obj data: that's done for each object when it's created (over in PhysicsWorldBuilder).
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return physicsManager;
+	}
+
+	public static PhysicsManager load(PlayScreen playScreen, Kryo kryo) {
+		PhysicsManager physicsManager = new PhysicsManager(playScreen);
+
+		try {
+
+			// Reading the array of controllable flags.
+			if (!physicsManager.firstTime) { // If this is not the first time loading this save,
+				Input input = new Input(new FileInputStream("saves/" + playScreen.player.getPlayerName() + "/controllableFlags.txt"));
+				physicsManager.controllableFlags = kryo.readObject(input, ObjectMap.class);
+				input.close();
 				// Even if the controllable flags were already initialised, this will overwrite the existing object map.
 			}
 
@@ -461,7 +481,7 @@ public class PhysicsManager {
 		*/
     }
     
-    public static class MyMotionState extends btMotionState {
+    /*public static class MyMotionState extends btMotionState {
     	public Matrix4 transform;
     	
     	@Override
@@ -473,7 +493,7 @@ public class PhysicsManager {
 		public void setWorldTransform(Matrix4 worldTrans) {
 			//transform.set(worldTrans);
 		}
-    }
+    }*/
 
 	/**
 	 * No-arg constructor, mainly for copying purposes.
@@ -481,7 +501,7 @@ public class PhysicsManager {
 	private PhysicsManager() { }
 	
 	public PhysicsManager(PlayScreen playScreen) {
-		this.entities = playScreen.entities;
+		Entities entities = playScreen.entities;
 		
         collisionConfig = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -985,6 +1005,30 @@ public class PhysicsManager {
 		rayTest.setCollisionFilterMask(mask);
 
 		dynamicsWorld.rayTest(rayFrom, rayTo, rayTest);
+
+		if (rayTest.hasHit()) {
+			Vector3 vector = new Vector3();
+			rayTest.getHitPointWorld(vector);
+			return new Pair<>(rayTest.getCollisionObject().getUserValue(), vector);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * This takes a mask as a parameter so that it only searches for certain types of objects.
+	 */
+	public Pair<Integer, Vector3> rayTestFirst(Vector3 start, Vector3 end, int mask) {
+		Vector3 vectorFrom = start.cpy();
+		Vector3 vectorTo = end.cpy();
+
+		ClosestRayResultCallback rayTest = new ClosestRayResultCallback(Vector3.Zero, Vector3.Zero);
+		rayTest.setClosestHitFraction(1f);
+		rayTest.setRayFromWorld(vectorFrom);
+		rayTest.setRayToWorld(vectorTo);
+		rayTest.setCollisionFilterMask(mask);
+
+		dynamicsWorld.rayTest(vectorFrom, vectorTo, rayTest);
 
 		if (rayTest.hasHit()) {
 			Vector3 vector = new Vector3();

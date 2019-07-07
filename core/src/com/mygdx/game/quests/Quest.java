@@ -43,15 +43,19 @@ public abstract class Quest {
 		objectives.get(objectiveIndex).setInProgress(true);
 	}
 
-	public void finishQuest() {
+	public void finishQuest(PlayScreen playScreen) {
 		objectives.get(objectiveIndex).setInProgress(false);
 		objectives.get(objectiveIndex).setCompleted(true);
 
 		inProgress = false;
 		completed = true;
+
+		onCompletion(playScreen);
 	}
 
-	public void abandonQuest() {
+	public abstract void onCompletion(PlayScreen playScreen);
+
+	void abandonQuest() {
 		objectiveIndex = 0;
 		for (Objective objective: objectives) {
 			objective.setInProgress(false);

@@ -7,7 +7,7 @@ public class RootedEffect extends BinaryEffect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public RootedEffect() { }
+	private RootedEffect() { }
 
 	public RootedEffect(Entity entity) {
 		super(entity);

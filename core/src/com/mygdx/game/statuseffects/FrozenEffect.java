@@ -7,7 +7,7 @@ public class FrozenEffect extends BinaryEffect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public FrozenEffect() { }
+	private FrozenEffect() { }
 
 	public FrozenEffect(Entity entity) {
 		super(entity);

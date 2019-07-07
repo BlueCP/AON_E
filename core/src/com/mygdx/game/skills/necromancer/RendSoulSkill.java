@@ -1,7 +1,6 @@
 package com.mygdx.game.skills.necromancer;
 
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.projectiles.electromancer.Thunderstrike;
 import com.mygdx.game.projectiles.necromancer.RendSoul;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.TargetedSkill;
@@ -11,7 +10,7 @@ public class RendSoulSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public RendSoulSkill() {
+	private RendSoulSkill() {
 		super(null);
 	}
 

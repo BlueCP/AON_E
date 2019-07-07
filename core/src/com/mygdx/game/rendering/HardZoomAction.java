@@ -12,7 +12,7 @@ public class HardZoomAction extends LimitedCameraAction {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public HardZoomAction() { }
+	private HardZoomAction() { }
 	
 	HardZoomAction(float lifetime, float initialZoom, float targetZoom) {
 		this.lifetime = lifetime;

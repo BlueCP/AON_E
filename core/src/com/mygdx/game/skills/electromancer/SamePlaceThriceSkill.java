@@ -10,7 +10,7 @@ public class SamePlaceThriceSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SamePlaceThriceSkill() {
+	private SamePlaceThriceSkill() {
 		super(null, false);
 	}
 

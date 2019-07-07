@@ -25,7 +25,7 @@ public class CracklingOrb extends DynamicProjectile {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public CracklingOrb() { }
+	private CracklingOrb() { }
 
 	public CracklingOrb(Entity entity, Vector3 pos, Vector3 targetPos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
@@ -64,9 +64,9 @@ public class CracklingOrb extends DynamicProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner && !hitIds.contains(entity.id, true)) {
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, damage + offender.getRealDamage(), playScreen);
 
 			playScreen.particleEngine.addBurst(playScreen.physicsManager.getDynamicsWorld(), pos, 20, 3, 2,
 					Particle.Sprite.FIRE, Particle.Behaviour.POOF);

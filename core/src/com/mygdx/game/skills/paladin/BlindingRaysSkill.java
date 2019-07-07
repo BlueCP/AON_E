@@ -10,7 +10,7 @@ public class BlindingRaysSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public BlindingRaysSkill() {
+	private BlindingRaysSkill() {
 		super(null);
 	}
 

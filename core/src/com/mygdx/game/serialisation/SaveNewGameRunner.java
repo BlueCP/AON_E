@@ -1,14 +1,14 @@
-package com.mygdx.game.runners;
+package com.mygdx.game.serialisation;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.droppeditems.DroppedItemManager;
-import com.mygdx.game.entities.Entities;
+import com.mygdx.game.entities.characters.Deltis;
+import com.mygdx.game.entities.characters.SilverStatue;
 import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.quests.Quests;
-import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.utils.NewGameData;
 import com.mygdx.game.world.Time;
 
@@ -24,7 +24,13 @@ public class SaveNewGameRunner implements Runnable {
 	public void run() {
 		calculateStats();
 		getStartingItems();
+		initialiseEntities();
 		saveEverything();
+	}
+
+	private void initialiseEntities() {
+		newGameData.entities.addEntity(new Deltis(newGameData.entities, new Vector3(0, 1, -4)));
+		newGameData.entities.addEntity(new SilverStatue(newGameData.entities, new Vector3(4, 1, 0)));
 	}
 	
 	private void getStartingItems() {
@@ -79,7 +85,7 @@ public class SaveNewGameRunner implements Runnable {
 		newGameData.player.saveInitial();
 
 		// Saving stuff to entities.txt
-		new Entities().saveEntitiesAndExit(name);
+		newGameData.entities.saveEntitiesAndExit(name);
 		
 		// Saving stuff to particles.txt
 		new ParticleEngine().saveAndExit(name);

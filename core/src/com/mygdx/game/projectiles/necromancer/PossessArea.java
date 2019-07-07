@@ -23,7 +23,7 @@ public class PossessArea extends DynamicProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public PossessArea() { }
+	private PossessArea() { }
 
 	public PossessArea(Entity entity, Entity possessed, float lifetime) {
 		super(entity, ProjectileSprite.NO_SPRITE, possessed.pos, lifetime);

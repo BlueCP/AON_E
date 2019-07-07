@@ -18,7 +18,7 @@ public class CleansingStrike extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public CleansingStrike() { }
+	private CleansingStrike() { }
 
 	public CleansingStrike(Entity entity, Vector3 pos, Entity targetEntity) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);
@@ -45,9 +45,9 @@ public class CleansingStrike extends StaticProjectile {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 
 		if (entity.id == targetEntity) {
-			float finalDamage = offender.dealDamage(entity, baseDamage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, baseDamage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, baseDamage + offender.getRealDamage(), playScreen);
 			return true;
 		} else {
 			return false;

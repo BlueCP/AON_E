@@ -14,7 +14,7 @@ public class SoulStealerSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SoulStealerSkill() {
+	private SoulStealerSkill() {
 		super(null, false);
 	}
 
@@ -48,9 +48,9 @@ public class SoulStealerSkill extends PassiveSkill {
 		}
 	}
 
-	public float damage(float damage) {
+	public float damage() {
 		if (isLearned()) {
-			return damage * entity.soulsEffect.numStacks();
+			return 0.5f * entity.soulsEffect.numStacks();
 		} else {
 			return 0;
 		}

@@ -1,7 +1,6 @@
 package com.mygdx.game.skills.necromancer;
 
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.projectiles.electromancer.RepulsionField;
 import com.mygdx.game.projectiles.necromancer.SpiritSnareArea;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.SimpleSkill;
@@ -11,7 +10,7 @@ public class SpiritSnareSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SpiritSnareSkill() {
+	private SpiritSnareSkill() {
 		super(null);
 	}
 

@@ -72,7 +72,7 @@ public abstract class ActiveSkill extends Skill {
 	/**
 	 * Tells this class that the skill is waiting for location input; the next place the player clicks will be used as the target location.
 	 */
-	protected void waitForLocation() {
+	void waitForLocation() {
 		state = State.WAITING_FOR_LOCATION;
 	}
 
@@ -86,7 +86,7 @@ public abstract class ActiveSkill extends Skill {
 	/**
 	 * The skill available to use again.
 	 */
-	protected void makeAvailable() {
+	void makeAvailable() {
 		state = State.AVAILABLE;
 	}
 
@@ -103,7 +103,7 @@ public abstract class ActiveSkill extends Skill {
 	/**
 	 * Removes the action associated with this skill from the entity's array of actions.
 	 */
-	public void removeAction() {
+	protected void removeAction() {
 		if (entity.actions.size > 0) {
 			EntityAction entityAction = entity.actions.first();
 			if (entityAction.getName().equals(name)) {

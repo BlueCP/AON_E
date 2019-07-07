@@ -10,7 +10,7 @@ public abstract class MyScreen implements Screen, InputProcessor {
 
 	public AON_E game;
 
-	public Vector2 virtualCoords;
+	Vector2 virtualCoords;
 
 	MyScreen(AON_E game) {
 		this.game = game;

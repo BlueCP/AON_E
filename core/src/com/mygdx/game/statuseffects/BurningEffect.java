@@ -10,7 +10,7 @@ public class BurningEffect extends ProcEffectDisc {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public BurningEffect() { }
+	private BurningEffect() { }
 
 	public BurningEffect(Entity entity) {
 		super(entity);

@@ -11,7 +11,7 @@ public class SoothingLightSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SoothingLightSkill() {
+	private SoothingLightSkill() {
 		super(null);
 	}
 

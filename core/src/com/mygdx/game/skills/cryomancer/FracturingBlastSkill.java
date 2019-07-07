@@ -10,7 +10,7 @@ public class FracturingBlastSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public FracturingBlastSkill() {
+	private FracturingBlastSkill() {
 		super(null, false);
 	}
 

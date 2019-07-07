@@ -52,7 +52,6 @@ public abstract class WorldObject {
 
 	/**
 	 * Returns an array of chunks which are adjacent to this object, not including the current chunk.
-	 * @return
 	 */
 	public Array<ConstantObject.Chunk> getAdjacentChunksExclusive() {
 		return new Array<>();

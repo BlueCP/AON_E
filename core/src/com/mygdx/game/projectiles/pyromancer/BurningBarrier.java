@@ -25,7 +25,7 @@ public class BurningBarrier extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public BurningBarrier() { }
+	private BurningBarrier() { }
 
 	public BurningBarrier(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
@@ -71,9 +71,9 @@ public class BurningBarrier extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, damage + offender.getRealDamage(), playScreen);
 			offender.stun(entity, stunDuration);
 //			entity.stunnedEffect.add(stunDuration);
 

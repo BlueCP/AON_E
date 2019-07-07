@@ -17,7 +17,7 @@ public class ChilledEffect extends Effect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ChilledEffect() { }
+	private ChilledEffect() { }
 
 	public ChilledEffect(Entity entity) {
 		super(entity);

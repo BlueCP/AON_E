@@ -24,7 +24,7 @@ public abstract class LocationSkill extends ActiveSkill {
 		super(entity);
 	}
 
-	protected void defaultStart(int cost, float time, float range, Entity.AnimationType animationType, PlayScreen playScreen) {
+	protected void defaultStart(int cost, float time, float range, Entity.AnimationType animationType) {
 //		this.targetPos = targetPos;
 		if (entity.actions.size == 0 && state == State.AVAILABLE) {
 			this.animationType = animationType;
@@ -61,7 +61,7 @@ public abstract class LocationSkill extends ActiveSkill {
 		return rotation;
 	}
 
-	protected void faceTarget(Vector3 targetPos) {
+	private void faceTarget(Vector3 targetPos) {
 		Vector3 diff = targetPos.cpy().sub(entity.pos);
 		float angle = (float) Math.toDegrees(MathUtils.atan2(diff.z, diff.x));
 

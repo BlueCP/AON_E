@@ -25,7 +25,7 @@ public class Blizzard extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Blizzard() { }
+	private Blizzard() { }
 
 	public Blizzard(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
@@ -56,9 +56,9 @@ public class Blizzard extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-			float finalDamage = offender.dealDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage(), playScreen);
 			hitEntities.add(entity.id);
 		}
 

@@ -21,7 +21,7 @@ public class DeathBolt extends DynamicProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DeathBolt() { }
+	private DeathBolt() { }
 
 	public DeathBolt(Entity entity, Vector3 pos, Vector3 targetPos, float lifetime) {
 		super(entity, ProjectileSprite.NO_SPRITE, pos, lifetime);
@@ -56,9 +56,9 @@ public class DeathBolt extends DynamicProjectile {
 		if (entity.id != owner) {
 			offender.changeSpirit(spiritGain);
 //			float finalDamage = entity.dealtDamageBy(offender, damage + offender.getRealDamage());
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landBasicAttack(entity, playScreen);
-			offender.landBasicAttackDamage(entity, finalDamage, playScreen);
+			offender.dealBasicAttackDamage(entity, damage + offender.getRealDamage(), playScreen);
 
 			destroy(playScreen);
 

@@ -20,7 +20,7 @@ public class LavaSnare extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public LavaSnare() { }
+	private LavaSnare() { }
 
 	public LavaSnare(Entity entity, Vector3 pos, float lifetime, Entity targetEntity) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);

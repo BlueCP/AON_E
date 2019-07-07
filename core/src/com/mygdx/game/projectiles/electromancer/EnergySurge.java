@@ -30,7 +30,7 @@ public class EnergySurge extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public EnergySurge() { }
+	private EnergySurge() { }
 
 	public EnergySurge(Entity entity, Entity targetEntity) {
 		super(entity, ProjectileSprite.LIGHTNING_BOLT, entity.pos, Float.MAX_VALUE);
@@ -80,8 +80,8 @@ public class EnergySurge extends StaticProjectile {
 			offender.landAbility(target, playScreen);
 		}
 
-		float finalDamage = offender.dealDamage(target, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage());
-		offender.landAbilityDamage(target, finalDamage, playScreen);
+//		float finalDamage = offender.dealDamage(target, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage());
+		offender.dealAbilityDamage(target, dps * Gdx.graphics.getDeltaTime() + offender.getRealDamage(), playScreen);
 	}
 
 	@Override

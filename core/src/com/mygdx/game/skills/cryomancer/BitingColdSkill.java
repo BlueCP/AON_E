@@ -8,7 +8,7 @@ public class BitingColdSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public BitingColdSkill() {
+	private BitingColdSkill() {
 		super(null, false);
 	}
 

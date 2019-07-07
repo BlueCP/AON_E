@@ -56,14 +56,14 @@ public class DummyBlueprint {
 			counter ++;
 		}
 		for (int i = 0; i < Dummy.directions; i ++) {
-			DummyBlueprint.standMap.put(String.valueOf((i / (float)(Dummy.directions)) * 360), standFrames[i]);
+			standMap.put(String.valueOf((i / (float)(Dummy.directions)) * 360), standFrames[i]);
 			
 			Array<TextureRegion> regionsById = new Array<>();
 			for (TextureRegion region: walkFrames[i]) {
 				regionsById.add(region);
 			}
 			Animation<TextureRegion> animation = new Animation<>(Dummy.frameInterval, regionsById, PlayMode.LOOP);
-			DummyBlueprint.walkMap.put(String.valueOf((i / (float)(Dummy.directions)) * 360), animation);
+			walkMap.put(String.valueOf((i / (float)(Dummy.directions)) * 360), animation);
 		}
 	}
 	

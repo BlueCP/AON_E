@@ -8,8 +8,7 @@ import com.mygdx.game.screens.PlayScreen;
 
 public abstract class InteractiveObject extends ConstantObject {
 
-	protected InteractiveObject(btCollisionObject collisionObject, TextureRegion[] TextureRegion, String id, Array<Tag> newTags,
-								int spriteX, int spriteY) {
+	protected InteractiveObject(btCollisionObject collisionObject, TextureRegion[] TextureRegion, String id, Array<Tag> newTags) {
 		super(collisionObject, TextureRegion, id, newTags);
 	}
 

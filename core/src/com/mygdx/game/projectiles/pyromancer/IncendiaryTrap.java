@@ -17,7 +17,7 @@ public class IncendiaryTrap extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public IncendiaryTrap() { }
+	private IncendiaryTrap() { }
 
 	public IncendiaryTrap(Entity entity, Vector3 pos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);

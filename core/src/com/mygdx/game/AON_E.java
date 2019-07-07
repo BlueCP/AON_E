@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -74,6 +73,8 @@ public class AON_E extends Game {
 	public Texture pointerDown;
 
 	public Sprite pointer;
+
+	public Texture exclaimationMark;
 
 	// These imaginary units are the units for full HD for convenience.
 	// It means the size of assets doesn't have to be changed, because they were all created for full HD by default anyway.
@@ -137,6 +138,9 @@ public class AON_E extends Game {
 		// Loading dropped item sprites
 		manager.load("sprites/droppedItems/droppedItems.atlas", TextureAtlas.class);
 
+		// Loading UI sprites
+		manager.load("sprites/UI/exclaimationMark.png", Texture.class);
+
 		// Loading screen backgrounds
 		manager.load("textures/titlescreen.jpg", Texture.class);
 		manager.load("textures/chooseRAndCBackground.jpg", Texture.class);
@@ -179,6 +183,8 @@ public class AON_E extends Game {
 		droppedItemsAtlas = manager.get("sprites/droppedItems/droppedItems.atlas");
 
 		pointer = new Sprite(pointerUp);
+
+		exclaimationMark = manager.get("sprites/UI/exclaimationMark.png");
 
 		soundManager = new SoundManager(this);
 		musicManager = new MusicManager(this);

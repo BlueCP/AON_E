@@ -10,7 +10,7 @@ public class DamageEffect extends ProcEffectCont {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DamageEffect() { }
+	private DamageEffect() { }
 
 	public DamageEffect(Entity entity) {
 		super(entity);

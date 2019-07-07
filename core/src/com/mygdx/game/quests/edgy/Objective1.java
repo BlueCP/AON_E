@@ -10,7 +10,7 @@ public class Objective1 extends Objective {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Objective1() { }
+	private Objective1() { }
 
 	Objective1(Quest quest) {
 		super(quest);

@@ -19,7 +19,7 @@ public class Flamethrower extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Flamethrower() { }
+	private Flamethrower() { }
 
 	public Flamethrower(Entity entity, Vector3 pos, float rotation) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);
@@ -53,9 +53,9 @@ public class Flamethrower extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, damage + offender.getRealDamage(), playScreen);
 		}
 		return true;
 	}

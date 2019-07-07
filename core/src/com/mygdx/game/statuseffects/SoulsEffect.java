@@ -14,7 +14,7 @@ public class SoulsEffect extends StackEffect {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SoulsEffect() { }
+	private SoulsEffect() { }
 
 	public SoulsEffect(Entity entity) {
 		super(entity);

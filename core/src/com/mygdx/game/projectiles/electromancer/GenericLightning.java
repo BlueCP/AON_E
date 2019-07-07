@@ -36,7 +36,7 @@ public class GenericLightning extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public GenericLightning() { }
+	private GenericLightning() { }
 
 	public GenericLightning(Entity entity, Vector3 startPoint, Vector3 endPoint, float lifetime, float damage) {
 //		super(entity, ProjectileSprite.LIGHTNING_BOLT, startPoint, lifetime);

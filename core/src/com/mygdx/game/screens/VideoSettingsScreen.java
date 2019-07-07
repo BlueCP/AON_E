@@ -19,13 +19,17 @@ public class VideoSettingsScreen extends MyScreen {
 	private Screen prevScreen;
 	Stage stage;
 
+	private TextButton vSyncButton;
+	private TextButton fullScreenButton;
+	private TextButton screenShakeButton;
+	private TextButton particlesButton;
+
 	VideoSettingsScreen(AON_E game, Screen prevScreen) {
 		super(game);
 
 		this.prevScreen = prevScreen;
 
-		TextButton vSyncButton = new TextButton("VSync", AON_E.SKIN, "toggle");
-		vSyncButton.setChecked(VideoSettings.isVSyncEnabled());
+		vSyncButton = new TextButton("VSync", AON_E.SKIN, "toggle");
 		vSyncButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -37,8 +41,7 @@ public class VideoSettingsScreen extends MyScreen {
 			}
 		});
 
-		TextButton fullScreenButton = new TextButton("Fullscreen", AON_E.SKIN, "toggle");
-		fullScreenButton.setChecked(VideoSettings.isFullscreen());
+		fullScreenButton = new TextButton("Fullscreen", AON_E.SKIN, "toggle");
 		fullScreenButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -50,8 +53,7 @@ public class VideoSettingsScreen extends MyScreen {
 			}
 		});
 
-		TextButton screenShakeButton = new TextButton("Screen shake", AON_E.SKIN, "toggle");
-		screenShakeButton.setChecked(VideoSettings.isScreenShakeEnabled());
+		screenShakeButton = new TextButton("Screen shake", AON_E.SKIN, "toggle");
 		screenShakeButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -63,8 +65,7 @@ public class VideoSettingsScreen extends MyScreen {
 			}
 		});
 
-		TextButton particlesButton = new TextButton("Particles", AON_E.SKIN, "toggle");
-		particlesButton.setChecked(VideoSettings.isParticlesEnabled());
+		particlesButton = new TextButton("Particles", AON_E.SKIN, "toggle");
 		particlesButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -76,6 +77,15 @@ public class VideoSettingsScreen extends MyScreen {
 			}
 		});
 
+		TextButton resetButton = new TextButton("Reset to default", AON_E.SKIN);
+		resetButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				VideoSettings.reset();
+				updateWidgets();
+			}
+		});
+
 		TextButton backButton = new TextButton("Back", AON_E.SKIN);
 		backButton.addListener(new ClickListener() {
 			@Override
@@ -83,6 +93,8 @@ public class VideoSettingsScreen extends MyScreen {
 				game.setScreen(prevScreen);
 			}
 		});
+
+		updateWidgets();
 
 		stage = new Stage(game.viewport);
 
@@ -94,11 +106,19 @@ public class VideoSettingsScreen extends MyScreen {
 		table.add(fullScreenButton).fillX().padBottom(50).row();
 		table.add(screenShakeButton).fillX().padBottom(50).row();
 		table.add(particlesButton).fillX().padBottom(50).row();
+		table.add(resetButton).fillX().padBottom(50).row();
 		table.add(backButton).fillX();
 
 		stage.addActor(table);
 
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
+	}
+
+	private void updateWidgets() {
+		vSyncButton.setChecked(VideoSettings.isVSyncEnabled());
+		fullScreenButton.setChecked(VideoSettings.isFullscreen());
+		screenShakeButton.setChecked(VideoSettings.isScreenShakeEnabled());
+		particlesButton.setChecked(VideoSettings.isParticlesEnabled());
 	}
 
 	@Override

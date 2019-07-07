@@ -32,7 +32,7 @@ public class SeraphicFlare extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SeraphicFlare() { }
+	private SeraphicFlare() { }
 
 	public SeraphicFlare(Entity entity, Vector3 startPoint, Vector3 endPoint, float lifetime) {
 		super(entity, ProjectileSprite.LIGHTNING_BOLT, startPoint.cpy().lerp(endPoint, 0.5f), lifetime);
@@ -82,9 +82,9 @@ public class SeraphicFlare extends StaticProjectile {
 				Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 
 				if (!hitEntities.contains(entity.id, true) && entity.id != owner) {
-					float finalDamage = offender.dealDamage(entity, baseDamage + offender.getRealDamage());
+//					float finalDamage = offender.dealDamage(entity, baseDamage + offender.getRealDamage());
 					offender.landAbility(entity, playScreen);
-					offender.landAbilityDamage(entity, finalDamage, playScreen);
+					offender.dealAbilityDamage(entity, baseDamage + offender.getRealDamage(), playScreen);
 					hitEntities.add(entity.id);
 				}
 			}

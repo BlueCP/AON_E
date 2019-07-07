@@ -29,7 +29,7 @@ public class RendSoul extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public RendSoul() { }
+	private RendSoul() { }
 
 	public RendSoul(Entity entity, Vector3 pos, float lifetime, Entity targetEntity) {
 		super(entity, ProjectileSprite.LIGHTNING_BOLT, pos, lifetime);
@@ -77,9 +77,9 @@ public class RendSoul extends StaticProjectile {
 		if (target.id == -1) {
 			destroy(playScreen);
 		} else if (!alreadyHit) {
-			float finalDamage = offender.dealDamage(target, realDamage);
+//			float finalDamage = offender.dealDamage(target, realDamage);
 			offender.landAbility(target, playScreen);
-			offender.landAbilityDamage(target, finalDamage, playScreen);
+			offender.dealAbilityDamage(target, realDamage, playScreen);
 			alreadyHit = true;
 			playScreen.particleEngine.addFlyUpPoint(playScreen.physicsManager.getDynamicsWorld(), endPoint, 10, 7, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
 		}

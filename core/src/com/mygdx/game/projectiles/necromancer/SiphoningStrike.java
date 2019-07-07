@@ -28,7 +28,7 @@ public class SiphoningStrike extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public SiphoningStrike() { }
+	private SiphoningStrike() { }
 
 	public SiphoningStrike(Entity entity, Vector3 pos, float lifetime, Entity targetEntity) {
 		super(entity, ProjectileSprite.LIGHTNING_BOLT, pos, lifetime);
@@ -74,9 +74,9 @@ public class SiphoningStrike extends StaticProjectile {
 		if (target.id == -1) {
 			destroy(playScreen);
 		} else if (!alreadyHit) {
-			float finalDamage = offender.dealDamage(target, damage);
+//			float finalDamage = offender.dealDamage(target, damage);
 			offender.landAbility(target, playScreen);
-			offender.landAbilityDamage(target, finalDamage, playScreen);
+			offender.dealAbilityDamage(target, damage, playScreen);
 			offender.changeLife(offender.soulsEffect.numStacks() * 2);
 			alreadyHit = true;
 			playScreen.particleEngine.addFlyUpPoint(playScreen.physicsManager.getDynamicsWorld(), endPoint, 10, 7, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);

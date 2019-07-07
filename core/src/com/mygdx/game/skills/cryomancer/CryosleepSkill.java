@@ -10,7 +10,7 @@ public class CryosleepSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public CryosleepSkill() {
+	private CryosleepSkill() {
 		super(null);
 	}
 

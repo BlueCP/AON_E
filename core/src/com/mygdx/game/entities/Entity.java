@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
+import com.mygdx.game.entities.characters.DeltisBlueprint;
+import com.mygdx.game.entities.characters.SilverStatueBlueprint;
 import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.items.Equipped;
 import com.mygdx.game.items.Inventory;
@@ -56,16 +58,16 @@ public abstract class Entity extends WorldObject {
 	public LightFireEffect lightFireEffect;
 	public PaladinShieldEffect paladinShieldEffect;
 	
-	float maxLife;
-	float maxSpirit;
+	protected float maxLife;
+	protected float maxSpirit;
 	float baseDamage;
 //	private float baseMagDmg;
 	float baseDefense;
-	float baseWalkSpeed;
+	protected float baseWalkSpeed;
 
-	float life;
-	float spirit;
-	protected float realDamage;
+	protected float life;
+	protected float spirit;
+	private float realDamage;
 //	protected float realMagDamage;
 	float realDefense;
 	private float realWalkSpeed;
@@ -81,7 +83,7 @@ public abstract class Entity extends WorldObject {
 	private boolean attacking = false;
 	private int targetEntity = -1; // The targeted entity's id
 	private Array<Integer> entitiesThatHit = new Array<>(); // An array of all the ids of entities that hit this entity (not necessarily damaged, could also be non-damage harmful effects).
-	int lastHitBy = -1; // The id of the entity that last hit this entity.
+	private int lastHitBy = -1; // The id of the entity that last hit this entity.
 
 	private boolean isProne = false; // If true, this entity is prone and will keep being prone until they stop moving.
 
@@ -97,8 +99,9 @@ public abstract class Entity extends WorldObject {
 	private Facing facing = Facing.N180_0;
 	private AnimationType animationType = AnimationType.STAND;
 	private AnimationType prevAnimationType;
+	private LifeState lifeState = LifeState.ALIVE;
 
-	protected BasicAttack basicAttack;
+	BasicAttack basicAttack;
 	protected Array<ActiveSkill> skills;
 	public ActiveSkill currentSkill = new NullActiveSkill(); // The (active) skill that is currently being cast, or is on standby (waiting for input).
 	// currentSkill is not reset, meaning that it also refers to the last skill cast if no skill is currently being cast.
@@ -112,7 +115,7 @@ public abstract class Entity extends WorldObject {
 //	public Vector3 additionalMovementVector = new Vector3(); // The additional movement vector exists only for the one tick: it is added, then removed, from the velocity of the object.
 	private Vector3 parentVelocity = new Vector3(); // The velocity of the object the player is walking on, if any
 	
-	Matrix4 rigidBodyMatrix;
+	protected Matrix4 rigidBodyMatrix;
 	private Vector3 linearVelocity;
 
 	public Vector3 hitboxExtents; // The dimensions of the hitbox. Full extents, not half.
@@ -125,6 +128,12 @@ public abstract class Entity extends WorldObject {
 	private Vector2 movementLocation = new Vector2(); // The location that this entity will move to (usually walking). For now it is a 2D vector, may change to 3D when adding pathfinding.
 	
 	private boolean movementVectorWasChanged = false;
+
+	boolean waitingToBeInteracted = false; // Whether or not this entity will be interacted with if the player presses the button.
+	protected boolean interactive = false; // Whether or not this entity can be interacted with by the player.
+
+	protected String speechBubbleText;
+	protected boolean showSpeechBubble = false;
 	
 	/*
 	 * Sets the linear velocity of the body to the movement vector, and clears the movement vector after.
@@ -219,7 +228,7 @@ public abstract class Entity extends WorldObject {
 	 */
 	public void knockBack(Vector3 velocity) {
 		isProne = true;
-		setAnimationType(AnimationType.PRONE); // Make the enitity prone.
+		setAnimationType(AnimationType.PRONE); // Make the entity prone.
 		rigidBody.setLinearVelocity(velocity); // Change the velocity to the given one.
 		currentSkill.failResolve(); // Stop the current skill.
 		actions.clear(); // Stop all other actions.
@@ -228,10 +237,10 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * Apply effects such as slows.
 	 */
-	private void applyMovementChanges() {
+	/*private void applyMovementChanges() {
 		realWalkSpeed *= (1 - (slowedEffect.movementDampening() + chilledEffect.movementDampening())) +
 							1 + (speedEffect.movementBoost());
-	}
+	}*/
 
 	/**
 	 * Sets the target location for movement for this entity to its current position.
@@ -328,7 +337,7 @@ public abstract class Entity extends WorldObject {
 
 	}
 	
-	void generateId(Entities entities) {
+	protected void generateId(Entities entities) {
 		if (entities.idPool.size > 0) {
 			id = Integer.MAX_VALUE; // Set it to the max value so that we can't accidentally be lower than the lowest int in the pool
 			for (Integer int0: entities.idPool) {
@@ -365,8 +374,8 @@ public abstract class Entity extends WorldObject {
 	
 	Entity getClosestOffensiveEnemy() {
 		Entity closest = null;
-		/*
-		for (Entity entity: this.offensiveEnemies.keySet()) {
+
+		/*for (Entity entity: this.offensiveEnemies.keySet()) {
 			if (zPos != entity.status.getZPos()) {
 				continue;
 			}
@@ -379,11 +388,11 @@ public abstract class Entity extends WorldObject {
 				// If entity is closer to this entity than closest
 				closest = entity;
 			}
-		}
-		*/
+		}*/
+
 		return closest;
 	}
-	
+
 	/*
 	 * How the entity moves in relation to the player
 	 */
@@ -435,6 +444,14 @@ public abstract class Entity extends WorldObject {
 		PRONE, // The entity is prone (for example from knockback), and will resume standing when it stops moving.
 		SHOOT_PROJECTILE, // The entity is throwing a projectile.
 		NO_ANIMATION
+	}
+
+	/**
+	 * The state of living the entity is in.
+	 */
+	public enum LifeState {
+		ALIVE,
+		DEAD
 	}
 	
 	/*
@@ -600,6 +617,16 @@ public abstract class Entity extends WorldObject {
 		}
 	}
 
+	private void testforDeath() {
+		if (life <= 0) {
+			lifeState = LifeState.DEAD;
+			currentSkill.failResolve();
+			actions.clear();
+			clearEffects();
+			stunnedEffect.add(Integer.MAX_VALUE); // Make sure the entity can't do anything at all.
+		}
+	}
+
 	/*
 	 * Update before anything else has happened in PlayScreen.executeLogic.
 	 */
@@ -641,6 +668,8 @@ public abstract class Entity extends WorldObject {
 		collidingWithClimbable = false;
 
 		applyEffects(playScreen);
+
+		testforDeath();
 	}
 	
 	/*
@@ -661,7 +690,7 @@ public abstract class Entity extends WorldObject {
 		} else if (collidingWithWalkable) {
 			setAnimationType(AnimationType.STAND);
 			rigidBody.setFriction(0.7f);
-		} else if (!collidingWithWalkable && !collidingWithClimbable) {
+		} else if (!collidingWithClimbable) {
 			setAnimationType(AnimationType.MIDAIR);
 		}
 	}
@@ -674,18 +703,11 @@ public abstract class Entity extends WorldObject {
 	}
 
 	/**
-	 * Copies the non-transient fields of this Entity object to the given object.
-	 *//*
-	void copyFields(Entity entity) {
-
-	}*/
-
-	/**
 	 * Each entity will have individual, different update logic.
 	 */
 	public abstract void individualUpdate(PlayScreen playScreen);
 	
-	public abstract void onInteract(PlayScreen session);
+	public abstract void interact(PlayScreen session);
 	
 	public abstract void attack(Entity target, int range, PlayScreen session);
 	
@@ -793,7 +815,7 @@ public abstract class Entity extends WorldObject {
 	/*
 	 * Create a new rigid body according to the correct hitbox for this type of entity and the transform.
 	 */
-	void loadRigidBody() {
+	protected void loadRigidBody() {
 		Vector3 localInertia = new Vector3();
 		Hitboxes.hitboxes.get(name).calculateLocalInertia(1, localInertia);
 		btRigidBody.btRigidBodyConstructionInfo constructionInfo;
@@ -834,11 +856,34 @@ public abstract class Entity extends WorldObject {
 		lightFireEffect = new LightFireEffect(this);
 		paladinShieldEffect = new PaladinShieldEffect(this);
 	}
+
+	private void clearEffects() {
+		stunnedEffect.remove();
+		slowedEffect.removeAll();
+		speedEffect.removeAll();
+		rootedEffect.remove();
+		damageEffect.removeAll();
+
+		burningEffect.removeAll();
+
+		chilledEffect.remove();
+		frozenEffect.remove();
+
+		chargedEffect.remove();
+
+		soulsEffect.remove();
+		soulsRegenEffect.removeAll();
+		witherEffect.removeAll();
+
+		blindedEffect.removeAll();
+		lightFireEffect.removeAll();
+		paladinShieldEffect.remove();
+	}
 	
 	/*
 	 * Iterate through and apply effects.
 	 */
-	void applyEffects(PlayScreen playScreen) {
+	private void applyEffects(PlayScreen playScreen) {
 		burningEffect.apply(playScreen);
 
 		chilledEffect.bitingColdDamage();
@@ -888,7 +933,7 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * This method also makes sure that the offending entity's actions have been recorded (for death procs, for example).
 	 */
-	public void takeDamageBase(Entity entity, float damage) {
+	void takeDamageBase(Entity entity, float damage) {
 		float newDamage = paladinShieldEffect.reflectDamage(entity, damage);
 		newDamage *= Math.pow(1.1, -realDefense); // Graph of damage reduction against defense follows exponential decay.
 
@@ -917,7 +962,7 @@ public abstract class Entity extends WorldObject {
 		return dealDamageBase(entity, damage);
 	}
 
-	public float dealDamageBase(Entity entity, float damage) {
+	float dealDamageBase(Entity entity, float damage) {
 		float finalDamage = damage * blindedEffect.damageDamping();
 		entity.takeDamage(this, finalDamage); // Assuming there are no behaviours on the attacking side to proc.
 		return finalDamage;
@@ -973,7 +1018,7 @@ public abstract class Entity extends WorldObject {
 	 * What the offending entity should do to the defending entity. Called when the entity is removed from existence.
 	 * Proc if this entity damaged the entity at any point.
 	 */
-	public void procDamageEffects(Entity entity, PlayScreen playScreen) {
+	private void procDamageEffects(Entity entity, PlayScreen playScreen) {
 		// By default, does nothing. Custom implementations if wanted in subclasses.
 	}
 
@@ -987,12 +1032,19 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * Iterate through all offending entities and proc their kill effects.
 	 */
-	public void procDeathEffects(PlayScreen playScreen) {
+	protected void procDeathEffectsBase(PlayScreen playScreen) {
 		playScreen.entities.getEntity(lastHitBy, playScreen.player).procKillEffects(this, playScreen);
 
 		for (Integer id: entitiesThatHit) {
 			playScreen.entities.getEntity(id, playScreen.player).procDamageEffects(this, playScreen);
 		}
+	}
+
+	/**
+	 * All effects that should happen when this entity dies.
+	 */
+	public void procDeathEffects(PlayScreen playScreen) {
+		procDeathEffectsBase(playScreen);
 	}
 
 	/**
@@ -1005,7 +1057,7 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * Procs any passives when an ability deals damage to an entity.
 	 */
-	public float landAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
+	public float dealAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
 		// By default, does nothing. Custom implementations if wanted in subclasses.
 		return 0;
 	}
@@ -1020,7 +1072,7 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * Procs any passives when this entity damages another entity with a basic attack.
 	 */
-	public float landBasicAttackDamage(Entity entity, float damage, PlayScreen playScreen) {
+	public float dealBasicAttackDamage(Entity entity, float damage, PlayScreen playScreen) {
 		// By default, does nothing. Custom implementations if wanted in subclasses.
 		return 0;
 	}
@@ -1032,6 +1084,10 @@ public abstract class Entity extends WorldObject {
 				return PlayerBlueprint.getCurrentTexture(animationState, facing, stateTime);
 			case "dummy":
 				return DummyBlueprint.getCurrentTexture(animationState, facing, stateTime);
+			case "Deltis":
+				return DeltisBlueprint.getCurrentTexture(animationState, facing, stateTime);
+			case "Silver statue":
+				return SilverStatueBlueprint.getCurrentTexture(animationState, facing, stateTime);
 			default:
 				return null;
 		}
@@ -1366,6 +1422,46 @@ public abstract class Entity extends WorldObject {
 
 	public void setRealDamage(float realDamage) {
 		this.realDamage = realDamage;
+	}
+
+	public LifeState getLifeState() {
+		return lifeState;
+	}
+
+	public void setLifeState(LifeState lifeState) {
+		this.lifeState = lifeState;
+	}
+
+	public boolean isInteractive() {
+		return interactive;
+	}
+
+	public void setInteractive(boolean interactive) {
+		this.interactive = interactive;
+	}
+
+	public boolean isWaitingToBeInteracted() {
+		return waitingToBeInteracted;
+	}
+
+	public void setWaitingToBeInteracted(boolean waitingToBeInteracted) {
+		this.waitingToBeInteracted = waitingToBeInteracted;
+	}
+
+	public String getSpeechBubbleText() {
+		return speechBubbleText;
+	}
+
+	public void setSpeechBubbleText(String speechBubbleText) {
+		this.speechBubbleText = speechBubbleText;
+	}
+
+	public boolean isShowSpeechBubble() {
+		return showSpeechBubble;
+	}
+
+	public void setShowSpeechBubble(boolean showSpeechBubble) {
+		this.showSpeechBubble = showSpeechBubble;
 	}
 
 }

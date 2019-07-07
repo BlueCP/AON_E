@@ -1,8 +1,6 @@
 package com.mygdx.game.skills.cryomancer;
 
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 import com.mygdx.game.projectiles.cryomancer.ShatterExplosion;
 import com.mygdx.game.screens.PlayScreen;
@@ -13,7 +11,7 @@ public class ShatterSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ShatterSkill() {
+	private ShatterSkill() {
 		super(null);
 	}
 

@@ -8,12 +8,12 @@ public class Dummy extends Entity {
 
 	static final float frameInterval = 0.0417f;
 	static final int fps = 24;
-	static final int directions = 16;
+	public static final int directions = 16;
 	
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Dummy() { }
+	private Dummy() { }
 
 	public Dummy(Entities entities, Vector3 pos) {
 		generateId(entities);
@@ -21,6 +21,9 @@ public class Dummy extends Entity {
 		life = 10; maxLife = 10;
 		spirit = 10; maxSpirit = 10;
 		baseWalkSpeed = 1.4f;
+
+		interactive = true;
+		speechBubbleText = "Hey! Come over here!";
 		
 		Matrix4 matrix = new Matrix4();
 		matrix.setTranslation(pos);
@@ -33,11 +36,12 @@ public class Dummy extends Entity {
 	@Override
 	public void individualUpdate(PlayScreen session) {
 //		stunnedEffect.add(1); // To stop the dummy from constantly walking to (0, 0, 0).
+		showSpeechBubble = pos.dst(session.player.pos) <= 5;
 	}
 
 	@Override
-	public void onInteract(PlayScreen session) {
-
+	public void interact(PlayScreen session) {
+		session.dialogManager.startDialog("Welcome", session.hudStage);
 	}
 
 	@Override

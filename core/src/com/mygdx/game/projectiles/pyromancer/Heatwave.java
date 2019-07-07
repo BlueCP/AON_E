@@ -19,7 +19,7 @@ public class Heatwave extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Heatwave() { }
+	private Heatwave() { }
 
 	public Heatwave(Entity entity, Vector3 pos) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);
@@ -47,9 +47,9 @@ public class Heatwave extends StaticProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, damage + offender.getRealDamage(), playScreen);
 			entity.slowedEffect.add(slowPower, slowDuration);
 			return true;
 		} else {

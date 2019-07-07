@@ -17,7 +17,7 @@ public class Workbench extends InteractiveObject {
 
 	protected Workbench(btCollisionObject collisionObject, Sprite[] sprite, String id, Array<Tag> newTags, int spriteX,
 			int spriteY) {
-		super(collisionObject, sprite, id, newTags, spriteX, spriteY);
+		super(collisionObject, sprite, id, newTags);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class IceShard extends DynamicProjectile {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public IceShard() { }
+	private IceShard() { }
 
 	public IceShard(Entity entity, Vector3 pos, Vector3 targetPos, float lifetime) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, lifetime);
@@ -62,9 +62,9 @@ public class IceShard extends DynamicProjectile {
 	public boolean onHitEntity(Entity entity, PlayScreen playScreen) {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landAbility(entity, playScreen);
-			offender.landAbilityDamage(entity, finalDamage, playScreen);
+			offender.dealAbilityDamage(entity, damage + offender.getRealDamage(), playScreen);
 
 			destroy(playScreen);
 

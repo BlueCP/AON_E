@@ -23,14 +23,20 @@ public class AudioSettingsScreen extends MyScreen {
 	private Screen prevScreen;
 	Stage stage;
 
+	private Slider masterVolumeSlider;
+	private Slider musicVolumeSlider;
+	private Slider environmentalVolumeSlider;
+	private Slider soundFXVolumeSlider;
+	private Slider creatureVolumeSlider;
+	private Slider UIVolumeSlider;
+
 	AudioSettingsScreen(AON_E game, Screen prevScreen) {
 		super(game);
 
 		this.prevScreen = prevScreen;
 
 		Label masterVolumeLabel = new Label("Master volume", AON_E.SKIN);
-		Slider masterVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
-		masterVolumeSlider.setValue(AudioSettings.masterVolume() * 100);
+		masterVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
 		masterVolumeSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -39,8 +45,7 @@ public class AudioSettingsScreen extends MyScreen {
 		});
 
 		Label musicVolumeLabel = new Label("Music", AON_E.SKIN);
-		Slider musicVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
-		musicVolumeSlider.setValue(AudioSettings.musicVolume() * 100);
+		musicVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
 		musicVolumeSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -49,8 +54,7 @@ public class AudioSettingsScreen extends MyScreen {
 		});
 
 		Label environmentalVolumeLabel = new Label("Environmental", AON_E.SKIN);
-		Slider environmentalVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
-		environmentalVolumeSlider.setValue(AudioSettings.environmentalVolume() * 100);
+		environmentalVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
 		environmentalVolumeSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -59,8 +63,7 @@ public class AudioSettingsScreen extends MyScreen {
 		});
 
 		Label soundFXVolumeLabel = new Label("Sound FX", AON_E.SKIN);
-		Slider soundFXVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
-		soundFXVolumeSlider.setValue(AudioSettings.soundFXVolume() * 100);
+		soundFXVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
 		soundFXVolumeSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -69,8 +72,7 @@ public class AudioSettingsScreen extends MyScreen {
 		});
 
 		Label creatureVolumeLabel = new Label("Creature sounds", AON_E.SKIN);
-		Slider creatureVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
-		creatureVolumeSlider.setValue(AudioSettings.creatureVolume() * 100);
+		creatureVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
 		creatureVolumeSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -79,12 +81,20 @@ public class AudioSettingsScreen extends MyScreen {
 		});
 
 		Label UIVolumeLabel = new Label("UI sounds", AON_E.SKIN);
-		Slider UIVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
-		UIVolumeSlider.setValue(AudioSettings.UIVolume() * 100);
+		UIVolumeSlider = new Slider(0, 100, 1, false, AON_E.SKIN);
 		UIVolumeSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AudioSettings.setUIVolume(UIVolumeSlider.getValue() / 100);
+			}
+		});
+
+		TextButton resetButton = new TextButton("Reset to default", AON_E.SKIN);
+		resetButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				AudioSettings.reset();
+				updateWidgets();
 			}
 		});
 
@@ -95,6 +105,8 @@ public class AudioSettingsScreen extends MyScreen {
 				game.setScreen(prevScreen);
 			}
 		});
+
+		updateWidgets();
 
 		stage = new Stage(game.viewport);
 
@@ -120,11 +132,22 @@ public class AudioSettingsScreen extends MyScreen {
 		table.add(UIVolumeLabel).fillX();
 		table.add(UIVolumeSlider).fillX();
 		table.row().padTop(50);
-		table.add(backButton).colspan(2).width(200);
+		table.add(resetButton).colspan(2).width(300);
+		table.row().padTop(50);
+		table.add(backButton).colspan(2).width(300);
 
 		stage.addActor(table);
 
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
+	}
+
+	private void updateWidgets() {
+		masterVolumeSlider.setValue(AudioSettings.masterVolume() * 100);
+		musicVolumeSlider.setValue(AudioSettings.musicVolume() * 100);
+		environmentalVolumeSlider.setValue(AudioSettings.environmentalVolume() * 100);
+		soundFXVolumeSlider.setValue(AudioSettings.soundFXVolume() * 100);
+		creatureVolumeSlider.setValue(AudioSettings.creatureVolume() * 100);
+		UIVolumeSlider.setValue(AudioSettings.UIVolume() * 100);
 	}
 
 	@Override

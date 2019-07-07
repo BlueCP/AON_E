@@ -9,7 +9,7 @@ public class ReenergiseSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ReenergiseSkill() {
+	private ReenergiseSkill() {
 		super(null);
 	}
 

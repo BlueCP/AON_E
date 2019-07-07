@@ -20,7 +20,7 @@ public class BlindingRaysArea extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public BlindingRaysArea() { }
+	private BlindingRaysArea() { }
 
 	public BlindingRaysArea(Entity entity, Vector3 pos) {
 		super(entity, ProjectileSprite.FIREBOLT, pos, -1);

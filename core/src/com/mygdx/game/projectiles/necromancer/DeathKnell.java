@@ -28,7 +28,7 @@ public class DeathKnell extends StaticProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DeathKnell() { }
+	private DeathKnell() { }
 
 	public DeathKnell(Entity entity, Vector3 pos, float lifetime, Entity targetEntity) {
 		super(entity, ProjectileSprite.LIGHTNING_BOLT, pos, lifetime);
@@ -74,9 +74,9 @@ public class DeathKnell extends StaticProjectile {
 		if (target.id == -1) {
 			destroy(playScreen);
 		} else if (!alreadyHit) {
-			float finalDamage = offender.dealDamage(target, baseDamage / (offender.getLife() / offender.getMaxLife()));
+//			float finalDamage = offender.dealDamage(target, baseDamage / (offender.getLife() / offender.getMaxLife()));
 			offender.landAbility(target, playScreen);
-			offender.landAbilityDamage(target, finalDamage, playScreen);
+			offender.dealAbilityDamage(target, baseDamage / (offender.getLife() / offender.getMaxLife()), playScreen);
 			alreadyHit = true;
 			playScreen.particleEngine.addFlyUpPoint(playScreen.physicsManager.getDynamicsWorld(), endPoint, 10, 7, 1.5f, Particle.Sprite.FIRE, Particle.Behaviour.GRAVITY);
 		}

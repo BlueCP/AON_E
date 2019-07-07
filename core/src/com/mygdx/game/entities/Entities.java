@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Iterator;
@@ -26,11 +28,11 @@ public class Entities {
 		pendingIds = new ObjectMap<>();
 	}
 	
-	public void clearOffensiveEnemies() {
+	/*public void clearOffensiveEnemies() {
 		for (Entity entity: allEntities) {
 			entity.getOffensiveEnemies().clear();
 		}
-	}
+	}*/
 
 	private void updatePendingIds() {
 		Iterator<ObjectMap.Entry<Integer, Float>> iterator = pendingIds.entries().iterator();
@@ -80,12 +82,24 @@ public class Entities {
 		}
 	}
 	
-	public void postUpdate(PlayScreen playScreen) {
+	public void postUpdate() {
 		for (Entity entity: allEntities) {
 			entity.postUpdate();
 		}
 	}
-	
+
+	/**
+	 * This method is useful for adding entities before PlayScreen is loaded as there is no need to add the
+	 * entity's rigid body to the physics world.
+	 */
+	public void addEntity(Entity entity) {
+		allEntities.add(entity);
+	}
+
+	/**
+	 * This method is useful for adding entities when PlayScreen is running, as it also adds the rigid body
+	 * to the physics world.
+	 */
 	public void addEntity(Entity entity, PhysicsManager physicsManager) {
 		allEntities.add(entity);
 		/*if (entity instanceof Player) {
@@ -125,7 +139,7 @@ public class Entities {
 		Array<Entity> nearestEntities = new Array<>(); // The two nearest entities to the entity that has been damaged.
 		for (Entity entity1: allEntities) {
 			if (entity.id == entity1.id) { // If the current entity is the same as the target entity
-				continue; // Skip it, since we want nearby entities, not just the same entity.
+				// Skip it, since we want nearby entities, not just the same entity.
 			} else if (nearestEntities.size < num && entity1.pos.dst(entity.pos) <= maxDistance) {
 				nearestEntities.add(entity1);
 			} else {
@@ -210,6 +224,25 @@ public class Entities {
 			entity.processAfterLoading();
 		}
 		
+		return entities;
+	}
+
+	public static Entities loadEntities(String dir, Kryo kryo) {
+		Entities entities;
+
+		try {
+			Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "saves/" + dir + "/world/entities.txt"));
+			entities = kryo.readObject(input, Entities.class);
+			input.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		for (Entity entity: entities.allEntities) {
+			entity.processAfterLoading();
+		}
+
 		return entities;
 	}
 	

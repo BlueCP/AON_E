@@ -7,7 +7,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 @SuppressWarnings("rawtypes")
-// This supression should be safe because this code came directly from libGDX.
+// This suppression should be safe because this code came directly from libGDX.
 // Source: https://github.com/libgdx/libgdx/wiki/Saved-game-serialization.
 public class ArraySerialiser extends Serializer<Array> {
 

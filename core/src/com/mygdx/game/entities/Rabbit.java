@@ -18,7 +18,7 @@ public class Rabbit extends Entity {
 	}
 
 	@Override
-	public void onInteract(PlayScreen session) {
+	public void interact(PlayScreen session) {
 		session.newMessage("The rabbit looks at you in fear.");
 	}
 

@@ -2,14 +2,17 @@ package com.mygdx.game.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.mygdx.game.mobtypes.MobClass;
-import com.mygdx.game.mobtypes.MobRace;
+import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.serialisation.KryoManager;
 import com.mygdx.game.skills.SkillBar;
+import com.mygdx.game.skills.SkillCollection;
 import com.mygdx.game.skills.cryomancer.BitingColdSkill;
 import com.mygdx.game.skills.cryomancer.EncaseInIceSkill;
 import com.mygdx.game.skills.cryomancer.FracturingBlastSkill;
@@ -19,12 +22,17 @@ import com.mygdx.game.skills.electromancer.ForkedLightningSkill;
 import com.mygdx.game.skills.electromancer.SamePlaceThriceSkill;
 import com.mygdx.game.skills.electromancer.VoltaicOverloadSkill;
 import com.mygdx.game.skills.necromancer.*;
-import com.mygdx.game.skills.paladin.*;
+import com.mygdx.game.skills.paladin.DivineBlessingSkill;
+import com.mygdx.game.skills.paladin.DivineProtectionSkill;
+import com.mygdx.game.skills.paladin.DivinePunishmentSkill;
+import com.mygdx.game.skills.paladin.DivineRetaliationSkill;
 import com.mygdx.game.skills.pyromancer.FlamingBarrageSkill;
 import com.mygdx.game.skills.pyromancer.StokeTheFlamesSkill;
 import com.mygdx.game.skills.pyromancer.SupernovaSkill;
 import com.mygdx.game.skills.pyromancer.VikingFuneralSkill;
+import javafx.util.Pair;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Map.Entry;
@@ -50,7 +58,7 @@ public class Player extends Entity {
 	public static final int basicLvlReq = 10;
 
 	static final int fps = 24;
-	static final int directions = 16;
+	public static final int directions = 16;
 
 	private VikingFuneralSkill vikingFuneral;
 	private StokeTheFlamesSkill stokeTheFlames;
@@ -77,6 +85,27 @@ public class Player extends Entity {
 	private DivinePunishmentSkill divinePunishmentSkill;
 	private DivineBlessingSkill divineBlessingSkill;
 
+	public Class gameClass = Class.NONE;
+	private SkillCollection skillCollection;
+
+	public enum Class {
+
+		NONE,
+
+		PYROMANCER,
+		CRYOMANCER,
+		ELECTROMANCER,
+		NECROMANCER,
+
+		WARRIOR,
+		SUMMONER,
+		PALADIN,
+
+		ROGUE,
+		ARCHER
+
+	}
+
 	public Player() {
 		id = 0;
 		physicsId = 10000;
@@ -100,7 +129,9 @@ public class Player extends Entity {
 //		newGameData.player.inventory.weapons.get(0).setDesc("Testing...");
 		inventory.addOtherItem("Iron ore");
 
-//		System.out.println(123456789);
+		skillCollection = new SkillCollection(this);
+
+		setMovementLocation(new Vector2(1, -1)); // This is the location the player spawns at.
 
 		// PYROMANCER
 
@@ -146,7 +177,7 @@ public class Player extends Entity {
 
 		// NECROMANCER
 
-		/*basicAttack = new NecromancerBasicAttack(this);
+		basicAttack = new NecromancerBasicAttack(this);
 
 		skills.add(new RendSoulSkill(this));
 		skills.add(new PossessSkill(this));
@@ -155,12 +186,12 @@ public class Player extends Entity {
 		skills.add(new DeathKnellSkill(this));
 		skills.add(new UnearthlyMiasmaSkill(this));
 		skills.add(new SacrificialPactSkill(this));
-		skills.add(new SpiritSnareSkill(this));*/
+		skills.add(new SpiritSnareSkill(this));
 
 
 		// PALADIN
 
-		basicAttack = new PaladinBasicAttack(this);
+		/*basicAttack = new PaladinBasicAttack(this);
 
 		skills.add(new CleansingStrikeSkill(this));
 		skills.add(new HolyFireSkill(this));
@@ -169,7 +200,12 @@ public class Player extends Entity {
 		skills.add(new DetainSkill(this));
 		skills.add(new BlindingRaysSkill(this));
 		skills.add(new EnforcementZoneSkill(this));
-		skills.add(new SeraphicFlareSkill(this));
+		skills.add(new SeraphicFlareSkill(this));*/
+
+
+		// WARRIOR
+
+//		basicAttack = new WarriorBasicAttack(this);
 
 
 		// Note: the player must have all of the passives loaded in like this at the start of the game.
@@ -192,15 +228,15 @@ public class Player extends Entity {
 		chargeBuildup = new ChargeBuildupSkill(this, false);
 		voltaicOverload = new VoltaicOverloadSkill(this, false);
 
-		soulStealer = new SoulStealerSkill(this, true);
-		underworldDenizen = new UnderworldDenizenSkill(this, true);
-		intangibleGhost = new IntangibleGhostSkill(this, true);
-		drainEssence = new DrainEssenceSkill(this, true);
+		soulStealer = new SoulStealerSkill(this, false);
+		underworldDenizen = new UnderworldDenizenSkill(this, false);
+		intangibleGhost = new IntangibleGhostSkill(this, false);
+		drainEssence = new DrainEssenceSkill(this, false);
 
-		divineProtectionSkill = new DivineProtectionSkill(this, false);
-		divineRetaliationSkill = new DivineRetaliationSkill(this, false);
-		divinePunishmentSkill = new DivinePunishmentSkill(this, false);
-		divineBlessingSkill = new DivineBlessingSkill(this, false);
+		divineProtectionSkill = new DivineProtectionSkill(this, true);
+		divineRetaliationSkill = new DivineRetaliationSkill(this, true);
+		divinePunishmentSkill = new DivinePunishmentSkill(this, true);
+		divineBlessingSkill = new DivineBlessingSkill(this, true);
 	}
 
 	@Override
@@ -211,18 +247,31 @@ public class Player extends Entity {
 		divineBlessingSkill.update();
 	}
 
+	/**
+	 * NOTE: in general, use the dealAbilityDamage and dealBasicAttackDamage methods instead of this one.
+	 * This is because it's much easier to control what effects basic attacks and abilities have if they
+	 * are separated into their own methods, rather than sharing a common one.
+	 */
 	@Override
 	public float dealDamage(Entity entity, float damage) {
 		float newDamage = damage;
 
-		newDamage += stokeTheFlames.damage(entity, damage);
+		// Percentage damage change effects
 
-		newDamage += voltaicOverload.damage(entity, damage);
+		float percChange = 1;
 
-		newDamage += soulStealer.damage(damage);
+		percChange += stokeTheFlames.damage(entity);
 
-		newDamage *= divineRetaliationSkill.damageBoost();
-		newDamage *= divinePunishmentSkill.damage(entity);
+		percChange += voltaicOverload.damage(entity);
+
+		percChange += soulStealer.damage();
+
+		percChange += divineRetaliationSkill.damageBoost();
+		percChange += divinePunishmentSkill.damage(entity);
+
+		newDamage *= percChange;
+
+		// Absolute damage change effects (none at the moment, put them here if there are any in future).
 
 //		entity.takeDamage(this, newDamage);
 		newDamage = dealDamageBase(entity, newDamage);
@@ -270,16 +319,34 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public float landAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
+	public float dealAbilityDamage(Entity entity, float damage, PlayScreen playScreen) {
 		forkedLightning.testfor(entity, damage, playScreen);
 
-		float newDamage = 0; // Default to not dealing any extra damage, as damage will have already been done through dealDamage().
+		float newDamage = damage; // Default to not dealing any extra damage, as damage will have already been done through dealDamage().
 
-		newDamage += underworldDenizen.damage(damage);
+		// Percentage damage change effects
 
-		entity.takeDamage(this, newDamage);
+		float percChange = 1;
 
-		return 0; // No extra damage was added to entity; therefore, return 0.
+		percChange += stokeTheFlames.damage(entity);
+
+		percChange += voltaicOverload.damage(entity);
+
+		percChange += soulStealer.damage();
+
+		percChange += divineRetaliationSkill.damageBoost();
+		percChange += divinePunishmentSkill.damage(entity);
+
+		percChange += underworldDenizen.damage();
+
+		newDamage *= percChange;
+
+		// Absolute damage change effects (none at the moment, put them here if there are any in future).
+
+//		entity.takeDamage(this, newDamage);
+		newDamage = dealDamageBase(entity, newDamage);
+
+		return newDamage;
 	}
 
 	@Override
@@ -290,9 +357,42 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public float landBasicAttackDamage(Entity entity, float damage, PlayScreen playScreen) {
-		soulStealer.basicAttackLifesteal(damage);
-		return 0; // No extra damage was added to entity; therefore, return 0.
+	public float dealBasicAttackDamage(Entity entity, float damage, PlayScreen playScreen) {
+		float newDamage = damage;
+
+		// Percentage damage change effects
+
+		float percChange = 1;
+
+		percChange += stokeTheFlames.damage(entity);
+
+		percChange += voltaicOverload.damage(entity);
+
+		percChange += soulStealer.damage();
+
+		percChange += divineRetaliationSkill.damageBoost();
+		percChange += divinePunishmentSkill.damage(entity);
+
+		newDamage *= percChange;
+
+		// Absolute damage change effects (none at the moment, put them here if there are any in future).
+
+		soulStealer.basicAttackLifesteal(damage); // Apply lifesteal after all other damage effects.
+
+		newDamage = dealDamageBase(entity, newDamage);
+
+		return newDamage;
+	}
+
+	public void respawn(PlayScreen playScreen) {
+		playScreen.respawning = true;
+		playScreen.respawnTimePassed = 0;
+		playScreen.additionalRespawnBlackTime = 0;
+		playScreen.hudStage.fadeToBlack(PlayScreen.respawnFadeTime, PlayScreen.minimumRespawnBlackTime);
+	}
+
+	public void addSkill() {
+		skillCollection.addSkill();
 	}
 
 	@Override
@@ -364,7 +464,7 @@ public class Player extends Entity {
 		try {
 			rigidBody = null;
 			rigidBodyMatrix = new Matrix4();
-			rigidBodyMatrix.setTranslation(new Vector3(0, 10f, 0));
+			rigidBodyMatrix.setTranslation(new Vector3(1, 2f, -1));
 			setLinearVelocity(new Vector3());
 
 			KryoManager.write(this, "saves/" + playerName + "/player.txt");
@@ -372,7 +472,7 @@ public class Player extends Entity {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
 	 * Load player data.
 	 */
@@ -381,6 +481,23 @@ public class Player extends Entity {
 		try {
 			Player player = KryoManager.read("saves/" + session.playerName + "/player.txt", Player.class);
 //			player.loadRigidBody();
+			player.processAfterLoading();
+			return player;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/*
+	 * Load player data.
+	 */
+	public static Player load(PlayScreen session, Kryo kryo) {
+		// We need to get session as a parameter because at initial loading, player would not have been updated and given session
+		try {
+			Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "saves/" + session.playerName + "/player.txt"));
+			Player player = kryo.readObject(input, Player.class);
+			input.close();
 			player.processAfterLoading();
 			return player;
 		} catch (Exception e) {
@@ -406,14 +523,51 @@ public class Player extends Entity {
 	@Override
 	public void individualUpdate(PlayScreen playScreen) {
 		realDefense *= divineProtectionSkill.defenseBoost();
+
+		updateInteractiveEntity(playScreen);
 	}
 
-	private void testforTurnHostile(Entity entity) {
+	/**
+	 * Looks through the entities within range to be interacted with, then marks the closest one
+	 * to be interacted with (they will get an indicator showing the player they can be
+	 * interacted with).
+	 */
+	private void updateInteractiveEntity(PlayScreen playScreen) {
+		Array<Entity> validEntities = new Array<>(); // Entities which are in range to be interacted with.
+		for (Entity entity: playScreen.entities.allEntities) {
+			if (pos.dst(entity.pos) <= 2 && entity.isInteractive()) {
+				Pair<Integer, Vector3> pair = playScreen.physicsManager.rayTestFirst(pos, entity.pos, PhysicsManager.CONST_OBJ_FLAG | PhysicsManager.HITBOX_FLAG);
+				if (entity.physicsId == pair.getKey()) {
+					validEntities.add(entity);
+				} else {
+					entity.waitingToBeInteracted = false;
+				}
+			} else {
+				entity.waitingToBeInteracted = false;
+			}
+		}
+		if (validEntities.size == 0) {
+			return;
+		}
+		Entity closestEntity = new NullEntity();
+		for (Entity entity: validEntities) {
+			if (pos.dst(entity.pos) < pos.dst(closestEntity.pos) || closestEntity.id == -1) {
+				closestEntity = entity;
+			}
+		}
+		closestEntity.setWaitingToBeInteracted(true);
+		validEntities.removeValue(closestEntity, false);
+		for (Entity entity: validEntities) {
+			entity.setWaitingToBeInteracted(false);
+		}
+	}
+
+	/*private void testforTurnHostile(Entity entity) {
 		if (entity.getNature() == Nature.NEUTRAL) {
 			entity.setNature(Nature.AGGRESSIVE);
 			// Makes neutral entities that are damaged by the player aggressive
 		}
-	}
+	}*/
 	
 	public void basicAttack(boolean withMainHand) {
 		/*if (noTargetSelected()) { return; }
@@ -694,7 +848,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void onInteract(PlayScreen session) {
+	public void interact(PlayScreen session) {
 
 	}
 

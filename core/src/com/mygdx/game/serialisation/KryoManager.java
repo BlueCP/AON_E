@@ -1,7 +1,6 @@
 package com.mygdx.game.serialisation;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Queue;
 import com.cyphercove.gdx.gdxtokryo.GdxToKryo;
 import com.esotericsoftware.kryo.Kryo;
@@ -15,9 +14,7 @@ import com.mygdx.game.particles.ParticleEngine;
 import com.mygdx.game.physics.PhysicsManager;
 import com.mygdx.game.projectiles.ProjectileManager;
 import com.mygdx.game.quests.Quests;
-import org.objenesis.strategy.StdInstantiatorStrategy;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

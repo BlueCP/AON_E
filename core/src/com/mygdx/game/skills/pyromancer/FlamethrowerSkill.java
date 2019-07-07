@@ -10,7 +10,7 @@ public class FlamethrowerSkill extends LocationSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public FlamethrowerSkill() {
+	private FlamethrowerSkill() {
 		super(null);
 	}
 
@@ -22,7 +22,7 @@ public class FlamethrowerSkill extends LocationSkill {
 
 	@Override
 	public void start(PlayScreen playScreen) {
-		defaultStart(5, 0.5f, 10, Entity.AnimationType.SHOOT_PROJECTILE, playScreen);
+		defaultStart(5, 0.5f, 10, Entity.AnimationType.SHOOT_PROJECTILE);
 	}
 
 	@Override

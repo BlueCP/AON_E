@@ -26,6 +26,12 @@ public class ControlSettingsScreen extends MyScreen {
 	private TextButton basicAttackButton;
 	private Array<TextButton> abilityButtons;
 	private TextButton openInventoryButton;
+	private TextButton respawnButton;
+	private TextButton optionsScreenButton;
+	private TextButton cancelMovementButton;
+	private TextButton questScreenButton;
+	private TextButton achievementsScreenButton;
+	private TextButton interactButton;
 
 	private ButtonGroup<TextButton> keyBindingsGroup;
 
@@ -57,6 +63,36 @@ public class ControlSettingsScreen extends MyScreen {
 		openInventoryButton = new TextButton(Input.Keys.toString(ControlSettings.openInventoryKey()), AON_E.SKIN, "toggle");
 		openInventoryButton.setName("open inventory");
 		keyBindingsGroup.add(openInventoryButton);
+
+		Label respawnLabel = new Label("Respawn:", AON_E.SKIN);
+		respawnButton = new TextButton(Input.Keys.toString(ControlSettings.respawnKey()), AON_E.SKIN, "toggle");
+		respawnButton.setName("respawn");
+		keyBindingsGroup.add(respawnButton);
+
+		Label optionsScreenLabel = new Label("Options screen:", AON_E.SKIN);
+		optionsScreenButton = new TextButton(Input.Keys.toString(ControlSettings.optionsScreenKey()), AON_E.SKIN, "toggle");
+		optionsScreenButton.setName("options screen");
+		keyBindingsGroup.add(optionsScreenButton);
+
+		Label cancelMovementLabel = new Label("Cancel movement:", AON_E.SKIN);
+		cancelMovementButton = new TextButton(Input.Keys.toString(ControlSettings.cancelMovementKey()), AON_E.SKIN, "toggle");
+		cancelMovementButton.setName("cancel movement");
+		keyBindingsGroup.add(cancelMovementButton);
+
+		Label questScreenLabel = new Label("Quest screen:", AON_E.SKIN);
+		questScreenButton = new TextButton(Input.Keys.toString(ControlSettings.questScreenKey()), AON_E.SKIN, "toggle");
+		questScreenButton.setName("quest screen");
+		keyBindingsGroup.add(questScreenButton);
+
+		Label achievementsScreenLabel = new Label("Achievements screen:", AON_E.SKIN);
+		achievementsScreenButton = new TextButton(Input.Keys.toString(ControlSettings.achivementsScreenKey()), AON_E.SKIN, "toggle");
+		achievementsScreenButton.setName("achievements screen");
+		keyBindingsGroup.add(achievementsScreenButton);
+
+		Label interactLabel = new Label("Interact:", AON_E.SKIN);
+		interactButton = new TextButton(Input.Keys.toString(ControlSettings.interactKey()), AON_E.SKIN, "toggle");
+		interactButton.setName("interact");
+		keyBindingsGroup.add(interactButton);
 
 		TextButton resetButton = new TextButton("Reset to default", AON_E.SKIN);
 		resetButton.addListener(new ClickListener() {
@@ -95,6 +131,24 @@ public class ControlSettingsScreen extends MyScreen {
 		table.add(openInventoryLabel).fillX();
 		table.add(openInventoryButton).fillX();
 		table.row().padTop(30);
+		table.add(respawnLabel).fillX();
+		table.add(respawnButton).fillX();
+		table.row().padTop(30);
+		table.add(optionsScreenLabel).fillX();
+		table.add(optionsScreenButton).fillX();
+		table.row().padTop(30);
+		table.add(cancelMovementLabel).fillX();
+		table.add(cancelMovementButton).fillX();
+		table.row().padTop(30);
+		table.add(questScreenLabel).fillX();
+		table.add(questScreenButton).fillX();
+		table.row().padTop(30);
+		table.add(achievementsScreenLabel).fillX();
+		table.add(achievementsScreenButton).fillX();
+		table.row().padTop(30);
+		table.add(interactLabel).fillX();
+		table.add(interactButton).fillX();
+		table.row().padTop(30);
 		table.add(resetButton).colspan(2).fillX();
 		table.row().padTop(50);
 		table.add(backButton).colspan(2).fillX();
@@ -111,6 +165,12 @@ public class ControlSettingsScreen extends MyScreen {
 		}
 
 		openInventoryButton.setText(Input.Keys.toString(ControlSettings.openInventoryKey()));
+		respawnButton.setText(Input.Keys.toString(ControlSettings.respawnKey()));
+		optionsScreenButton.setText(Input.Keys.toString(ControlSettings.optionsScreenKey()));
+		cancelMovementButton.setText(Input.Keys.toString(ControlSettings.cancelMovementKey()));
+		questScreenButton.setText(Input.Keys.toString(ControlSettings.questScreenKey()));
+		achievementsScreenButton.setText(Input.Keys.toString(ControlSettings.achivementsScreenKey()));
+		interactButton.setText(Input.Keys.toString(ControlSettings.interactKey()));
 	}
 
 	private void updateKeybinding(String key) {
@@ -133,6 +193,36 @@ public class ControlSettingsScreen extends MyScreen {
 			}
 		} else if (button.getName().equals("open inventory")) {
 			if (ControlSettings.setOpenInventoryKey(Input.Keys.valueOf(key))) {
+				button.setText(key);
+				keyBindingsGroup.uncheckAll();
+			}
+		} else if (button.getName().equals("respawn")) {
+			if (ControlSettings.setRespawnKey(Input.Keys.valueOf(key))) {
+				button.setText(key);
+				keyBindingsGroup.uncheckAll();
+			}
+		} else if (button.getName().equals("options screen")) {
+			if (ControlSettings.setOptionsScreenKey(Input.Keys.valueOf(key))) {
+				button.setText(key);
+				keyBindingsGroup.uncheckAll();
+			}
+		} else if (button.getName().equals("cancel movement")) {
+			if (ControlSettings.setCancelMovementKey(Input.Keys.valueOf(key))) {
+				button.setText(key);
+				keyBindingsGroup.uncheckAll();
+			}
+		} else if (button.getName().equals("quest screen")) {
+			if (ControlSettings.setQuestScreenKey(Input.Keys.valueOf(key))) {
+				button.setText(key);
+				keyBindingsGroup.uncheckAll();
+			}
+		} else if (button.getName().equals("achievements screen")) {
+			if (ControlSettings.setAchivementsScreenKey(Input.Keys.valueOf(key))) {
+				button.setText(key);
+				keyBindingsGroup.uncheckAll();
+			}
+		} else if (button.getName().equals("interact")) {
+			if (ControlSettings.setInteractKey(Input.Keys.valueOf(key))) {
 				button.setText(key);
 				keyBindingsGroup.uncheckAll();
 			}

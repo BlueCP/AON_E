@@ -2,7 +2,6 @@ package com.mygdx.game.skills.electromancer;
 
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entityactions.EntityAction;
 import com.mygdx.game.entityactions.SkillAction;
 import com.mygdx.game.projectiles.Projectile;
 import com.mygdx.game.projectiles.electromancer.EnergySurge;
@@ -16,7 +15,7 @@ public class EnergySurgeSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public EnergySurgeSkill() {
+	private EnergySurgeSkill() {
 		super(null);
 	}
 

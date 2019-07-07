@@ -14,7 +14,7 @@ public class DivineBlessingSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DivineBlessingSkill() {
+	private DivineBlessingSkill() {
 		super(null, false);
 	}
 

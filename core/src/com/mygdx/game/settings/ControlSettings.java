@@ -19,6 +19,12 @@ public class ControlSettings extends Settings {
 		}
 
 		takenKeys.add(openInventoryKey());
+		takenKeys.add(respawnKey());
+		takenKeys.add(optionsScreenKey());
+		takenKeys.add(cancelMovementKey());
+		takenKeys.add(questScreenKey());
+		takenKeys.add(achivementsScreenKey());
+		takenKeys.add(interactKey());
 	}
 
 	public static void resetKeyBindings() {
@@ -29,6 +35,12 @@ public class ControlSettings extends Settings {
 		}
 
 		preferences.putInteger("openInventoryKey", Keys.I);
+		preferences.putInteger("respawnKey", Keys.R);
+		preferences.putInteger("optionsScreenKey", Keys.M);
+		preferences.putInteger("cancelMovementKey", Keys.ESCAPE);
+		preferences.putInteger("questScreenKey", Keys.Q);
+		preferences.putInteger("achievementsScreenKey", Keys.A);
+		preferences.putInteger("interactKey", Keys.E);
 
 		preferences.flush();
 
@@ -99,6 +111,120 @@ public class ControlSettings extends Settings {
 
 	public static int openInventoryKey() {
 		return preferences.getInteger("openInventoryKey", Keys.I);
+	}
+
+	/**
+	 * Sets the key for respawning.
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setRespawnKey(int key) {
+		if (!takenKeys.contains(key, true)) {
+			updateTakenKeys(respawnKey(), key);
+			preferences.putInteger("respawnKey", key);
+			preferences.flush();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static int respawnKey() {
+		return preferences.getInteger("respawnKey", Keys.R);
+	}
+
+	/**
+	 * Sets the key for opening the options screen.
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setOptionsScreenKey(int key) {
+		if (!takenKeys.contains(key, true)) {
+			updateTakenKeys(optionsScreenKey(), key);
+			preferences.putInteger("optionsScreenKey", key);
+			preferences.flush();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static int optionsScreenKey() {
+		return preferences.getInteger("optionsScreenKey", Keys.M);
+	}
+
+	/**
+	 * Sets the key for cancelling movement (stop walking to the targeted location).
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setCancelMovementKey(int key) {
+		if (!takenKeys.contains(key, true)) {
+			updateTakenKeys(cancelMovementKey(), key);
+			preferences.putInteger("cancelMovementKey", key);
+			preferences.flush();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static int cancelMovementKey() {
+		return preferences.getInteger("cancelMovementKey", Keys.ESCAPE);
+	}
+
+	/**
+	 * Sets the key for opening the quest screen.
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setQuestScreenKey(int key) {
+		if (!takenKeys.contains(key, true)) {
+			updateTakenKeys(questScreenKey(), key);
+			preferences.putInteger("questScreenKey", key);
+			preferences.flush();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static int questScreenKey() {
+		return preferences.getInteger("questScreenKey", Keys.Q);
+	}
+
+	/**
+	 * Sets the key for opening the achievements screen.
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setAchivementsScreenKey(int key) {
+		if (!takenKeys.contains(key, true)) {
+			updateTakenKeys(achivementsScreenKey(), key);
+			preferences.putInteger("achievementsScreenKey", key);
+			preferences.flush();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static int achivementsScreenKey() {
+		return preferences.getInteger("achievementsScreenKey", Keys.A);
+	}
+
+	/**
+	 * Sets the key for interacting with an entity.
+	 * @return true if the key was updated, false if not.
+	 */
+	public static boolean setInteractKey(int key) {
+		if (!takenKeys.contains(key, true)) {
+			updateTakenKeys(interactKey(), key);
+			preferences.putInteger("interactKey", key);
+			preferences.flush();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static int interactKey() {
+		return preferences.getInteger("interactKey", Keys.E);
 	}
 
 }

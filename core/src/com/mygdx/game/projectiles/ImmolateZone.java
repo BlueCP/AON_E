@@ -15,9 +15,9 @@ public class ImmolateZone extends StaticProjectile {
 	/*
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ImmolateZone() { }
+	private ImmolateZone() { }
 	
-	ImmolateZone(Entity entity, ProjectileManager projectileManager, btDynamicsWorld dynamicsWorld, Vector3 pos) {
+	ImmolateZone(Entity entity, btDynamicsWorld dynamicsWorld, Vector3 pos) {
 		super(entity, ProjectileSprite.IMMOLATE_ZONE, pos, 0);
 		
 		//btGhostPairCallback ghostCall = new btGhostPairCallback();

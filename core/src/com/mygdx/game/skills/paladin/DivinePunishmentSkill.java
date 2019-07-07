@@ -5,12 +5,12 @@ import com.mygdx.game.skills.PassiveSkill;
 
 public class DivinePunishmentSkill extends PassiveSkill {
 
-	private static final float damageMultiplier = 1.5f;
+	private static final float damageMultiplier = 0.5f;
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public DivinePunishmentSkill() {
+	private DivinePunishmentSkill() {
 		super(null, false);
 	}
 
@@ -25,7 +25,7 @@ public class DivinePunishmentSkill extends PassiveSkill {
 				entity.rootedEffect.isActive())) {
 			return damageMultiplier;
 		} else {
-			return 1;
+			return 0;
 		}
 	}
 

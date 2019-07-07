@@ -3,7 +3,6 @@ package com.mygdx.game.serialisation;
 import com.badlogic.gdx.utils.Queue;
 import com.cyphercove.gdx.gdxtokryo.GdxToKryo;
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.Serializer;
 import com.mygdx.game.achievements.AchievementCollection;
 import com.mygdx.game.droppeditems.DroppedItemManager;
 import com.mygdx.game.entities.Dummy;
@@ -17,11 +16,11 @@ import com.mygdx.game.screens.PlayScreen;
 
 import java.util.Date;
 
-public class GameSerialisationThread implements Runnable {
+public class GameSavingThread implements Runnable {
 
 	private PlayScreen playScreen;
 
-	public GameSerialisationThread(PlayScreen playScreen) {
+	public GameSavingThread(PlayScreen playScreen) {
 		this.playScreen = playScreen; // Keep a reference to playScreen.
 	}
 

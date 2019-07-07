@@ -33,6 +33,10 @@ public class BinaryEffect extends Effect {
 		this.duration += duration;
 	}
 
+	public void addThisTick() {
+		this.duration += 0.001; // Increment the duration by such a small amount it will only be one frame.
+	}
+
 	public void remove() {
 		duration = 0;
 	}

@@ -236,13 +236,5 @@ public class Particle extends WorldObject implements Pool.Poolable {
 	void setLifeSoFar(float lifeSoFar) {
 		this.lifeSoFar = lifeSoFar;
 	}
-
-	public float getChangeRate() {
-		return changeRate;
-	}
-
-	public void setChangeRate(float changeRate) {
-		this.changeRate = changeRate;
-	}
 	
 }

@@ -30,7 +30,7 @@ public class Zombie extends Entity {
 	}
 
 	@Override
-	public void onInteract(PlayScreen session) {
+	public void interact(PlayScreen session) {
 		session.newMessage("The zombie growls and stumbles towards you.");
 	}
 

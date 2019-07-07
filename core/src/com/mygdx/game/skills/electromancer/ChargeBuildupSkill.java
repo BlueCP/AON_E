@@ -8,7 +8,7 @@ public class ChargeBuildupSkill extends PassiveSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ChargeBuildupSkill() {
+	private ChargeBuildupSkill() {
 		super(null, false);
 	}
 

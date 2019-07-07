@@ -9,7 +9,7 @@ public class Objective2 extends Objective {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Objective2() { }
+	private Objective2() { }
 
 	Objective2(Quest quest) {
 		super(quest);
@@ -19,7 +19,7 @@ public class Objective2 extends Objective {
 	@Override
 	public void update(PlayScreen playScreen) {
 		if (playScreen.player.pos.y < 0) {
-			quest.finishQuest();
+			quest.finishQuest(playScreen);
 		}
 	}
 

@@ -9,13 +9,13 @@ import com.mygdx.game.skills.PassiveSkill;
 public class ForkedLightningSkill extends PassiveSkill {
 
 	private static final float maxDistanceTotal = 10; // The maximum distance the lightning will travel from the starting point.
-	private static final float maxDistanceSingle = 10; // The maximum distance a single lightning botl will travel.
+//	private static final float maxDistanceSingle = 10; // The maximum distance a single lightning botl will travel.
 	private static final int chainLength = 4; // The number of entities this spell can chain to.
 
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public ForkedLightningSkill() {
+	private ForkedLightningSkill() {
 		super(null, false);
 	}
 

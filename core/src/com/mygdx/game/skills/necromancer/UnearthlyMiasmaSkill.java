@@ -2,7 +2,6 @@ package com.mygdx.game.skills.necromancer;
 
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.projectiles.necromancer.UnearthlyMiasmaArea;
-import com.mygdx.game.projectiles.pyromancer.Heatwave;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.skills.SimpleSkill;
 
@@ -11,7 +10,7 @@ public class UnearthlyMiasmaSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public UnearthlyMiasmaSkill() {
+	private UnearthlyMiasmaSkill() {
 		super(null);
 	}
 

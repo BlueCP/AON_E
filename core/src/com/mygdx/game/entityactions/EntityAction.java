@@ -6,7 +6,7 @@ import com.mygdx.game.screens.PlayScreen;
 public abstract class EntityAction {
 
 	protected String name;
-	protected Entity.AnimationType animationType;
+	private Entity.AnimationType animationType;
 	
 	float totalLifetime; // Maxiumum lifetime of action
 	private float countUp; // Time passed since creation of action
@@ -33,14 +33,6 @@ public abstract class EntityAction {
 
 	public void setCountUp(float countUp) {
 		this.countUp = countUp;
-	}
-
-	public float getTotalLifetime() {
-		return totalLifetime;
-	}
-
-	public void setTotalLifetime(float totalLifetime) {
-		this.totalLifetime = totalLifetime;
 	}
 
 	public String getName() {

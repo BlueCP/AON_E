@@ -10,7 +10,7 @@ public class LavaSnareSkill extends TargetedSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public LavaSnareSkill() {
+	private LavaSnareSkill() {
 		super(null);
 	}
 

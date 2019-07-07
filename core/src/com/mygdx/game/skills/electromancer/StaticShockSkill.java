@@ -10,7 +10,7 @@ public class StaticShockSkill extends SimpleSkill {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public StaticShockSkill() {
+	private StaticShockSkill() {
 		super(null);
 	}
 

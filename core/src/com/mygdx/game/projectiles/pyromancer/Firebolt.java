@@ -21,7 +21,7 @@ public class Firebolt extends DynamicProjectile {
 	/**
 	 * No-arg constructor for serialisation purposes.
 	 */
-	public Firebolt() { }
+	private Firebolt() { }
 
 	public Firebolt(Entity entity, Vector3 pos, Vector3 targetPos, float lifetime) {
 		super(entity, ProjectileSprite.NO_SPRITE, pos, lifetime);
@@ -58,9 +58,9 @@ public class Firebolt extends DynamicProjectile {
 		Entity offender = playScreen.entities.getEntity(owner, playScreen.player);
 		if (entity.id != owner) {
 			offender.changeSpirit(spiritGain);
-			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
+//			float finalDamage = offender.dealDamage(entity, damage + offender.getRealDamage());
 			offender.landBasicAttack(entity, playScreen);
-			offender.landBasicAttackDamage(entity, finalDamage, playScreen);
+			offender.dealBasicAttackDamage(entity, damage + offender.getRealDamage(), playScreen);
 
 			destroy(playScreen);
 
